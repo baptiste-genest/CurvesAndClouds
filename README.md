@@ -1,3 +1,28 @@
+# Curves and Clouds
+Scientific computing library and data visualization
+
+## Relative to LIFAP4
+### Informations
+- PROJET LIFAP4: Curves and clouds 
+- Axel BESSY P1910329
+- Baptiste GENEST P1905020
+- ID FORGE 18075
+
+### Organisation
+- apps : applications tournant avec Qt + C&C
+- cnc_lib : code source de la lib
+- data : assets pour certaines apps
+- doc : documentation doxygen + Gantt + UML
+- new_project : script bash pour création de projet Qt creator pour utiliser la lib
+- README.md : ce fichier
+- templates : fichers pour le script
+
+### For the demo apps
+In order to use the demo apps, you'll need to compile the library in a directory at the root folder named `debug`.
+The script link to the debug folder, by default.
+
+
+## Curves and clouds
 **If you just want to analyze data from files without coding:**
 you can simply use the GUI version of C&C by compiling and launching Cnc_GUI.
 
@@ -5,8 +30,6 @@ you can simply use the GUI version of C&C by compiling and launching Cnc_GUI.
 
 
 **If you want to use C&C to plot scientific data, here's how:**
-
-
 If you want to be able to display and interact with data and plots, you must include <curvesandcloud.h> and use Qt.
 If you use QtCreator, you can simply use the bash script as so (works for linux at least) : 
 `./new_project.sh [your project name]`
@@ -16,23 +39,23 @@ to generate a new qt project (with the needed modules and includes) in the apps 
 
 The Curves&Cloud library is dynamically linked, you have to compile the lib first and then indicate the directory when compiling your program.
 
-**How the lib works?**
+### **How the lib works?**
 
 First of all, we recommend you to check the apps/Cnc_demo program to see a detailled example of what you can do with C&C and how.
 
 What's the difference between a Plot_window, a Plot_tab, a Plot_frame, a Plot_layer and a Plot?
 
 
-![Alt Text](https://media.giphy.com/media/Nz74Au53VfpAT826TN/giphy.gif)
+![Alt Text](doc/TFL.gif?raw=true)
 
 - A Plot_window is the main structure, it's the actual window poping on your screen, from it you can only add a Plot_tab with`add_tab(name of your tab)`, one Plot_tab is displayed at a time on a window.
 - A Plot_tab is a tab class that you can name. From it you can create Plot_frames, to do so, you can either use `add_frame(width of the frame(default = 1),height of the frame(default 1))` it will add a frame at the first available spot where it fits, or you can specify the location by giving the coordinates of the upper-left corner of the frame as so:
 `add_frame_at(x coord of the UL corner,y coord of the UL corner,width of the frame(default = 1),height of the frame(default 1))`
-![Alt Text](https://i.ibb.co/qggPMbP/frame-system.png)
+![Alt Text](doc/frame_system.png?raw=true)
 - A Plot_frame corresponds to a box where the plots are actually displayed, a frame will display all its layers consecutively, you can add one layer to the frame by `add_layer()`, you can also specify the number of layers displayed each second by `set_nb_layer_per_second(frame rate)`
 - A Plot_layer is the structure that contains the actual plots, when a layer is drawn it will draw all the plots at the same time on top of each other. From a layer you can finally add a plot! 
 
-**Main plot types: and how to add them (from a Plot_layer)**
+### **Main plot types: and how to add them (from a Plot_layer)**
 - **function plot** plotting standard 1D scalar functions
 
 `layer.new_function_plot(function to plot, range to plot between,plot axis policy (y range = x range or adaptative to min/max values of the function))`
@@ -81,7 +104,7 @@ ts << tex_system({"a + b = 0","2a - b = 1"}); //to display system of equations, 
 [your plot layer]->add_text_frame_from_tex_stream(ts);//finally add it to your layer!
 ```
 
-**Main C&C types**
+### **Main C&C types**
 - **vec** N-dimensionnal vector (from linear algebra not std lol), you can have the norm, the dot_product, etc... You can access to i-th data by x(i), you can initialize it by vec x(dim) or x(std::vector of values)
 
 - **mat** NxM-dimensionnal matrix (can multiply mat-mat, mat-vec, can solve linear systems, find eigenvalues of symetric matrices) You can access to i,j data by M(i,j)
@@ -104,7 +127,8 @@ C&c uses a lot functionnal programming so here are the **must important function
 
 - **vector_function** f(x) = -x where x is a vec
 
-**The scientific computing modules:** The list of _what_ you can do, but _how_ you can do it is in the doxygen doc!
+### **The scientific computing modules:** 
+The list of _what_ you can do, but _how_ you can do it is in the doxygen doc!
 
 - **Statistics** C&C allows you to compute the following stuff from a cloud:
     - **the mean**
