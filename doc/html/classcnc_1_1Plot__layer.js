@@ -1,0 +1,26 @@
+var classcnc_1_1Plot__layer =
+[
+    [ "Plot_layer", "classcnc_1_1Plot__layer.html#a6ce75c067be1af0ac4ba39854fa0c7b5", null ],
+    [ "~Plot_layer", "classcnc_1_1Plot__layer.html#a77790d661e1ffb834fefdb2ee305f2d2", null ],
+    [ "add_text_frame", "classcnc_1_1Plot__layer.html#ad416bcf462c8699cec5e7029f1593aa5", null ],
+    [ "add_text_frame_from_tex_stream", "classcnc_1_1Plot__layer.html#a44433c9258f1f15707d976d8f3125233", null ],
+    [ "display_layer", "classcnc_1_1Plot__layer.html#a96480603eccb2227d0c6744a1e446c09", null ],
+    [ "duplicate_layer", "classcnc_1_1Plot__layer.html#a662856c3ec0a043ea1603b4403185079", null ],
+    [ "insert_plot", "classcnc_1_1Plot__layer.html#a69e4fad765f006dc2005409dd5205d9a", null ],
+    [ "new_2D_curve", "classcnc_1_1Plot__layer.html#aa1807eba565e2e16c5d08c724f324bc5", null ],
+    [ "new_2D_curve", "classcnc_1_1Plot__layer.html#a1444cfb43f61af5f21cfced84d334155", null ],
+    [ "new_colormap", "classcnc_1_1Plot__layer.html#a045104ccedbc90419b46e44afb8e9c78", null ],
+    [ "new_figure_from_file", "classcnc_1_1Plot__layer.html#a987b0cbdfb8eb80e6e8b5f7c5de9cdb8", null ],
+    [ "new_figure_from_texturing", "classcnc_1_1Plot__layer.html#a98b48aa1aaa3faa8c87ccf53feafdc11", null ],
+    [ "new_function_plot", "classcnc_1_1Plot__layer.html#adefddef37b140654018340a44e1cbd19", null ],
+    [ "new_function_plot", "classcnc_1_1Plot__layer.html#a3f3bb7ece271891a77c42d964b0a0d83", null ],
+    [ "new_level_curve", "classcnc_1_1Plot__layer.html#ad95dee125f4daa2dae6f7ef5bab5af99", null ],
+    [ "new_level_curve_unique", "classcnc_1_1Plot__layer.html#aace0c54169124be83b3531ad59fdfd89", null ],
+    [ "new_point_cloud", "classcnc_1_1Plot__layer.html#a3e19b912fa575114b83da1f03cd99ffa", null ],
+    [ "new_point_cloud", "classcnc_1_1Plot__layer.html#a5f8ffb342ddc1ab8515a7b582ff2e402", null ],
+    [ "new_vector_field", "classcnc_1_1Plot__layer.html#aa4b1c34c83a61dda4d44f2350e809b5f", null ],
+    [ "new_void_figure", "classcnc_1_1Plot__layer.html#a3b4db42b2cacc093be4e814576b49014", null ],
+    [ "Plot_frame", "classcnc_1_1Plot__layer.html#ac8077450167fe34d4c8c87c6d57dd0e5", null ],
+    [ "Stat_displayer", "classcnc_1_1Plot__layer.html#a7e50645e2c6ae6aaf6903814408ba548", null ],
+    [ "plots", "classcnc_1_1Plot__layer.html#aa3149788abbb0c9f52c71579a0207ee2", null ]
+];

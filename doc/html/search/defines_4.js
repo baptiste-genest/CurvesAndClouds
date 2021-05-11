@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['matrix_5fcant_5fconvert_5fto_5fvector_1100',['MATRIX_CANT_CONVERT_TO_VECTOR',['../matrix__errors_8h.html#ab89e2f4c5da309f6bbb5c7795ad7d8a9',1,'matrix_errors.h']]],
+  ['matrix_5fcant_5fexp_5finteger_5fmatrix_1101',['MATRIX_CANT_EXP_INTEGER_MATRIX',['../matrix__errors_8h.html#ad04f772f87acef243aed24ac1c1aea7c',1,'matrix_errors.h']]],
+  ['matrix_5fdenman_5fnot_5fconvergent_1102',['MATRIX_DENMAN_NOT_CONVERGENT',['../matrix__errors_8h.html#aac19efca3638ab78d982be092f5fb6eb',1,'matrix_errors.h']]],
+  ['matrix_5fdiff_5fheight_1103',['MATRIX_DIFF_HEIGHT',['../matrix__errors_8h.html#aa505355cb655c3cfd8eba10e4f400781',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5fadd_5frow_5fand_5fcol_5fnot_5fequal_1104',['MATRIX_ERR_ADD_ROW_AND_COL_NOT_EQUAL',['../matrix__errors_8h.html#ac4931b1b5f2469daa27250ebce136123',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5fmul_5frow_5fand_5fcol_5fbe_5fgreater_5fthan_5fzero_1105',['MATRIX_ERR_MUL_ROW_AND_COL_BE_GREATER_THAN_ZERO',['../matrix__errors_8h.html#a0f424f8f53a6a817aecc9e236fc922ab',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5fmul_5frow_5fand_5fcol_5fnot_5fequal_1106',['MATRIX_ERR_MUL_ROW_AND_COL_NOT_EQUAL',['../matrix__errors_8h.html#ab466865fb4ea4ecef2c17170ba89350b',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5ftoo_5ffew_5fdata_1107',['MATRIX_ERR_TOO_FEW_DATA',['../matrix__errors_8h.html#a303691329cf74b23efec9b5cfe937eab',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5fundefined_1108',['MATRIX_ERR_UNDEFINED',['../matrix__errors_8h.html#a8a4e1c93c5ec0aaaf968274c8e24a9a8',1,'matrix_errors.h']]],
+  ['matrix_5ferr_5fwrong_5frow_5findex_1109',['MATRIX_ERR_WRONG_ROW_INDEX',['../matrix__errors_8h.html#a30534397b150588caacf606864bbf2f9',1,'matrix_errors.h']]],
+  ['matrix_5ferror_5fcode_5fcount_1110',['MATRIX_ERROR_CODE_COUNT',['../matrix__errors_8h.html#a226fb22cd7cb76afc3f1959d6f01554c',1,'matrix_errors.h']]],
+  ['matrix_5fhouseholder_5fmust_5fbe_5fvector_1111',['MATRIX_HOUSEHOLDER_MUST_BE_VECTOR',['../matrix__errors_8h.html#aeea339533a64195caddc9c475688772e',1,'matrix_errors.h']]],
+  ['matrix_5fisnt_5fsquare_1112',['MATRIX_ISNT_SQUARE',['../matrix__errors_8h.html#a34b85616ceea510f21d319a885e18e72',1,'matrix_errors.h']]],
+  ['matrix_5fnot_5fa_5fvector_1113',['MATRIX_NOT_A_VECTOR',['../matrix__errors_8h.html#a7440c0fc0aeafa4ce8be5bc61a1d11cf',1,'matrix_errors.h']]],
+  ['matrix_5fnul_5fdeterminant_1114',['MATRIX_NUL_DETERMINANT',['../matrix__errors_8h.html#a6774904c315e7c557d8376670639708d',1,'matrix_errors.h']]],
+  ['matrix_5foffset_5ferr_1115',['MATRIX_OFFSET_ERR',['../matrix__errors_8h.html#ad8f5c1e9aa5113049f3cba31d9d394a9',1,'matrix_errors.h']]],
+  ['matrix_5foffset_5fover_5fmax_1116',['MATRIX_OFFSET_OVER_MAX',['../matrix__errors_8h.html#a0cd789e2aeca7da910f3d0439c4efd24',1,'matrix_errors.h']]],
+  ['matrix_5fout_5fof_5farray_1117',['MATRIX_OUT_OF_ARRAY',['../matrix__errors_8h.html#a5ff92b7f914c67b80520b69137a43a32',1,'matrix_errors.h']]],
+  ['matrix_5fout_5frow_1118',['MATRIX_OUT_ROW',['../matrix__errors_8h.html#a136c5fcce787191669f512c4dfa54b86',1,'matrix_errors.h']]],
+  ['matrix_5fwrong_5fcut_1119',['MATRIX_WRONG_CUT',['../matrix__errors_8h.html#a25e7133c66910321005cc8b6566c7fc8',1,'matrix_errors.h']]]
+];

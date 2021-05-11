@@ -1,0 +1,4 @@
+<map id="cnc::Plot_window" name="cnc::Plot_window">
+<area shape="rect" id="node1" title="Base class that instanciates a Qt window and allows displaying plots." alt="" coords="5,131,292,296"/>
+<area shape="rect" id="node2" title=" " alt="" coords="91,5,207,83"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="cnc::Plot_tab" name="cnc::Plot_tab">
+<area shape="rect" id="node1" title="The Plot_tab class defines a tab which contains plot frames." alt="" coords="182,2132,602,2371"/>
+<area shape="rect" id="node2" title=" " alt="" coords="1643,132,1722,209"/>
+<area shape="rect" id="node10" href="$classcnc_1_1Plot__layer.html" title="The Plot_layer class will contain plots, if contains multiples plots, they will be displayed in the s..." alt="" coords="833,981,1703,1381"/>
+<area shape="rect" id="node12" href="$classcnc_1_1Plottable.html" title="Abstract class that represents any type plot." alt="" coords="841,287,1500,716"/>
+<area shape="rect" id="node16" href="$classcnc_1_1Stat__window.html" title="The Stat_window class is the window displaying plot frames duplicata and numerical informations." alt="" coords="864,2191,1203,2312"/>
+<area shape="rect" id="node17" href="$classcnc_1_1Stat__displayer.html" title="The Stat_displayer class is a sub widget of a stat window to duplicate a plot frame and possibly add ..." alt="" coords="820,1977,1247,2069"/>
+<area shape="rect" id="node3" title=" " alt="" coords="115,880,275,957"/>
+<area shape="rect" id="node4" title=" " alt="" coords="263,463,393,540"/>
+<area shape="rect" id="node6" title=" " alt="" coords="275,1985,509,2062"/>
+<area shape="rect" id="node9" title=" " alt="" coords="851,1507,1077,1584"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1061,779,1281,856"/>
+<area shape="rect" id="node15" title=" " alt="" coords="660,2433,905,2511"/>
+<area shape="rect" id="node19" title=" " alt="" coords="341,779,589,856"/>
+<area shape="rect" id="node5" title=" " alt="" coords="309,132,347,209"/>
+<area shape="rect" id="node7" href="$classcnc_1_1Plot__frame.html" title="The Plot_frame class defines a plot frame contains plot layers." alt="" coords="835,1647,1216,1915"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1102,1507,1175,1584"/>
+<area shape="rect" id="node13" title=" " alt="" coords="678,132,765,209"/>
+<area shape="rect" id="node14" title=" " alt="" coords="627,5,815,83"/>
+<area shape="rect" id="node18" href="$classcnc_1_1Stat__list.html" title="The Stat_list class exists to transmit selected data type to the stat displayer." alt="" coords="448,1405,741,1483"/>
+</map>

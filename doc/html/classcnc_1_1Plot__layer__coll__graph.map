@@ -1,0 +1,10 @@
+<map id="cnc::Plot_layer" name="cnc::Plot_layer">
+<area shape="rect" id="node1" title="The Plot_layer class will contain plots, if contains multiples plots, they will be displayed in the s..." alt="" coords="5,919,876,1319"/>
+<area shape="rect" id="node2" title=" " alt="" coords="511,132,589,209"/>
+<area shape="rect" id="node4" href="$classcnc_1_1Plottable.html" title="Abstract class that represents any type plot." alt="" coords="457,287,1115,716"/>
+<area shape="rect" id="node3" title=" " alt="" coords="676,779,896,856"/>
+<area shape="rect" id="node5" title=" " alt="" coords="743,132,829,209"/>
+<area shape="rect" id="node6" title=" " alt="" coords="692,5,880,83"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1285,463,1415,540"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1331,132,1369,209"/>
+</map>

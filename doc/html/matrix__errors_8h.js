@@ -1,0 +1,25 @@
+var matrix__errors_8h =
+[
+    [ "MatrixException", "classMatrixException.html", "classMatrixException" ],
+    [ "CNC_LIB_EXPORT", "matrix__errors_8h.html#aee235ccc5d024b68295292dc7408b228", null ],
+    [ "MATRIX_CANT_CONVERT_TO_VECTOR", "matrix__errors_8h.html#ab89e2f4c5da309f6bbb5c7795ad7d8a9", null ],
+    [ "MATRIX_CANT_EXP_INTEGER_MATRIX", "matrix__errors_8h.html#ad04f772f87acef243aed24ac1c1aea7c", null ],
+    [ "MATRIX_DENMAN_NOT_CONVERGENT", "matrix__errors_8h.html#aac19efca3638ab78d982be092f5fb6eb", null ],
+    [ "MATRIX_DIFF_HEIGHT", "matrix__errors_8h.html#aa505355cb655c3cfd8eba10e4f400781", null ],
+    [ "MATRIX_ERR_ADD_ROW_AND_COL_NOT_EQUAL", "matrix__errors_8h.html#ac4931b1b5f2469daa27250ebce136123", null ],
+    [ "MATRIX_ERR_MUL_ROW_AND_COL_BE_GREATER_THAN_ZERO", "matrix__errors_8h.html#a0f424f8f53a6a817aecc9e236fc922ab", null ],
+    [ "MATRIX_ERR_MUL_ROW_AND_COL_NOT_EQUAL", "matrix__errors_8h.html#ab466865fb4ea4ecef2c17170ba89350b", null ],
+    [ "MATRIX_ERR_TOO_FEW_DATA", "matrix__errors_8h.html#a303691329cf74b23efec9b5cfe937eab", null ],
+    [ "MATRIX_ERR_UNDEFINED", "matrix__errors_8h.html#a8a4e1c93c5ec0aaaf968274c8e24a9a8", null ],
+    [ "MATRIX_ERR_WRONG_ROW_INDEX", "matrix__errors_8h.html#a30534397b150588caacf606864bbf2f9", null ],
+    [ "MATRIX_ERROR_CODE_COUNT", "matrix__errors_8h.html#a226fb22cd7cb76afc3f1959d6f01554c", null ],
+    [ "MATRIX_HOUSEHOLDER_MUST_BE_VECTOR", "matrix__errors_8h.html#aeea339533a64195caddc9c475688772e", null ],
+    [ "MATRIX_ISNT_SQUARE", "matrix__errors_8h.html#a34b85616ceea510f21d319a885e18e72", null ],
+    [ "MATRIX_NOT_A_VECTOR", "matrix__errors_8h.html#a7440c0fc0aeafa4ce8be5bc61a1d11cf", null ],
+    [ "MATRIX_NUL_DETERMINANT", "matrix__errors_8h.html#a6774904c315e7c557d8376670639708d", null ],
+    [ "MATRIX_OFFSET_ERR", "matrix__errors_8h.html#ad8f5c1e9aa5113049f3cba31d9d394a9", null ],
+    [ "MATRIX_OFFSET_OVER_MAX", "matrix__errors_8h.html#a0cd789e2aeca7da910f3d0439c4efd24", null ],
+    [ "MATRIX_OUT_OF_ARRAY", "matrix__errors_8h.html#a5ff92b7f914c67b80520b69137a43a32", null ],
+    [ "MATRIX_OUT_ROW", "matrix__errors_8h.html#a136c5fcce787191669f512c4dfa54b86", null ],
+    [ "MATRIX_WRONG_CUT", "matrix__errors_8h.html#a25e7133c66910321005cc8b6566c7fc8", null ]
+];
