@@ -31,7 +31,7 @@ namespace algo {
  * @param X list of values
  * @return range of [min(X),max(X)]
  */
-range get_min_max_range(const std::vector<float>& X);
+range get_min_max_range(const std::vector<scalar>& X);
 
 /**
  * @brief get_index_lin_space
@@ -48,14 +48,14 @@ std::vector<int> get_index_lin_space(int a,int b,int step = 1);
  * @param eps equality condition on real numbers
  * @return true  if two numbers are equal (are their diff is less than eps)
  */
-bool check_unicity(const std::vector<float>& v,float eps = 1e-8);
+bool check_unicity(const std::vector<scalar>& v,scalar eps = 1e-8);
 
 /**
  * @brief scale_range scales the difference between the two bounds a range
  * @param r range to scale
  * @param s scale factor
  */
-void scale_range(range& r,float s);
+void scale_range(range& r,scalar s);
 
 /**
  * @brief sort a range to make sure that the first bound is smaller than the second
@@ -69,7 +69,7 @@ range sort(const range& r );
  * @param x
  * @return -1 if x < 0, 1 else
  */
-int sign(float x);
+int sign(scalar x);
 
 }
 

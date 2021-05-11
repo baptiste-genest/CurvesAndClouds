@@ -23,7 +23,7 @@ namespace calculus {
  * @param dx space step (better be small)
  * @return derivative of the function
  */
-scalar_function_1D build_derivative(const scalar_function_1D& f,float dx = 1e-6);
+scalar_function_1D build_derivative(const scalar_function_1D& f,scalar dx = 1e-6);
 
 /**
  * @brief build_second_derivative build a function to evaluate the second derivative of a given scalar function (2*f(x) - f(x+dx) - f(x-dx))/dx^2
@@ -31,7 +31,7 @@ scalar_function_1D build_derivative(const scalar_function_1D& f,float dx = 1e-6)
  * @param dx space step (better be small)
  * @return derivative of the function
  */
-scalar_function_1D build_second_derivative(const scalar_function_1D& f,float dx = 1e-6);
+scalar_function_1D build_second_derivative(const scalar_function_1D& f,scalar dx = 1e-6);
 
 
 }

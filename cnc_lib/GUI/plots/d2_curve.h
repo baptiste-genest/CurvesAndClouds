@@ -21,7 +21,7 @@ public:
      * @param X
      * @param Y
      */
-    D2_curve(const std::vector<float>& X,const std::vector<float>& Y);
+    D2_curve(const cnc::algo::calculus::nodes& X,const cnc::algo::calculus::nodes& Y);
     ~D2_curve() {}
 
 

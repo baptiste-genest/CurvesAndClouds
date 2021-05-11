@@ -20,11 +20,11 @@ Colormap::Colormap(const algo::calculus::scalar_function_2D &f, const range & x,
         if (std::abs(z_range.second) < 0.001f)
             R = [] (float) {return 0.f;};
         else
-            R = algo::calculus::build_range_mapper({0,std::max(0.f,z_range.second)},{0,255});
+            R = algo::calculus::build_range_mapper({0,std::max(scalar(0),z_range.second)},{0,255});
         if (std::abs(z_range.first) < 0.001f)
             B = [] (float) {return 0.f;};
         else
-            B = algo::calculus::build_range_mapper({std::min(0.f,z_range.first),0},{255,0});
+            B = algo::calculus::build_range_mapper({std::min(scalar(0),z_range.first),0},{255,0});
         break;
     }
 

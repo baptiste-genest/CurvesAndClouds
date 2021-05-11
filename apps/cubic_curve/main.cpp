@@ -6,8 +6,8 @@ scalar_function_2D cubic(const cloud& c){
     mat A(9,9);vec one(9);
     for (uint j = 0;j<9;j++){
         one(j) = 1.f;
-        float x = c[j](0);
-        float y = c[j](1);
+        scalar x = c[j](0);
+        scalar y = c[j](1);
         A(0,j) = x*x*x;
         A(1,j) = y*x*x;
         A(2,j) = y*y*x;
@@ -18,13 +18,8 @@ scalar_function_2D cubic(const cloud& c){
         A(7,j) = x;
         A(8,j) = y;
     }
-    /*
-    for (uint j = 1;j<=3;j++)
-        for (uint i = 0;i<=j;i++)
-            std::cout << j-i << ' ' << i << std::endl;
-            */
     auto X = A.solve(one);
-    return [X] (float x,float y){
+    return [X] (scalar x,scalar y){
         vec A(9);
         A(0) = x*x*x;
         A(1) = y*x*x;
@@ -45,12 +40,21 @@ int main(int argc, char *argv[])
     Plot_window w;w.resize(500,500);
     auto T = w.add_tab("Cubic planar curve");
     auto F = T->add_frame();
-    for (uint k = 0;k<10;k++){
+    auto F2 = T->add_frame();
+    Plot_layer* L;
+    for (uint k = 0;k<3;k++){
         cloud C = algo::stat::random_var::sample_uniform_in_square(2,0.8f,9);
-        auto f = cubic(C);
-        auto L = F->add_layer();
+        scalar_function_2D f = cubic(C);
+        L = F->add_layer();
         L->new_level_curve_unique(f,{-1.f,1.f},{-1.f,1.f},1.f);
         L->new_point_cloud(C,4)->fix_plot_in_rect(0,0,1.f);
+        if (k == 1){
+            cloud C2 = algo::stat::random_var::sample_uniform_in_square(2,0.8f,9);
+            scalar_function_2D f2 = cubic(C2);
+            Plot_layer* L2 = F2->add_layer();
+            L2->new_level_curve_unique(f2,{-1.f,1.f},{-1.f,1.f},1.f);
+            L2->new_point_cloud(C2,4)->fix_plot_in_rect(0,0,1.f);
+        }
     }
 
     w.show();

@@ -87,7 +87,7 @@ public:
         return ts;
     }
 
-    inline friend tex_stream& operator<<(tex_stream& ts,float x) {
+    inline friend tex_stream& operator<<(tex_stream& ts,scalar x) {
         ts.add_latex(std::to_string(x));
         return ts;
     }

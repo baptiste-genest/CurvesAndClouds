@@ -29,7 +29,7 @@ namespace ODE {
 /**
  * @brief ODE_steps type containing all the steps computed during ODE solving
  */
-typedef std::vector<std::pair<vec,float>> ODE_steps;
+typedef std::vector<std::pair<vec,scalar>> ODE_steps;
 /**
  * @brief extract_space_steps remove time information from an ODE_steps to only keep position (usually for plotting^)
  * @param S ODE steps to select from
@@ -40,11 +40,11 @@ std::vector<vec> extract_space_steps(const ODE_steps& S);
 /**
  * @brief differential derivative (here f) in the associated cauchy problem u'(t) = f(u(t),t)
  */
-typedef std::function<vec(const vec&,float)> differential;
+typedef std::function<vec(const vec&,scalar)> differential;
 /**
  * @brief ODE_scheme numerical scheme to solve the ODE, must give u_{n+1} given u_n and t
  */
-typedef std::function<vec(const vec&,float)> ODE_scheme;
+typedef std::function<vec(const vec&,scalar)> ODE_scheme;
 
 /**
  * @brief build_euler_explicit build the ODE_scheme associated with the euler explicit method (order 1)
@@ -52,21 +52,21 @@ typedef std::function<vec(const vec&,float)> ODE_scheme;
  * @param dt time step
  * @return ODE_scheme
  */
-ODE_scheme build_euler_explicit(const differential& f,float dt);
+ODE_scheme build_euler_explicit(const differential& f,scalar dt);
 /**
  * @brief build_runge_kutta_2 build the ODE_scheme associated with the runge kutta 2 method (order 2)
  * @param f differential of the ODE
  * @param dt time step
  * @return ODE_scheme
  */
-ODE_scheme build_runge_kutta_2(const differential& f,float dt);
+ODE_scheme build_runge_kutta_2(const differential& f,scalar dt);
 /**
  * @brief build_runge_kutta_4 build the ODE_scheme associated with the runge kutta 4 method (order 4)
  * @param f differential of the ODE
  * @param dt time step
  * @return ODE_scheme
  */
-ODE_scheme build_runge_kutta_4(const differential& f,float dt);
+ODE_scheme build_runge_kutta_4(const differential& f,scalar dt);
 
 /**
  * @brief solve_ODE computes the approximation of the solution of the ODE, given a scheme, a starting point and time, time step and number of iterations
@@ -77,7 +77,7 @@ ODE_scheme build_runge_kutta_4(const differential& f,float dt);
  * @param N number of steps
  * @return ODE_steps computed
  */
-ODE_steps solve_ODE(const ODE_scheme& s,const vec& x0,float t0,float dt,uint N);
+ODE_steps solve_ODE(const ODE_scheme& s,const vec& x0,scalar t0,scalar dt,uint N);
 
 
 }
@@ -126,7 +126,7 @@ vec build_initial_solution(const calculus::nodes& X,const calculus::scalar_funct
  * @param bct boundary condition type can be : dirichlet (boundaries fixed), periodic, or nothing
  * @return
  */
-mat build_1D_laplacian_operator(uint n,float dx,boundary_condition_type bct = any);
+mat build_1D_laplacian_operator(uint n,scalar dx,boundary_condition_type bct = any);
 /**
  * @brief build_1D_advection_operator build finite difference 1D approximation of the space advection operator
  * @param n dim of the mesh
@@ -134,7 +134,7 @@ mat build_1D_laplacian_operator(uint n,float dx,boundary_condition_type bct = an
  * @param bct boundary condition type can be : dirichlet (boundaries fixed), periodic, or nothing
  * @return
  */
-mat build_1D_advection_operator(uint n,float dx,boundary_condition_type = any);
+mat build_1D_advection_operator(uint n,scalar dx,boundary_condition_type = any);
 
 /**
  * @brief build_euler_explicit PDE scheme U_n+1 = U_n + dt*(A(u_n) + F) order 1
@@ -144,7 +144,7 @@ mat build_1D_advection_operator(uint n,float dx,boundary_condition_type = any);
  * @param bc boundary condition type can be : dirichlet (boundaries fixed), periodic, or nothing
  * @return PDE scheme
  */
-PDE_scheme build_euler_explicit(const mat& A,const vec& F,float dt,boundary_condition_type bc);
+PDE_scheme build_euler_explicit(const mat& A,const vec& F,scalar dt,boundary_condition_type bc);
 /**
  * @brief build_euler_implicit PDE scheme U_n+1 = U_n + dt*(A(u_n+1) + F) order 1
  * @param A linear space differential operator
@@ -153,7 +153,7 @@ PDE_scheme build_euler_explicit(const mat& A,const vec& F,float dt,boundary_cond
  * @param bc boundary condition type can be : dirichlet (boundaries fixed), periodic, or nothing
  * @return PDE scheme
  */
-PDE_scheme build_euler_implicit(const mat& A,const vec& F,float dt,boundary_condition_type bc);
+PDE_scheme build_euler_implicit(const mat& A,const vec& F,scalar dt,boundary_condition_type bc);
 /**
  * @brief build_crank_nicholsan PDE scheme U_n+1 = U_n + 1/2*dt*(A(u_n) + A(u_n+1) + 2*F) order 2
  * @param A linear space differential operator
@@ -162,7 +162,7 @@ PDE_scheme build_euler_implicit(const mat& A,const vec& F,float dt,boundary_cond
  * @param bc boundary condition type can be : dirichlet (boundaries fixed), periodic, or nothing
  * @return PDE scheme
  */
-PDE_scheme build_crank_nicholson(const mat& A,const vec& F,float dt,boundary_condition_type bc);
+PDE_scheme build_crank_nicholson(const mat& A,const vec& F,scalar dt,boundary_condition_type bc);
 
 
 }

@@ -9,7 +9,7 @@ Vector_field::Vector_field(const algo::calculus::vector_function_2D &f, const ra
     auto Mx = cnc::algo::calculus::build_range_mapper({0,sample_size},x);
     auto My = cnc::algo::calculus::build_range_mapper({0,sample_size},y);
 
-    std::vector<float> norm_samples(sample_size*sample_size);
+    std::vector<scalar> norm_samples(sample_size*sample_size);
     samples.resize(sample_size*sample_size);
     for (uint j = 0;j<sample_size;j++)
         for (uint i = 0;i<sample_size;i++){

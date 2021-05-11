@@ -4,20 +4,20 @@ using namespace cnc;
 using namespace cnc::algo::calculus;
 using namespace cnc::algo::differential_equations;
 
-vec f(const vec& x,float){
+vec f(const vec& x,scalar){
     return vec({x(1),-x(0)}).normalize();
 }
 
-float u0(float x) {
-    float a = 2*M_PI;
+scalar u0(scalar x) {
+    scalar a = 2*M_PI;
     return std::pow(std::sin(a*x) + std::sin(a*3*x)*0.2f,2);
 }
 
-float z(float x){
+scalar z(scalar ){
     return 0.f;//std::pow((x-0.5),2);
 }
 
-float wave(float x){
+scalar wave(scalar x){
     return 0.5*std::exp(-40*(x-0.5)*(x-0.5));
     if (x < 0.5f)
         return x;
@@ -25,25 +25,20 @@ float wave(float x){
 }
 
 scalar_function_2D build_nth_lagrange_modulus(uint n){
-    return [n] (float x,float y) {
-        float f = 1.f;
-        std::complex<float> z = 1.f,z0(x,y);
+    return [n] (scalar x,scalar y) {
+        scalar f = 1.f;
+        std::complex<scalar> z = 1.f,z0(x,y);
         for (uint k = 1;k<=n;k++){
             f /= k;
-            z += std::pow(z0,float(k))*f;
+            z += std::pow(z0,scalar(k))*f;
         }
-        float r = std::abs(z);
+        scalar r = std::abs(z);
 
-        if (r > 1.1f)
-            return 0.f;
+        if (r > scalar(1.1))
+            return scalar(0);
 
         return r;
     };
-}
-
-float conv(float x,float y){
-    std::complex<float> z(x,y);
-    return std::abs(1.f + z + z*z/2.f + z*z*z/6.f + z*z*z*z/24.f);
 }
 
 int main(int argc, char *argv[])
@@ -57,8 +52,8 @@ int main(int argc, char *argv[])
         Plot_frame* F= T->add_frame();
         Plot_layer* L = F->add_layer();
 
-        float dt = 0.3;
-        float t0 = 0.f;
+        scalar dt = 0.3;
+        scalar t0 = 0.f;
         vec x0({1.f,0.f});
         ODE_scheme ee = build_euler_explicit(f,dt);
         ODE_scheme rk2 = build_runge_kutta_2(f,dt);
@@ -88,10 +83,10 @@ int main(int argc, char *argv[])
         using namespace PDE;
         using namespace PDE::D1;
         Plot_tab* T = w.add_tab("PDE solving schemes");
-        float dt = 0.0001;
-        float dx = 0.02;
+        scalar dt = 0.0001;
+        scalar dx = 0.02;
 
-        float xa = 0.f,xb = 1.f;
+        scalar xa = 0.f,xb = 1.f;
         range x_range({xa,xb});
         nodes X = get_lin_space(x_range,dx);
         uint n = X.size();

@@ -18,7 +18,7 @@ namespace algo {
 
 namespace calculus {
 
-typedef std::function<float(float,float)> scheme;
+typedef std::function<scalar(scalar,scalar)> scheme;
 
 /**
  * @brief namespace containing all integration schemes
@@ -68,7 +68,7 @@ scheme simpson(const scalar_function_1D& f);
  * @param n nodes where integrate
  * @return approximated integral
  */
-float integrate(const scheme& s,const nodes& n);
+scalar integrate(const scheme& s,const nodes& n);
 
 }
 

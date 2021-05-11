@@ -5,7 +5,7 @@ cnc::vec cnc::algo::stat::compute_mean(const cnc::cloud& P)
     if (P.size() == 0)
         throw Cnc_error("can't compute mean of a void cloud");
     uint N = P.points.size();
-    const float scaling = 1.f/(float)N;
+    const scalar scaling = 1.f/(scalar)N;
     vec M(P.points[0].rowNum());
     for (const vec& v : P.points)
         M += v;
@@ -61,8 +61,8 @@ std::vector<cnc::cloud> cnc::algo::stat::compute_clusters_by_k_means(const cnc::
 
     const static uint MAX_NB_ITER = 1000;
 
-    const static float eps = 1e-6;
-    float dmean = 2*eps;
+    const static scalar eps = 1e-6;
+    scalar dmean = 2*eps;
     for (uint iter = 0;dmean > eps && iter < MAX_NB_ITER;iter++) {
         std::vector<vec> avg_pos_in_voronoi(k);
         for (uint i = 0;i<k;i++){
@@ -71,7 +71,7 @@ std::vector<cnc::cloud> cnc::algo::stat::compute_clusters_by_k_means(const cnc::
         }
 
         for (uint i = 0;i<N;i++){
-            std::vector<float> dist_to_mean(k);
+            std::vector<scalar> dist_to_mean(k);
             for (uint j = 0;j<k;j++){
                 dist_to_mean[j] = (I.points[i] - k_means[j]).norm();
             }
@@ -104,7 +104,7 @@ cnc::mat cnc::algo::stat::compute_covariance_matrix(const cnc::cloud &c)
 {
     cnc::cloud centered = center(c);
     uint dim = c.points[0].rowNum(), N = c.points.size();
-    float scale_factor = 1.f/(N-1);
+    scalar scale_factor = 1.f/(N-1);
     mat C(dim,dim);
 
     for (uint j = 0;j<dim;j++){
@@ -157,7 +157,7 @@ std::vector<cnc::vec> cnc::algo::stat::compute_PCA(const cnc::cloud &X, uint n,b
 cnc::algo::stat::norm cnc::algo::stat::build_wasserstein_norm(uint p)
 {
     return [p] (const cnc::vec& v){
-        float p_norm = 0.f;
+        scalar p_norm = 0.f;
         for (uint k = 0;k<v.rowNum();k++)
             p_norm += std::pow(std::abs(v(k)),p);
         return std::pow(p_norm,1.f/p);
@@ -237,7 +237,7 @@ cnc::cloud cnc::algo::stat::project_by_min_dist(const cnc::cloud &c, uint dim)
             D(j,i) = D(i,j);
         }
     calculus::scalar_function dist = [N,D,dim] (const vec& X) {
-        float cum_dist = 0.f;
+        scalar cum_dist = 0.f;
         std::vector<vec> p(N,vec(dim));
         for (uint j = 0;j<N;j++)
             for (uint i = 0;i<dim;i++)

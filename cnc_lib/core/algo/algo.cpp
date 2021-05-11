@@ -1,6 +1,6 @@
 #include "algo.h"
 
-cnc::range cnc::algo::get_min_max_range(const std::vector<float>& X)
+cnc::range cnc::algo::get_min_max_range(const std::vector<scalar>& X)
 {
     range R;
     R.first = *std::min_element(X.begin(),X.end());
@@ -23,7 +23,7 @@ std::vector<int> cnc::algo::get_index_lin_space(int a, int b, int dx)
     return X;
 }
 
-bool cnc::algo::check_unicity(const std::vector<float> &v,float eps)
+bool cnc::algo::check_unicity(const std::vector<scalar> &v,scalar eps)
 {
     for (uint j = 0;j<v.size();j++)
         for (uint i = 0;i<v.size();i++)
@@ -32,9 +32,9 @@ bool cnc::algo::check_unicity(const std::vector<float> &v,float eps)
     return true;
 }
 
-void cnc::algo::scale_range(cnc::range &r, float s)
+void cnc::algo::scale_range(cnc::range &r, scalar s)
 {
-    float offset = (r.second+r.first)*0.5f;
+    scalar offset = (r.second+r.first)*0.5f;
     r.first -= offset;
     r.second -= offset;
     r.first *= s;
@@ -48,7 +48,7 @@ cnc::range cnc::algo::sort(const cnc::range &r )
     return {std::min(r.first,r.second),std::max(r.first,r.second)};
 }
 
-int cnc::algo::sign(float x)
+int cnc::algo::sign(scalar x)
 {
     if (x < 0.f)
         return -1.f;

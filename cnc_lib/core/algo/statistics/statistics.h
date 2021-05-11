@@ -111,7 +111,7 @@ namespace algo {
  */
 namespace stat {
 
-typedef std::function<float(const vec&)> norm;
+typedef std::function<scalar(const vec&)> norm;
 
 /**
  * @brief build_wasserstein_norm builds p norm
@@ -194,7 +194,7 @@ projector get_PCA_projector(const cloud& c,uint dim = 2);
 /**
  * @brief kernel functions
  */
-typedef std::function<float(const vec&,const vec&)> kernel;
+typedef std::function<scalar(const vec&,const vec&)> kernel;
 
 
 /**

@@ -31,12 +31,12 @@ namespace stat {
 namespace random_var {
 
 /**
- * @brief random_float return a random float between a and b
+ * @brief random_scalar return a random scalar between a and b
  * @param a lower bound
  * @param b upper bound
  * @return
  */
-float random_float(float a,float b);
+scalar random_scalar(scalar a,scalar b);
 
 
 /**
@@ -46,7 +46,7 @@ float random_float(float a,float b);
  * @param N number of samples
  * @return sample cloud
  */
-cloud sample_normal_random_vectors(const std::vector<float>& means,const std::vector<float>& var,uint N);
+cloud sample_normal_random_vectors(const std::vector<scalar>& means,const std::vector<scalar>& var,uint N);
 
 /**
  * @brief sample_centered_reduced_gaussian_vector sample a gaussian vector following
@@ -64,7 +64,7 @@ cloud sample_centered_reduced_gaussian_vector(uint dim,uint N);
  * @param N number of samples
  * @return samples
  */
-cloud sample_gaussian_vector_by_PC(const std::vector<vec>& pc_axis,const std::vector<float>& var,const vec& mean,uint N);
+cloud sample_gaussian_vector_by_PC(const std::vector<vec>& pc_axis,const std::vector<scalar>& var,const vec& mean,uint N);
 
 /**
  * @brief sample_vector_on_unit_sphere generate a point cloud with coords between [-1,1]
@@ -81,7 +81,7 @@ cloud sample_vector_on_unit_sphere(uint dim,uint N);
  * @param N number of points
  * @return samples cloud
  */
-cloud sample_uniform_in_square(uint dim,float half_width,uint N);
+cloud sample_uniform_in_square(uint dim,scalar half_width,uint N);
 
 }
 

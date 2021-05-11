@@ -1,4 +1,5 @@
 #include "lagrange_interpolator.h"
+using namespace cnc;
 
 
 void cnc::algo::calculus::lagrange_interpolator::divided_difference_algo()
@@ -13,8 +14,8 @@ void cnc::algo::calculus::lagrange_interpolator::divided_difference_algo()
         for (uint i = 0;i< N-j-1;i++){
             left = brackets[j][i];
             right = brackets[j][i+1];
-            float rrm = right.rightmost_x;
-            float llm = left.leftmost_x;
+            scalar rrm = right.rightmost_x;
+            scalar llm = left.leftmost_x;
             brackets[j+1].push_back({llm,rrm,(right.value - left.value)/(rrm-llm)});
         }
     }
@@ -41,10 +42,10 @@ cnc::algo::calculus::lagrange_interpolator::operator scalar_function_1D() const
     auto& c = coefs;
     auto& Xn = X;
     auto& n = N;
-    return [c,Xn,n] (float x){
-        float interpolation = 0;
+    return [c,Xn,n] (scalar x){
+        scalar interpolation = 0;
         for (uint k = 0;k<n;k++){
-            float f = 1;
+            scalar f = 1;
             for (uint i = 0;i<k;i++)
                 f *= x-Xn[i];
             interpolation += c[k]*f;
@@ -53,11 +54,11 @@ cnc::algo::calculus::lagrange_interpolator::operator scalar_function_1D() const
     };
 }
 
-float cnc::algo::calculus::lagrange_interpolator::operator()(float x) const
+scalar cnc::algo::calculus::lagrange_interpolator::operator()(scalar x) const
 {
-    float interpolation = 0;
+    scalar interpolation = 0;
     for (uint k = 0;k<N;k++){
-        float f = 1;
+        scalar f = 1;
         for (uint i = 0;i<k;i++)
             f *= x-X[i];
         interpolation += coefs[k]*f;
@@ -67,7 +68,7 @@ float cnc::algo::calculus::lagrange_interpolator::operator()(float x) const
 
 cnc::algo::calculus::nodes cnc::algo::calculus::get_tchebytchev_points(uint N, const cnc::range &x)
 {
-    float a = x.first,b= x.second,mid = (a+b)*0.5f, half_length = (b-a)*0.5f;
+    scalar a = x.first,b= x.second,mid = (a+b)*0.5f, half_length = (b-a)*0.5f;
     nodes T(N);
 
     for (uint k = 0;k<N;k++)

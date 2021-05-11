@@ -1,25 +1,26 @@
 #include "vector_calculus.h"
+using namespace cnc;
 
 
-cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::build_gradient(const cnc::algo::calculus::scalar_function_2D &f,float dx)
+cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::build_gradient(const cnc::algo::calculus::scalar_function_2D &f,scalar dx)
 {
-    return [f,dx] (float x,float y){
-        float v = f(x,y);
+    return [f,dx] (scalar x,scalar y){
+        scalar v = f(x,y);
         return cnc::vec({f(x+dx,y) - v,f(x,y+dx)-v})*(1.f/dx);
     };
 }
 
-cnc::algo::calculus::scalar_function_2D cnc::algo::vector_calculus::build_divergence(const cnc::algo::calculus::vector_function_2D &f, float dx)
+cnc::algo::calculus::scalar_function_2D cnc::algo::vector_calculus::build_divergence(const cnc::algo::calculus::vector_function_2D &f, scalar dx)
 {
-    return [f,dx] (float x,float y){
+    return [f,dx] (scalar x,scalar y){
         cnc::vec v = f(x,y);
         return ((f(x+dx,y)-v)(0)+(f(x,y+dx)-v)(1))*(1.f/dx);
     };
 }
 
-cnc::algo::calculus::scalar_function_2D cnc::algo::vector_calculus::build_rot_norm(const cnc::algo::calculus::vector_function_2D &f, float dx)
+cnc::algo::calculus::scalar_function_2D cnc::algo::vector_calculus::build_rot_norm(const cnc::algo::calculus::vector_function_2D &f, scalar dx)
 {
-    return [f,dx] (float x,float y){
+    return [f,dx] (scalar x,scalar y){
         cnc::vec v = f(x,y);
         return ((f(x+dx,y)(1) - v(1) - f(x,y+dx)(0) + v(0))*(1.f/dx));
     };
@@ -39,16 +40,16 @@ cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::Vector_2D_ar
     auto X = calculus::build_range_mapper(x,{0,w-1});
     auto Y = calculus::build_range_mapper(y,{0,h-1});
     auto W = w;
-    float bx = x.second,by = y.second;
+    scalar bx = x.second,by = y.second;
     auto V = value;
-    return [X,Y,V,W,bx,by] (float x,float y){
+    return [X,Y,V,W,bx,by] (scalar x,scalar y){
         if (x > bx)
             return vec(2);
         if (y > by)
             return vec(2);
-        float px = X(x),py = Y(y);
+        scalar px = X(x),py = Y(y);
         uint ix = (uint)px,iy = (uint)py;
-        float tx = px - ix,ty = py-iy;
+        scalar tx = px - ix,ty = py-iy;
         const vec& v00 = V[iy*W + ix];
         const vec& v10 = V[iy*W + ix+1];
         const vec& v01 = V[(iy+1)*W + ix];
@@ -84,7 +85,7 @@ cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2
 
 }
 
-cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::operator*(float l) const
+cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::operator*(scalar l) const
 {
     Vector_2D_array R(w,h);
     for (uint j = 0;j<R.value.size();j++)
@@ -164,9 +165,9 @@ std::pair<cnc::algo::vector_calculus::Vector_2D_array, cnc::algo::vector_calculu
     return {U,grad};
 }
 
-cnc::algo::calculus::vector_function cnc::algo::vector_calculus::build_gradient(const cnc::algo::calculus::scalar_function &f,uint dim, float dx)
+cnc::algo::calculus::vector_function cnc::algo::vector_calculus::build_gradient(const cnc::algo::calculus::scalar_function &f,uint dim, scalar dx)
 {
-    float idx = 1.f/dx;
+    scalar idx = 1.f/dx;
     auto DX = [dim,dx] (uint k){
         vec d(dim);
         d(k) = dx;
@@ -174,7 +175,7 @@ cnc::algo::calculus::vector_function cnc::algo::vector_calculus::build_gradient(
     };
     return [f,idx,dim,DX] (const vec& x){
         vec G(dim);
-        float v = f(x);
+        scalar v = f(x);
         for (uint k = 0;k<dim;k++)
             G(k) = f(x + DX(k)) - v;
         return G*idx;

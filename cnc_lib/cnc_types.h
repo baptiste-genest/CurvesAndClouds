@@ -19,10 +19,20 @@ typedef unsigned int uint;
  */
 namespace cnc {
 
+#if PRECISION == FLOAT
+typedef float scalar;
+#elif PRECISION == DOUBLE
+typedef double scalar;
+#elif PRECISION == LONG_DOUBLE
+typedef double scalar;
+#else
+typedef float scalar;
+#endif
+
 /**
  * @brief A pair of float
  */
-typedef std::pair<float,float> range;
+typedef std::pair<scalar,scalar> range;
 
 enum axis {
     x_axis,

@@ -1,25 +1,25 @@
 #include "differential_equations.h"
 using namespace cnc::algo::differential_equations;
 
-ODE::ODE_scheme ODE::build_euler_explicit(const ODE::differential &f,float dt)
+ODE::ODE_scheme ODE::build_euler_explicit(const ODE::differential &f,scalar dt)
 {
-    return [f,dt] (const vec& x,float t){
+    return [f,dt] (const vec& x,scalar t){
         return x + f(x,t)*dt;
     };
 }
 
-ODE::ODE_scheme ODE::build_runge_kutta_2(const ODE::differential &f,float dt)
+ODE::ODE_scheme ODE::build_runge_kutta_2(const ODE::differential &f,scalar dt)
 {
-    return [f,dt] (const vec& x,float t){
+    return [f,dt] (const vec& x,scalar t){
         vec k1 = f(x,t)*dt;
         vec k2 = f(x+k1,t+dt)*dt;
         return x + (k1 + k2)*0.5f;
     };
 }
 
-ODE::ODE_scheme ODE::build_runge_kutta_4(const ODE::differential &f,float dt)
+ODE::ODE_scheme ODE::build_runge_kutta_4(const ODE::differential &f,scalar dt)
 {
-    return [f,dt] (const vec& x,float t){
+    return [f,dt] (const vec& x,scalar t){
         vec k1 = f(x,t)*dt;
         vec k2 = f(x+k1*0.5f,t + dt*0.5f)*dt;
         vec k3 = f(x+k2*0.5f,t + dt*0.5f)*dt;
@@ -28,10 +28,10 @@ ODE::ODE_scheme ODE::build_runge_kutta_4(const ODE::differential &f,float dt)
     };
 }
 
-ODE::ODE_steps ODE::solve_ODE(const ODE_scheme& s, const cnc::vec &x0, float t0, float dt, uint N)
+ODE::ODE_steps ODE::solve_ODE(const ODE_scheme& s, const cnc::vec &x0, scalar t0, scalar dt, uint N)
 {
     ODE_steps S(N);
-    float t = t0;
+    scalar t = t0;
     S[0] = {x0,t0};
     for (uint k = 1;k<N;k++){
         t += dt;
@@ -48,10 +48,10 @@ std::vector<cnc::vec> ODE::extract_space_steps(const ODE::ODE_steps &S)
     return C;
 }
 
-cnc::mat PDE::D1::build_1D_laplacian_operator(uint n,float dx,boundary_condition_type bct)
+cnc::mat PDE::D1::build_1D_laplacian_operator(uint n,scalar dx,boundary_condition_type bct)
 {
     cnc::mat L(n,n);
-    float idx2 = 1.f/(dx*dx);
+    scalar idx2 = 1.f/(dx*dx);
     for (uint k = 0;k<n;k++){
         L(k,k) = 2.f*idx2;
         if (k > 0)
@@ -70,19 +70,19 @@ cnc::mat PDE::D1::build_1D_laplacian_operator(uint n,float dx,boundary_condition
     return L;
 }
 
-PDE::PDE_scheme PDE::D1::build_euler_explicit(const cnc::mat &A, const cnc::vec &F, float dt,boundary_condition_type)
+PDE::PDE_scheme PDE::D1::build_euler_explicit(const cnc::mat &A, const cnc::vec &F, scalar dt,boundary_condition_type)
 {
     uint n = A.rowNum();
-    mat EE = chaskal::Id<float>(n) + A*dt;
+    mat EE = chaskal::Id<scalar>(n) + A*dt;
     return [EE,F,dt] (const vec& u ){
         return EE*u + F*dt;
     };
 }
 
-PDE::PDE_scheme PDE::D1::build_euler_implicit(const cnc::mat &A, const cnc::vec &F, float dt,boundary_condition_type bc)
+PDE::PDE_scheme PDE::D1::build_euler_implicit(const cnc::mat &A, const cnc::vec &F, scalar dt,boundary_condition_type bc)
 {
     uint n = A.rowNum();
-    mat EI = chaskal::Id<float>(n) - A*dt;
+    mat EI = chaskal::Id<scalar>(n) - A*dt;
     return [EI,F,dt,bc] (const vec& u ){
         if (bc == periodic)
             return EI.tri_diagonal_periodic_solve(u + F*dt);
@@ -91,11 +91,11 @@ PDE::PDE_scheme PDE::D1::build_euler_implicit(const cnc::mat &A, const cnc::vec 
     };
 }
 
-PDE::PDE_scheme PDE::D1::build_crank_nicholson(const cnc::mat &A, const cnc::vec &F, float dt,boundary_condition_type bc)
+PDE::PDE_scheme PDE::D1::build_crank_nicholson(const cnc::mat &A, const cnc::vec &F, scalar dt,boundary_condition_type bc)
 {
     uint n = A.rowNum();
-    mat EI = chaskal::Id<float>(n) - A*dt*0.5;
-    mat EE = chaskal::Id<float>(n) + A*dt*0.5;
+    mat EI = chaskal::Id<scalar>(n) - A*dt*0.5;
+    mat EE = chaskal::Id<scalar>(n) + A*dt*0.5;
     return [EI,EE,F,dt,bc] (const vec& u ){
         if (bc == periodic)
             return EI.tri_diagonal_periodic_solve(EE*u+F*dt);
@@ -124,10 +124,10 @@ cnc::vec PDE::D1::build_initial_solution(const cnc::algo::calculus::nodes &X, co
 }
 
 
-cnc::mat PDE::D1::build_1D_advection_operator(uint n, float dx, boundary_condition_type bct)
+cnc::mat PDE::D1::build_1D_advection_operator(uint n, scalar dx, boundary_condition_type bct)
 {
     cnc::mat L(n,n);
-    float idx = 1.f/dx;
+    scalar idx = 1.f/dx;
     for (uint k = 0;k<n;k++){
         L(k,k) = -idx;
         if (k < n-1)

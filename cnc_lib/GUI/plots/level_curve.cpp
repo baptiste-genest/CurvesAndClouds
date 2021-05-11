@@ -17,6 +17,7 @@ Level_curve::Level_curve(const algo::calculus::scalar_function_2D &f, const rang
     float thickness = 0.2f*(z_range.second - z_range.first)/nb_slices;
     auto grad = algo::vector_calculus::build_gradient(Scalar_field::value);
 
+
     for (uint j = 0;j< MAX_HEIGHT;j++){
         for (uint i = 0;i<MAX_WIDTH;i++){
             float z = f(X(i),Y(j));

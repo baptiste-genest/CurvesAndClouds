@@ -33,7 +33,7 @@ namespace optimization {
  * @param max_iter maximum number of iterations
  * @return zero approximation
  */
-float newton_method_1D(const scalar_function_1D& f,const scalar_function_1D& df,float x0,float eps = 1e-5,uint max_iter = 1000);
+scalar newton_method_1D(const scalar_function_1D& f,const scalar_function_1D& df,scalar x0,scalar eps = 1e-5,uint max_iter = 1000);
 
 /**
  * @brief dichotomia
@@ -44,16 +44,16 @@ float newton_method_1D(const scalar_function_1D& f,const scalar_function_1D& df,
  * @param max_iter
  * @return
  */
-float min_dichotomia(const scalar_function_1D& f, float a,float b,float eps,uint max_iter);
+scalar min_dichotomia(const scalar_function_1D& f, scalar a,scalar b,scalar eps,uint max_iter);
 
 inline scalar_function_1D build_descent_function(const scalar_function& f,const vec& x,const vec& d);
 
-vec gradient_descent(const scalar_function& f,const vec& x0,float eps = 1e-5,uint max_iter = 1000);
-vec gradient_descent_fixed_step(const scalar_function& f,const vec& x0,float h,float eps = 1e-5,uint max_iter = 1000);
+vec gradient_descent(const scalar_function& f,const vec& x0,scalar eps = 1e-5,uint max_iter = 1000);
+vec gradient_descent_fixed_step(const scalar_function& f,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
 
 template<class T>
-T argmin(const std::function<float(const T&)>& f,const std::vector<T>& X){
-    std::vector<float> values(X.size());
+T argmin(const std::function<scalar(const T&)>& f,const std::vector<T>& X){
+    std::vector<scalar> values(X.size());
     for (uint k = 0;k<X.size();k++)
         values[k] = f(X[k]);
     return X[std::distance(values.begin(),std::min_element(values.begin(),values.end()))];

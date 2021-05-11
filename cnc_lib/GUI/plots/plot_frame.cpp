@@ -53,6 +53,9 @@ void Plot_frame::drawWidget(QPainter& painter)
 {
     frame_info fi = {(uint)QFrame::width(),(uint)QFrame::height()};
     frame_draw_object fdo = {painter,fi};
+    painter.setBrush(QColorConstants::White);
+    painter.drawRect(QRect(0,0,fi.width,fi.height));
+    painter.setBrush(QColorConstants::Black);
     draw_current_layer(fdo);
 }
 

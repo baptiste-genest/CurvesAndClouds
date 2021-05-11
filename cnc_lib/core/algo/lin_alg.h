@@ -10,6 +10,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#include "../../cnc_types.h"
 #include "../matrix.h"
 #include "../matrix_errors.h"
 
@@ -18,11 +19,11 @@ namespace cnc {
 /**
  * @brief vec N dimensional vector
  */
-typedef chaskal::Vector<float> vec;
+typedef chaskal::Vector<scalar> vec;
 /**
  * @brief mat NxM matrix
  */
-typedef chaskal::Matrix<float> mat;
+typedef chaskal::Matrix<scalar> mat;
 
 }
 #endif // LIN_ALG_H

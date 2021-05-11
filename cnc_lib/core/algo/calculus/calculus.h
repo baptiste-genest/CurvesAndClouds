@@ -31,31 +31,31 @@ namespace algo {
 namespace calculus
 {
 
-static constexpr float epsilon = 1e-12;
+static constexpr scalar epsilon = 1e-12;
 
 /**
  * @brief nodes datastruct is the basic structure to tell where to integrate/compute
  */
-typedef std::vector<float> nodes;
+typedef std::vector<scalar> nodes;
 
 /**
  * @brief scalar_function_1D are real functions of 1 real argument
  */
-typedef std::function<float(float)> scalar_function_1D;
+typedef std::function<scalar(scalar)> scalar_function_1D;
 
 /**
  * @brief scalar_function_2D are real functions of 2 real arguments
  */
-typedef std::function<float(float,float)> scalar_function_2D;
+typedef std::function<scalar(scalar,scalar)> scalar_function_2D;
 
 /**
  * @brief scalar_function are real functions of 1 real-vector argumen^t
  */
-typedef std::function<float(const cnc::vec&)> scalar_function;
+typedef std::function<scalar(const cnc::vec&)> scalar_function;
 /**
  * @brief vector_function_2D are real-vector values of 2 real arguments
  */
-typedef std::function<cnc::vec(float,float)> vector_function_2D;
+typedef std::function<cnc::vec(scalar,scalar)> vector_function_2D;
 /**
  * @brief vector_function are real-vector values of 1 real-vector argument
  */
@@ -69,14 +69,14 @@ typedef std::function<cnc::vec(const cnc::vec&)> vector_function;
  * @param dx space step
  * @return vector of nodes
  */
-std::vector<float> get_lin_space(float a,float b,float dx);
+std::vector<scalar> get_lin_space(scalar a,scalar b,scalar dx);
 /**
  * @brief get_lin_space create 1D evenly spaced nodes set in a given range with step dx
  * @param x range
  * @param dx space step
  * @return vector of nodes
  */
-std::vector<float> get_lin_space(range x,float dx);
+std::vector<scalar> get_lin_space(range x,scalar dx);
 
 /**
  * @brief get_lin_space create 1D evenly spaced nodes set from a to b with N steps
@@ -85,14 +85,14 @@ std::vector<float> get_lin_space(range x,float dx);
  * @param N number of nodes
  * @return vector of nodes
  */
-std::vector<float> get_lin_space(float a,float b,int N);
+std::vector<scalar> get_lin_space(scalar a,scalar b,int N);
 /**
  * @brief get_lin_space create 1D evenly spaced nodes set in a given range with N steps
  * @param x range
  * @param N number of nodes
  * @return vector of nodes
  */
-std::vector<float> get_lin_space(range x,int N);
+std::vector<scalar> get_lin_space(range x,int N);
 
 /**
  * @brief build_1D_linear_interpolator given x will interpolate depending on two closest X nodes corresponding Y values
@@ -126,7 +126,7 @@ nodes sample(const scalar_function_1D& f,const nodes& X);
  * @param dx
  * @return
  */
-nodes build_integration_mesh(const scalar_function_1D& f, float a,float b,float dx);
+nodes build_integration_mesh(const scalar_function_1D& f, scalar a,scalar b,scalar dx);
 
 /**
  * @brief build_2D_laplacian build a 2D function to evaluation the laplacian at any point of any function
@@ -134,7 +134,7 @@ nodes build_integration_mesh(const scalar_function_1D& f, float a,float b,float 
  * @param dx space step (better be small)
  * @return function
  */
-scalar_function_2D build_2D_laplacian(const scalar_function_2D& f,float dx = 0.01f);
+scalar_function_2D build_2D_laplacian(const scalar_function_2D& f,scalar dx = 0.01f);
 
 nodes convert_to_nodes(const vec& x);
 

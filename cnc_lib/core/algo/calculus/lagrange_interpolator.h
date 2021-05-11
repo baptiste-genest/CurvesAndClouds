@@ -40,7 +40,7 @@ class lagrange_interpolator {
          * @param x value to interpolate
          * @return interpolated value
          */
-        float operator ()(float x) const;
+        scalar operator ()(scalar x) const;
 
     private:
         uint N;
@@ -51,9 +51,9 @@ class lagrange_interpolator {
         uint nb_computed_coefs;
 
         struct bracket_info {
-            float leftmost_x;
-            float rightmost_x;
-            float value;
+            scalar leftmost_x;
+            scalar rightmost_x;
+            scalar value;
         };
 
         void divided_difference_algo();

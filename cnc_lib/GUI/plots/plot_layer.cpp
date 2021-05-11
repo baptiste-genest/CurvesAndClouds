@@ -15,8 +15,8 @@ void Plot_layer::display_layer(frame_draw_object& fdo)
             plots[p]->compute_value_range(fdo.fi);
         else {
             plots[p]->range_reference->compute_value_range(fdo.fi);
-            plots[p]->x_range = plots[p]->range_reference->x_range;
-            plots[p]->y_range = plots[p]->range_reference->y_range;
+            plots[p]->x_range = plots[p]->get_x_range();
+            plots[p]->y_range = plots[p]->get_y_range();
         }
         fdo.painter.setPen(QPen(plots[p]->plot_color, 2));
         plots[p]->plot(fdo);

@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DCNC_LIB -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DCNC_LIB -DPRECISION -DDOUBLE -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../cnc_lib -I. -I../../Qt/5.15.2/gcc_64/include -I../../Qt/5.15.2/gcc_64/include/QtWidgets -I../../Qt/5.15.2/gcc_64/include/QtGui -I../../Qt/5.15.2/gcc_64/include/QtNetwork -I../../Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/libdrm -I../../Qt/5.15.2/gcc_64/mkspecs/linux-g++
@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = cnc_lib1.0.0
-DISTDIR = /home/eulerson/curvesandclouds/debug/.tmp/cnc_lib1.0.0
+DISTDIR = /home/eulerson/Curves-Clouds/debug/.tmp/cnc_lib1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/eulerson/Qt/5.15.2/gcc_64/lib -shared -Wl,-soname,libcnc_lib.so.1
 LIBS          = $(SUBLIBS) /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Widgets.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Gui.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Network.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
@@ -1003,7 +1003,7 @@ moc_plot_frame.cpp: ../cnc_lib/GUI/plots/plot_frame.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/curvesandclouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/curvesandclouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_frame.h -o moc_plot_frame.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_frame.h -o moc_plot_frame.cpp
 
 moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../cnc_lib/GUI/plots/plot_frame.h \
@@ -1199,7 +1199,7 @@ moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/curvesandclouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/curvesandclouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_tab.h -o moc_plot_tab.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_tab.h -o moc_plot_tab.cpp
 
 moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
@@ -1411,7 +1411,7 @@ moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/curvesandclouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/curvesandclouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_list_window.h -o moc_stat_list_window.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_list_window.h -o moc_stat_list_window.cpp
 
 moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../cnc_lib/cnc_types.h \
@@ -1617,7 +1617,7 @@ moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/curvesandclouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/curvesandclouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_window.h -o moc_stat_window.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_window.h -o moc_stat_window.cpp
 
 moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
@@ -1820,7 +1820,7 @@ moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/curvesandclouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/curvesandclouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plotwindow.h -o moc_plotwindow.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plotwindow.h -o moc_plotwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -5222,11 +5222,11 @@ vector_calculus.o: ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/
 
 inout.o: ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/core/algo/statistics/statistics.h \
 		../cnc_lib/core/algo/algo.h \
-		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/calculus/optimization.h \

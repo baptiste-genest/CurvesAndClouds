@@ -92,7 +92,7 @@ public:
      * @param l scalar parameters
      * @return scaled vector field
      */
-    Vector_2D_array operator*(float l) const ;
+    Vector_2D_array operator*(scalar l) const ;
 
 
     /**
@@ -121,7 +121,7 @@ private:
  * @param dx space step
  * @return gradient function (x,y) -> Grad(f)(x,y) (vector valued)
  */
-calculus::vector_function_2D build_gradient(const calculus::scalar_function_2D& f,float dx = 0.001f);
+calculus::vector_function_2D build_gradient(const calculus::scalar_function_2D& f,scalar dx = 0.001f);
 
 /**
  * @brief build_gradient build gradient application of a n-D scalar field
@@ -129,21 +129,21 @@ calculus::vector_function_2D build_gradient(const calculus::scalar_function_2D& 
  * @param dx space step
  * @return gradient function (x) -> Grad(f)(x) (vector valued)
  */
-calculus::vector_function build_gradient(const calculus::scalar_function& f,uint dim,float dx = 1e-4);
+calculus::vector_function build_gradient(const calculus::scalar_function& f,uint dim,scalar dx = 1e-4);
 /**
  * @brief build_divergence build divergence application of a 2D vector field
  * @param f vector field
  * @param dx space step
  * @return divergence function (x,y) -> div(f)(x,y) (scalar valued)
  */
-calculus::scalar_function_2D build_divergence(const calculus::vector_function_2D& f,float dx = 0.001f);
+calculus::scalar_function_2D build_divergence(const calculus::vector_function_2D& f,scalar dx = 0.001f);
 /**
  * @brief build_divergence build rot norm application of a 2D vector field
  * @param f vector field
  * @param dx space step
  * @return ||rot(F)|| function (x,y) -> sign(rot(f)(x,y)_z)*||rot(f)(x,y)|| (scalar valued)
  */
-calculus::scalar_function_2D build_rot_norm(const calculus::vector_function_2D& f,float dx = 0.001f);
+calculus::scalar_function_2D build_rot_norm(const calculus::vector_function_2D& f,scalar dx = 0.001f);
 
 }
 

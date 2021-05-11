@@ -1,7 +1,7 @@
 #include "d2_curve.h"
 using namespace cnc;
 
-D2_curve::D2_curve(const std::vector<float> &X, const std::vector<float> &Y){
+D2_curve::D2_curve(const algo::calculus::nodes &X, const algo::calculus::nodes &Y){
     if (X.size() == 0)
         throw Cnc_error("can't build 2D curve without X coords");
     if (Y.size() == 0)

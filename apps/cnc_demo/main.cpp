@@ -6,22 +6,22 @@ using namespace cnc;
 using namespace cnc::algo;
 using namespace cnc::algo::calculus;
 
-float g(float x){
+scalar g(scalar x){
     return std::sin(x);
 }
 
-float f(float x){
+scalar f(scalar x){
     return 1.f/(1+x*x);
 }
 
-float h(float x,float y){
+scalar h(scalar x,scalar y){
     return std::sin(x)*std::sin(y);
 }
 
-float h2(float x,float y){
+scalar h2(scalar x,scalar y){
     return std::sin(x)*std::sin(y);
 }
-cnc::vec z(float x,float y){
+cnc::vec z(scalar x,scalar y){
     return cnc::vec({std::sin(y),std::sin(x)});
 }
 
@@ -30,7 +30,7 @@ QColor mandelbrot(uint i,uint j){
     auto Color = build_range_mapper({0,MAX_ITER},{255,0});
 
     auto M = build_range_mapper({0,500},{-2,2});
-    std::complex<float> z(M(i),M(j)),c(z);
+    std::complex<scalar> z(M(i),M(j)),c(z);
     for (uint i = 0;i<MAX_ITER;i++){
         if (std::abs(z) < 2.f)
             z = z*z+c;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         Plot_frame* PFU = lag->add_frame_at(0,1,2,1);
         PFT->set_nb_layer_per_second(4);
 
-        float xa = -5.f,xb=-xa;
+        scalar xa = -5.f,xb=-xa;
         range xr(xa,xb);
 
         std::vector<int> N = get_index_lin_space(2,20,1);
@@ -129,9 +129,9 @@ int main(int argc, char *argv[])
         auto pi_approx = quadra->add_frame(2,2)->add_layer();
         auto quadra_legend = quadra->add_frame(2,2);
 
-        uint max_step = 20;
-        std::vector<float> error1(max_step);
-        std::vector<float> error2(max_step);
+        uint max_step = 30;
+        std::vector<scalar> error1(max_step);
+        std::vector<scalar> error2(max_step);
         for (uint i = 0;i<max_step;i++){
             auto mesh = get_lin_space(0.f,M_PI*0.5f,(int)i+2);
             error1[i] = std::log(std::abs(1.f - integrate(integration_scheme::simpson(g),mesh)));
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
         }
 
         auto xs = get_lin_space(2,max_step+1,1.f);
-        std::vector<float> log_xs;
+        std::vector<scalar> log_xs;
         for (auto x : xs)
             log_xs.push_back(std::log(x));
         range x_range = {std::log(2),std::log(max_step+1)},y_range = {0,*std::min_element(error1.begin(),error1.end())};
