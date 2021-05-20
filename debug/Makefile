@@ -73,9 +73,15 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/GUI/plots/vector_field.cpp \
 		../cnc_lib/GUI/plotwindow.cpp \
 		../cnc_lib/core/algo/algo.cpp \
+		../cnc_lib/core/algo/bit_operations.cpp \
 		../cnc_lib/core/algo/calculus/calculus.cpp \
 		../cnc_lib/core/algo/calculus/differential_equations.cpp \
 		../cnc_lib/core/algo/calculus/finite_differences.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/mesh.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtree.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp \
+		../cnc_lib/core/algo/calculus/fourier.cpp \
 		../cnc_lib/core/algo/calculus/integration_scheme.cpp \
 		../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp \
 		../cnc_lib/core/algo/calculus/optimization.cpp \
@@ -108,9 +114,15 @@ OBJECTS       = algo_gui.o \
 		vector_field.o \
 		plotwindow.o \
 		algo.o \
+		bit_operations.o \
 		calculus.o \
 		differential_equations.o \
 		finite_differences.o \
+		mesh.o \
+		quadtree.o \
+		quadtreemesher.o \
+		triangle.o \
+		fourier.o \
 		integration_scheme.o \
 		lagrange_interpolator.o \
 		optimization.o \
@@ -329,9 +341,16 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/bit_operations.h \
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/core/algo/calculus/differential_equations.h \
 		../cnc_lib/core/algo/calculus/finite_differences.h \
+		../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h \
+		../cnc_lib/core/algo/calculus/finite_elements/mesh.h \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtree.h \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.h \
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
+		../cnc_lib/core/algo/calculus/fourier.h \
 		../cnc_lib/core/algo/calculus/integration_scheme.h \
 		../cnc_lib/core/algo/calculus/lagrange_interpolator.h \
 		../cnc_lib/core/algo/calculus/optimization.h \
@@ -364,9 +383,15 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/GUI/plots/vector_field.cpp \
 		../cnc_lib/GUI/plotwindow.cpp \
 		../cnc_lib/core/algo/algo.cpp \
+		../cnc_lib/core/algo/bit_operations.cpp \
 		../cnc_lib/core/algo/calculus/calculus.cpp \
 		../cnc_lib/core/algo/calculus/differential_equations.cpp \
 		../cnc_lib/core/algo/calculus/finite_differences.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/mesh.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtree.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp \
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp \
+		../cnc_lib/core/algo/calculus/fourier.cpp \
 		../cnc_lib/core/algo/calculus/integration_scheme.cpp \
 		../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp \
 		../cnc_lib/core/algo/calculus/optimization.cpp \
@@ -774,8 +799,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/function_plot.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/function_plot.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/function_plot.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/finite_elements/mesh.h ../cnc_lib/core/algo/calculus/finite_elements/quadtree.h ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.h ../cnc_lib/core/algo/calculus/finite_elements/triangle.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/function_plot.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/finite_elements/mesh.cpp ../cnc_lib/core/algo/calculus/finite_elements/quadtree.cpp ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp ../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -5147,6 +5172,11 @@ algo.o: ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/algo.h \
 		../cnc_lib/cnc_error.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o algo.o ../cnc_lib/core/algo/algo.cpp
 
+bit_operations.o: ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/bit_operations.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/cnc_error.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bit_operations.o ../cnc_lib/core/algo/bit_operations.cpp
+
 calculus.o: ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/core/algo/algo.h \
 		../cnc_lib/cnc_types.h \
@@ -5178,6 +5208,59 @@ finite_differences.o: ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cn
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/cnc_error.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o finite_differences.o ../cnc_lib/core/algo/calculus/finite_differences.cpp
+
+mesh.o: ../cnc_lib/core/algo/calculus/finite_elements/mesh.cpp ../cnc_lib/core/algo/calculus/finite_elements/mesh.h \
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/cnc_error.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh.o ../cnc_lib/core/algo/calculus/finite_elements/mesh.cpp
+
+quadtree.o: ../cnc_lib/core/algo/calculus/finite_elements/quadtree.cpp ../cnc_lib/core/algo/calculus/finite_elements/quadtree.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/cnc_error.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o quadtree.o ../cnc_lib/core/algo/calculus/finite_elements/quadtree.cpp
+
+quadtreemesher.o: ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.h \
+		../cnc_lib/core/algo/calculus/finite_elements/quadtree.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o quadtreemesher.o ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp
+
+triangle.o: ../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp ../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/cnc_error.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o triangle.o ../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp
+
+fourier.o: ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/fourier.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/cnc_error.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fourier.o ../cnc_lib/core/algo/calculus/fourier.cpp
 
 integration_scheme.o: ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/integration_scheme.h \
 		../cnc_lib/core/algo/calculus/calculus.h \

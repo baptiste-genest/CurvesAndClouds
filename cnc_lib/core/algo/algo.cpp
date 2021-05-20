@@ -54,3 +54,36 @@ int cnc::algo::sign(scalar x)
         return -1.f;
     return 1.f;
 }
+
+cnc::range cnc::algo::inter(const cnc::range &A, const cnc::range &B)
+{
+    return {std::max(A.first,B.first),std::min(A.second,B.second)};
+}
+
+cnc::algo::set_type cnc::algo::inter_type(const cnc::range &A, const cnc::range &B)
+{
+    scalar x = std::max(A.first,B.first);
+    scalar y = std::min(A.second,B.second);
+    if (x < y)
+        return continuous;
+    else if ( std::abs(x-y) < 1e-12)
+        return discrete;
+    return empty;
+}
+
+bool cnc::algo::is_sorted(const cnc::range &r)
+{
+    return r.first < r.second;
+}
+
+std::vector<cnc::range> cnc::algo::get_min_max_range(const std::vector<cnc::vec> &X)
+{
+    std::vector<range> R(X[0].rowNum());
+    std::vector<scalar> coord(X.size());
+    for (uint j = 0;j<X[0].rowNum();j++){
+        for (uint i = 0;i<X.size();i++)
+            coord[i] = X[i](j);
+        R[j] = get_min_max_range(coord);
+    }
+    return R;
+}

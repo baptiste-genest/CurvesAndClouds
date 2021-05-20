@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.1, 2021-05-08T23:38:00. -->
+<!-- Written by QtCreator 4.14.1, 2021-05-19T19:11:39. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -137,8 +137,8 @@
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/eulerson/curvesandclouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/eulerson/curvesandclouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/eulerson/Curves-Clouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/eulerson/Curves-Clouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -251,15 +251,14 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">KPCA2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/eulerson/curvesandclouds/apps/KPCA/KPCA.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/eulerson/curvesandclouds/apps/KPCA/KPCA.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/eulerson/Curves-Clouds/apps/KPCA/KPCA.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/eulerson/Curves-Clouds/apps/KPCA/KPCA.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/eulerson/curvesandclouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/eulerson/Curves-Clouds/apps/build-KPCA-Desktop_Qt_5_15_2_GCC_64bit-debug</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

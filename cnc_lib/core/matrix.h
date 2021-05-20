@@ -147,6 +147,7 @@ public:
 
     //LINEAR SYSTEMS
     Vector<T> solve(const Vector<T>& B,float eps = 1e-5) const;
+    Vector<T> gauss_pivot(const Vector<T>& B) const;
     Vector<T> lower_solve(const Vector<T>& B) const;
     Vector<T> upper_solve(const Vector<T>& B) const;
     Vector<T> tri_diagonal_solve(const Vector<T>& B) const;
@@ -193,8 +194,8 @@ public:
 
     inline Matrix operator-() const{
         Matrix<T> rslt(Matrix<T>::rowNum(),Matrix<T>::colNum(),v);
-        for (uint j = 0;j<Matrix<T>::rowNum();j++)
-            rslt.at(j) *= -1;
+        for (uint j = 0;j<v.size();j++)
+            rslt.v[j] *= -1;
         return rslt;
     }
 
@@ -701,6 +702,35 @@ void Matrix<T>::gauss_jordan(){
 }
 
 template<class T>
+Vector<T> Matrix<T>::gauss_pivot(const Vector<T>& b) const {
+    Matrix<T> A = *this;
+    Vector<T> X = b;
+    uint M = rowNum();
+    int r = -1;
+    for (uint i = 0;i<M;i++){
+        uint idmax = A.get_abs_max(uint(r+1),i,M);
+
+        if (std::abs(A.ix(i,idmax)) > 0.0){
+            r++;
+            X(idmax) /= A.ix(i,idmax);
+            A.scale_row(idmax,T(1)/A.ix(i,idmax));
+            T tmp = X(idmax);
+            X(idmax) = X(r);
+            X(r) = tmp;
+            A.swap_rows(idmax,r);
+            for (uint j = 0;j<A.rowNum();j++){
+                if (int(j) != r){
+                    X(j) -= X(r)*A.ix(i,j);
+                    A.sub_rows(j,r,A.ix(i,j));
+                }
+            }
+        }
+    }
+
+    return X;
+}
+
+template<class T>
 Matrix<T> Matrix<T>::invert() const{
     if (colNum() != rowNum()){
         throw MatrixException(MATRIX_ISNT_SQUARE);
@@ -831,7 +861,7 @@ Vector<T> Matrix<T>::solve(const Vector<T>& B,float eps) const{
         }
     }
     if (rowNum() < 10)
-        return invert()*B;
+        return gauss_pivot(B);
     return gauss_seidel(B,eps);
 }
 
@@ -1364,6 +1394,8 @@ public:
             s += ix(k);
         return s;
     }
+
+    T distance(const Vector<T>& b) const;
 };
 
 template<class T>
@@ -1459,6 +1491,18 @@ Vector<T> Vector<T>::apply(const std::function<T(T)>& f) const{
     for (uint k = 0;k<Matrix<T>::rowNum();k++)
         R(k) = f(ix(k));
     return R;
+}
+
+template<class T>
+T Vector<T>::distance(const Vector<T> &b) const
+{
+    T d = 0;
+    T tmp;
+    for (uint k = 0;k<Matrix<T>::rowNum();k++){
+        tmp = ix(k) - b.ix(k);
+        d += tmp*tmp;
+    }
+    return std::sqrt(d);
 }
 
 template<class T>

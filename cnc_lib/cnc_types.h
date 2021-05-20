@@ -11,6 +11,7 @@
 
 #include <utility>
 #include <iostream>
+#include <complex>
 
 typedef unsigned int uint;
 
@@ -28,6 +29,8 @@ typedef double scalar;
 #else
 typedef float scalar;
 #endif
+
+typedef std::complex<scalar> complex_scalar;
 
 /**
  * @brief A pair of float

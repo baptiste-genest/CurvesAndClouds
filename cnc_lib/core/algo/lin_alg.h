@@ -25,5 +25,9 @@ typedef chaskal::Vector<scalar> vec;
  */
 typedef chaskal::Matrix<scalar> mat;
 
+inline scalar det22(const vec& a,const vec& b){
+    return a(0)*b(1) - a(1)*b(0);
+}
+
 }
 #endif // LIN_ALG_H

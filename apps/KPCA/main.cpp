@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     auto F1 = T->add_frame()->add_layer();
     for (uint k = 0;k<3;k++){
         for (vec& p : X[k].points)
-            p *= random_float(1.f + k,1.5f+k);
+            p *= random_scalar(1.f + k,1.5f+k);
         F1->new_point_cloud(X[k],2)->fix_plot_in_rect(0,0,4);
         C += X[k];
     }

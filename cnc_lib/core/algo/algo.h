@@ -18,6 +18,7 @@
 
 #include "cnc_types.h"
 #include "core/algo/calculus/calculus.h"
+#include "lin_alg.h"
 
 namespace cnc {
 
@@ -32,6 +33,8 @@ namespace algo {
  * @return range of [min(X),max(X)]
  */
 range get_min_max_range(const std::vector<scalar>& X);
+
+std::vector<range> get_min_max_range(const std::vector<vec>& X);
 
 /**
  * @brief get_index_lin_space
@@ -64,12 +67,24 @@ void scale_range(range& r,scalar s);
  */
 range sort(const range& r );
 
+bool is_sorted(const range& r);
+
 /**
  * @brief sign sign function
  * @param x
  * @return -1 if x < 0, 1 else
  */
 int sign(scalar x);
+
+enum set_type {
+    empty,
+    discrete,
+    continuous
+};
+
+range inter(const range& A,const range& B);
+set_type inter_type(const range& A,const range& B);
+
 
 }
 

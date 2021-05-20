@@ -31,9 +31,15 @@ SOURCES += \
     GUI/plots/vector_field.cpp \
     GUI/plotwindow.cpp \
     core/algo/algo.cpp \
+    core/algo/bit_operations.cpp \
     core/algo/calculus/calculus.cpp \
     core/algo/calculus/differential_equations.cpp \
     core/algo/calculus/finite_differences.cpp \
+    core/algo/calculus/finite_elements/mesh.cpp \
+    core/algo/calculus/finite_elements/quadtree.cpp \
+    core/algo/calculus/finite_elements/quadtreemesher.cpp \
+    core/algo/calculus/finite_elements/triangle.cpp \
+    core/algo/calculus/fourier.cpp \
     core/algo/calculus/integration_scheme.cpp \
     core/algo/calculus/lagrange_interpolator.cpp \
     core/algo/calculus/optimization.cpp \
@@ -72,9 +78,16 @@ HEADERS += \
     cnc_error.h \
     cnc_types.h \
     core/algo/algo.h \
+    core/algo/bit_operations.h \
     core/algo/calculus/calculus.h \
     core/algo/calculus/differential_equations.h \
     core/algo/calculus/finite_differences.h \
+    core/algo/calculus/finite_elements/finite_elements.h \
+    core/algo/calculus/finite_elements/mesh.h \
+    core/algo/calculus/finite_elements/quadtree.h \
+    core/algo/calculus/finite_elements/quadtreemesher.h \
+    core/algo/calculus/finite_elements/triangle.h \
+    core/algo/calculus/fourier.h \
     core/algo/calculus/integration_scheme.h \
     core/algo/calculus/lagrange_interpolator.h \
     core/algo/calculus/optimization.h \
