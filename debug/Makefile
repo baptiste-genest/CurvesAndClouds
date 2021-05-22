@@ -5239,7 +5239,12 @@ quadtreemesher.o: ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.c
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/cnc_error.h \
-		../cnc_lib/core/algo/calculus/finite_elements/triangle.h
+		../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
+		../cnc_lib/core/algo/statistics/random_var.h \
+		../cnc_lib/core/algo/statistics/statistics.h \
+		../cnc_lib/core/algo/calculus/optimization.h \
+		../cnc_lib/core/algo/calculus/vector_calculus.h \
+		../cnc_lib/core/algo/bit_operations.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o quadtreemesher.o ../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.cpp
 
 triangle.o: ../cnc_lib/core/algo/calculus/finite_elements/triangle.cpp ../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
