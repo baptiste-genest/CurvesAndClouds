@@ -18,20 +18,34 @@ namespace cnc {
 
 namespace algo {
 
-namespace calculus {
+namespace geometry {
 
-namespace finite_elements{
+class vertex_ref;
 
 class Mesh
 {
 public:
     Mesh();
+    inline vertex_ref add_vertex(const vec& x);
+    inline void add_face(const Triangle& t);
 
 private:
+    friend class vertex_ref;
+    std::vector<vec> vertex;
+    std::vector<Triangle> faces;
     constexpr static uint dim = 2;
 };
 
-}}}}
+class vertex_ref {
+public:
+    vertex_ref(uint i,Mesh* c) : id(i),container(c) {}
+    vec operator()() const ;
+private:
+    uint id;
+    Mesh* container;
+};
+
+}}}
 
 
 #endif // MESH_H

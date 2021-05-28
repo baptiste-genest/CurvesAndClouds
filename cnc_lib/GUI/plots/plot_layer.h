@@ -147,21 +147,21 @@ public:
      * @param ts tex_stream to display
      * @return pointer to the plot
      */
-    formula* add_text_frame_from_tex_stream(const tex_stream& ts);
+    formula* add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d = centered);
 
     /**
      * @brief add_text_frame
      * @param ts
      * @return
      */
-    formula* add_text_frame(const std::string& ts);
+    formula* add_text_frame(const std::string& ts,formula_disposition d = centered);
 
     ~Plot_layer();
 
     friend class Plot_frame;
     friend class Stat_displayer;
 
-private:
+protected:
 
     Plot_layer* duplicate_layer(QWidget*) const;
 
@@ -170,7 +170,7 @@ private:
         plots.push_back(P);
     }
 
-    void display_layer(frame_draw_object& fdo);
+    virtual void display_layer(frame_draw_object& fdo);
 
     std::vector<Plottable*> plots;
 

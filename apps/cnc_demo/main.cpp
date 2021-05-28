@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
         dog->new_figure_from_file("../../data/rodrigo.jpg");
         tex_stream ts;
         ts << "Rodrigo" << tex::endl << "the wildest dog";
-        dog->add_text_frame_from_tex_stream(ts);
+        dog->add_text_frame_from_tex_stream(ts,upper_right);
 
         auto mandel = figs->add_frame(2,2)->add_layer();
         mandel->new_figure_from_texturing(500,500,mandelbrot);

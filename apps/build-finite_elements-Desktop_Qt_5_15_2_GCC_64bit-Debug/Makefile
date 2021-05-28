@@ -210,6 +210,7 @@ DIST          = ../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		../finite_elements/.qmake.stash \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -398,6 +399,7 @@ Makefile: ../finite_elements/finite_elements.pro ../../../Qt/5.15.2/gcc_64/mkspe
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -576,6 +578,7 @@ Makefile: ../finite_elements/finite_elements.pro ../../../Qt/5.15.2/gcc_64/mkspe
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -681,10 +684,9 @@ main.o: ../finite_elements/main.cpp ../../cnc_lib/curvesandcloud.h \
 		../../cnc_lib/core/algo/calculus/lagrange_interpolator.h \
 		../../cnc_lib/core/algo/calculus/differential_equations.h \
 		../../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h \
-		../../cnc_lib/core/algo/calculus/finite_elements/mesh.h \
-		../../cnc_lib/core/algo/calculus/finite_elements/triangle.h \
-		../../cnc_lib/core/algo/calculus/finite_elements/quadtree.h \
-		../../cnc_lib/core/algo/calculus/finite_elements/quadtreemesher.h \
+		../../cnc_lib/core/algo/geometry/quadtreemesher.h \
+		../../cnc_lib/core/algo/geometry/quadtree.h \
+		../../cnc_lib/core/algo/geometry/triangle.h \
 		../../cnc_lib/core/algo/statistics/random_var.h \
 		../../cnc_lib/core/algo/calculus/fourier.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
@@ -876,6 +878,7 @@ main.o: ../finite_elements/main.cpp ../../cnc_lib/curvesandcloud.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../../cnc_lib/GUI/plots/plot_group.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../finite_elements/main.cpp

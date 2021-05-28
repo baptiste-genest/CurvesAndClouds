@@ -84,6 +84,7 @@ enum set_type {
 
 range inter(const range& A,const range& B);
 set_type inter_type(const range& A,const range& B);
+void extend_range(range& A,const range& B);
 
 
 }

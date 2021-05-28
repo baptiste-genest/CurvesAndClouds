@@ -9,21 +9,16 @@
 
 #include "quadtree.h"
 #include "triangle.h"
-#include "../../statistics/random_var.h"
-#include "../../bit_operations.h"
+#include "geometry.h"
+#include "../statistics/random_var.h"
+#include "../bit_operations.h"
 
 namespace cnc {
 
 namespace algo {
 
-namespace calculus {
+namespace geometry {
 
-namespace finite_elements{
-
-struct edge{
-    vec* a;
-    vec* b;
-};
 
 class QuadtreeMesher 	{
 public:
@@ -88,6 +83,6 @@ private:
 };
 
 
-}}}}
+}}}
 
 #endif // QUADTREEMESHER_H

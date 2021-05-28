@@ -16,9 +16,7 @@ namespace cnc {
 
 namespace algo {
 
-namespace calculus {
-
-namespace finite_elements{
+namespace geometry {
 
 class Triangle
 {
@@ -62,9 +60,9 @@ private:
     friend bool share_edge(const Triangle& A,const Triangle& B);
 
     constexpr static uint dim = 2;
+
 };
 
-
-}}}}
+}}}
 
 #endif // TRIANGLE_H

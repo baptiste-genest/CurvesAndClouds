@@ -2,7 +2,7 @@
 
 using namespace cnc;
 using namespace cnc::algo::calculus;
-using namespace cnc::algo::calculus::finite_elements;
+using namespace cnc::algo::geometry;
 
 void generate_borders(QuadtreeMesher& QM,uint N){
     for (uint k = 0;k<N;k++)

@@ -7,9 +7,6 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-#include "mesh.h"
-#include "triangle.h"
-#include "quadtree.h"
-#include "quadtreemesher.h"
+#include "../../geometry/quadtreemesher.h"
 
 #endif // FINITE_ELEMENTS_H

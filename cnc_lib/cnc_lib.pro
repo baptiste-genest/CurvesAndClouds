@@ -20,6 +20,7 @@ SOURCES += \
     GUI/plots/function_plot.cpp \
     GUI/plots/level_curve.cpp \
     GUI/plots/plot_frame.cpp \
+    GUI/plots/plot_group.cpp \
     GUI/plots/plot_layer.cpp \
     GUI/plots/plot_stat_display.cpp \
     GUI/plots/plot_tab.cpp \
@@ -35,15 +36,16 @@ SOURCES += \
     core/algo/calculus/calculus.cpp \
     core/algo/calculus/differential_equations.cpp \
     core/algo/calculus/finite_differences.cpp \
-    core/algo/calculus/finite_elements/mesh.cpp \
-    core/algo/calculus/finite_elements/quadtree.cpp \
-    core/algo/calculus/finite_elements/quadtreemesher.cpp \
-    core/algo/calculus/finite_elements/triangle.cpp \
     core/algo/calculus/fourier.cpp \
     core/algo/calculus/integration_scheme.cpp \
     core/algo/calculus/lagrange_interpolator.cpp \
     core/algo/calculus/optimization.cpp \
     core/algo/calculus/vector_calculus.cpp \
+    core/algo/geometry/geometry.cpp \
+    core/algo/geometry/mesh.cpp \
+    core/algo/geometry/quadtree.cpp \
+    core/algo/geometry/quadtreemesher.cpp \
+    core/algo/geometry/triangle.cpp \
     core/algo/inout.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp
@@ -64,6 +66,7 @@ HEADERS += \
     GUI/plots/function_plot.h \
     GUI/plots/level_curve.h \
     GUI/plots/plot_frame.h \
+    GUI/plots/plot_group.h \
     GUI/plots/plot_layer.h \
     GUI/plots/plot_policy.h \
     GUI/plots/plot_tab.h \
@@ -83,15 +86,16 @@ HEADERS += \
     core/algo/calculus/differential_equations.h \
     core/algo/calculus/finite_differences.h \
     core/algo/calculus/finite_elements/finite_elements.h \
-    core/algo/calculus/finite_elements/mesh.h \
-    core/algo/calculus/finite_elements/quadtree.h \
-    core/algo/calculus/finite_elements/quadtreemesher.h \
-    core/algo/calculus/finite_elements/triangle.h \
     core/algo/calculus/fourier.h \
     core/algo/calculus/integration_scheme.h \
     core/algo/calculus/lagrange_interpolator.h \
     core/algo/calculus/optimization.h \
     core/algo/calculus/vector_calculus.h \
+    core/algo/geometry/geometry.h \
+    core/algo/geometry/mesh.h \
+    core/algo/geometry/quadtree.h \
+    core/algo/geometry/quadtreemesher.h \
+    core/algo/geometry/triangle.h \
     core/algo/inout.h \
     core/algo/lin_alg.h \
     core/algo/statistics/random_var.h \

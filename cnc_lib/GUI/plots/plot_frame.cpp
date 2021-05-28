@@ -17,6 +17,7 @@ Plot_layer* Plot_frame::add_layer()
     return l;
 }
 
+
 void Plot_frame::set_nb_layer_per_second(float layer_rate)
 {
     if (layer_rate < 1e-4)

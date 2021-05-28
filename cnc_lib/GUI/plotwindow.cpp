@@ -26,6 +26,15 @@ Plot_tab* Plot_window::add_tab(const QString& tab_name)
     return tab;
 }
 
+int Plot_window::run()
+{
+    int a = 0;
+    char** b= nullptr;
+    QApplication A(a,b);
+    show();
+    return A.exec();
+}
+
 void Plot_window::resizeEvent(QResizeEvent* event)
 {
     init = true;

@@ -32,6 +32,7 @@ static constexpr QColor CNC_COLORS[NB_CNC_COLORS] = {Blue,Red,Green,DarkBlue,Dar
 class Plot_layer;
 class Plot_frame;
 class Stat_list;
+class Plot_group;
 
 enum plot_type {
     function_plot,
@@ -134,7 +135,15 @@ public:
      */
     virtual plot_type get_type() const = 0;
 
+    inline bool is_in_group() const {
+        return pg != nullptr;
+    }
+
 protected:
+
+    Plot_group* pg;
+    friend class Plot_group;
+
     virtual void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const {}
 
     friend class Plot_layer;

@@ -3,7 +3,7 @@ using namespace cnc;
 
 const std::string formula::tex_url = "https://latex.codecogs.com/png.latex?\\dpi{600}";
 const tex::tex_eol tex::endl;
-formula::formula(const tex_stream &ts)
+formula::formula(const tex_stream &ts,formula_disposition d) : fd(d)
 {
     latex = ts.latex + "\\end{matrix}";
     downloaded = false;
@@ -15,12 +15,23 @@ formula::formula(const tex_stream &ts)
 
 void cnc::formula::plot(frame_draw_object& fdo)
 {
-    const static float dezoom_ratio = 0.95f;
-    if (downloaded){
-        QRect F(0,0,fdo.fi.width,fdo.fi.height);
-        QPixmap tmp = formula_pix.scaled(fdo.fi.width*dezoom_ratio,fdo.fi.height*dezoom_ratio,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        fdo.painter.drawPixmap(F.center() - tmp.rect().center(),tmp);
+    if (!downloaded)
+        return;
+    QRect F;
+    float dezoom_ratio;
+    if (fd == centered){
+        dezoom_ratio = 0.95;
+        F = QRect(0,0,fdo.fi.width,fdo.fi.height);
     }
+    else {
+        dezoom_ratio = 0.4;
+        uint w = fdo.fi.width*(1-dezoom_ratio);
+        uint h = fdo.fi.height*(1-dezoom_ratio);
+        F = QRect(algo::get_bit(fd,0)*w,(1-algo::get_bit(fd,1))*h,fdo.fi.width*dezoom_ratio,fdo.fi.height*dezoom_ratio);
+    }
+
+    QPixmap tmp = formula_pix.scaled(fdo.fi.width*dezoom_ratio,fdo.fi.height*dezoom_ratio,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    fdo.painter.drawPixmap(F.center() - tmp.rect().center(),tmp);
 }
 
 void formula::change_pixmap_color(QPixmap & P, const QColor &C)
@@ -37,19 +48,19 @@ void formula::change_pixmap_color(QPixmap & P, const QColor &C)
 
 void formula::download_tex_result()
 {
-        QNetworkAccessManager *man = new QNetworkAccessManager(this);
-        const QUrl url = QUrl(QString::fromStdString(tex_url + latex));
-        QNetworkRequest request(url);
-        man->get(request);
+    QNetworkAccessManager *man = new QNetworkAccessManager(this);
+    const QUrl url = QUrl(QString::fromStdString(tex_url + latex));
+    QNetworkRequest request(url);
+    man->get(request);
 
-        formula* ref = this;
+    formula* ref = this;
 
-        connect(man,&QNetworkAccessManager::finished ,[ref] (QNetworkReply* reply) {
-            ref->formula_pix.loadFromData(reply->readAll());
-            change_pixmap_color(ref->formula_pix,ref->text_color);
-            ref->downloaded = true;
-            ref->update();
-        });
+    connect(man,&QNetworkAccessManager::finished ,[ref] (QNetworkReply* reply) {
+        ref->formula_pix.loadFromData(reply->readAll());
+        change_pixmap_color(ref->formula_pix,ref->text_color);
+        ref->downloaded = true;
+        ref->update();
+    });
 }
 
 void formula::change_text_color(const QColor & C)

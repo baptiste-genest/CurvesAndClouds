@@ -10,6 +10,7 @@
 #endif
 
 #include "plottable.h"
+#include "core/algo/bit_operations.h"
 #include <string>
 
 #include <QtNetwork/QNetworkAccessManager>
@@ -104,6 +105,14 @@ public:
 
 };
 
+enum formula_disposition {
+    lower_left,
+    lower_right,
+    upper_left,
+    upper_right,
+    centered
+};
+
 /**
  * @brief The formula class is a plot to display latex style text/formulas, one can interact with it with the tex_stream which works as std::cout,
  * WARNING: since it works when an online API to generate latex, you must be connected to internet
@@ -111,7 +120,7 @@ public:
 class formula : public Plottable
 {
 public:
-    formula(const tex_stream& ts);
+    formula(const tex_stream& ts,formula_disposition d);
     void change_text_color(const QColor&);
 
     inline plot_type get_type() const override {
@@ -119,6 +128,7 @@ public:
     }
 private:
     void download_tex_result();
+    formula_disposition fd;
 
     std::string latex;
 

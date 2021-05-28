@@ -16,9 +16,8 @@ namespace cnc {
 
 namespace algo {
 
-namespace calculus {
+namespace geometry {
 
-namespace finite_elements{
 
 namespace quadtree_loc {
     enum location {
@@ -104,7 +103,6 @@ private:
     friend class QuadtreeMesher;
 };
 
-}
 }
 }
 }

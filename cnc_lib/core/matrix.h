@@ -770,6 +770,8 @@ Matrix<T> Matrix<T>::invert_triangular(uint shape) const{
 template <class T>
 T Matrix<T>::det() const {
     uint n = rowNum();
+    if (n == 2)
+        return ix(0,0)*ix(1,1) - ix(0,1)*ix(1,0);
     Matrix<T> tmp(n,n,v);
     int sig = tmp.inner_rref(n,true);
     T rslt = T(1);

@@ -1,11 +1,11 @@
 #include "quadtreemesher.h"
 
-cnc::algo::calculus::finite_elements::QuadtreeMesher::QuadtreeMesher(){
+cnc::algo::geometry::QuadtreeMesher::QuadtreeMesher(){
     simplex_head = nullptr;
     simplex_tail = nullptr;
 }
 
-cnc::algo::calculus::finite_elements::QuadtreeMesher::~QuadtreeMesher()
+cnc::algo::geometry::QuadtreeMesher::~QuadtreeMesher()
 {
     for (vec* a : avg)
         delete a;
@@ -16,7 +16,7 @@ cnc::algo::calculus::finite_elements::QuadtreeMesher::~QuadtreeMesher()
     delete Q;
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::add_to_chain(const cnc::vec &x)
+void cnc::algo::geometry::QuadtreeMesher::add_to_chain(const cnc::vec &x)
 {
     boundaries.push_back(new vec(x));
     vec* head = boundaries.back();
@@ -30,14 +30,14 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::add_to_chain(const cn
     }
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::complete_chain()
+void cnc::algo::geometry::QuadtreeMesher::complete_chain()
 {
     boundaries_edge.push_back({simplex_head,simplex_tail});
     simplex_head = nullptr;
     simplex_tail = nullptr;
 }
 
-std::vector<std::vector<cnc::vec>> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_edges() const
+std::vector<std::vector<cnc::vec>> cnc::algo::geometry::QuadtreeMesher::get_edges() const
 {
     std::vector<std::vector<cnc::vec>> R;
     for (const edge& e : boundaries_edge)
@@ -45,7 +45,7 @@ std::vector<std::vector<cnc::vec>> cnc::algo::calculus::finite_elements::Quadtre
     return R;
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_empty_leafs_with_multiple_edges() const
+std::vector<cnc::algo::geometry::Quadtree *> cnc::algo::geometry::QuadtreeMesher::get_empty_leafs_with_multiple_edges() const
 {
     std::vector<Quadtree*> L = Q->get_empty_leafs();
     std::vector<Quadtree*> R;
@@ -60,7 +60,7 @@ std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculu
     return R;
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::split_leafs_by_type()
+void cnc::algo::geometry::QuadtreeMesher::split_leafs_by_type()
 {
     leafs_by_type[FULL_LEAF] = Q->get_full_leafs();
     std::vector<Quadtree*> E = Q->get_empty_leafs();
@@ -77,13 +77,13 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::split_leafs_by_type()
     }
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::balance_quadtree()
+void cnc::algo::geometry::QuadtreeMesher::balance_quadtree()
 {
     std::vector<Quadtree*> L = Q->get_leafs();
     balance_quadtree(L);
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::balance_quadtree(const std::vector<cnc::algo::calculus::finite_elements::Quadtree *> &L)
+void cnc::algo::geometry::QuadtreeMesher::balance_quadtree(const std::vector<cnc::algo::geometry::Quadtree *> &L)
 {
     std::vector<Quadtree*> to_check;
     for (Quadtree* l : L){
@@ -107,7 +107,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::balance_quadtree(cons
         balance_quadtree(to_check);
 }
 
-bool cnc::algo::calculus::finite_elements::QuadtreeMesher::is_edge_in_box(const cnc::algo::calculus::finite_elements::Quadtree *Q, const cnc::algo::calculus::finite_elements::edge &e) const
+bool cnc::algo::geometry::QuadtreeMesher::is_edge_in_box(const cnc::algo::geometry::Quadtree *Q, const cnc::algo::geometry::edge &e) const
 {
     const vec& e1 = *e.a,e2 = *e.b;
     vec E = e2-e1;
@@ -139,7 +139,7 @@ bool cnc::algo::calculus::finite_elements::QuadtreeMesher::is_edge_in_box(const 
     return false;
 }
 
-std::array<cnc::algo::calculus::finite_elements::edge,2> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_edges_by_corner(const cnc::vec *x) const
+std::array<cnc::algo::geometry::edge,2> cnc::algo::geometry::QuadtreeMesher::get_edges_by_corner(const cnc::vec *x) const
 {
     std::array<edge,2> E;
     uint i = 0;
@@ -154,7 +154,7 @@ std::array<cnc::algo::calculus::finite_elements::edge,2> cnc::algo::calculus::fi
     throw Cnc_error("couldn't find 2 edges associated with a corner");
 }
 
-cnc::vec cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_quad_edge_intersection(const cnc::algo::calculus::finite_elements::Quadtree *q, const cnc::algo::calculus::finite_elements::edge &e) const
+cnc::vec cnc::algo::geometry::QuadtreeMesher::compute_quad_edge_intersection(const cnc::algo::geometry::Quadtree *q, const cnc::algo::geometry::edge &e) const
 {
     const vec& e1 = *e.a,e2 = *e.b;
     vec E = e2-e1;
@@ -178,7 +178,7 @@ cnc::vec cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_quad_edge
     throw Cnc_error("Couldn't find intersection for edge");
 }
 
-std::array<cnc::vec,2> cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_quad_edge_intersection_border(const cnc::algo::calculus::finite_elements::Quadtree *q, const cnc::algo::calculus::finite_elements::edge &e) const
+std::array<cnc::vec,2> cnc::algo::geometry::QuadtreeMesher::compute_quad_edge_intersection_border(const cnc::algo::geometry::Quadtree *q, const cnc::algo::geometry::edge &e) const
 {
     std::array<vec,2> R;
     const vec& e1 = *e.a,e2 = *e.b;
@@ -213,7 +213,7 @@ std::array<cnc::vec,2> cnc::algo::calculus::finite_elements::QuadtreeMesher::com
     throw Cnc_error("Couldn't find intersection for edge at border");
 }
 
-std::vector<cnc::vec *> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_contact_points(Quadtree* l,uint &config)
+std::vector<cnc::vec *> cnc::algo::geometry::QuadtreeMesher::get_contact_points(Quadtree* l,uint &config)
 {
     using namespace quadtree_loc;
     uint N = l->scale_factor;
@@ -239,7 +239,7 @@ std::vector<cnc::vec *> cnc::algo::calculus::finite_elements::QuadtreeMesher::ge
     return points_address;
 }
 
-std::array<std::vector<cnc::vec *>,2> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_chunks(const std::vector<cnc::vec *> &points, const std::pair<cnc::vec *, cnc::vec *> &intersections)
+std::array<std::vector<cnc::vec *>,2> cnc::algo::geometry::QuadtreeMesher::get_chunks(const std::vector<cnc::vec *> &points, const std::pair<cnc::vec *, cnc::vec *> &intersections)
 {
     std::array<std::vector<vec*>,2> R;
     R[0] = {intersections.first,intersections.second};
@@ -265,7 +265,7 @@ std::array<std::vector<cnc::vec *>,2> cnc::algo::calculus::finite_elements::Quad
     return R;
 }
 
-cnc::vec* cnc::algo::calculus::finite_elements::QuadtreeMesher::get_avg(const std::vector<cnc::vec *> &P)
+cnc::vec* cnc::algo::geometry::QuadtreeMesher::get_avg(const std::vector<cnc::vec *> &P)
 {
     vec a(2);
     for (uint k = 0;k<P.size();k++)
@@ -277,7 +277,7 @@ cnc::vec* cnc::algo::calculus::finite_elements::QuadtreeMesher::get_avg(const st
     return A;
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::add_to_mesh(const cnc::vec &x)
+void cnc::algo::geometry::QuadtreeMesher::add_to_mesh(const cnc::vec &x)
 {
     for (const vec* m : mesh_points)
         if (m->distance(x) < eps){
@@ -286,7 +286,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::add_to_mesh(const cnc
     mesh_points.push_back(new vec(x));
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_mesh_points()
+void cnc::algo::geometry::QuadtreeMesher::compute_mesh_points()
 {
     std::vector<Quadtree*> L = Q->get_leafs();
     for (const Quadtree* l : L){
@@ -306,14 +306,14 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_mesh_points()
     }
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_interior_mesh(cnc::algo::calculus::finite_elements::Quadtree *l)
+void cnc::algo::geometry::QuadtreeMesher::compute_interior_mesh(cnc::algo::geometry::Quadtree *l)
 {
     uint config;
     std::vector<vec*> points_address = get_contact_points(l,config);
     make_interior_triangles(points_address,config);
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_corner_mesh(cnc::algo::calculus::finite_elements::Quadtree *l)
+void cnc::algo::geometry::QuadtreeMesher::compute_corner_mesh(cnc::algo::geometry::Quadtree *l)
 {
     uint config;
     std::vector<vec*> points_address = get_contact_points(l,config);
@@ -334,7 +334,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_corner_mesh(c
     }
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_border_mesh(cnc::algo::calculus::finite_elements::Quadtree *l)
+void cnc::algo::geometry::QuadtreeMesher::compute_border_mesh(cnc::algo::geometry::Quadtree *l)
 {
     uint config;
     std::vector<vec*> points_address = get_contact_points(l,config);
@@ -371,7 +371,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::compute_border_mesh(c
 
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::subdivide_for_edges()
+void cnc::algo::geometry::QuadtreeMesher::subdivide_for_edges()
 {
     auto L = Q->get_empty_leafs();
     for (Quadtree* l : L){
@@ -385,7 +385,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::subdivide_for_edges()
     }
 }
 
-cnc::vec *cnc::algo::calculus::finite_elements::QuadtreeMesher::get_point_adress(const cnc::vec &x)
+cnc::vec *cnc::algo::geometry::QuadtreeMesher::get_point_adress(const cnc::vec &x)
 {
     for (uint k = 0;k<mesh_points.size();k++)
         if (mesh_points[k]->distance(x) < eps)
@@ -393,7 +393,7 @@ cnc::vec *cnc::algo::calculus::finite_elements::QuadtreeMesher::get_point_adress
     throw Cnc_error("Couldn't find point in QuadtreeMesher");
 }
 
-std::vector<cnc::vec *> cnc::algo::calculus::finite_elements::QuadtreeMesher::sort_counterclockwise(const cnc::vec &center, const std::vector<cnc::vec *> &points) const
+std::vector<cnc::vec *> cnc::algo::geometry::QuadtreeMesher::sort_counterclockwise(const cnc::vec &center, const std::vector<cnc::vec *> &points) const
 {
     uint N = points.size();
     std::vector<cnc::vec*> R(N);
@@ -416,7 +416,7 @@ std::vector<cnc::vec *> cnc::algo::calculus::finite_elements::QuadtreeMesher::so
 
 
 
-bool cnc::algo::calculus::finite_elements::QuadtreeMesher::is_triangle_in_shape(const cnc::algo::calculus::finite_elements::Triangle &T)
+bool cnc::algo::geometry::QuadtreeMesher::is_triangle_in_shape(const cnc::algo::geometry::Triangle &T)
 {
     vec M = T.get_mid_point();
     scalar th = algo::stat::random_var::random_scalar(0,2*M_PI);
@@ -428,7 +428,7 @@ bool cnc::algo::calculus::finite_elements::QuadtreeMesher::is_triangle_in_shape(
     return nb%2;
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::purge_outside_mesh()
+void cnc::algo::geometry::QuadtreeMesher::purge_outside_mesh()
 {
     std::vector<Triangle> M;
     for (const auto& t : mesh)
@@ -437,7 +437,7 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::purge_outside_mesh()
     mesh = M;
 }
 
-cnc::scalar cnc::algo::calculus::finite_elements::QuadtreeMesher::ray_edge_intersection(const cnc::vec &a, const cnc::vec &b, const cnc::algo::calculus::finite_elements::edge &e) const
+cnc::scalar cnc::algo::geometry::QuadtreeMesher::ray_edge_intersection(const cnc::vec &a, const cnc::vec &b, const cnc::algo::geometry::edge &e) const
 {
     mat A(2,2);
     const vec& c = *e.a;
@@ -453,7 +453,7 @@ cnc::scalar cnc::algo::calculus::finite_elements::QuadtreeMesher::ray_edge_inter
 
 
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::build_mesh()
+void cnc::algo::geometry::QuadtreeMesher::build_mesh()
 {
     std::vector<vec> p(boundaries.size());
     for (uint k = 0;k<boundaries.size();k++)
@@ -486,12 +486,12 @@ void cnc::algo::calculus::finite_elements::QuadtreeMesher::build_mesh()
 
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Triangle> cnc::algo::calculus::finite_elements::QuadtreeMesher::get_mesh() const
+std::vector<cnc::algo::geometry::Triangle> cnc::algo::geometry::QuadtreeMesher::get_mesh() const
 {
     return mesh;
 }
 
-void cnc::algo::calculus::finite_elements::QuadtreeMesher::make_interior_triangles(const std::vector<cnc::vec *> &points, uint config)
+void cnc::algo::geometry::QuadtreeMesher::make_interior_triangles(const std::vector<cnc::vec *> &points, uint config)
 {
     constexpr static uint L = 4;
     std::vector<std::vector<uint>> T;

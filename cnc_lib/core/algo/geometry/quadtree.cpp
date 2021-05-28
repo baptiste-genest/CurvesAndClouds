@@ -1,6 +1,6 @@
 #include "quadtree.h"
 
-cnc::algo::calculus::finite_elements::Quadtree::Quadtree(const range& X,const range& Y,uint factor,Quadtree* p) : x_range(X) , y_range(Y) , parent(p)
+cnc::algo::geometry::Quadtree::Quadtree(const range& X,const range& Y,uint factor,Quadtree* p) : x_range(X) , y_range(Y) , parent(p)
 {
     if (!is_sorted(X))
         throw Cnc_error("Can't build quadtree with X range unsorted");
@@ -19,23 +19,23 @@ cnc::algo::calculus::finite_elements::Quadtree::Quadtree(const range& X,const ra
     my = (y_range.first + y_range.second)*0.5;
 }
 
-cnc::algo::calculus::finite_elements::Quadtree::Quadtree(const cnc::range &X, const cnc::range &Y) : Quadtree(X,Y,0,nullptr)
+cnc::algo::geometry::Quadtree::Quadtree(const cnc::range &X, const cnc::range &Y) : Quadtree(X,Y,0,nullptr)
 {}
 
-cnc::algo::calculus::finite_elements::Quadtree::~Quadtree()
+cnc::algo::geometry::Quadtree::~Quadtree()
 {
     for (uint k = 0;k<4;k++)
         delete leafs[k];
     val = nullptr;
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::insert(const cnc::vec *x)
+void cnc::algo::geometry::Quadtree::insert(const cnc::vec *x)
 {
     if (find(*x,eps) == nullptr)
         inner_insert(x);
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::inner_insert(const cnc::vec *x,uint iter)
+void cnc::algo::geometry::Quadtree::inner_insert(const cnc::vec *x,uint iter)
 {
     if (iter > 10)
         throw Cnc_error("Probable error with insertion");
@@ -53,7 +53,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::inner_insert(const cnc::vec
     leafs[xc]->inner_insert(x,iter+1);
 }
 
-const cnc::algo::calculus::finite_elements::Quadtree *cnc::algo::calculus::finite_elements::Quadtree::find(const cnc::vec &x, cnc::scalar eps) const
+const cnc::algo::geometry::Quadtree *cnc::algo::geometry::Quadtree::find(const cnc::vec &x, cnc::scalar eps) const
 {
     if (is_empty())
         return nullptr;
@@ -63,7 +63,7 @@ const cnc::algo::calculus::finite_elements::Quadtree *cnc::algo::calculus::finit
         return leafs[get_corner(x)]->find(x,eps);
 }
 
-cnc::algo::calculus::finite_elements::quadtree_loc::location cnc::algo::calculus::finite_elements::Quadtree::get_corner(const cnc::vec &p) const
+cnc::algo::geometry::quadtree_loc::location cnc::algo::geometry::Quadtree::get_corner(const cnc::vec &p) const
 {
     using namespace quadtree_loc;
     const scalar& x = p(0),y = p(1);
@@ -76,48 +76,48 @@ cnc::algo::calculus::finite_elements::quadtree_loc::location cnc::algo::calculus
     return upper_right;
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::check_adjacency(const cnc::algo::calculus::finite_elements::Quadtree *q) const
+bool cnc::algo::geometry::Quadtree::check_adjacency(const cnc::algo::geometry::Quadtree *q) const
 {
     return inter_type(x_range,q->x_range) + inter_type(y_range,q->y_range) > 2;
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculus::finite_elements::Quadtree::get_empty_leafs()
+std::vector<cnc::algo::geometry::Quadtree *> cnc::algo::geometry::Quadtree::get_empty_leafs()
 {
     std::vector<Quadtree*> EL;
     get_empty_leafs(EL);
     return EL;
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculus::finite_elements::Quadtree::get_full_leafs()
+std::vector<cnc::algo::geometry::Quadtree *> cnc::algo::geometry::Quadtree::get_full_leafs()
 {
     std::vector<Quadtree*> FL;
     get_full_leafs(FL);
     return FL;
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculus::finite_elements::Quadtree::get_leafs()
+std::vector<cnc::algo::geometry::Quadtree *> cnc::algo::geometry::Quadtree::get_leafs()
 {
     std::vector<Quadtree*> L;
     get_leafs(L);
     return L;
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::in_x_range(cnc::scalar x) const
+bool cnc::algo::geometry::Quadtree::in_x_range(cnc::scalar x) const
 {
     return (x >= x_range.first) && (x <= x_range.second);
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::in_y_range(cnc::scalar y) const
+bool cnc::algo::geometry::Quadtree::in_y_range(cnc::scalar y) const
 {
     return (y >= y_range.first) && (y <= y_range.second);
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::in_ranges(const cnc::vec &x) const
+bool cnc::algo::geometry::Quadtree::in_ranges(const cnc::vec &x) const
 {
     return in_x_range(x(0)) && in_y_range(x(1));
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::subdivide()
+void cnc::algo::geometry::Quadtree::subdivide()
 {
     create_leafs();
     if (val != nullptr){
@@ -127,7 +127,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::subdivide()
     }
 }
 
-cnc::algo::calculus::finite_elements::quadtree_loc::direction cnc::algo::calculus::finite_elements::Quadtree::get_adjacency_dir(cnc::algo::calculus::finite_elements::Quadtree *o) const
+cnc::algo::geometry::quadtree_loc::direction cnc::algo::geometry::Quadtree::get_adjacency_dir(cnc::algo::geometry::Quadtree *o) const
 {
     constexpr static scalar eps = 1e-12;
     set_type X = inter_type(x_range,o->x_range);
@@ -143,7 +143,7 @@ cnc::algo::calculus::finite_elements::quadtree_loc::direction cnc::algo::calculu
     }
 }
 
-std::vector<cnc::vec> cnc::algo::calculus::finite_elements::Quadtree::get_corners() const
+std::vector<cnc::vec> cnc::algo::geometry::Quadtree::get_corners() const
 {
     std::vector<vec> C(4);
     scalar X[2] = {x_range.first,x_range.second};
@@ -155,7 +155,7 @@ std::vector<cnc::vec> cnc::algo::calculus::finite_elements::Quadtree::get_corner
     return C;
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::get_empty_leafs(std::vector<cnc::algo::calculus::finite_elements::Quadtree *> &L)
+void cnc::algo::geometry::Quadtree::get_empty_leafs(std::vector<cnc::algo::geometry::Quadtree *> &L)
 {
     if (is_empty())
         L.push_back(this);
@@ -164,7 +164,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::get_empty_leafs(std::vector
             leafs[k]->get_empty_leafs(L);
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::get_full_leafs(std::vector<cnc::algo::calculus::finite_elements::Quadtree *> &L)
+void cnc::algo::geometry::Quadtree::get_full_leafs(std::vector<cnc::algo::geometry::Quadtree *> &L)
 {
     if (is_leaf() && val != nullptr)
         L.push_back(this);
@@ -173,7 +173,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::get_full_leafs(std::vector<
             leafs[k]->get_full_leafs(L);
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::get_leafs(std::vector<cnc::algo::calculus::finite_elements::Quadtree *> &L)
+void cnc::algo::geometry::Quadtree::get_leafs(std::vector<cnc::algo::geometry::Quadtree *> &L)
 {
     if (is_leaf())
         L.push_back(this);
@@ -182,12 +182,12 @@ void cnc::algo::calculus::finite_elements::Quadtree::get_leafs(std::vector<cnc::
             leafs[k]->get_leafs(L);
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::is_empty() const {
+bool cnc::algo::geometry::Quadtree::is_empty() const {
     bool empty = (val == nullptr) && is_leaf();
     return empty;
 }
 
-bool cnc::algo::calculus::finite_elements::Quadtree::is_leaf() const
+bool cnc::algo::geometry::Quadtree::is_leaf() const
 {
     bool leaf = true;
     for (uint k = 0;k<4;k++)
@@ -195,7 +195,7 @@ bool cnc::algo::calculus::finite_elements::Quadtree::is_leaf() const
     return leaf;
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::print(uint pads) const
+void cnc::algo::geometry::Quadtree::print(uint pads) const
 {
     using namespace quadtree_loc;
     const static std::string pad = " ";
@@ -218,14 +218,14 @@ void cnc::algo::calculus::finite_elements::Quadtree::print(uint pads) const
     }
 }
 
-std::vector<std::vector<cnc::vec> > cnc::algo::calculus::finite_elements::Quadtree::get_lines() const
+std::vector<std::vector<cnc::vec> > cnc::algo::geometry::Quadtree::get_lines() const
 {
     std::vector<std::vector<cnc::vec> > L;
     get_lines(L);
     return L;
 }
 
-std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculus::finite_elements::Quadtree::get_adjacents_cells() const
+std::vector<cnc::algo::geometry::Quadtree *> cnc::algo::geometry::Quadtree::get_adjacents_cells() const
 {
     std::vector<Quadtree*> neighbors;
     std::vector<Quadtree*> visited;
@@ -233,14 +233,14 @@ std::vector<cnc::algo::calculus::finite_elements::Quadtree *> cnc::algo::calculu
     return neighbors;
 }
 
-uint cnc::algo::calculus::finite_elements::Quadtree::get_deep() const
+uint cnc::algo::geometry::Quadtree::get_deep() const
 {
     if (parent == nullptr)
         return 0;
     return 1+ parent->get_deep();
 }
 
-uint cnc::algo::calculus::finite_elements::Quadtree::get_height() const
+uint cnc::algo::geometry::Quadtree::get_height() const
 {
     if (is_leaf())
         return 1;
@@ -250,7 +250,7 @@ uint cnc::algo::calculus::finite_elements::Quadtree::get_height() const
     return 1+h;
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::get_adjacents_cells(const cnc::algo::calculus::finite_elements::Quadtree *q,std::vector<cnc::algo::calculus::finite_elements::Quadtree *> &L,std::vector<Quadtree*>& V)
+void cnc::algo::geometry::Quadtree::get_adjacents_cells(const cnc::algo::geometry::Quadtree *q,std::vector<cnc::algo::geometry::Quadtree *> &L,std::vector<Quadtree*>& V)
 {
     V.push_back(this);
     if (check_adjacency(q)){
@@ -266,7 +266,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::get_adjacents_cells(const c
             parent->get_adjacents_cells(q,L,V);
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::get_lines(std::vector<std::vector<cnc::vec> > &L) const
+void cnc::algo::geometry::Quadtree::get_lines(std::vector<std::vector<cnc::vec> > &L) const
 {
     if (!is_leaf()){
         L.push_back({vec({x_range.first,my}),vec({x_range.second,my})});
@@ -278,7 +278,7 @@ void cnc::algo::calculus::finite_elements::Quadtree::get_lines(std::vector<std::
     }
 }
 
-void cnc::algo::calculus::finite_elements::Quadtree::create_leafs()
+void cnc::algo::geometry::Quadtree::create_leafs()
 {
     using namespace quadtree_loc;
     range NX,NY;

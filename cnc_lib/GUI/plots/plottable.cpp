@@ -3,6 +3,7 @@ using namespace cnc;
 
 Plottable::Plottable()
 {
+    pg = nullptr;
 }
 
 void Plottable::change_label(axis axis_id, const std::string &str)

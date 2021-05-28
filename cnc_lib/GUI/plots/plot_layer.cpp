@@ -9,15 +9,23 @@ Plot_layer::Plot_layer(QWidget* parent) : QWidget(parent)
 
 void Plot_layer::display_layer(frame_draw_object& fdo)
 {
+    std::vector<uint> free_pl,dependant;
     for (uint p = 0;p<plots.size();p++){
         plots[p]->compute_values(fdo.fi);
         if (plots[p]->range_reference == nullptr)
-            plots[p]->compute_value_range(fdo.fi);
-        else {
-            plots[p]->range_reference->compute_value_range(fdo.fi);
-            plots[p]->x_range = plots[p]->get_x_range();
-            plots[p]->y_range = plots[p]->get_y_range();
-        }
+            free_pl.push_back(p);
+        else
+            dependant.push_back(p);
+    }
+    for (uint f : free_pl)
+        plots[f]->compute_value_range(fdo.fi);
+
+    for (uint d : dependant){
+        plots[d]->x_range = plots[d]->get_x_range();
+        plots[d]->y_range = plots[d]->get_y_range();
+    }
+
+    for (uint p = 0;p<plots.size();p++){
         fdo.painter.setPen(QPen(plots[p]->plot_color, 2));
         plots[p]->plot(fdo);
     }
@@ -116,15 +124,15 @@ Figure *Plot_layer::new_figure_from_texturing(uint w,uint h,const algo_GUI::text
     return (F);
 }
 
-formula* Plot_layer::add_text_frame(const std::string& ts)
+formula* Plot_layer::add_text_frame(const std::string& ts,formula_disposition d)
 {
     tex_stream text; text << ts << tex::endl;
-    return add_text_frame_from_tex_stream(text);
+    return add_text_frame_from_tex_stream(text,d);
 }
 
-formula* Plot_layer::add_text_frame_from_tex_stream(const tex_stream& ts)
+formula* Plot_layer::add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d)
 {
-    formula* F = new formula(ts);
+    formula* F = new formula(ts,d);
     insert_plot(F);
     return F;
 }

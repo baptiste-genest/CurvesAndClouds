@@ -11,12 +11,14 @@
 
 #include <QMainWindow>
 #include "plots/plot_tab.h"
+#include "plots/plot_group.h"
 
 #include <QTabWidget>
 #include <vector>
 #include <QString>
 //#include <QDesktopWidget>
 #include <QResizeEvent>
+#include <QApplication>
 
 namespace cnc {
 
@@ -38,6 +40,8 @@ public:
      * @return pointer to it
      */
     Plot_tab* add_tab(const QString&);
+
+    int run();
 
 protected:
     QTabWidget* tabs = nullptr;

@@ -20,6 +20,7 @@
 namespace cnc {
 class Stat_window;
 class Frame_duplicata;
+class Plot_group;
 
 /**
  * @brief The Plot_frame class defines a plot frame contains plot layers
@@ -41,6 +42,8 @@ public:
      * @return reference to the new layer
      */
     Plot_layer* add_layer();
+
+    Plot_group* add_plot_group();
 
     /**
      * @brief set_nb_layer_per_second changes the rythm to update the frame

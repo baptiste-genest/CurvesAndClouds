@@ -87,3 +87,9 @@ std::vector<cnc::range> cnc::algo::get_min_max_range(const std::vector<cnc::vec>
     }
     return R;
 }
+
+void cnc::algo::extend_range(cnc::range &A, const cnc::range &B)
+{
+    A.first = std::min(A.first,B.first);
+    A.second = std::max(A.second,B.second);
+}

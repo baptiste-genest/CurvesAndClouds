@@ -23,28 +23,45 @@ mat exp(const mat& M){
     return R;
 }
 
+mat A(2,2,{1,0,0,2});
+vec b({3.,1.});
+mat P1(2,2,{0,1,-1,0});
+mat M1 = P1*A*2;
+vec B1 = P1*b;
+vec bp = M1.solve(B1);
+
+scalar F(const vec& x) {
+    return (x.transpose()*A*x + x.transpose()*b)(0,0);
+}
+
+scalar get_initial_condition(const vec& x){
+    scalar f = F(x-bp)-1;
+    return f*f;
+}
+
 int main(int argc, char *argv[])
 {
-    mat A(2,2,{1,0,0,1});
+    scalar a = 4,b=3,c=-2;
+    mat P(2,2,{a,b/2,b/2,c});
+    auto eigen = P.lanczos();
+    for (auto& e : eigen)
+        std::cout << e.vector << std::endl;
+    return 0;
     mat P1(2,2,{0,1,-1,0});
     mat P2 = -P1;
-    mat M1 = P1*A*2;
     mat M2 = P2*A;
-    vec y0({0,(-2+sqrt(12))/2}),b({2.,8.}),B1 = P1*b;
-    auto f = [A,b] (const vec& x){
-        return (x.transpose()*A*x + x.transpose()*b)(0,0);
-    };
-    vec bp = M1.invert()*B1;
-    scalar t = 0,dt = 0.2;
+    vec y0;
+    y0 = algo::calculus::optimization::gradient_descent(get_initial_condition,vec(2),0.2,2000);
+    scalar t = 0,dt = 0.1;
     uint N = 40;
     std::vector<vec> O1(N),O2(N);
+    std::cout <<"initial: " << F(y0-bp) << std::endl;
     for (uint k = 0;k<N;k++){
-        O1[k] = exp(M1*t)*y0 - bp;
-        std::cout << f(O1[k]) << std::endl;
-        //O2[k] = exp(M2*t)*y0 - P1*A.solve(b);
+        mat E = exp(M1*t);
+        O1[k] = E*y0 - bp;
         t += dt;
     }
-    QApplication a(argc,argv);
+    QApplication app(argc,argv);
     Plot_window w; w.resize(500,500);
 
     Plot_tab* T = w.add_tab("my first tab");
@@ -54,5 +71,5 @@ int main(int argc, char *argv[])
     L->new_2D_curve(O1)->fix_plot_in_rect(0,0,10);
     //L->new_2D_curve(O2)->fix_plot_in_rect(0,0,5);
     w.show();
-    return a.exec();
+    return app.exec();
 }
