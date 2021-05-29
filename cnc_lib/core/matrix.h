@@ -1337,6 +1337,14 @@ public:
             for (uint j = 0;j<Matrix<T>::rowNum();j++)
                 at(j) += other.ix(j);
     }
+    void operator-=(const Vector& other) {
+        if (other.rowNum() != Matrix<T>::rowNum())
+            throw MatrixException(MATRIX_ERR_ADD_ROW_AND_COL_NOT_EQUAL);
+        else
+            for (uint j = 0;j<Matrix<T>::rowNum();j++)
+                at(j) -= other.ix(j);
+    }
+
 
     inline void operator*=(const T& f) {
         for (uint j = 0;j<Matrix<T>::rowNum();j++)

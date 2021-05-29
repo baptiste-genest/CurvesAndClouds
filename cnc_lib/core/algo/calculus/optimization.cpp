@@ -37,9 +37,9 @@ scalar cnc::algo::calculus::optimization::min_dichotomia(const cnc::algo::calcul
     scalar xa = a,xb = b,m;
     for (uint k = 0;k<max_iter;k++){
         m = (xa + xb)*0.5f;
-        if (std::abs(f(m)) < eps)
+        if (xb-xa < eps)
             return m;
-        if (std::abs(f(xa)) < std::abs(f(m)))
+        if (f(xa)*f(m) < 0)
             xb = m;
         else
             xa = m;
@@ -54,18 +54,22 @@ cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::optimization::build
     };
 }
 
-cnc::vec cnc::algo::calculus::optimization::gradient_descent_fixed_step(const cnc::algo::calculus::scalar_function &f, const cnc::vec &x0, scalar h, scalar eps, uint max_iter)
+cnc::vec cnc::algo::calculus::optimization::gradient_descent_fixed_step(const cnc::algo::calculus::scalar_function &f, const cnc::vec &x0, scalar h, scalar eps,scalar dx, uint max_iter)
 {
-    scalar dx = eps/10.f;
     auto grad = vector_calculus::build_gradient(f,x0.size(),dx);
-    h *= -1.f;
+    return gradient_descent_fixed_step(grad,x0,h,eps,max_iter);
+}
+
+vec algo::calculus::optimization::gradient_descent_fixed_step(const algo::calculus::vector_function &grad, const vec &x0, scalar h, scalar eps, uint max_iter)
+{
     vec x = x0,G;scalar gn;
     for (uint iter = 0;iter < max_iter;iter++){
         G = grad(x); gn = G.norm();
         if (gn < eps){
             return x;
         }
-        x += grad(x)*h;
+        x -= grad(x)*h;
     }
     return x;
+
 }

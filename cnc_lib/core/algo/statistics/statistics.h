@@ -76,6 +76,10 @@ struct cloud{
         for (vec& p : points)
             p = v(p);
     }
+    inline void apply(const mat& v){
+        for (vec& p : points)
+            p = v*p;
+    }
 
     /**
      * @brief apply_to_copy duplicate cloud and apply to the duplicata a given function v
