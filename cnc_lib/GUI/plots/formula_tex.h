@@ -151,6 +151,33 @@ private:
     static void change_pixmap_color(QPixmap&,const QColor& C);
 };
 
+class tex_printable_token{
+public:
+    inline tex_printable_token(scalar x) {
+        scl_value = x;
+        type = SCALAR_TYPE;
+    }
+
+    inline tex_printable_token(const std::string& x) {
+        txt_value = x;
+        type = TEXT_TYPE;
+    }
+private:
+    scalar scl_value;
+    std::string txt_value;
+    friend class tex_matrix;
+
+    bool type;
+    const static bool SCALAR_TYPE = true;
+    const static bool TEXT_TYPE = true;
+};
+
+class tex_matrix{
+public:
+    tex_matrix(uint w,uint h,const std::vector<tex_printable_token>& val);
+private:
+    std::vector<tex_printable_token> values;
+};
 
 }
 

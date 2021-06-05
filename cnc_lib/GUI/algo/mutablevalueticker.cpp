@@ -18,8 +18,8 @@ cnc::MutableValueTicker::~MutableValueTicker()
 
 cnc::scalar cnc::MutableValueTicker::value() const
 {
-    auto now = std::chrono::steady_clock::now();
-    return (now - start).count();
+    std::chrono::duration<scalar> elapsed = std::chrono::steady_clock::now() - start;
+    return elapsed.count();
 }
 
 

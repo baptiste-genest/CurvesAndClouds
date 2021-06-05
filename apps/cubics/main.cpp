@@ -16,13 +16,19 @@ int main(int argc, char *argv[])
     QApplication a(argc,argv);
     PlotWindow w; w.resize(500,500);
 
+    tex_stream ts;
+    tex_matrix M(2,2,{2.,"b",3.,4.});
+
     MutScalar t = w.get_time_variable(1000);
 
     PlotTab* T = w.add_tab("Cubics");
     PlotFrame* F= T->add_frame();
     F->set_nb_layer_per_second(10);
     PlotLayer* L = F->add_layer();
-    L->new_trajectory([t] (scalar) {return vec({std::cos(t),std::sin(t)});},0,0.1)->fix_plot_in_rect(0,0,2);
+    L->new_trajectory([t] (scalar) {
+        std::cout << t << std::endl;
+        return vec({std::cos(t),std::sin(t)});
+    },0,0.1)->fix_plot_in_rect(0,0,2);
 
     w.show();
     return a.exec();
