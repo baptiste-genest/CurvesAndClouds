@@ -1,25 +1,14 @@
 #include "vector_field.h"
 using namespace cnc;
 
-Vector_field::Vector_field(const algo::calculus::vector_function_2D &f, const range &x, const range &y, uint nb_vector) : value(f),nb_vector_per_line(nb_vector)
+VectorField::VectorField(const algo::calculus::vector_function_2D &f, const range &x, const range &y, uint nb_vector) : value(f),nb_vector_per_line(nb_vector)
 {
     Plottable::x_range = x;
     Plottable::y_range = y;
-    const uint sample_size = nb_vector;
-    auto Mx = cnc::algo::calculus::build_range_mapper({0,sample_size},x);
-    auto My = cnc::algo::calculus::build_range_mapper({0,sample_size},y);
-
-    std::vector<scalar> norm_samples(sample_size*sample_size);
-    samples.resize(sample_size*sample_size);
-    for (uint j = 0;j<sample_size;j++)
-        for (uint i = 0;i<sample_size;i++){
-            samples[j*sample_size + i] = f(Mx(i),My(j));
-            norm_samples[j*sample_size+i] = samples[j*sample_size+i].norm();
-        }
-    norm_range = algo::get_min_max_range(norm_samples);
+    VectorField::compute_values(frame_info());
 }
 
-void Vector_field::plot(frame_draw_object &fdo)
+void VectorField::plot(frame_draw_object &fdo)
 {
     float xs = 0.5f*(fdo.fi.width)/nb_vector_per_line;
     float ys = 0.5f*(fdo.fi.height)/nb_vector_per_line;
@@ -52,4 +41,20 @@ void Vector_field::plot(frame_draw_object &fdo)
             fdo.painter.drawEllipse(gp+v,1,1);
         }
     }
+}
+
+void VectorField::compute_values(const frame_info &)
+{
+    const uint sample_size = nb_vector_per_line;
+    auto Mx = cnc::algo::calculus::build_range_mapper({0,sample_size},x_range);
+    auto My = cnc::algo::calculus::build_range_mapper({0,sample_size},y_range);
+
+    std::vector<scalar> norm_samples(sample_size*sample_size);
+    samples.resize(sample_size*sample_size);
+    for (uint j = 0;j<sample_size;j++)
+        for (uint i = 0;i<sample_size;i++){
+            samples[j*sample_size + i] = value(Mx(i),My(j));
+            norm_samples[j*sample_size+i] = samples[j*sample_size+i].norm();
+        }
+    norm_range = algo::get_min_max_range(norm_samples);
 }

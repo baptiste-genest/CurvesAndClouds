@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include <complex>
 #include <functional>
 #include <cmath>
@@ -81,6 +82,7 @@ public:
     std::vector<T> operator[](uint) const;
     Matrix operator*(const Matrix&) const;
     Matrix operator+(const Matrix&) const;
+    void operator+=(const Matrix&);
     Matrix operator-(const Matrix&) const;
     Matrix operator*(const T&) const;
     operator Vector<T>() const;
@@ -419,6 +421,16 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
 }
 
 template<class T>
+void Matrix<T>::operator+=(const Matrix & O)
+{
+    for (uint j = 0;j<h;j++){
+        for (uint i = 0;i<w;i++){
+            at(i,j) += O(i,j);
+        }
+    }
+}
+
+template<class T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T>& other) const {
     Matrix result(h, w);
     if (w != other.w || h != other.h) {
@@ -640,7 +652,7 @@ uint Matrix<T>::get_abs_max(uint offset,uint col,uint max) const{
     else if (col >=rowNum())
         throw MatrixException(MATRIX_OUT_ROW);
     else if (offset == max)
-        return ix(col,offset);
+        return offset;
     else{
         uint id = offset;
         float m = std::abs(ix(col,offset));
@@ -1080,18 +1092,26 @@ eigen_pair<T> Matrix<T>::power_method(Vector<T> u) const{
     u = u.normalize();
     Vector<T> x;
 
-    T error = 1,beta;
+    double error = 1;
+    T beta,old_beta = 0;
     uint iter = 0;
     while (error > 1e-10 && iter < 40000){
         iter++;
         x = (*this)*u;
-        beta = x.norm();//*((u.ix(0)*x.ix(0) < 0.0) ? -1.0 : 1.0 );
-        if (beta < epsilon){
+        beta = 0;
+        for (uint j = 0;j<u.rowNum();j++)
+            if (std::abs(u(j)) > epsilon){
+                beta = x(j)/u(j);
+                break;
+            }
+        if (std::abs(beta) < epsilon){
             return {0.0,u};//in kernel
         }
         x = x.normalize();
-        error = 1 - std::abs(u.scalar_product(x));
+        error = std::abs(beta - old_beta);
+        //error = 1 - std::abs(u.scalar_product(x));
         u = x;
+        old_beta = beta;
     }
     if (iter == 1){
         printf("probable error\n");
@@ -1406,6 +1426,9 @@ public:
     }
 
     T distance(const Vector<T>& b) const;
+
+    T norm1() const;
+    T norm_inf() const;
 };
 
 template<class T>
@@ -1514,6 +1537,22 @@ T Vector<T>::distance(const Vector<T> &b) const
     }
     return std::sqrt(d);
 }
+
+template<class T>
+T Vector<T>::norm1() const
+{
+    T s = 0;
+    for (T x : Matrix<T>::v)
+        s += std::abs(x);
+    return s;
+}
+
+template<class T>
+T Vector<T>::norm_inf() const
+{
+    return std::abs(*std::max_element(Matrix<T>::v.begin(),Matrix<T>::v.end(),[] (const T& a,const T& b) {return std::abs(a) < std::abs(b);}));
+}
+
 
 template<class T>
 T Vector<T>::colinearity(const Vector<T>& other) const{
@@ -1651,6 +1690,37 @@ Matrix<T> build_basis(const std::vector<Vector<T>>& X){
         for (uint i = 0;i<n;i++){
             B(i,j) = X[j](i);
         }
+    }
+    return B;
+}
+
+template<class T>
+Matrix<T> build_basis(const std::vector<eigen_pair<T>>& X){
+    uint n = X.size();
+    Matrix<T> B(n,n);
+    for (uint j = 0;j< n;j++){
+        for (uint i = 0;i<n;i++){
+            B(i,j) = X[i].vector(j);
+        }
+    }
+    return B;
+}
+
+template<class T>
+Matrix<T> Diag(const std::vector<T>& X){
+    uint n = X.size();
+    Matrix<T> B(n,n);
+    for (uint j = 0;j< n;j++){
+        B(j,j) = X[j];
+    }
+    return B;
+}
+template<class T>
+Matrix<T> Diag(const std::vector<eigen_pair<T>>& X){
+    uint n = X.size();
+    Matrix<T> B(n,n);
+    for (uint j = 0;j< n;j++){
+        B(j,j) = X[j].value;
     }
     return B;
 }

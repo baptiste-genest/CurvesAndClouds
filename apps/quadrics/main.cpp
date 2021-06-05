@@ -22,14 +22,22 @@ algo::calculus::vector_function get_grad(const mat& A){
 }
 
 void antisymetrize(mat& M){
+    for (uint i = 0;i<M.rowNum();i++)
+        M(i,i) = 0;
     for (uint j = 0;j<M.rowNum();j++)
         for (uint i = 0;i<j;i++)
             M(i,j) = -M(j,i);
 }
 
 vec proj2(const vec& x){
+    return vec({x(0),x(1)});
     scalar z = 4+x(2);
     return vec({x(0)/z,x(1)/z})*4;
+}
+
+void proj2(std::vector<vec>& T){
+    for (vec& p : T)
+        p = proj2(p);
 }
 
 algo::calculus::scalar_function get_quadratic(const mat& A){
@@ -38,24 +46,12 @@ algo::calculus::scalar_function get_quadratic(const mat& A){
     };
 }
 
-int main(int argc, char *argv[])
-{
-    scalar a=1,b=-1,c=1;
-    mat A(3,3);
-    A(0,0) = a;A(1,1) = b;A(2,2) = c;
-
-    vec y({1.,1.,1.});
-    std::cout << y.transpose()*A*y << std::endl;
-
-    mat P(3,3);
-    P(1,0) = 1.0;
-    P(2,1) = 1.0;
-    P(2,0) = 1.0;
+std::vector<vec> travel_on_quadric(const vec& x0,const mat& A,scalar dt,uint N){
+    mat P = algo::stat::random_var::random_mat(-1,1,3);
     antisymetrize(P);
-    std::cout << P << std::endl;
-    mat flow = P*A*2.;
 
-    const uint N = 8;
+    mat flow = P*A*2.0;
+    mat pulse = exp(flow*dt);
     auto Q = get_quadratic(A);
 
     scalar_function goal = [Q] (const vec& x) {
@@ -63,26 +59,33 @@ int main(int argc, char *argv[])
         return val*val;
     };
 
+    std::vector<vec> traj(1);
+    traj[0] = algo::calculus::optimization::gradient_descent_fixed_step(goal,x0,0.1);
+    for (uint k = 1;k<N;k++){
+        traj.push_back(pulse*traj.back());
+        if (traj.back().norm_inf() > 3)
+            return traj;
+    }
+
+    return traj;
+}
+
+int main(int argc, char *argv[])
+{
+    srand(time(NULL));
+
+    mat A = algo::stat::random_var::random_mat(-2,2,3);
+    A = (A + A.transpose())*0.5;
+    auto RS = get_polar_decomposition(A);
+    std::cout << A << std::endl;
+    std::cout << RS.second << std::endl;
+    auto ee = A.lanczos();
+    for (uint k = 0;k<3;k++)
+        std::cout << ee[k].value << std::endl;
+
+    const uint N = 80;
+
     cloud initials = algo::stat::random_var::sample_vector_on_unit_sphere(3,N);
-    for (uint k = 0;k<N;k++){
-        initials[k] = algo::calculus::optimization::gradient_descent_fixed_step(goal,initials[k],0.1);
-        std::cout << Q(initials[k]) << std::endl;
-    }
-
-
-    std::array<cloud,N> C;
-
-
-    vec x(3);
-    scalar dt = 0.1;
-    for (uint i = 0;i<N;i++){
-        scalar t=-15*dt;
-        for (uint k = 0;k<30;k++){
-            x = exp(flow*t)*initials[i];
-            C[i].add_point(proj2(x));
-            t += dt;
-        }
-    }
 
 
     QApplication App(argc,argv);
@@ -92,8 +95,12 @@ int main(int argc, char *argv[])
     Plot_frame* F= T->add_frame();
     Plot_layer* L = F->add_layer();
 
-    for (uint k = 0;k<N;k++)
-        L->new_point_cloud(C[k])->fix_plot_in_rect(0,0,2);
+    scalar dt = 0.05;
+    for (uint k = 0;k<N;k++){
+        auto T = travel_on_quadric(initials[k],A,dt,100);
+        proj2(T);
+        L->new_2D_curve(T)->fix_plot_in_rect(0,0,2);
+    }
 
     w.show();
     return App.exec();

@@ -13,12 +13,13 @@
 
 namespace cnc {
 
-class Colormap : public Scalar_field
+class Colormap : public ScalarField
 {
 public:
     Colormap(const algo::calculus::scalar_function_2D&,const range&,const range&,color_policy cp);
 
 private:
+    void compute_values(const frame_info& fi) override;
     virtual void call_draw_axis(frame_draw_object&) const override;
 
     ~Colormap() {}

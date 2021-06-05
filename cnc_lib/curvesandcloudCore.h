@@ -13,6 +13,7 @@
 #include "cnc_types.h"
 #include "cnc_error.h"
 #include "core/algo/lin_alg.h"
+#include "core/algo/matrix_functions.h"
 #include "core/algo/algo.h"
 #include "core/algo/inout.h"
 #include "core/algo/bit_operations.h"

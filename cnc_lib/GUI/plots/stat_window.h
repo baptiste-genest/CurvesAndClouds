@@ -23,7 +23,7 @@ namespace cnc {
 /**
  * @brief The Stat_list class exists to transmit selected data type to the stat displayer
  */
-class Stat_list{
+class StatList{
 public:
     std::vector<std::vector<bool>> P;
 
@@ -35,28 +35,28 @@ public:
 /**
  * @brief The Stat_displayer class is a sub widget of a stat window to duplicate a plot frame and possibly add new plots over it
  */
-class Stat_displayer : public QWidget {
+class StatDisplayer : public QWidget {
     Q_OBJECT
 public:
-    Stat_displayer(Plot_frame*,QWidget*,const Stat_list& SL);
+    StatDisplayer(PlotFrame*,QWidget*,const StatList& SL);
 
 private:
-    Plot_frame* ref;
+    PlotFrame* ref;
     QWidget* QSL_parent;
     QStackedWidget* QSL;
 
-    friend class Stat_window;
+    friend class StatWindow;
 };
 
 
 /**
  * @brief The Stat_window class is the window displaying plot frames duplicata and numerical informations
  */
-class Stat_window : public QWidget
+class StatWindow : public QWidget
 {
 Q_OBJECT
 public:
-    Stat_window(Plot_frame* r,const Stat_list& p);
+    StatWindow(PlotFrame* r,const StatList& p);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -66,10 +66,10 @@ private:
 
     bool init;
     QHBoxLayout* QHL;
-    Plot_frame* FD;
-    Plot_frame* ref;
-    Stat_list SL;
-    Stat_displayer* SD;
+    PlotFrame* FD;
+    PlotFrame* ref;
+    StatList SL;
+    StatDisplayer* SD;
 };
 
 }

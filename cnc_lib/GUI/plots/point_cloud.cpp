@@ -1,7 +1,7 @@
 #include "point_cloud.h"
 using namespace cnc;
 
-Point_cloud::Point_cloud(const cloud& c, const uint radius)
+PointCloud::PointCloud(const cloud& c, const uint radius)
 {
     if (c.size() == 0)
         throw Cnc_error("Can't plot void point cloud");
@@ -17,7 +17,7 @@ Point_cloud::Point_cloud(const cloud& c, const uint radius)
     size = projected_2d_coords.size();
 }
 
-Point_cloud::Point_cloud(const cloud& c, const std::vector<uint>& radius){
+PointCloud::PointCloud(const cloud& c, const std::vector<uint>& radius){
     pap = square_max_range;
     if (radius.size() != c.points.size()){
         throw(Cnc_error("You need to have the same size for the vectors c and radius."));
@@ -34,13 +34,13 @@ Point_cloud::Point_cloud(const cloud& c, const std::vector<uint>& radius){
     size = projected_2d_coords.size();
 }
 
-void Point_cloud::call_draw_axis(frame_draw_object &fdo) const
+void PointCloud::call_draw_axis(frame_draw_object &fdo) const
 {
     fdo.painter.setPen(QPen(Qt::black, 1));
     draw_axis(fdo, {get_x_range(),get_y_range()});
 }
 
-void Point_cloud::plot(frame_draw_object& fdo)
+void PointCloud::plot(frame_draw_object& fdo)
 {
     range gx_range = get_x_range();
     range gy_range = get_y_range();
@@ -59,7 +59,7 @@ void Point_cloud::plot(frame_draw_object& fdo)
     }
 }
 
-void Point_cloud::compute_value_range(const frame_info &)
+void PointCloud::compute_value_range(const frame_info &)
 {
     if (pap == given_range)
         return;

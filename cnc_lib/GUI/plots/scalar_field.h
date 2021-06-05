@@ -15,11 +15,11 @@
 namespace cnc {
 
 
-class Scalar_field : public Field
+class ScalarField : public Field
 {
 public:
-    Scalar_field(const algo::calculus::scalar_function_2D&,const range&,const range&);
-    virtual ~Scalar_field() {}
+    ScalarField(const algo::calculus::scalar_function_2D&,const range&,const range&);
+    virtual ~ScalarField() {}
 
     inline  plot_type get_type() const override {
         return scalar_field;
@@ -27,15 +27,15 @@ public:
 
 
 protected:
-    void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const override;
+    void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
     color_policy CP;
     algo::calculus::scalar_function_2D value;
     QPixmap values;
     algo::calculus::nodes z_values;
     range z_range;
 
-    const uint MAX_WIDTH = 500;
-    const uint MAX_HEIGHT = 500;
+    const uint MAX_WIDTH = 200;
+    const uint MAX_HEIGHT = 200;
 
     inline void plot(frame_draw_object& fdo) override
     {

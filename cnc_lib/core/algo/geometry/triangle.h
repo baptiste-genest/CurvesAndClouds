@@ -9,6 +9,7 @@
 
 #include "core/algo/algo.h"
 #include "core/algo/lin_alg.h"
+#include "core/algo/matrix_functions.h"
 #include "cnc_error.h"
 #include "cnc_types.h"
 

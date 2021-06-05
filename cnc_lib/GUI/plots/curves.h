@@ -23,8 +23,10 @@ public:
 
 protected:
     uint line_width = 2;
-    void plot(frame_draw_object&) override;
+    virtual void plot(frame_draw_object&) override;
     void call_draw_axis(frame_draw_object&) const override;
+
+    virtual void set_segment_color(frame_draw_object&,uint) const {}
 
     algo::calculus::nodes x_values;
     algo::calculus::nodes y_values;

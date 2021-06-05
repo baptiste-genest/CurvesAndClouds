@@ -420,7 +420,7 @@ bool cnc::algo::geometry::QuadtreeMesher::is_triangle_in_shape(const cnc::algo::
 {
     vec M = T.get_mid_point();
     scalar th = algo::stat::random_var::random_scalar(0,2*M_PI);
-    vec a({cos(th),sin(th)});
+    vec a({std::cos(th),std::sin(th)});
     uint nb = 0;
     for (const edge& e : boundaries_edge)
         if (ray_edge_intersection(M,a,e) > 0)

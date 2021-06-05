@@ -4,7 +4,7 @@
 #include <QPushButton>
 using namespace cnc;
 
-Plot_tab::Plot_tab(QWidget* parent) : QWidget(parent)
+PlotTab::PlotTab(QWidget* parent) : QWidget(parent)
 {
     Grid = new QGridLayout;
     QWidget::setLayout(Grid);
@@ -12,7 +12,7 @@ Plot_tab::Plot_tab(QWidget* parent) : QWidget(parent)
 
 }
 
-void Plot_tab::paintEvent(QPaintEvent *e)
+void PlotTab::paintEvent(QPaintEvent *e)
 {
     QPainter qp(this);
     drawWidget(qp);
@@ -20,14 +20,14 @@ void Plot_tab::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 }
 
-void Plot_tab::drawWidget(QPainter&)
+void PlotTab::drawWidget(QPainter&)
 {
 }
 
-Plot_frame *Plot_tab::insert_frame(const QRect& R)
+PlotFrame *PlotTab::insert_frame(const QRect& R)
 {
     frame_grid.push_back(R);
-    Plot_frame* f = new Plot_frame(this);
+    PlotFrame* f = new PlotFrame(this);
     f->start_timer();
 
     QSizePolicy qsp(QSizePolicy::Preferred,QSizePolicy::Preferred);
@@ -47,7 +47,7 @@ Plot_frame *Plot_tab::insert_frame(const QRect& R)
     return f;
 }
 
-Plot_frame* Plot_tab::add_frame_at(int px, int py, int w, int h)
+PlotFrame* PlotTab::add_frame_at(int px, int py, int w, int h)
 {
     if (px < 0 || py < 0)
         throw Cnc_error("position in frame grid must be strictely positive");
@@ -63,7 +63,7 @@ Plot_frame* Plot_tab::add_frame_at(int px, int py, int w, int h)
     return insert_frame(tmp);
 }
 
-Plot_frame* Plot_tab::add_frame(int w,int h)
+PlotFrame* PlotTab::add_frame(int w,int h)
 {
     if (w <= 0 || h <= 0)
         throw Cnc_error("frame size must be strictely positive");
@@ -85,11 +85,11 @@ Plot_frame* Plot_tab::add_frame(int w,int h)
     throw Cnc_error("Couldn't place frame in grid");
 }
 
-float Plot_tab::get_tab_ratio() const
+float PlotTab::get_tab_ratio() const
 {
     return ratio;
 }
 
-Plot_tab::~Plot_tab()
+PlotTab::~PlotTab()
 {
 }

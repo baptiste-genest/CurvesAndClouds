@@ -30,8 +30,8 @@ std::array<cnc::scalar, 3> cnc::algo::geometry::Triangle::get_barycentric(const 
     std::array<scalar,3> B;
     vec a1 = *m_vertex[2] - x,b1 = *m_vertex[1] - x;
     vec b2 = *m_vertex[0] - x;
-    B[0] = 0.5*std::abs(det22(a1,b1))/area();
-    B[1] = 0.5*std::abs(det22(a1,b2))/area();
+    B[0] = 0.5*std::abs(algo::det22(a1,b1))/area();
+    B[1] = 0.5*std::abs(algo::det22(a1,b2))/area();
     B[2] = 1 - B[1] - B[0];
     return B;
 }

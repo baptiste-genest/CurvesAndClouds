@@ -14,15 +14,17 @@
 
 namespace cnc{
 
-class Level_curve : public Scalar_field
+class LevelCurve : public ScalarField
 {
 public:
-    Level_curve(const algo::calculus::scalar_function_2D&,const range&,const range&,uint = 10);
-    Level_curve(const algo::calculus::scalar_function_2D&,const range&,const range&,float = 0.f);
+    LevelCurve(const algo::calculus::scalar_function_2D&,const range&,const range&,uint = 10);
+    LevelCurve(const algo::calculus::scalar_function_2D&,const range&,const range&,float = 0.f);
 
 private:
+    void compute_values(const frame_info& fi) override;
     virtual void call_draw_axis(frame_draw_object&) const override;
-    ~Level_curve() {}
+    uint nb_slices;
+    ~LevelCurve() {}
 };
 
 }

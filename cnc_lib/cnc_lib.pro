@@ -11,13 +11,18 @@ CONFIG += c++11
 
 SOURCES += \
     GUI/algo/algo_gui.cpp \
+    GUI/algo/mutablevalue.cpp \
+    GUI/algo/mutablevaluecursor.cpp \
+    GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
     GUI/plots/curves.cpp \
     GUI/plots/d2_curve.cpp \
     GUI/plots/field.cpp \
     GUI/plots/figure.cpp \
     GUI/plots/formula_tex.cpp \
-    GUI/plots/function_plot.cpp \
+    GUI/plots/functionplot.cpp \
+    GUI/plots/grid_layer.cpp \
     GUI/plots/level_curve.cpp \
     GUI/plots/plot_frame.cpp \
     GUI/plots/plot_group.cpp \
@@ -29,6 +34,7 @@ SOURCES += \
     GUI/plots/scalar_field.cpp \
     GUI/plots/stat_list_window.cpp \
     GUI/plots/stat_window.cpp \
+    GUI/plots/trajectory.cpp \
     GUI/plots/vector_field.cpp \
     GUI/plotwindow.cpp \
     core/algo/algo.cpp \
@@ -47,23 +53,30 @@ SOURCES += \
     core/algo/geometry/quadtreemesher.cpp \
     core/algo/geometry/triangle.cpp \
     core/algo/inout.cpp \
+    core/algo/lin_alg.cpp \
+    core/algo/matrix_functions.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp
 
 HEADERS += \
     GUI/algo/algo_gui.h \
+    GUI/algo/mutablevalue.h \
+    GUI/algo/mutablevaluecursor.h \
+    GUI/algo/mutablevalueticker.h \
     GUI/display_info.h \
     GUI/plot_frame.h \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
     GUI/plots/curves.h \
     GUI/plots/d2_curve.h \
     GUI/plots/field.h \
     GUI/plots/figure.h \
     GUI/plots/formula_tex.h \
-    GUI/plots/function_plot.h \
+    GUI/plots/functionplot.h \
+    GUI/plots/grid_layer.h \
     GUI/plots/level_curve.h \
     GUI/plots/plot_frame.h \
     GUI/plots/plot_group.h \
@@ -76,6 +89,7 @@ HEADERS += \
     GUI/plots/scalar_field.h \
     GUI/plots/stat_list_window.h \
     GUI/plots/stat_window.h \
+    GUI/plots/trajectory.h \
     GUI/plots/vector_field.h \
     GUI/plotwindow.h \
     cnc_error.h \
@@ -98,8 +112,10 @@ HEADERS += \
     core/algo/geometry/triangle.h \
     core/algo/inout.h \
     core/algo/lin_alg.h \
+    core/algo/matrix_functions.h \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
+    core/matrix_algo.h \
     curvesandcloudCore.h \
     core/matrix.h \
     core/matrix_errors.h \

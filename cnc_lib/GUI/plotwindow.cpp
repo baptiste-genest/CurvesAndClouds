@@ -2,7 +2,7 @@
 
 using namespace cnc;
 
-Plot_window::Plot_window()
+PlotWindow::PlotWindow()
     : QMainWindow(nullptr)
 {
     init = false;
@@ -14,31 +14,35 @@ Plot_window::Plot_window()
     setWindowTitle("Double click on a frame to analyze it");
 }
 
-Plot_window::~Plot_window()
+PlotWindow::~PlotWindow()
 {
+    if (sliders_panel)
+        delete sliders_panel;
 }
 
-Plot_tab* Plot_window::add_tab(const QString& tab_name)
+PlotTab* PlotWindow::add_tab(const QString& tab_name)
 {
-    Plot_tab* tab = new Plot_tab(this);
+    PlotTab* tab = new PlotTab(this);
     tabs->addTab(tab,tab_name);
     tabs_list.push_back(tab);
     return tab;
 }
 
-int Plot_window::run()
+int PlotWindow::run()
 {
+    /*
     int a = 0;
     char** b= nullptr;
-    QApplication A(a,b);
-    show();
-    return A.exec();
+    App = new QApplication(a,b);
+    W->show();
+    */
+    return 1;
 }
 
-void Plot_window::resizeEvent(QResizeEvent* event)
+void PlotWindow::resizeEvent(QResizeEvent* event)
 {
     init = true;
-    float r = ((Plot_tab*) tabs->currentWidget())->get_tab_ratio();
+    float r = ((PlotTab*) tabs->currentWidget())->get_tab_ratio();
     int w,h;
     if (event->size().width()*r < event->size().height()){
         w = event->size().width();
@@ -56,7 +60,7 @@ void Plot_window::resizeEvent(QResizeEvent* event)
     tabs->currentWidget()->resize(w, h-30);
 }
 
-void Plot_window::call_resize()
+void PlotWindow::call_resize()
 {
     if (!init)
         return;

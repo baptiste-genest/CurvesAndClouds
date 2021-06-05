@@ -25,7 +25,7 @@ namespace cnc {
 /**
  * @brief The Plot_tab class defines a tab which contains plot frames
  */
-class Plot_tab : public QWidget
+class PlotTab : public QWidget
 {
     Q_OBJECT;
 
@@ -34,7 +34,7 @@ public:
      * @brief Plot_tab initialize empty tab, displaying handled by QGridLayout
      * @param parent Qt parent to display and automatic destruction
      */
-    Plot_tab(QWidget* parent);
+    PlotTab(QWidget* parent);
 
     /**
      * @brief add frame to a given location and size in frame grid throw error if place unavailable
@@ -44,7 +44,7 @@ public:
      * @param h height number of cells of the frame
      * @return reference to the created frame
      */
-    Plot_frame* add_frame_at(int px,int py,int w = 1,int h = 1);
+    PlotFrame* add_frame_at(int px,int py,int w = 1,int h = 1);
 
 
     /**
@@ -53,11 +53,11 @@ public:
      * @param h height number of cells of the frame
      * @return pointer to the created frame
      */
-    Plot_frame* add_frame(int w = 1,int h = 1);
+    PlotFrame* add_frame(int w = 1,int h = 1);
 
     float get_tab_ratio() const;
 
-    ~Plot_tab();
+    ~PlotTab();
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -69,14 +69,14 @@ private:
     QGridLayout* Grid;
 
     std::vector<QRect> frame_grid;
-    std::vector<Plot_frame*> frames;
+    std::vector<PlotFrame*> frames;
 
 
     static constexpr int MAX_CELL_WIDTH = 10;
     static constexpr int MAX_CELL_HEIGHT = 8;
     static constexpr int CELL_SIZE = 100;
 
-    Plot_frame* insert_frame(const QRect&);
+    PlotFrame* insert_frame(const QRect&);
 };
 
 }

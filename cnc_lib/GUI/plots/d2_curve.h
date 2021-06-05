@@ -13,7 +13,7 @@ namespace cnc {
 /**
  * @brief The D2_curve class to plot curves in 2D
  */
-class D2_curve : public Curves
+class D2Curve : public Curves
 {
 public:
     /**
@@ -21,17 +21,22 @@ public:
      * @param X
      * @param Y
      */
-    D2_curve(const cnc::algo::calculus::nodes& X,const cnc::algo::calculus::nodes& Y);
-    ~D2_curve() {}
+    D2Curve(const cnc::algo::calculus::nodes& X,const cnc::algo::calculus::nodes& Y,bool color = false);
+    ~D2Curve() {}
 
 
     inline  plot_type get_type() const override {
         return d2_curve;
     }
 
-private:
-    void compute_value_range(const frame_info& fi) override;
-    void compute_values(const frame_info&) override {};
+protected:
+    D2Curve() {}
+    virtual void compute_value_range(const frame_info& fi) override;
+    virtual void compute_values(const frame_info&) override {};
+
+    void set_segment_color(frame_draw_object&,uint) const override;
+
+    bool color_by_order;
 };
 
 }

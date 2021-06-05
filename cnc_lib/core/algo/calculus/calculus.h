@@ -61,6 +61,10 @@ typedef std::function<cnc::vec(scalar,scalar)> vector_function_2D;
  */
 typedef std::function<cnc::vec(const cnc::vec&)> vector_function;
 
+typedef std::function<bool(scalar x,scalar y)> property_2D;
+
+typedef std::function<cnc::vec(scalar t)> parametrization_1D;
+
 
 /**
  * @brief get_lin_space create 1D evenly spaced nodes set from a to b with step dx

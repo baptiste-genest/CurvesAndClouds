@@ -14,19 +14,19 @@
 
 namespace cnc {
 
-class Vector_field : public Field
+class VectorField : public Field
 {
 public:
-    Vector_field(const algo::calculus::vector_function_2D&,const range&,const range&,uint);
+    VectorField(const algo::calculus::vector_function_2D&,const range&,const range&,uint);
 
-    virtual ~Vector_field() {}
+    virtual ~VectorField() {}
 
     inline  plot_type get_type() const override {
         return vector_field;
     }
 
 protected:
-    void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const override;
+    void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
 
     algo::calculus::vector_function_2D value;
     uint nb_vector_per_line;
@@ -35,7 +35,7 @@ protected:
 
     void plot(frame_draw_object& fdo) override;
 
-    inline void compute_values(const frame_info &) override {}
+    void compute_values(const frame_info &) override;
 
     inline void compute_value_range(const frame_info &) override {}
 

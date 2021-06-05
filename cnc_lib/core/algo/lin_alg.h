@@ -12,6 +12,7 @@
 
 #include "../../cnc_types.h"
 #include "../matrix.h"
+#include "../matrix_algo.h"
 #include "../matrix_errors.h"
 
 namespace cnc {
@@ -20,14 +21,12 @@ namespace cnc {
  * @brief vec N dimensional vector
  */
 typedef chaskal::Vector<scalar> vec;
+typedef chaskal::Vector<complex_scalar> cvec;
 /**
  * @brief mat NxM matrix
  */
 typedef chaskal::Matrix<scalar> mat;
-
-inline scalar det22(const vec& a,const vec& b){
-    return a(0)*b(1) - a(1)*b(0);
-}
+typedef chaskal::Matrix<complex_scalar> cmat;
 
 }
 #endif // LIN_ALG_H

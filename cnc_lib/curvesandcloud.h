@@ -15,5 +15,6 @@
 #include "GUI/plotwindow.h"
 #include "GUI/plots/formula_tex.h"
 #include "GUI/algo/algo_gui.h"
+#include "GUI/algo/mutablevalue.h"
 
 #endif // CURVESANDCLOUD_H

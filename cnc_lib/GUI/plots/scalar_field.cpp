@@ -1,7 +1,7 @@
 #include "scalar_field.h"
 using namespace cnc;
 
-Scalar_field::Scalar_field(const algo::calculus::scalar_function_2D &f, const range & x, const range &y) : value(f)
+ScalarField::ScalarField(const algo::calculus::scalar_function_2D &f, const range & x, const range &y) : value(f)
 {
     Plottable::x_range = x;
     Plottable::y_range = y;
@@ -15,7 +15,7 @@ Scalar_field::Scalar_field(const algo::calculus::scalar_function_2D &f, const ra
 
     for (uint j = 0;j<y_values.size();j++)
         for (uint i = 0;i<x_values.size();i++)
-            z_values[j*nx+i] = Scalar_field::value(x_values[i],y_values[j]);
+            z_values[j*nx+i] = ScalarField::value(x_values[i],y_values[j]);
 
     z_range = algo::get_min_max_range(z_values);
 }

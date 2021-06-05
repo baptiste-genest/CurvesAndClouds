@@ -1,4 +1,4 @@
-#include "function_plot.h"
+#include "functionplot.h"
 #include "point_cloud.h"
 #include "stat_list_window.h"
 #include "core/algo/calculus/vector_calculus.h"
@@ -8,7 +8,7 @@
 
 using namespace cnc;
 
-void Function_plot::init_stat_display(Plot_frame*,Plot_layer* ,QVBoxLayout* V,const Stat_list& SL) const {
+void FunctionPlot::init_stat_display(PlotFrame*,PlotLayer* ,QVBoxLayout* V,const StatList& SL) const {
     using namespace cnc::algo::calculus;
     using namespace cnc::stat_prop;
     if (SL(function_plot,INTEGRAL)){
@@ -56,7 +56,7 @@ void Function_plot::init_stat_display(Plot_frame*,Plot_layer* ,QVBoxLayout* V,co
     }
 }
 
-void Scalar_field::init_stat_display(Plot_frame*,Plot_layer *L, QVBoxLayout *V, const Stat_list &SL) const
+void ScalarField::init_stat_display(PlotFrame*,PlotLayer *L, QVBoxLayout *V, const StatList &SL) const
 {
     using namespace cnc::stat_prop;
     if (SL(scalar_field,GRAD)){
@@ -70,7 +70,7 @@ void Scalar_field::init_stat_display(Plot_frame*,Plot_layer *L, QVBoxLayout *V, 
     }
 }
 
-void Point_cloud::init_stat_display(Plot_frame*,Plot_layer * lay , QVBoxLayout *V, const Stat_list &SL) const{
+void PointCloud::init_stat_display(PlotFrame*,PlotLayer * lay , QVBoxLayout *V, const StatList &SL) const{
     using namespace cnc::algo::stat;
     using namespace cnc::stat_prop;
     auto D2_coords = project_into_2D(coords);
@@ -102,7 +102,7 @@ void Point_cloud::init_stat_display(Plot_frame*,Plot_layer * lay , QVBoxLayout *
     }
 }
 
-void Vector_field::init_stat_display(Plot_frame* F,Plot_layer*,QVBoxLayout*V,const Stat_list& SL) const {
+void VectorField::init_stat_display(PlotFrame* F,PlotLayer*,QVBoxLayout*V,const StatList& SL) const {
     using namespace cnc::algo;
     using namespace cnc::stat_prop;
     if (SL(vector_field,DIV)){

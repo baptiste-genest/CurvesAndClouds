@@ -83,6 +83,12 @@ cloud sample_vector_on_unit_sphere(uint dim,uint N);
  */
 cloud sample_uniform_in_square(uint dim,scalar half_width,uint N);
 
+mat random_mat(scalar lb,scalar ub,uint n);
+mat random_mat(scalar lb,scalar ub,uint h,uint w);
+
+cmat random_complex_mat(scalar lb,scalar ub,uint n);
+cmat random_complex_mat(scalar lb,scalar ub,uint h,uint w);
+
 }
 
 }

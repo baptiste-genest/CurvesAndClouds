@@ -6,11 +6,11 @@ using namespace cnc;
 int main(int argc, char *argv[])
 {
     QApplication a(argc,argv);
-    Plot_window w; w.resize(500,500);
+    PlotWindow w; w.resize(500,500);
 
-    Plot_tab* T = w.add_tab("my first tab");
-    Plot_frame* F= T->add_frame();
-    Plot_layer* L = F->add_layer();
+    PlotTab* T = w.add_tab("my first tab");
+    PlotFrame* F= T->add_frame();
+    PlotLayer* L = F->add_layer();
 
     tex_stream ts;
     ts << "My first plot!" << tex::endl;

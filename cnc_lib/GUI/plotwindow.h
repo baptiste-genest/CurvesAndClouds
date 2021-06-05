@@ -14,6 +14,7 @@
 #include "plots/plot_group.h"
 
 #include <QTabWidget>
+#include <QLabel>
 #include <vector>
 #include <QString>
 //#include <QDesktopWidget>
@@ -22,36 +23,50 @@
 
 namespace cnc {
 
+class MutableValue;
+class MutScalar;
 /*! \class Plot_window
  *  \brief Base class that instanciates a Qt window and allows displaying plots
  */
-class Plot_window : public QMainWindow
+class PlotWindow : public QMainWindow
 {
     Q_OBJECT;
 
 public:
 
-    Plot_window();
+    PlotWindow();
 
-    ~Plot_window();
+    ~PlotWindow();
 
     /**
      * @brief add_tab adds a new tab to the window
      * @return pointer to it
      */
-    Plot_tab* add_tab(const QString&);
+    PlotTab* add_tab(const QString&);
+    MutScalar add_mutable_scalar_by_cursor(range v,const QString&,uint = 100);
+
+    MutScalar get_time_variable(uint tickrate);
 
     int run();
 
 protected:
     QTabWidget* tabs = nullptr;
-    std::vector<Plot_tab*> tabs_list;
+    std::vector<PlotTab*> tabs_list;
+
+    QVBoxLayout* sliders_box = nullptr;
+    QWidget* sliders_panel = nullptr;
+    std::vector<QLabel*> sliders_text;
 
 private:
-    //std::vector<Plot_tab*> tabs_list;
     void resizeEvent(QResizeEvent* event);
 
+    friend class MutableValueCursor;
+    friend class MutableValueTicker;
+
     bool init = false;
+
+    std::vector<MutableValue*> mv;
+
 
 private slots:
     void call_resize();

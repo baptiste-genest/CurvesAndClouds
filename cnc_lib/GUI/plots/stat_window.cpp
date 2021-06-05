@@ -1,6 +1,6 @@
 #include "stat_window.h"
 
-cnc::Stat_window::Stat_window(Plot_frame *r,const Stat_list& p) : QWidget(nullptr){
+cnc::StatWindow::StatWindow(PlotFrame *r,const StatList& p) : QWidget(nullptr){
     setMinimumSize(QSize(1000,500));
     setMaximumSize(QSize(1000,500));
 
@@ -10,7 +10,7 @@ cnc::Stat_window::Stat_window(Plot_frame *r,const Stat_list& p) : QWidget(nullpt
     init = false;
 }
 
-void cnc::Stat_window::paintEvent(QPaintEvent *e)
+void cnc::StatWindow::paintEvent(QPaintEvent *e)
 {
     if (!init)
         init_window();
@@ -18,7 +18,7 @@ void cnc::Stat_window::paintEvent(QPaintEvent *e)
     SD->paintEvent(e);
 }
 
-void cnc::Stat_window::init_window()
+void cnc::StatWindow::init_window()
 {
     QHL = new QHBoxLayout;
     FD = ref->duplicate_frame(this);
@@ -29,20 +29,20 @@ void cnc::Stat_window::init_window()
     F->setLineWidth(1);
     F->setFrameStyle(1);
     F->setMaximumSize(QSize(500,500));
-    SD = new Stat_displayer(FD,F,SL);
+    SD = new StatDisplayer(FD,F,SL);
     QHL->addWidget(F);
 
     QWidget::setLayout(QHL);
     init = true;
 }
 
-cnc::Plot_frame::~Plot_frame()
+cnc::PlotFrame::~PlotFrame()
 {
     for (uint i = 0;i<popups.size();i++)
         delete popups[i];
 }
 
-cnc::Stat_displayer::Stat_displayer(cnc::Plot_frame* f,QWidget* parent,const Stat_list& SL) : ref(f)
+cnc::StatDisplayer::StatDisplayer(cnc::PlotFrame* f,QWidget* parent,const StatList& SL) : ref(f)
 {
     QSL = new QStackedWidget(parent);
 

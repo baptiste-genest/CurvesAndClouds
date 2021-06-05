@@ -3,6 +3,7 @@ using namespace cnc;
 
 Plottable::Plottable()
 {
+    dynamic = false;
     pg = nullptr;
 }
 

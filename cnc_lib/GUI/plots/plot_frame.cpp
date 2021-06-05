@@ -2,7 +2,7 @@
 
 using namespace cnc;
 
-Plot_frame::Plot_frame(QWidget* parent) : QFrame(parent)
+PlotFrame::PlotFrame(QWidget* parent) : QFrame(parent)
 {
     current_frame = 0;
     setLineWidth(1);
@@ -10,15 +10,23 @@ Plot_frame::Plot_frame(QWidget* parent) : QFrame(parent)
 }
 
 
-Plot_layer* Plot_frame::add_layer()
+PlotLayer* PlotFrame::add_layer()
 {
-    Plot_layer* l = new Plot_layer(this);
+    PlotLayer* l = new PlotLayer(this);
     layers.push_back(l);
     return l;
 }
 
+GridLayer *PlotFrame::add_grid_layer(range x, range y, bool display_grid)
+{
+    GridLayer* g = new GridLayer(x,y,display_grid,this);
+    layers.push_back((PlotLayer*)g);
+    return g;
 
-void Plot_frame::set_nb_layer_per_second(float layer_rate)
+}
+
+
+void PlotFrame::set_nb_layer_per_second(float layer_rate)
 {
     if (layer_rate < 1e-4)
         throw Cnc_error("can't set a frame rate to small or negative");
@@ -26,11 +34,11 @@ void Plot_frame::set_nb_layer_per_second(float layer_rate)
     timer->start((uint) (1000 / nb_layers_per_second));
 }
 
-std::vector<bool> Plot_frame::list_types_contained() const
+std::vector<bool> PlotFrame::list_types_contained() const
 {
     std::vector<bool> types(7,false);//NUMBER OF TYPES
     for (uint k = 0;k<layers.size();k++){
-        for (Plot_layer* l : layers){
+        for (PlotLayer* l : layers){
             for (Plottable* p : l->plots){
                 types[(int)p->get_type()] = true;
             }
@@ -40,7 +48,7 @@ std::vector<bool> Plot_frame::list_types_contained() const
     return types;
 }
 
-void Plot_frame::paintEvent(QPaintEvent* e)
+void PlotFrame::paintEvent(QPaintEvent* e)
 {
 
     QPainter qp(this);
@@ -50,7 +58,7 @@ void Plot_frame::paintEvent(QPaintEvent* e)
     QFrame::paintEvent(e);
 }
 
-void Plot_frame::drawWidget(QPainter& painter)
+void PlotFrame::drawWidget(QPainter& painter)
 {
     frame_info fi = {(uint)QFrame::width(),(uint)QFrame::height()};
     frame_draw_object fdo = {painter,fi};
@@ -60,22 +68,22 @@ void Plot_frame::drawWidget(QPainter& painter)
     draw_current_layer(fdo);
 }
 
-void Plot_frame::start_timer() {
+void PlotFrame::start_timer() {
     timer = new QTimer(this);
 
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(draw_next_frame()));
     timer->start((uint) (1000 / nb_layers_per_second));
 }
 
-void Plot_frame::draw_next_frame()
+void PlotFrame::draw_next_frame()
 {
     current_frame++;
     current_frame %= layers.size();
     QWidget::update();
 }
 
-Plot_frame *Plot_frame::duplicate_frame(QWidget* parent) const{
-    Plot_frame* D = new Plot_frame(parent);
+PlotFrame *PlotFrame::duplicate_frame(QWidget* parent) const{
+    PlotFrame* D = new PlotFrame(parent);
     D->timer = timer;
     QObject::connect(timer,SIGNAL(timeout()),D,SLOT(draw_next_frame()));
 

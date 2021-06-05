@@ -49,11 +49,11 @@ int main(int argc, char *argv[])
 
         QApplication a(argc, argv);
 
-        Plot_window w;w.resize(800,800);
+        PlotWindow w;w.resize(800,800);
 
-        Plot_tab* lag = w.add_tab("Fonctions et interpolation");
-        Plot_frame* PFT = lag->add_frame(2,1);
-        Plot_frame* PFU = lag->add_frame_at(0,1,2,1);
+        PlotTab* lag = w.add_tab("Fonctions et interpolation");
+        PlotFrame* PFT = lag->add_frame(2,1);
+        PlotFrame* PFU = lag->add_frame_at(0,1,2,1);
         PFT->set_nb_layer_per_second(4);
 
         scalar xa = -5.f,xb=-xa;
@@ -67,13 +67,13 @@ int main(int argc, char *argv[])
             lagrange_interpolator lt(T,sample(f,T));
             lagrange_interpolator lu(U,sample(f,U));
 
-            Plot_layer* LT = PFT->add_layer();
+            PlotLayer* LT = PFT->add_layer();
             auto fp2 = LT->new_function_plot(f,xr);
             LT->new_function_plot(lt,xr);
             auto PT = LT->new_point_cloud(stat::sample_points_on_1D_function(f,T),2);
             PT->set_range_reference(fp2);
 
-            Plot_layer* LU = PFU->add_layer();
+            PlotLayer* LU = PFU->add_layer();
             LU->new_function_plot(f,xr);
             LU->new_function_plot(lu,xr);
             LU->new_point_cloud(stat::sample_points_on_1D_function(f,U),2)->set_range_reference(fp2);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 
 
 
-        Plot_tab* field = w.add_tab("Champs scalaires et vectoriels 2D");
+        PlotTab* field = w.add_tab("Champs scalaires et vectoriels 2D");
 
         auto D2F = field->add_frame();D2F->set_nb_layer_per_second(0.5f);
         D2F->add_layer()->new_colormap(h,xr,xr);
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         auto VFF = field->add_frame();
         VFF->add_layer()->new_vector_field(z,xr,xr,20);
 
-        Plot_tab* stats = w.add_tab("Simulation aléatoire et analyse statistique");
+        PlotTab* stats = w.add_tab("Simulation aléatoire et analyse statistique");
 
         vec axis_1({1.f,1.f}),axis_2({-1.f,1.f});
 
@@ -107,14 +107,14 @@ int main(int argc, char *argv[])
 
         auto clusters = algo::stat::compute_clusters_by_k_means(C,2);
 
-        Plot_frame* PFS = stats->add_frame_at(0,0,2,2);
+        PlotFrame* PFS = stats->add_frame_at(0,0,2,2);
         auto clusters_plot = PFS->add_layer();
-        Point_cloud* PC;
+        PointCloud* PC;
         for (uint i = 0;i<2;i++){
             PC = clusters_plot->new_point_cloud(clusters[i],2);
             PC->fix_plot_in_rect(0,0,5);
         }
-        Plot_tab* figs = w.add_tab("Chargement et édition d'images");
+        PlotTab* figs = w.add_tab("Chargement et édition d'images");
 
         auto dog = figs->add_frame(2,2)->add_layer();
         dog->new_figure_from_file("../../data/rodrigo.jpg");
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
         auto mandel = figs->add_frame(2,2)->add_layer();
         mandel->new_figure_from_texturing(500,500,mandelbrot);
 
-        Plot_tab* quadra = w.add_tab("Méthodes de quadrature");
+        PlotTab* quadra = w.add_tab("Méthodes de quadrature");
         auto pi_approx = quadra->add_frame(2,2)->add_layer();
         auto quadra_legend = quadra->add_frame(2,2);
 

@@ -1,12 +1,12 @@
 #include "stat_list_window.h"
 
-void cnc::Plot_frame::mouseDoubleClickEvent(QMouseEvent *)
+void cnc::PlotFrame::mouseDoubleClickEvent(QMouseEvent *)
 {
-    Stat_list_window* SLW = new Stat_list_window(this);
+    StatListWindow* SLW = new StatListWindow(this);
     SLW->show();
 }
 
-cnc::Stat_list_window::Stat_list_window(Plot_frame* r) : QWidget(nullptr) , ref(r)
+cnc::StatListWindow::StatListWindow(PlotFrame* r) : QWidget(nullptr) , ref(r)
 {
     QVBoxLayout* V = new QVBoxLayout;
     const uint NB_TYPES = stat_prop::types_name.size();
@@ -36,9 +36,9 @@ cnc::Stat_list_window::Stat_list_window(Plot_frame* r) : QWidget(nullptr) , ref(
     QWidget::setLayout(V);
 }
 
-void cnc::Stat_list_window::exit_slot()
+void cnc::StatListWindow::exit_slot()
 {
-    Stat_list SL;
+    StatList SL;
     SL.P.resize(boxes.size());
     for (uint j = 0;j<boxes.size();j++){
         SL.P[j].resize(boxes[j].size());
@@ -46,7 +46,7 @@ void cnc::Stat_list_window::exit_slot()
             SL.P[j][i] = boxes[j][i]->isChecked();
         }
     }
-    Stat_window* S = new Stat_window(ref,SL);
+    StatWindow* S = new StatWindow(ref,SL);
     S->show();
     close();
 }

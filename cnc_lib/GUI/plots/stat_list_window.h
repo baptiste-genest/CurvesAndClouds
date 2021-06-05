@@ -68,14 +68,14 @@ namespace stat_prop {
 
 }
 
-class Stat_list_window : public QWidget
+class StatListWindow : public QWidget
 {
     Q_OBJECT
 public:
-    Stat_list_window(Plot_frame*);
+    StatListWindow(PlotFrame*);
 private:
     std::vector<std::vector<QCheckBox*>> boxes;
-    Plot_frame* ref;
+    PlotFrame* ref;
 
 private slots:
     void exit_slot();

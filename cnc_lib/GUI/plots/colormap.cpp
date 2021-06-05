@@ -1,9 +1,14 @@
 #include "colormap.h"
 using namespace cnc;
 
-Colormap::Colormap(const algo::calculus::scalar_function_2D &f, const range & x, const range &y,color_policy cp) : Scalar_field(f,x,y)
+Colormap::Colormap(const algo::calculus::scalar_function_2D &f, const range & x, const range &y,color_policy cp) : ScalarField(f,x,y)
 {
     CP = cp;
+    Colormap::compute_values(frame_info());
+}
+
+void Colormap::compute_values(const frame_info &)
+{
     QImage tmp(MAX_HEIGHT,MAX_WIDTH,QImage::Format_RGBA64);
     float mid_val = (z_range.first + z_range.second)*0.5f;
 
@@ -30,7 +35,7 @@ Colormap::Colormap(const algo::calculus::scalar_function_2D &f, const range & x,
 
     for (uint j = 0;j< MAX_HEIGHT;j++){
         for (uint i = 0;i<MAX_WIDTH;i++){
-            float z = f(X(i),Y(j));
+            float z = value(X(i),Y(j));
             tmp.setPixelColor(i,MAX_HEIGHT - 1 - j,QColor::fromRgb(R(z),0,B(z)));
         }
     }

@@ -13,28 +13,30 @@
 #endif
 
 #include "plottable.h"
-#include "function_plot.h"
+#include "functionplot.h"
 #include "figure.h"
 #include "colormap.h"
 #include "d2_curve.h"
 #include "core/algo/calculus/calculus.h"
 #include "point_cloud.h"
 #include "level_curve.h"
+#include "boolean_field.h"
 #include "vector_field.h"
 #include "formula_tex.h"
+#include "trajectory.h"
 
 namespace cnc {
 
 /**
  * @brief The Plot_layer class will contain plots, if contains multiples plots, they will be displayed in the same frame
  */
-class Plot_layer : protected QWidget
+class PlotLayer : protected QWidget
 {
 public:
     /**
      * @brief Plot_layer initialize empty layer
      */
-    Plot_layer(QWidget*);
+    PlotLayer(QWidget*);
 
     /**
      * @brief new_function_plot adds the plot of a function to the layer
@@ -43,7 +45,7 @@ public:
      * @param pap Plot axis policy, you can choose : plot between the min and the max values,same than x range(default)
      * @return pointer to the plot
      */
-    Function_plot* new_function_plot(const algo::calculus::scalar_function_1D& f,const range& x_range,plot_axis_policy pap = same_than_x_range);
+    FunctionPlot* new_function_plot(const algo::calculus::scalar_function_1D& f,const range& x_range,plot_axis_policy pap = same_than_x_range);
     /**
      * @brief new_function_plot adds the plot of a function to the layer
      * @param f function to plot
@@ -51,7 +53,7 @@ public:
      * @param y_range fix the range of possible values to plot
      * @return pointer to the plot
      */
-    Function_plot* new_function_plot(const algo::calculus::scalar_function_1D& f,const range& x_range,const range& y_range);
+    FunctionPlot* new_function_plot(const algo::calculus::scalar_function_1D& f,const range& x_range,const range& y_range);
 
     /**
      * @brief new_point_cloud adds a point cloud to the layer
@@ -59,14 +61,14 @@ public:
      * @param radius radius of each point (default = 2)
      * @return pointer to the plot
      */
-    Point_cloud* new_point_cloud(const cloud& c, const uint radius = 2);
+    PointCloud* new_point_cloud(const cloud& c, const uint radius = 2);
     /**
      * @brief new_point_cloud adds a point cloud to the layer
      * @param c cloud to plot
      * @param radius you can fix each radius of each point (must have same size than cloud )
      * @return pointer to the plot
      */
-    Point_cloud* new_point_cloud(const cloud& c, const std::vector<uint>& radius);
+    PointCloud* new_point_cloud(const cloud& c, const std::vector<uint>& radius);
 
     /**
      * @brief new_2D_curve adds a 2D curve to the layer from the set of the control points, straight lines are drawn between them
@@ -74,13 +76,15 @@ public:
      * @param Y y coordinates of the control points
      * @return pointer to the plot
      */
-    D2_curve *new_2D_curve(const algo::calculus::nodes& X,const algo::calculus::nodes& Y);
+    D2Curve *new_2D_curve(const algo::calculus::nodes& X,const algo::calculus::nodes& Y,bool color_by_order = false);
     /**
      * @brief new_2D_curve adds a 2D curve to the layer from the set of the control points, straight lines are drawn between them
      * @param P set of control points, in vector format, must be 2D
      * @return pointer to the plot
      */
-    D2_curve *new_2D_curve(const std::vector<vec>& P);
+    D2Curve *new_2D_curve(const std::vector<vec>& P,bool color_by_order = false);
+
+    Trajectory* new_trajectory(const algo::calculus::parametrization_1D& P,scalar t0,scalar dt);
 
     /**
      * @brief new_colormap adds the plot of a 2D scalar function, plot in the x and y range, color goes from blue to black to red
@@ -92,6 +96,8 @@ public:
      */
     Colormap* new_colormap(const algo::calculus::scalar_function_2D& f,const range& x_range,const range& y_range ,color_policy cp = min_max);
 
+    BooleanField* new_boolean_field(const algo::calculus::property_2D& p,const range& x_range,const range& y_range);
+
     /**
      * @brief new_level_curve adds the plot of a 2D scalar function, plot in the x and y range, by displaying it's level curves
      * @param f function to plot
@@ -100,7 +106,7 @@ public:
      * @param nb_slices number of level curves (evenly sliced from min to max)
      * @return pointer to the plot
      */
-    Level_curve* new_level_curve(const algo::calculus::scalar_function_2D& f,const range& x,const range&y,uint nb_slices = 10);
+    LevelCurve* new_level_curve(const algo::calculus::scalar_function_2D& f,const range& x,const range&y,uint nb_slices = 10);
     /**
      * @brief new_level_curve adds the plot of a 2D scalar function, plot in the x and y range, by displaying one level curve of a given value
      * @param f function to plot
@@ -109,7 +115,7 @@ public:
      * @param level value to slice
      * @return pointer to the plot
      */
-    Level_curve* new_level_curve_unique(const algo::calculus::scalar_function_2D&,const range&,const range&,float level = 0.f);
+    LevelCurve* new_level_curve_unique(const algo::calculus::scalar_function_2D&,const range&,const range&,float level = 0.f);
 
     /**
      * @brief new_level_curve adds the plot of a 2D vector field, plot in the x and y range
@@ -119,7 +125,7 @@ public:
      * @param number_of_vector_per_side (default = 10)
      * @return pointer to the plot
      */
-    Vector_field* new_vector_field(const algo::calculus::vector_function_2D&,const range& x_range,const range& y_range,uint nb_vector_per_side= 10);
+    VectorField* new_vector_field(const algo::calculus::vector_function_2D&,const range& x_range,const range& y_range,uint nb_vector_per_side= 10);
 
     /**
      * @brief new_figure_from_file displays a picture from a given file (supports most of the image format (check Qt doc for the list))
@@ -156,14 +162,14 @@ public:
      */
     formula* add_text_frame(const std::string& ts,formula_disposition d = centered);
 
-    ~Plot_layer();
+    ~PlotLayer();
 
-    friend class Plot_frame;
-    friend class Stat_displayer;
+    friend class PlotFrame;
+    friend class StatDisplayer;
 
 protected:
 
-    Plot_layer* duplicate_layer(QWidget*) const;
+    PlotLayer* duplicate_layer(QWidget*) const;
 
     inline void insert_plot(Plottable* P) {
         P->set_color(CNC_COLORS[plots.size() % NB_CNC_COLORS]);

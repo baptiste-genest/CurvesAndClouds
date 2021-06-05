@@ -1,18 +1,21 @@
-#include "function_plot.h"
+#include "functionplot.h"
 using namespace cnc;
 
 
-Function_plot::Function_plot(const algo::calculus::scalar_function_1D &v, const range &x,plot_axis_policy _fpp) : value(v)
+FunctionPlot::FunctionPlot(const algo::calculus::scalar_function_1D &v, const range &x,plot_axis_policy _fpp) : value(v)
 {
     illustrative = false;
     pap = _fpp;
     if (x.first > x.second)
         throw Cnc_error("plot interval for a to b must have a < b");
     x_range = x;
+    x_values = algo::calculus::get_lin_space(x_range.first,x_range.second,NB_X_SAMPLES);
+    y_values.resize(NB_X_SAMPLES);
+    FunctionPlot::compute_values(frame_info());
 }
 
 
-void Function_plot::compute_value_range(const frame_info &)
+void FunctionPlot::compute_value_range(const frame_info &)
 {
     switch (pap){
             case (min_max_range):
@@ -28,10 +31,8 @@ void Function_plot::compute_value_range(const frame_info &)
     }
 }
 
-void Function_plot::compute_values(const frame_info& fi)
+void FunctionPlot::compute_values(const frame_info&)
 {
-    x_values = algo::calculus::get_lin_space(x_range.first,x_range.second,(int)fi.width);
-    y_values.resize(x_values.size());
     for (uint i = 0;i<x_values.size();i++)
         y_values[i] = value(x_values[i]);
 }

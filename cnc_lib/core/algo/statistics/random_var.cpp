@@ -89,3 +89,33 @@ cnc::scalar cnc::algo::stat::random_var::random_scalar(scalar a, scalar b)
     static constexpr int N = 1e6;
     return (b-a)*scalar(rand()%N)/N + a;
 }
+
+cnc::mat cnc::algo::stat::random_var::random_mat(cnc::scalar lb, cnc::scalar ub, uint n)
+{
+    return random_mat(lb,ub,n,n);
+}
+
+cnc::mat cnc::algo::stat::random_var::random_mat(cnc::scalar lb, cnc::scalar ub, uint h, uint w)
+{
+    mat R(h,w);
+    for (uint j = 0;j<h;j++)
+        for (uint i = 0;i<w;i++)
+            R(i,j) = random_scalar(lb,ub);
+
+    return R;
+}
+
+cnc::cmat cnc::algo::stat::random_var::random_complex_mat(cnc::scalar lb, cnc::scalar ub, uint h, uint w)
+{
+    cmat R(h,w);
+    for (uint j = 0;j<h;j++)
+        for (uint i = 0;i<w;i++)
+            R(i,j) = complex_scalar(random_scalar(lb,ub),random_scalar(lb,ub));
+
+    return R;
+}
+
+cnc::cmat cnc::algo::stat::random_var::random_complex_mat(cnc::scalar lb, cnc::scalar ub, uint n)
+{
+    return random_complex_mat(lb,ub,n,n);
+}

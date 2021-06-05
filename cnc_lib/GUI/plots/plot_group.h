@@ -11,9 +11,9 @@
 
 namespace cnc {
 
-class Plot_group : public Plot_layer {
+class PlotGroup : public PlotLayer {
 public:
-    Plot_group(QWidget* parent);
+    PlotGroup(QWidget* parent);
 private:
     void display_layer(frame_draw_object& fdo) override;
 

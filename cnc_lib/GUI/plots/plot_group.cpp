@@ -1,25 +1,27 @@
 #include "plot_group.h"
 using namespace cnc;
 
-Plot_group *Plot_frame::add_plot_group()
+PlotGroup *PlotFrame::add_plot_group()
 {
-    Plot_group* g = new Plot_group(this);
-    layers.push_back((Plot_layer*)g);
+    PlotGroup* g = new PlotGroup(this);
+    layers.push_back((PlotLayer*)g);
     return g;
 }
 
 
-Plot_group::Plot_group(QWidget *parent) : Plot_layer(parent)
+PlotGroup::PlotGroup(QWidget *parent) : PlotLayer(parent)
 {
 
 }
 
-void Plot_group::display_layer(frame_draw_object &fdo)
+void PlotGroup::display_layer(frame_draw_object &fdo)
 {
     range max_frame_x = {MAXFLOAT,-MAXFLOAT};
     range max_frame_y = {MAXFLOAT,-MAXFLOAT};
     std::vector<uint> free_pl,dependant;
     for (uint p = 0;p<plots.size();p++){
+        if (plots[p]->dynamic)
+            plots[p]->compute_values(fdo.fi);
         plots[p]->compute_values(fdo.fi);
         if (plots[p]->range_reference == nullptr)
             free_pl.push_back(p);

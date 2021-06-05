@@ -1,8 +1,8 @@
 /**
   * @file function_plot.h defines function plotting
   */
-#ifndef FUNCTION_PLOT_H
-#define FUNCTION_PLOT_H
+#ifndef FUNCTIONPLOT_H
+#define FUNCTIONPLOT_H
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT
 #else
@@ -17,18 +17,18 @@
 
 namespace cnc {
 
-class Function_plot : public Curves
+class FunctionPlot : public Curves
 {
 public:
-    Function_plot(const algo::calculus::scalar_function_1D& value,const range& x_range,plot_axis_policy);
-    ~Function_plot() {}
+    FunctionPlot(const algo::calculus::scalar_function_1D& value,const range& x_range,plot_axis_policy);
+    ~FunctionPlot() {}
 
     inline  plot_type get_type() const override {
         return function_plot;
     }
 
 protected:
-    void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const override;
+    void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
 
 private:
 
@@ -39,8 +39,10 @@ private:
 
     range get_y_range(const algo::calculus::nodes&) const;
 
+    const static int NB_X_SAMPLES = 700;
+
 };
 
 }
 
-#endif // FUNCTION_PLOT_H
+#endif // FUNCTIONPLOT_H

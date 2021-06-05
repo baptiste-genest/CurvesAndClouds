@@ -15,7 +15,7 @@
 
 namespace cnc {
 
-class Point_cloud : public Plottable
+class PointCloud : public Plottable
 {
 public:
     /**
@@ -23,14 +23,14 @@ public:
      * @param coords
      * @param radius
      */
-    Point_cloud(const cloud& c, const uint radius);
+    PointCloud(const cloud& c, const uint radius);
 
     /**
      * @brief Points_cloud's constructor with a different size for each point
      * @param coords
      * @param radius
      */
-    Point_cloud(const cloud& coords, const std::vector<uint>& radius);
+    PointCloud(const cloud& coords, const std::vector<uint>& radius);
 
     inline  plot_type get_type() const override {
         return point_cloud;
@@ -38,7 +38,7 @@ public:
 
 protected:
 
-    void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const override;
+    void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
 
 private:
     constexpr static float zoom_factor = 1.2;

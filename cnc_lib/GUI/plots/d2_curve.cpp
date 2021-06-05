@@ -1,7 +1,7 @@
 #include "d2_curve.h"
 using namespace cnc;
 
-D2_curve::D2_curve(const algo::calculus::nodes &X, const algo::calculus::nodes &Y){
+D2Curve::D2Curve(const algo::calculus::nodes &X, const algo::calculus::nodes &Y,bool color): color_by_order(color){
     if (X.size() == 0)
         throw Cnc_error("can't build 2D curve without X coords");
     if (Y.size() == 0)
@@ -13,7 +13,7 @@ D2_curve::D2_curve(const algo::calculus::nodes &X, const algo::calculus::nodes &
     pap = same_than_x_range;
 }
 
-void D2_curve::compute_value_range(const frame_info &)
+void D2Curve::compute_value_range(const frame_info &)
 {
     switch (pap){
             case (min_max_range):
@@ -30,5 +30,14 @@ void D2_curve::compute_value_range(const frame_info &)
             default:
                 return;
     }
+}
+
+void D2Curve::set_segment_color(frame_draw_object& fdo, uint i) const
+{
+    if (!color_by_order)
+        return;
+    auto R = algo::calculus::build_range_mapper({0,x_values.size()},{0,255});
+    auto B = algo::calculus::build_range_mapper({0,x_values.size()},{255,0});
+    fdo.painter.setPen(QPen(QColor::fromRgb(R(i),0,B(i)),2));
 }
 

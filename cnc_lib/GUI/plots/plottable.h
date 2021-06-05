@@ -29,16 +29,17 @@ using namespace QColorConstants;
 static constexpr uint NB_CNC_COLORS = 10;
 static constexpr QColor CNC_COLORS[NB_CNC_COLORS] = {Blue,Red,Green,DarkBlue,DarkRed,DarkGreen,Magenta,Cyan,DarkMagenta,DarkCyan};
 
-class Plot_layer;
-class Plot_frame;
-class Stat_list;
-class Plot_group;
+class PlotLayer;
+class PlotFrame;
+class StatList;
+class PlotGroup;
 
 enum plot_type {
     function_plot,
     d2_curve,
     scalar_field,
     vector_field,
+    boolean_field,
     text,
     figure,
     point_cloud
@@ -139,15 +140,22 @@ public:
         return pg != nullptr;
     }
 
+    inline void set_dynamic() {
+        dynamic = true;
+    }
+
 protected:
 
-    Plot_group* pg;
-    friend class Plot_group;
+    bool dynamic;
 
-    virtual void init_stat_display(Plot_frame*,Plot_layer*,QVBoxLayout*,const Stat_list&) const {}
+    PlotGroup* pg;
+    friend class PlotGroup;
 
-    friend class Plot_layer;
-    friend class Stat_displayer;
+    virtual void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const {}
+
+    friend class PlotLayer;
+    friend class GridLayer;
+    friend class StatDisplayer;
 
     std::string x_label = "x";
     std::string y_label = "y";

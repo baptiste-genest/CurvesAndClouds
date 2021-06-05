@@ -12,20 +12,21 @@
 #endif
 
 #include "plot_layer.h"
+#include "grid_layer.h"
 #include "GUI/display_info.h"
 #include <vector>
 #include <QFrame>
 #include <QTimer>
 
 namespace cnc {
-class Stat_window;
+class StatWindow;
 class Frame_duplicata;
-class Plot_group;
+class PlotGroup;
 
 /**
  * @brief The Plot_frame class defines a plot frame contains plot layers
  */
-class Plot_frame : protected QFrame
+class PlotFrame : protected QFrame
 {
     Q_OBJECT;
 
@@ -34,16 +35,18 @@ public:
      * @brief Plot_frame initialize empty frame
      * @param parent pointer to parent (typically a Plot_tab)
      */
-    Plot_frame(QWidget* parent);
-    virtual ~Plot_frame();
+    PlotFrame(QWidget* parent);
+    virtual ~PlotFrame();
 
     /**
      * @brief add_layer adds an empty layer in the frame
      * @return reference to the new layer
      */
-    Plot_layer* add_layer();
+    PlotLayer* add_layer();
 
-    Plot_group* add_plot_group();
+    GridLayer* add_grid_layer(range x,range y,bool display_grid = true);
+
+    PlotGroup* add_plot_group();
 
     /**
      * @brief set_nb_layer_per_second changes the rythm to update the frame
@@ -51,7 +54,7 @@ public:
      */
     void set_nb_layer_per_second(float layer_rate);
 
-    friend class Plot_tab;
+    friend class PlotTab;
 
     /**
      * @brief list_types_contained list all types of plot contained in this frame
@@ -63,20 +66,20 @@ protected:
     void drawWidget(QPainter&);
     void mouseDoubleClickEvent(QMouseEvent*);
 private:
-    friend class Stat_window;
-    friend class Stat_displayer;
+    friend class StatWindow;
+    friend class StatDisplayer;
 
     void start_timer();
 
-    Plot_frame *duplicate_frame(QWidget* parent) const;
+    PlotFrame *duplicate_frame(QWidget* parent) const;
 
-    std::vector<Stat_window*> popups;
+    std::vector<StatWindow*> popups;
 
     QTimer* timer;
     float nb_layers_per_second = 2.f;
 
     uint current_frame;
-    std::vector<Plot_layer*> layers;
+    std::vector<PlotLayer*> layers;
 
     inline void draw_current_layer(frame_draw_object& fdo){
         layers[current_frame]->display_layer(fdo);
