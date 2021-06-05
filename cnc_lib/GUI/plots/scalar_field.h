@@ -25,6 +25,20 @@ public:
         return scalar_field;
     }
 
+    inline void set_width_resolution(uint w) {
+        MAX_WIDTH = w;
+        compute_values(frame_info());
+    }
+
+    inline void set_height_resolution(uint h) {
+        MAX_HEIGHT = h;
+        compute_values(frame_info());
+    }
+
+    inline void set_resolution(uint v) {
+        MAX_HEIGHT = v;MAX_WIDTH = v;
+        compute_values(frame_info());
+    }
 
 protected:
     void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
@@ -34,8 +48,8 @@ protected:
     algo::calculus::nodes z_values;
     range z_range;
 
-    const uint MAX_WIDTH = 200;
-    const uint MAX_HEIGHT = 200;
+    uint MAX_WIDTH = 600;
+    uint MAX_HEIGHT = 600;
 
     inline void plot(frame_draw_object& fdo) override
     {
