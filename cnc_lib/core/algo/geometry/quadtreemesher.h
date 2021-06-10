@@ -10,6 +10,7 @@
 #include "quadtree.h"
 #include "triangle.h"
 #include "geometry.h"
+#include "mesh.h"
 #include "../statistics/random_var.h"
 #include "../bit_operations.h"
 
@@ -33,7 +34,7 @@ public:
     }
 
     void build_mesh();
-    std::vector<Triangle> get_mesh() const;
+    Mesh get_mesh() const;
 
     bool is_triangle_in_shape(const Triangle& T);
 

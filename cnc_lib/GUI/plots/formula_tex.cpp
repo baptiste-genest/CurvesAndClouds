@@ -75,3 +75,16 @@ tex_system::tex_system(const std::vector<std::string> &S)
         chunk += s + " \\\\ ";
     chunk += "\\end{cases}";
 }
+
+tex_matrix::tex_matrix(uint w, uint h, const std::vector<std::string> &val){
+    chunk = "\\begin{pmatrix}";
+    for (uint j = 0;j<h;j++){
+        for (uint i = 0;i<w;i++){
+            chunk += val[j*w+i];
+            if (i != w-1)
+            chunk += " & ";
+        }
+        chunk += "\\\\";
+    }
+    chunk += "\\end{pmatrix}";
+}

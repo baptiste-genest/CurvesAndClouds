@@ -18,8 +18,8 @@ void generate_borders(QuadtreeMesher& QM,uint N){
 int main(int argc, char *argv[])
 {
     QApplication a(argc,argv);
-    Plot_window w; w.resize(500,500);
-    Plot_tab* T = w.add_tab("Quadtree meshing");
+    PlotWindow w; w.resize(500,500);
+    PlotTab* T = w.add_tab("Quadtree meshing");
 
     range R({-1.2,1.2});
     uint N = 20;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     {
         auto layer = T->add_frame()->add_layer();
         auto M = QM.get_mesh();
-        for (const Triangle& t : M){
+        for (const Triangle& t : M.get_faces()){
             layer->new_2D_curve(t.get_edges())->fix_plot_range(R,R);
         }
     }

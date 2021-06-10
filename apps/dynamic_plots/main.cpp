@@ -29,6 +29,12 @@ int main(int argc, char *argv[])
         return vec({a*x + c*y,b*x+d*y});
     },r,r,20)->set_dynamic();
 
+    T->add_frame()->add_layer()->new_vector_field([a,b,c,d] (scalar x,scalar y) {
+        mat U(2,2,{a,b,c,d});
+        vec X({x,y});
+        return (U*U.transpose())*X;
+    },r,r,20)->set_dynamic();
+
     w.show();
     return App.exec();
 }

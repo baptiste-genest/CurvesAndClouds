@@ -486,9 +486,9 @@ void cnc::algo::geometry::QuadtreeMesher::build_mesh()
 
 }
 
-std::vector<cnc::algo::geometry::Triangle> cnc::algo::geometry::QuadtreeMesher::get_mesh() const
+cnc::algo::geometry::Mesh cnc::algo::geometry::QuadtreeMesher::get_mesh() const
 {
-    return mesh;
+    return cnc::algo::geometry::Mesh(mesh);
 }
 
 void cnc::algo::geometry::QuadtreeMesher::make_interior_triangles(const std::vector<cnc::vec *> &points, uint config)

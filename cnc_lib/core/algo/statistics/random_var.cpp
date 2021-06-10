@@ -86,8 +86,9 @@ cnc::scalar cnc::algo::stat::random_var::random_scalar(scalar a, scalar b)
 {
     if (b < a)
         throw Cnc_error("Can't generate random between a and b if b < a");
-    static constexpr int N = 1e6;
-    return (b-a)*scalar(rand()%N)/N + a;
+    static constexpr int N = RAND_MAX;
+    static constexpr scalar ratio = 1.0/N;
+    return (b-a)*(scalar(rand()%N)*ratio) + a;
 }
 
 cnc::mat cnc::algo::stat::random_var::random_mat(cnc::scalar lb, cnc::scalar ub, uint n)

@@ -18,6 +18,11 @@
 #include "GUI/display_info.h"
 
 #include <algorithm>
+#include <limits>
+
+#if defined(WIN64)
+#define MAXFLOAT 1e10
+#endif
 
 #include <QString>
 #include <QPoint>

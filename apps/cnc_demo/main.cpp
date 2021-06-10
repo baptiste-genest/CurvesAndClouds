@@ -70,13 +70,13 @@ int main(int argc, char *argv[])
             PlotLayer* LT = PFT->add_layer();
             auto fp2 = LT->new_function_plot(f,xr);
             LT->new_function_plot(lt,xr);
-            auto PT = LT->new_point_cloud(stat::sample_points_on_1D_function(f,T),2);
+            auto PT = LT->new_point_cloud(algo::stat::sample_points_on_1D_function(f,T),2);
             PT->set_range_reference(fp2);
 
             PlotLayer* LU = PFU->add_layer();
             LU->new_function_plot(f,xr);
             LU->new_function_plot(lu,xr);
-            LU->new_point_cloud(stat::sample_points_on_1D_function(f,U),2)->set_range_reference(fp2);
+            LU->new_point_cloud(algo::stat::sample_points_on_1D_function(f,U),2)->set_range_reference(fp2);
         }
 
         tex_stream to ;
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 
         vec axis_1({1.f,1.f}),axis_2({-1.f,1.f});
 
-        cloud C = stat::random_var::sample_gaussian_vector_by_PC({axis_2,axis_1},{1.3f,1.0f},vec({3.f,1.f}),1000);
-        C = C + stat::random_var::sample_gaussian_vector_by_PC({axis_1,axis_2},{1.f,0.3f},vec({-3.f,1.f}),1000);
+        cloud C = algo::stat::random_var::sample_gaussian_vector_by_PC({axis_2,axis_1},{1.3f,1.0f},vec({3.f,1.f}),1000);
+        C = C + algo::stat::random_var::sample_gaussian_vector_by_PC({axis_1,axis_2},{1.f,0.3f},vec({-3.f,1.f}),1000);
 
         auto clusters = algo::stat::compute_clusters_by_k_means(C,2);
 

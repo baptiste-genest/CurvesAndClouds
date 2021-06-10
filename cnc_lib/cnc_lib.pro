@@ -48,6 +48,7 @@ SOURCES += \
     core/algo/calculus/optimization.cpp \
     core/algo/calculus/vector_calculus.cpp \
     core/algo/geometry/geometry.cpp \
+    core/algo/geometry/halfedge.cpp \
     core/algo/geometry/mesh.cpp \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
@@ -106,6 +107,7 @@ HEADERS += \
     core/algo/calculus/optimization.h \
     core/algo/calculus/vector_calculus.h \
     core/algo/geometry/geometry.h \
+    core/algo/geometry/halfedge.h \
     core/algo/geometry/mesh.h \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \

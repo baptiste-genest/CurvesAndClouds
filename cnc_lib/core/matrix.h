@@ -1429,6 +1429,15 @@ public:
 
     T norm1() const;
     T norm_inf() const;
+
+    inline Vector trunc(uint t) const{
+        if (t>Matrix<T>::h)
+            throw MatrixException(MATRIX_OUT_OF_ARRAY);
+        Vector R(t);
+        for (uint k = 0;k<t;k++)
+            R(k) = ix(k);
+        return R;
+    }
 };
 
 template<class T>

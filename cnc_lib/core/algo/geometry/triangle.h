@@ -39,6 +39,7 @@ public:
     vec get_mid_point() const;
 
 private:
+    friend class Mesh;
     std::array<cnc::vec*,3> m_vertex;
 
     std::array<scalar,3> m_side_length;

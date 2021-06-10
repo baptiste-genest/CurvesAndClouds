@@ -8,6 +8,7 @@
 #endif
 
 #include "triangle.h"
+#include "halfedge.h"
 
 #include "core/algo/algo.h"
 #include "core/algo/lin_alg.h"
@@ -20,29 +21,21 @@ namespace algo {
 
 namespace geometry {
 
-class vertex_ref;
-
 class Mesh
 {
 public:
     Mesh();
-    inline vertex_ref add_vertex(const vec& x);
+    ~Mesh();
+    Mesh(const std::vector<Triangle>& T);
     inline void add_face(const Triangle& t);
+    inline const std::vector<Triangle>& get_faces() {
+        return faces;
+    }
 
 private:
-    friend class vertex_ref;
-    std::vector<vec> vertex;
+    std::vector<halfedge*> h_edges;
     std::vector<Triangle> faces;
     constexpr static uint dim = 2;
-};
-
-class vertex_ref {
-public:
-    vertex_ref(uint i,Mesh* c) : id(i),container(c) {}
-    vec operator()() const ;
-private:
-    uint id;
-    Mesh* container;
 };
 
 }}}
