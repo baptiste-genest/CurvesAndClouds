@@ -91,6 +91,13 @@ Colormap *PlotLayer::new_colormap(const algo::calculus::scalar_function_2D &f, c
     return (CM);
 }
 
+ComplexFunctionPlot *PlotLayer::new_complex_function_plot(const algo::calculus::complex_function &f, const range &re, const range &im)
+{
+    ComplexFunctionPlot* CFP = new ComplexFunctionPlot(f,re,im);
+    insert_plot(CFP);
+    return CFP;
+}
+
 BooleanField* PlotLayer::new_boolean_field(const algo::calculus::property_2D& p,const range& x,const range& y){
     BooleanField* BF = new BooleanField(p,x,y);
     insert_plot(BF);

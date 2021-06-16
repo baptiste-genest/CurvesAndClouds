@@ -1,75 +1,112 @@
 #include <curvesandcloud.h>
 
+using std::cout;
+using std::endl;
+
 using namespace cnc;
 using namespace cnc::algo;
 using namespace cnc::algo::calculus;
 
-template<class T>
-void print(const std::vector<T>& X){
-    for (const T& x : X)
-        std::cout << x << std::endl;
-    std::cout << std::endl;
-}
+struct linear_fourier_series{
 
-mat exp(const mat& M){
-    mat X = chaskal::Id<scalar>(2);
-    scalar ifac = 1.0;
-    mat R = X;
-    for (uint k = 1;k<50;k++){
-        ifac /= scalar(k);
-        X = M*X;
-        R = R + X*ifac;
+    scalar T;
+    uint N;
+    cmat polynomial_eval;
+    cvec P;
+    int order;
+
+    std::vector<complex_scalar> cnp,cnn;
+    scalar c0;
+
+    linear_fourier_series(const vec& p,scalar _T,int o) : T(_T) , order(o) {
+        N = p.rowNum();
+        polynomial_eval = cmat(1,N);
+        scalar t = T;
+        for (uint k = 1;k<N;k++){
+            polynomial_eval(N-k-1,0) = t;
+            t *= _T;
+        }
+        std::cout << polynomial_eval << endl;
+        P = cvec(N);
+        for (uint k = 0;k<N;k++)
+            P(k).real(p(k));
+        cnp.resize(o);
+        cnn.resize(o);
+        compute_cn();
     }
+
+    cmat get_Fd(int n) const {
+        cmat Fd(N,N);
+        scalar omega = 2*n*M_PI/T;
+        for (uint k = 0;k<N;k++){
+            Fd(k,k).imag(-omega);
+            if (k)
+                Fd(k-1,k).real(N-k);
+        }
+        return Fd;
+    }
+
+    void compute_cn() {
+        c0 = 0;
+        for (uint k = 0;k<N;k++)
+            c0 += P(k).real()*std::pow(T,N-k-1)/((scalar)N-k);
+        for (int k = 1;k<order;k++){
+            cnp[k-1] = (polynomial_eval*get_Fd(k).lower_solve(P))(0,0) * 1./T;
+            cnn[k-1] = (polynomial_eval*get_Fd(-k).lower_solve(P))(0,0) * 1./T;
+        }
+    }
+
+    scalar evaluate(scalar t) const{
+        scalar R = c0;
+        for (int k = 1;k<=order;k++){
+            scalar omega = 2*k*M_PI/T;
+            R += (cnp[k-1] * std::polar(1.,omega*t) + cnn[k-1] * std::polar(1.,-omega*t)).real();
+        }
+        return R;
+    }
+};
+
+complex_scalar hermitian_product(cvec w1,cvec w2){
+    complex_scalar R = 0;
+    for (uint k = 0;k<w1.rowNum();k++)
+        R += w1(k)*std::conj(w2(k));
     return R;
-}
-
-mat A(2,2,{1,0,0,2});
-vec b({3.,1.});
-mat P1(2,2,{0,1,-1,0});
-mat M1 = P1*A*2;
-vec B1 = P1*b;
-vec bp = M1.solve(B1);
-
-scalar F(const vec& x) {
-    return (x.transpose()*A*x + x.transpose()*b)(0,0);
-}
-
-scalar get_initial_condition(const vec& x){
-    scalar f = F(x-bp)-1;
-    return f*f;
 }
 
 int main(int argc, char *argv[])
 {
-    scalar a = 4,b=3,c=-2;
-    mat P(2,2,{a,b/2,b/2,c});
-    auto eigen = P.lanczos();
-    for (auto& e : eigen)
-        std::cout << e.vector << std::endl;
+    cvec w1({algo::stat::random_var::random_complex_scalar(-1,1),algo::stat::random_var::random_complex_scalar(-1,1)});
+    //cvec w2({algo::stat::random_var::random_complex_scalar(-1,1),algo::stat::random_var::random_complex_scalar(-1,1)});
+    cmat A(2,2);
+    A(0,0).imag(-1);
+    A(1,0) = complex_scalar(2,1);
+    A(0,1) = complex_scalar(-2,1);
+    std::cout << A << std::endl;
+    std::cout << w1 << std::endl;
+    std::cout << hermitian_product(w1,A*w1) << std::endl;
     return 0;
-    mat P1(2,2,{0,1,-1,0});
-    mat P2 = -P1;
-    mat M2 = P2*A;
-    vec y0;
-    y0 = algo::calculus::optimization::gradient_descent(get_initial_condition,vec(2),0.2,2000);
-    scalar t = 0,dt = 0.1;
-    uint N = 40;
-    std::vector<vec> O1(N),O2(N);
-    std::cout <<"initial: " << F(y0-bp) << std::endl;
-    for (uint k = 0;k<N;k++){
-        mat E = exp(M1*t);
-        O1[k] = E*y0 - bp;
-        t += dt;
-    }
+    vec p({1,-5,6,0});
+    linear_fourier_series LFS(p,3,3);
+
     QApplication app(argc,argv);
-    Plot_window w; w.resize(500,500);
+    PlotWindow w; w.resize(500,500);
 
-    Plot_tab* T = w.add_tab("my first tab");
-    Plot_frame* F= T->add_frame();
-    Plot_layer* L = F->add_layer();
+    PlotTab* T = w.add_tab("my first tab");
+    PlotFrame* F= T->add_frame();
+    range t{0,3};
+    GridLayer* L = F->add_grid_layer(t,{-3,3});
+    L->new_function_plot([LFS](scalar x){return LFS.evaluate(x);},t);
+    L->new_function_plot([p](scalar x){
+        scalar X = 1.;
+        uint n = p.rowNum();
+        scalar eval = 0;
+        for (uint k = 0;k<n;k++){
+            eval += p(n-k-1)*X;
+            X *= x;
+        }
+        return eval;
+    },t);
 
-    L->new_2D_curve(O1)->fix_plot_in_rect(0,0,10);
-    //L->new_2D_curve(O2)->fix_plot_in_rect(0,0,5);
     w.show();
     return app.exec();
 }

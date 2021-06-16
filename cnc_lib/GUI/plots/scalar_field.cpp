@@ -19,3 +19,9 @@ ScalarField::ScalarField(const algo::calculus::scalar_function_2D &f, const rang
 
     z_range = algo::get_min_max_range(z_values);
 }
+
+ScalarField::ScalarField(const range &x, const range &y)
+{
+    Plottable::x_range = x;
+    Plottable::y_range = y;
+}

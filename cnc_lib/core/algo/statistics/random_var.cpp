@@ -120,3 +120,8 @@ cnc::cmat cnc::algo::stat::random_var::random_complex_mat(cnc::scalar lb, cnc::s
 {
     return random_complex_mat(lb,ub,n,n);
 }
+
+cnc::complex_scalar cnc::algo::stat::random_var::random_complex_scalar(cnc::scalar a, cnc::scalar b)
+{
+    return complex_scalar(random_scalar(a,b),random_scalar(a,b));
+}

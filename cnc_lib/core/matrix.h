@@ -70,7 +70,7 @@ public:
         clear();
     }
     Matrix(uint);
-    Matrix(uint, uint, T* = 0, uint = 0);
+    Matrix(uint h, uint w, T* = 0, uint = 0);
     Matrix(uint, uint, const std::vector<T>&);
     Matrix(uint row, uint col,const std::function<T(uint,uint)>&);
     //Matrix(const Matrix&);
@@ -85,6 +85,7 @@ public:
     void operator+=(const Matrix&);
     Matrix operator-(const Matrix&) const;
     Matrix operator*(const T&) const;
+    Matrix operator/(const T&) const;
     operator Vector<T>() const;
 
     void operator*=(const T& l) {
@@ -1387,6 +1388,13 @@ public:
         return rslt;
     }
 
+    inline Vector operator/(const T& other) const{
+        Vector<T> rslt(Matrix<T>::rowNum());
+        for (uint j = 0;j<Matrix<T>::rowNum();j++)
+            rslt.at(j) = ix(j) / other;
+        return rslt;
+    }
+
     inline Vector operator-() const{
         Vector<T> rslt(Matrix<T>::rowNum());
         for (uint j = 0;j<Matrix<T>::rowNum();j++)
@@ -1693,11 +1701,12 @@ std::vector<eigen_pair<T>> sparse_lanczos(const sparse_matrix<T>& A){
 
 template<class T>
 Matrix<T> build_basis(const std::vector<Vector<T>>& X){
-    uint n = X.size();
-    Matrix<T> B(n,n);
-    for (uint j = 0;j< n;j++){
-        for (uint i = 0;i<n;i++){
-            B(i,j) = X[j](i);
+    uint w = X.size();
+    uint h = X[0].rowNum();
+    Matrix<T> B(h,w);
+    for (uint j = 0;j< h;j++){
+        for (uint i = 0;i<w;i++){
+            B(i,j) = X[i](j);
         }
     }
     return B;
@@ -1705,10 +1714,11 @@ Matrix<T> build_basis(const std::vector<Vector<T>>& X){
 
 template<class T>
 Matrix<T> build_basis(const std::vector<eigen_pair<T>>& X){
-    uint n = X.size();
-    Matrix<T> B(n,n);
-    for (uint j = 0;j< n;j++){
-        for (uint i = 0;i<n;i++){
+    uint w = X.size();
+    uint h = X[0].vector.rowNum();
+    Matrix<T> B(h,w);
+    for (uint j = 0;j< h;j++){
+        for (uint i = 0;i<w;i++){
             B(i,j) = X[i].vector(j);
         }
     }

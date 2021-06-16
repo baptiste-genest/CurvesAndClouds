@@ -19,6 +19,7 @@ class ScalarField : public Field
 {
 public:
     ScalarField(const algo::calculus::scalar_function_2D&,const range&,const range&);
+    ScalarField(const range&,const range&);
     virtual ~ScalarField() {}
 
     inline  plot_type get_type() const override {
@@ -56,7 +57,7 @@ protected:
         fdo.painter.drawPixmap(0,0,fdo.fi.width,fdo.fi.height,values);
     }
 
-    inline void compute_values(const frame_info &) override {}
+    inline virtual void compute_values(const frame_info &) override {}
 
     inline void compute_value_range(const frame_info &) override {}
 };

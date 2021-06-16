@@ -19,6 +19,7 @@
 #include "d2_curve.h"
 #include "core/algo/calculus/calculus.h"
 #include "point_cloud.h"
+#include "complex_function_plot.h"
 #include "level_curve.h"
 #include "boolean_field.h"
 #include "vector_field.h"
@@ -95,6 +96,8 @@ public:
      * @return pointer to the plot
      */
     Colormap* new_colormap(const algo::calculus::scalar_function_2D& f,const range& x_range,const range& y_range ,color_policy cp = min_max);
+
+    ComplexFunctionPlot* new_complex_function_plot(const algo::calculus::complex_function& f,const range& re,const range& im);
 
     BooleanField* new_boolean_field(const algo::calculus::property_2D& p,const range& x_range,const range& y_range);
 

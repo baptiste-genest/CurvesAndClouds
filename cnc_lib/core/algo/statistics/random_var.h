@@ -37,6 +37,7 @@ namespace random_var {
  * @return
  */
 scalar random_scalar(scalar a,scalar b);
+complex_scalar random_complex_scalar(scalar a,scalar b);
 
 
 /**

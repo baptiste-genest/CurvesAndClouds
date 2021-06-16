@@ -16,6 +16,7 @@ SOURCES += \
     GUI/algo/mutablevalueticker.cpp \
     GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
+    GUI/plots/complex_function_plot.cpp \
     GUI/plots/curves.cpp \
     GUI/plots/d2_curve.cpp \
     GUI/plots/field.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     GUI/plots/trajectory.cpp \
     GUI/plots/vector_field.cpp \
     GUI/plotwindow.cpp \
+    GUI/ColorWheel.cpp \
     core/algo/algo.cpp \
     core/algo/bit_operations.cpp \
     core/algo/calculus/calculus.cpp \
@@ -71,6 +73,7 @@ HEADERS += \
     GUI/plot_tab.h \
     GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
+    GUI/plots/complex_function_plot.h \
     GUI/plots/curves.h \
     GUI/plots/d2_curve.h \
     GUI/plots/field.h \
@@ -93,6 +96,7 @@ HEADERS += \
     GUI/plots/trajectory.h \
     GUI/plots/vector_field.h \
     GUI/plotwindow.h \
+    GUI/ColorWheel.h \
     cnc_error.h \
     cnc_types.h \
     core/algo/algo.h \

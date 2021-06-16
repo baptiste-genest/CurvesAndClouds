@@ -65,6 +65,8 @@ typedef std::function<bool(scalar x,scalar y)> property_2D;
 
 typedef std::function<cnc::vec(scalar t)> parametrization_1D;
 
+typedef std::function<complex_scalar(complex_scalar)> complex_function;
+
 
 /**
  * @brief get_lin_space create 1D evenly spaced nodes set from a to b with step dx

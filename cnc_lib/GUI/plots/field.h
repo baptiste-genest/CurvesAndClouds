@@ -15,7 +15,6 @@ class Field : public Plottable
 public:
     Field();
 
-
     void set_axis_policy(plot_axis_policy) = delete;
     void set_range_reference(Plottable*) = delete;
     void fix_plot_in_rect(float,float,float,float) = delete;
