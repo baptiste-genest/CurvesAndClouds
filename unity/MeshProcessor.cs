@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshFilter))]
 public abstract class MeshProcessor : MonoBehaviour
 {
     protected Mesh mesh;

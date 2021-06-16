@@ -15,7 +15,6 @@ public class Planet : MeshProcessor
     {
         float r = 5.0f;
         transform.position = (new Vector3(Random.Range(-r, r), Random.Range(-r, r), Random.Range(-r, r))).normalized*r;
-        print(transform.position);
         acc = new Vector3();
         vel = new Vector3(1, 1, 0) * 1f;
         mass = Random.Range(5f, 20f);
