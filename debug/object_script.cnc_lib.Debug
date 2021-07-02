@@ -4,6 +4,7 @@ debug/mutablevaluecursor.o
 debug/mutablevalueticker.o
 debug/boolean_field.o
 debug/colormap.o
+debug/complex_function_plot.o
 debug/curves.o
 debug/d2_curve.o
 debug/field.o
@@ -25,15 +26,18 @@ debug/stat_window.o
 debug/trajectory.o
 debug/vector_field.o
 debug/plotwindow.o
+debug/ColorWheel.o
 debug/algo.o
 debug/bit_operations.o
 debug/calculus.o
+debug/complex_analysis.o
 debug/differential_equations.o
 debug/finite_differences.o
 debug/fourier.o
 debug/integration_scheme.o
 debug/lagrange_interpolator.o
 debug/optimization.o
+debug/spline.o
 debug/vector_calculus.o
 debug/geometry.o
 debug/halfedge.o

@@ -144,6 +144,8 @@ scalar_function_2D build_2D_laplacian(const scalar_function_2D& f,scalar dx = 0.
 
 nodes convert_to_nodes(const vec& x);
 
+int get_node_number(const nodes& n,scalar x);
+
 }
 
 }

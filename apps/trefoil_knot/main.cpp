@@ -1,6 +1,7 @@
 #include <curvesandcloud.h>
 
 using namespace cnc;
+using namespace algo::stat::random_var;
 
 vec f(const vec& x){//w3 + z2
     const scalar& a = x(0);
@@ -59,23 +60,37 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
     vec x0(4);
-
-    do {
-        x0 = cnc::algo::stat::random_var::sample_vector_on_unit_sphere(4,1)[0];
-    } while(f(x0).norm2() > 1e-3);
-    mat U = grad_space(x0);
-    mat P = U*(U.transpose()*U).invert()*U.transpose();
-    mat OP = chaskal::Id<scalar>(4) - P;
-    scalar dt = 1e-2;
+    uint sample_size = 3000;
+    cloud sample = sample_vector_on_unit_sphere(4,sample_size);
+    std::vector<scalar> score(sample_size);
+    for (uint k = 0;k<sample_size;k++)
+        score[k] = f(sample[k]).norm();
+    auto best = std::min_element(score.begin(),score.end());
+    x0 = sample[std::distance(score.begin(),best)];
+    std::cout << f(x0) << std::endl;
+    scalar dt = 1e-3;
     vec X = x0;
-    uint N = 30;
-    std::vector<vec> traj(N,vec(2));
-    vec o = algo::stat::random_var::sample_vector_on_unit_sphere(4,1)[0];
+    uint N = 30000;
+    auto rand = algo::stat::random_var::sample_vector_on_unit_sphere(4,N);
+    vec o = rand[0],a;
+    mat U,P,OP;
+    uint sample_nb = 0;
+    cloud knot;
     for (uint k = 0;k<N;k++){
-        vec a = OP*o;
+        //o = sample[k%sample_size];
+        U = grad_space(X);
+        P = U*(U.transpose()*U).invert()*U.transpose();
+        a = o-P*o;
+        if (a.norm() < 1e-2){
+            sample_nb++;
+            o = rand[sample_nb];
+        }
         X = X + a.normalize()*dt;
-        traj[k](0) = X(0);
-        traj[k](1) = X(1);
+        scalar stereo = 1./(1-X(3));
+        if (!k)
+            knot.add_point(vec({X(0)*stereo,X(1)*stereo}));
+        else if (knot.points.back().distance(X) > 1e-2)
+            knot.add_point(vec({X(0)*stereo,X(1)*stereo}));
     }
     QApplication App(argc,argv);
     PlotWindow w; w.resize(500,500);
@@ -83,7 +98,7 @@ int main(int argc, char *argv[])
     PlotTab* T = w.add_tab("trefoil knot");
     PlotFrame* F= T->add_frame();
     PlotLayer* L = F->add_layer();
-    L->new_2D_curve(traj);
+    L->new_point_cloud(knot);
 
 
     w.show();

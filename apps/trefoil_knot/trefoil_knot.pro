@@ -6,7 +6,7 @@ DEFINES += PRECISION DOUBLE
 
 DEPENDPATH += . ../../cnc_lib
 INCLUDEPATH += ../../cnc_lib
-LIBS += -L../../debug -L../../cnc_lib -lcnc_lib
+LIBS += -L../../debug/debug -L../../cnc_lib -lcnc_lib
 
 SOURCES += \
         main.cpp

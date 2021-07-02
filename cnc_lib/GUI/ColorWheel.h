@@ -8,6 +8,7 @@
 
 #include <QColor>
 #include "cnc_types.h"
+#include "core/algo/algo.h"
 namespace cnc {
 constexpr static uint NB_SEG = 300;
 constexpr static unsigned char WHEEL[NB_SEG][3] = {

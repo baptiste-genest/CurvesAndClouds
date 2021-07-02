@@ -8,8 +8,7 @@ std::vector<complex_scalar> lattice;
 std::vector<complex_scalar> gen_lattice(complex_scalar w1,complex_scalar w2){
     if (w1 == old_w1 && w2 == old_w2)
         return lattice;
-    std::cout << "new lattice" << std::endl;
-    constexpr static int N = 6;
+    constexpr static int N = 5;
     std::vector<complex_scalar> R;
     for (int j = -N;j<N;j++)
         for (int i = -N;i<N;i++)
@@ -26,11 +25,12 @@ int main(int argc, char *argv[])
     QApplication App(argc,argv);
     PlotWindow w; w.resize(500,500);
 
-    range X{-2,2};
-    auto a = w.add_mutable_scalar_by_cursor(X,"a");
-    auto b = w.add_mutable_scalar_by_cursor(X,"b");
-    auto c = w.add_mutable_scalar_by_cursor(X,"c");
-    auto d = w.add_mutable_scalar_by_cursor(X,"d");
+    uint N = 4;
+    range X{0,N};
+    auto a = w.add_mutable_scalar_by_cursor(X,"a",N);
+    auto b = w.add_mutable_scalar_by_cursor(X,"b",N);
+    auto c = w.add_mutable_scalar_by_cursor(X,"c",N);
+    auto d = w.add_mutable_scalar_by_cursor(X,"d",N);
     //auto n = w.add_mutable_scalar_by_cursor({0,10},"n",10);
 
     auto f = [a,b,c,d] (complex_scalar z) {
@@ -54,12 +54,12 @@ int main(int argc, char *argv[])
     PlotLayer* L = F->add_layer();
 
 
-    //auto CFP = L->new_complex_function_plot(f,X,X);
-    auto CFP = L->new_complex_function_plot([] (complex_scalar z) {
+    auto CFP = L->new_complex_function_plot(f,X,X);
+    /*auto CFP = L->new_complex_function_plot([] (complex_scalar z) {
             complex_scalar w(1,1);
             return std::conj(z)*w;
-},X,X);
-    CFP->set_resolution(300);
+},X,X);*/
+    CFP->set_resolution(150);
     CFP->set_dynamic();
 
     w.show();

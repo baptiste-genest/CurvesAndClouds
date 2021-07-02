@@ -4,6 +4,7 @@ release/mutablevaluecursor.o
 release/mutablevalueticker.o
 release/boolean_field.o
 release/colormap.o
+release/complex_function_plot.o
 release/curves.o
 release/d2_curve.o
 release/field.o
@@ -25,15 +26,18 @@ release/stat_window.o
 release/trajectory.o
 release/vector_field.o
 release/plotwindow.o
+release/ColorWheel.o
 release/algo.o
 release/bit_operations.o
 release/calculus.o
+release/complex_analysis.o
 release/differential_equations.o
 release/finite_differences.o
 release/fourier.o
 release/integration_scheme.o
 release/lagrange_interpolator.o
 release/optimization.o
+release/spline.o
 release/vector_calculus.o
 release/geometry.o
 release/halfedge.o

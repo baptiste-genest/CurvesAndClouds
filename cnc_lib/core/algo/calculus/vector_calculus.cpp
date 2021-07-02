@@ -26,7 +26,7 @@ cnc::algo::calculus::scalar_function_2D cnc::algo::vector_calculus::build_rot_no
     };
 }
 
-cnc::algo::vector_calculus::Vector_2D_array::Vector_2D_array(const cnc::algo::calculus::nodes &X, const cnc::algo::calculus::nodes &Y, const cnc::algo::calculus::vector_function_2D &V)
+cnc::algo::vector_calculus::Vector2DArray::Vector2DArray(const cnc::algo::calculus::nodes &X, const cnc::algo::calculus::nodes &Y, const cnc::algo::calculus::vector_function_2D &V)
 {
     w = X.size();
     h = Y.size();
@@ -36,7 +36,7 @@ cnc::algo::vector_calculus::Vector_2D_array::Vector_2D_array(const cnc::algo::ca
             (*this)(i,j) = V(X[i],Y[j]);
 }
 
-cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::Vector_2D_array::get_interpolator(const cnc::range &x, const cnc::range &y) const {
+cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::Vector2DArray::get_interpolator(const cnc::range &x, const cnc::range &y) const {
     auto X = calculus::build_range_mapper(x,{0,w-1});
     auto Y = calculus::build_range_mapper(y,{0,h-1});
     auto W = w;
@@ -60,40 +60,40 @@ cnc::algo::calculus::vector_function_2D cnc::algo::vector_calculus::Vector_2D_ar
     };
 }
 
-cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::operator+(const cnc::algo::vector_calculus::Vector_2D_array &O) const
+cnc::algo::vector_calculus::Vector2DArray cnc::algo::vector_calculus::Vector2DArray::operator+(const cnc::algo::vector_calculus::Vector2DArray &O) const
 {
     if (w != O.w)
         throw Cnc_error("vector arrays to add must have same width");
     if (h != O.h)
         throw Cnc_error("vector arrays to add must have same height");
-    Vector_2D_array R(w,h);
+    Vector2DArray R(w,h);
     for (uint j = 0;j<R.value.size();j++)
         R.value[j] = value[j] + O.value[j];
     return R;
 }
 
-cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::operator-(const cnc::algo::vector_calculus::Vector_2D_array &O) const
+cnc::algo::vector_calculus::Vector2DArray cnc::algo::vector_calculus::Vector2DArray::operator-(const cnc::algo::vector_calculus::Vector2DArray &O) const
 {
     if (w != O.w)
         throw Cnc_error("vector arrays to sub must have same width");
     if (h != O.h)
         throw Cnc_error("vector arrays to sub must have same height");
-    Vector_2D_array R(w,h);
+    Vector2DArray R(w,h);
     for (uint j = 0;j<R.value.size();j++)
         R.value[j] = value[j] + O.value[j]*(-1.f);
     return R;
 
 }
 
-cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::operator*(scalar l) const
+cnc::algo::vector_calculus::Vector2DArray cnc::algo::vector_calculus::Vector2DArray::operator*(scalar l) const
 {
-    Vector_2D_array R(w,h);
+    Vector2DArray R(w,h);
     for (uint j = 0;j<R.value.size();j++)
         R.value[j] = value[j]*l;
     return R;
 }
 
-cnc::vec cnc::algo::vector_calculus::Vector_2D_array::get_vec_form_divergence() const
+cnc::vec cnc::algo::vector_calculus::Vector2DArray::get_vec_form_divergence() const
 {
     vec R(w*h);
     for (uint j = 0;j<h-1;j++)
@@ -109,9 +109,9 @@ cnc::vec cnc::algo::vector_calculus::Vector_2D_array::get_vec_form_divergence() 
     return R;
 }
 
-cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2D_array::build_gradient_from_matrix(const cnc::mat &M)
+cnc::algo::vector_calculus::Vector2DArray cnc::algo::vector_calculus::Vector2DArray::build_gradient_from_matrix(const cnc::mat &M)
 {
-    Vector_2D_array R(M.colNum(),M.rowNum());
+    Vector2DArray R(M.colNum(),M.rowNum());
     for (uint j = 0;j<M.rowNum()-1;j++){
         for (uint i = 0;i<M.colNum()-1;i++){
             R(i,j)(0) = M(i+1,j) - M(i,j);
@@ -125,7 +125,7 @@ cnc::algo::vector_calculus::Vector_2D_array cnc::algo::vector_calculus::Vector_2
     return R;
 }
 
-std::pair<cnc::algo::vector_calculus::Vector_2D_array, cnc::algo::vector_calculus::Vector_2D_array> cnc::algo::vector_calculus::Vector_2D_array::get_helmoltz_hodge_decomposition() const
+std::pair<cnc::algo::vector_calculus::Vector2DArray, cnc::algo::vector_calculus::Vector2DArray> cnc::algo::vector_calculus::Vector2DArray::get_helmoltz_hodge_decomposition() const
 {
     uint N = w*h,x,y,k;
     mat L(N,N);
@@ -157,8 +157,8 @@ std::pair<cnc::algo::vector_calculus::Vector_2D_array, cnc::algo::vector_calculu
     auto S = L.solve(Div,1e-4);
     auto A = mat(h,w,S.get_values());
 
-    Vector_2D_array grad = build_gradient_from_matrix(A);
-    const Vector_2D_array& V = *this;
+    Vector2DArray grad = build_gradient_from_matrix(A);
+    const Vector2DArray& V = *this;
 
     auto U = V - grad;
 

@@ -86,6 +86,15 @@ range inter(const range& A,const range& B);
 set_type inter_type(const range& A,const range& B);
 void extend_range(range& A,const range& B);
 
+template<class T>
+T clamp(T x,T a,T b)
+{
+    if (x < a)
+        return a;
+    if (x > b)
+        return b;
+    return x;
+}
 
 }
 

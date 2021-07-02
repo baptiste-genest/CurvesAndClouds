@@ -25,19 +25,19 @@ namespace vector_calculus {
 /**
  * @brief The Vector_2D_array class allows to store and compute discrete sampled 2D vector field (for fluid simulation for instance)
  */
-class Vector_2D_array{
+class Vector2DArray{
 public:
     /**
      * @brief Vector_2D_array initialize a null vector field of size W*H
      * @param W number of vector by width
      * @param H number of vector by height
      */
-    inline Vector_2D_array(uint W,uint H) : w(W), h(H){	value.resize(W*H,vec(2));	}
+    inline Vector2DArray(uint W,uint H) : w(W), h(H){	value.resize(W*H,vec(2));	}
     /**
      * @brief Vector_2D_array initialize a null vector field of size N*N
      * @param N number of vector by side
      */
-    inline Vector_2D_array(uint N) : w(N),h(N) {	value.resize(N*N,cnc::vec(2));	}
+    inline Vector2DArray(uint N) : w(N),h(N) {	value.resize(N*N,cnc::vec(2));	}
 
     /**
      * @brief Vector_2D_array initialize a vector field of size (X.size)*(Y.size) with value of V computes at nodes
@@ -45,7 +45,7 @@ public:
      * @param Y nodes of y coords
      * @param V function to sample
      */
-    Vector_2D_array(const calculus::nodes& X,const calculus::nodes& Y,const calculus::vector_function_2D& V);
+    Vector2DArray(const calculus::nodes& X,const calculus::nodes& Y,const calculus::vector_function_2D& V);
 
     /**
      * @brief operator () access to vector at [i,j]
@@ -80,26 +80,26 @@ public:
      * @param O VF to add
      * @return sum
      */
-    Vector_2D_array operator+(const Vector_2D_array& O) const ;
+    Vector2DArray operator+(const Vector2DArray& O) const ;
     /**
      * @brief operator + substract two vector fields of same sizes
      * @param O VF to sub
      * @return sub
      */
-    Vector_2D_array operator-(const Vector_2D_array& O) const ;
+    Vector2DArray operator-(const Vector2DArray& O) const ;
     /**
      * @brief operator * return scaled vector field
      * @param l scalar parameters
      * @return scaled vector field
      */
-    Vector_2D_array operator*(scalar l) const ;
+    Vector2DArray operator*(scalar l) const ;
 
 
     /**
      * @brief get_helmoltz_hodge_decomposition return helmoltz hodge decomposition WIP (only works on small grid)
      * @return [U,V] with this VF = U + V and div(U) = 0 and rot(V) = 0
      */
-    std::pair<Vector_2D_array,Vector_2D_array> get_helmoltz_hodge_decomposition() const;
+    std::pair<Vector2DArray,Vector2DArray> get_helmoltz_hodge_decomposition() const;
 
 private:
     vec ix(uint i,uint j) const{
@@ -112,7 +112,7 @@ private:
 
     vec get_vec_form_divergence() const;
 
-    static Vector_2D_array build_gradient_from_matrix(const mat& M);
+    static Vector2DArray build_gradient_from_matrix(const mat& M);
 };
 
 /**

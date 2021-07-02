@@ -149,3 +149,17 @@ cnc::algo::calculus::nodes cnc::algo::calculus::convert_to_nodes(const cnc::vec 
         N[k] = x(k);
     return N;
 }
+
+int algo::calculus::get_node_number(const nodes &n, scalar x)
+{
+    if (n.size() < 2)
+        throw Cnc_error("get_node_number takes nodes of size at least 2");
+    if (x < n[0])
+        return -1;
+    if (x > n.back())
+        return -2;
+    for (uint k = 0;k<n.size()-1;k++)
+        if (x > n[k] && x < n[k+1])
+            return k;
+    throw Cnc_error("error while computing node number");
+}

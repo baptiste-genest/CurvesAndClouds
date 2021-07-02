@@ -42,12 +42,14 @@ SOURCES += \
     core/algo/algo.cpp \
     core/algo/bit_operations.cpp \
     core/algo/calculus/calculus.cpp \
+    core/algo/calculus/complex_analysis.cpp \
     core/algo/calculus/differential_equations.cpp \
     core/algo/calculus/finite_differences.cpp \
     core/algo/calculus/fourier.cpp \
     core/algo/calculus/integration_scheme.cpp \
     core/algo/calculus/lagrange_interpolator.cpp \
     core/algo/calculus/optimization.cpp \
+    core/algo/calculus/spline.cpp \
     core/algo/calculus/vector_calculus.cpp \
     core/algo/geometry/geometry.cpp \
     core/algo/geometry/halfedge.cpp \
@@ -102,6 +104,7 @@ HEADERS += \
     core/algo/algo.h \
     core/algo/bit_operations.h \
     core/algo/calculus/calculus.h \
+    core/algo/calculus/complex_analysis.h \
     core/algo/calculus/differential_equations.h \
     core/algo/calculus/finite_differences.h \
     core/algo/calculus/finite_elements/finite_elements.h \
@@ -109,6 +112,7 @@ HEADERS += \
     core/algo/calculus/integration_scheme.h \
     core/algo/calculus/lagrange_interpolator.h \
     core/algo/calculus/optimization.h \
+    core/algo/calculus/spline.h \
     core/algo/calculus/vector_calculus.h \
     core/algo/geometry/geometry.h \
     core/algo/geometry/halfedge.h \
