@@ -80,3 +80,16 @@ bool cnc::algo::is_integer(const std::string &s)
     strtof(s.c_str(), &p);
     return (*p == 0);
 }
+
+void cnc::algo::export_cloud(const std::string &output_file, const cnc::cloud &C)
+{
+    std::ofstream file;
+    file.open (output_file);
+    file << C.size() << std::endl;
+    for (const vec& p : C.points){
+        for (uint k = 0;k<p.rowNum();k++)
+            file << p(k) << ' ';
+        file << std::endl;
+    }
+    file.close();
+}

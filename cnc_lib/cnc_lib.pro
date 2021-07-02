@@ -59,7 +59,8 @@ SOURCES += \
     core/algo/lin_alg.cpp \
     core/algo/matrix_functions.cpp \
     core/algo/statistics/random_var.cpp \
-    core/algo/statistics/statistics.cpp
+    core/algo/statistics/statistics.cpp \
+    core/quaternion.cpp
 
 HEADERS += \
     GUI/algo/algo_gui.h \
@@ -122,6 +123,7 @@ HEADERS += \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
     core/matrix_algo.h \
+    core/quaternion.h \
     curvesandcloudCore.h \
     core/matrix.h \
     core/matrix_errors.h \

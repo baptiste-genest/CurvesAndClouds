@@ -31,6 +31,7 @@ typedef float scalar;
 #endif
 
 typedef std::complex<scalar> complex_scalar;
+typedef std::complex<scalar> cscalar;
 
 /**
  * @brief A pair of float
