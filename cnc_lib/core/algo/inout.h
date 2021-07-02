@@ -32,6 +32,8 @@ cloud parse_from_uchar(const std::string& filename,uint chunk_size,int max_size 
 cloud parse_csv(const std::string& filename);
 std::vector<std::string> split(const std::string& str, char delim);
 bool is_integer(const std::string& s);
+
+void export_cloud(const std::string& output_file,const cloud& C);
 }
 
 }

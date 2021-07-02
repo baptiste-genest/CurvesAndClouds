@@ -61,6 +61,8 @@ protected:
         h = w = 0;
     }
 
+    Matrix invert22() const;
+
 
 public:
  
@@ -222,6 +224,20 @@ T Matrix<T>::ix(uint i,uint j) const{
         return T();
     }
     return v[j*w + i];
+}
+
+template<class T>
+Matrix<T> Matrix<T>::invert22() const
+{
+    T det = ix(0,0)*ix(1,1) - ix(1,0)*ix(0,1);
+    if (std::abs(det) < epsilon)
+        throw MatrixException(MATRIX_NUL_DETERMINANT);
+    Matrix I(2,2);
+    I(0,0) = ix(1,1);
+    I(1,1) = ix(0,0);
+    I(0,1) = -ix(0,1);
+    I(1,0) = -ix(1,0);
+    return I*(T(1)/det);
 }
 
 template <class T>
@@ -750,11 +766,13 @@ Matrix<T> Matrix<T>::invert() const{
         return Matrix<T>(1,1);
     }
     uint n = rowNum();
+    if (n == 2)
+        return invert22();
     Matrix<T> tmp(n,n,v);
     tmp.augment(Id<T>(n));
     int sig = tmp.inner_rref(n);
     if (sig == 0){
-        std::cout << *this << std::endl;
+        //std::cout << *this << std::endl;
         throw MatrixException(MATRIX_NUL_DETERMINANT);
         return tmp;
     }
