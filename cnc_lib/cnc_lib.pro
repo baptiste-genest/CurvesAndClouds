@@ -19,6 +19,7 @@ SOURCES += \
     GUI/plots/complex_function_plot.cpp \
     GUI/plots/curves.cpp \
     GUI/plots/d2_curve.cpp \
+    GUI/plots/euclidean_geometry.cpp \
     GUI/plots/field.cpp \
     GUI/plots/figure.cpp \
     GUI/plots/formula_tex.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
     GUI/plots/complex_function_plot.h \
     GUI/plots/curves.h \
     GUI/plots/d2_curve.h \
+    GUI/plots/euclidean_geometry.h \
     GUI/plots/field.h \
     GUI/plots/figure.h \
     GUI/plots/formula_tex.h \

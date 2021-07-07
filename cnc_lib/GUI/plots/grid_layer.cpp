@@ -9,8 +9,8 @@ cnc::GridLayer::GridLayer(cnc::range xr, cnc::range yr, bool display, QWidget *p
 void cnc::GridLayer::display_layer(cnc::frame_draw_object &fdo)
 {
     if (display_grid){
-        float dx = fdo.fi.width/(NB_LINES);
-        float dy = fdo.fi.height/(NB_LINES);
+        float dx = fdo.fi.width/(NB_LINES-1);
+        float dy = fdo.fi.height/(NB_LINES-1);
         fdo.painter.setPen(QPen(QColorConstants::Gray,1));
         fdo.painter.setOpacity(0.2);
         for (uint j = 0;j<=NB_LINES;j++){

@@ -808,7 +808,7 @@ T Matrix<T>::det() const {
     T rslt = T(1);
     for (uint i = 0;i<n;i++)
         rslt *= tmp.ix(i,i);
-    return sig*rslt;
+    return T(sig)*rslt;
 }
 
 template<class T>

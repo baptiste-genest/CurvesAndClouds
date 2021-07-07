@@ -7,6 +7,7 @@ release/colormap.o
 release/complex_function_plot.o
 release/curves.o
 release/d2_curve.o
+release/euclidean_geometry.o
 release/field.o
 release/figure.o
 release/formula_tex.o
@@ -50,6 +51,7 @@ release/lin_alg.o
 release/matrix_functions.o
 release/random_var.o
 release/statistics.o
+release/quaternion.o
 release/moc_plot_frame.o
 release/moc_plot_tab.o
 release/moc_stat_list_window.o
