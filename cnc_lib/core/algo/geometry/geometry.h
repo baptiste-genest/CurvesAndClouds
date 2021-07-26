@@ -8,6 +8,7 @@
 #endif
 
 #include "cnc_types.h"
+#include "cnc_error.h"
 #include "../lin_alg.h"
 
 namespace cnc {
@@ -23,6 +24,8 @@ struct edge{
 
 scalar isotropy_score(const std::array<vec,3>& v);
 scalar isotropy_score(const vec& a,const vec& b,const vec& c);
+
+vec cross(const vec& a,const vec& b);
 
 }
 

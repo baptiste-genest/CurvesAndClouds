@@ -127,6 +127,10 @@ bool cnc::algo::geometry::share_vertex(const cnc::algo::geometry::Triangle &A, c
 
 bool cnc::algo::geometry::share_edge(const cnc::algo::geometry::Triangle &A, const cnc::algo::geometry::Triangle &B)
 {
-    //TODO
-    return false;
+    uint shared_vertices = 0;
+    for (uint j = 0;j<3;j++)
+        for (uint i = 0;i<3;i++)
+            if (A.m_vertex[i] == B.m_vertex[j])
+                shared_vertices++;
+    return shared_vertices > 1;
 }

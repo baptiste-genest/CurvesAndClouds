@@ -114,6 +114,16 @@ public:
     void augment(const Matrix<T>& other);
     Matrix split(uint col);
 
+    inline bool is_symetric() const {
+        if (rowNum() != colNum())
+            return false;
+        for (uint j = 0;j<rowNum();j++)
+            for (uint i = j+1;i<rowNum();i++)
+                if (std::abs(ix(i,j) - ix(j,i)) > epsilon)
+                    return false;
+        return true;
+    }
+
 
     //ROW/COL MANIPULATION
     std::vector<T> get_row(uint row) const;
@@ -137,6 +147,7 @@ public:
     T diag_product() const;
     int inner_rref(uint M = -1,bool to_det = false);
     void gauss_jordan();
+    Matrix LL() const;
     
     Matrix<std::complex<double>> transconjugate() const;
     
@@ -731,6 +742,25 @@ void Matrix<T>::gauss_jordan(){
 }
 
 template<class T>
+Matrix<T> Matrix<T>::LL() const
+{
+    uint n = rowNum();
+    Matrix<T> L(n,n);
+    for (uint i = 0;i<n;i++){
+        for (uint j = 0;j<=i;j++){
+            T sum = 0;
+            for (uint k = 0;k<j;k++)
+                sum += L(i,k)*L(j,k);
+            if (i==j)
+                L(i,j) = sqrt(ix(i,i) - sum);
+            else
+                L(i,j) = (ix(i,j)-sum)/L(j,j);
+        }
+    }
+    return L;
+}
+
+template<class T>
 Vector<T> Matrix<T>::gauss_pivot(const Vector<T>& b) const {
     Matrix<T> A = *this;
     Vector<T> X = b;
@@ -879,6 +909,10 @@ T Matrix<T>::diag_product() const{
 
 template<class T>
 Vector<T> Matrix<T>::solve(const Vector<T>& B,float eps) const{
+    if (is_symetric()){
+        Matrix<T> L = LL();
+        return L.upper_solve(L.transpose().lower_solve(B));
+    }
     uint shape = get_shape();
     if (shape == LOWER || shape == UPPER){
 

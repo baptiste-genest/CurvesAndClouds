@@ -25,6 +25,7 @@
 #include "vector_field.h"
 #include "formula_tex.h"
 #include "trajectory.h"
+#include "3D/mesh_displayer.h"
 
 namespace cnc {
 
@@ -164,6 +165,8 @@ public:
      * @return
      */
     formula* add_text_frame(const std::string& ts,formula_disposition d = centered);
+
+    MeshDisplayer *add_mesh_displayer();
 
     ~PlotLayer();
 

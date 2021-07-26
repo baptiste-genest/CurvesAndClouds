@@ -17,6 +17,7 @@
 #include "core/algo/algo.h"
 #include "core/algo/inout.h"
 #include "core/quaternion.h"
+#include "core/algo/geometry/rotations.h"
 #include "core/algo/bit_operations.h"
 #include "core/algo/calculus/calculus.h"
 #include "core/algo/calculus/finite_differences.h"

@@ -153,6 +153,13 @@ formula* PlotLayer::add_text_frame(const std::string& ts,formula_disposition d)
     return add_text_frame_from_tex_stream(text,d);
 }
 
+MeshDisplayer *PlotLayer::add_mesh_displayer()
+{
+    MeshDisplayer* MD = new MeshDisplayer();
+    insert_plot(MD);
+    return (MD);
+}
+
 formula* PlotLayer::add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d)
 {
     formula* F = new formula(ts,d);

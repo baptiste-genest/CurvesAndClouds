@@ -92,6 +92,12 @@ struct cloud{
             p = v(p);
         return D;
     }
+    inline cloud apply_to_copy(const mat& v) const {
+        cloud D; D.points = points;
+        for (vec& p : D.points)
+            p = v*p;
+        return D;
+    }
 };
 /**
  * @brief operator + merge operator, creates a new cloud with all the points of A and B

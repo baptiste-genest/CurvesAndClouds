@@ -17,3 +17,14 @@ cnc::scalar cnc::algo::geometry::isotropy_score(const std::array<cnc::vec,3> &v)
     }
     return score;
 }
+
+cnc::vec cnc::algo::geometry::cross(const cnc::vec &a, const cnc::vec &b)
+{
+    if (a.rowNum() != 3 || b.rowNum() != 3)
+        throw Cnc_error("can't apply cross product to non 3 dimensional vectors");
+    vec c(3);
+    c(0) = a(1)*b(2) - a(2)*b(1);
+    c(1) = a(2)*b(0) - a(0)*b(2);
+    c(2) = a(0)*b(1) - a(1)*b(0);
+    return c;
+}

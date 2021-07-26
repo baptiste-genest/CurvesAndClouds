@@ -1,4 +1,4 @@
-QT += gui core widgets network
+QT += gui core widgets network opengl
 
 TEMPLATE = lib
 DEFINES += CNC_LIB
@@ -14,6 +14,7 @@ SOURCES += \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/3D/mesh_displayer.cpp \
     GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
     GUI/plots/complex_function_plot.cpp \
@@ -57,6 +58,7 @@ SOURCES += \
     core/algo/geometry/mesh.cpp \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
+    core/algo/geometry/rotations.cpp \
     core/algo/geometry/triangle.cpp \
     core/algo/inout.cpp \
     core/algo/lin_alg.cpp \
@@ -75,6 +77,7 @@ HEADERS += \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/3D/mesh_displayer.h \
     GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
     GUI/plots/complex_function_plot.h \
@@ -122,6 +125,7 @@ HEADERS += \
     core/algo/geometry/mesh.h \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \
+    core/algo/geometry/rotations.h \
     core/algo/geometry/triangle.h \
     core/algo/inout.h \
     core/algo/lin_alg.h \

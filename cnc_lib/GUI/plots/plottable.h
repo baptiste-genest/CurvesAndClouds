@@ -50,6 +50,7 @@ enum plot_type {
  */
 class Plottable : protected QWidget
 {
+    Q_OBJECT
 public:
     Plottable();
 
