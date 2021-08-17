@@ -2,6 +2,7 @@
 
 cnc::algo::geometry::Mesh::Mesh(const std::vector<Triangle> &T)
 {
+/*
     h_edges.resize(T.size()*3);
     faces.resize(T.size());
     uint count =0,tid;
@@ -18,6 +19,7 @@ cnc::algo::geometry::Mesh::Mesh(const std::vector<Triangle> &T)
         }
         count += 3;
     }
+*/
 }
 
 cnc::algo::geometry::Mesh::~Mesh()

@@ -13,6 +13,7 @@
 
 #include "plot_layer.h"
 #include "grid_layer.h"
+#include "3D/mesh_displayer.h"
 #include "GUI/display_info.h"
 #include <vector>
 #include <QFrame>
@@ -48,6 +49,8 @@ public:
 
     PlotGroup* add_plot_group();
 
+    MeshDisplayer* add_mesh_viewer();
+
     /**
      * @brief set_nb_layer_per_second changes the rythm to update the frame
      * @param layer_rate number of layer per second
@@ -62,9 +65,10 @@ public:
     std::vector<bool> list_types_contained() const;
 
 protected:
-    void paintEvent(QPaintEvent*);
-    void drawWidget(QPainter&);
-    void mouseDoubleClickEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*) override;
+    void drawWidget(QPainter&,QPaintEvent* e);
+    void mouseDoubleClickEvent(QMouseEvent*) override;
+    void resizeEvent(QResizeEvent* event) override;
 private:
     friend class StatWindow;
     friend class StatDisplayer;
@@ -81,8 +85,9 @@ private:
     uint current_frame;
     std::vector<PlotLayer*> layers;
 
-    inline void draw_current_layer(frame_draw_object& fdo){
-        layers[current_frame]->display_layer(fdo);
+    inline void draw_current_layer(frame_draw_object& fdo,QPaintEvent* e){
+        if (layers.size())
+            layers[current_frame]->display_layer(fdo);
     }
 
 public slots:

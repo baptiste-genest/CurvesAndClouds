@@ -14,6 +14,7 @@
 #include "plot_frame.h"
 #include "cnc_error.h"
 #include "GUI/display_info.h"
+#include "3D/mesh_displayer.h"
 #include <vector>
 #include <QWidget>
 #include <QGridLayout>
@@ -55,6 +56,9 @@ public:
      */
     PlotFrame* add_frame(int w = 1,int h = 1);
 
+    MeshDisplayer* add_3D_frame(int w = 1,int h = 1);
+    MeshDisplayer *add_3D_frame_at(int px,int py,int w = 1,int h = 1);
+
     float get_tab_ratio() const;
 
     ~PlotTab();
@@ -62,14 +66,19 @@ public:
 protected:
     void paintEvent(QPaintEvent*) override;
     void drawWidget(QPainter&);
+    //void resizeEvent(QResizeEvent* event) override;
 
 private:
+    QRect get_frame_free_pos(int w,int h);
+    QRect check_frame_free_pos(int x,int y,int w,int h);
+
     float ratio;
 
     QGridLayout* Grid;
 
     std::vector<QRect> frame_grid;
     std::vector<PlotFrame*> frames;
+    std::vector<MeshDisplayer*> frames3D;
 
 
     static constexpr int MAX_CELL_WIDTH = 10;
@@ -77,6 +86,7 @@ private:
     static constexpr int CELL_SIZE = 100;
 
     PlotFrame* insert_frame(const QRect&);
+    MeshDisplayer* insert_3D_frame(const QRect&);
 };
 
 }

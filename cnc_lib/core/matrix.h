@@ -1432,6 +1432,10 @@ public:
         return ix(j);
     }
 
+    inline std::vector<T> data() const {
+        return Matrix<T>::v;
+    }
+
 
     inline Vector operator*(const T& other) const{
         Vector<T> rslt(Matrix<T>::rowNum());
@@ -1452,6 +1456,15 @@ public:
         for (uint j = 0;j<Matrix<T>::rowNum();j++)
             rslt.at(j) = -ix(j);
         return rslt;
+    }
+
+    inline Vector scale_from_0_to_1() const {
+        Vector S(Matrix<T>::rowNum());
+        auto mm = std::minmax_element(Matrix<T>::v.begin(),Matrix<T>::v.end());
+        T s = T(1)/(*mm.second - *mm.first);
+        for (uint k = 0;k<S.rowNum();k++)
+            S(k) = (ix(k)-*mm.first)*s;
+        return S;
     }
 
     T colinearity(const Vector& other) const;
@@ -1654,7 +1667,7 @@ Vector<T> ortho_proj(const Vector<T>& u,const Vector<T>& v,bool unitary = false)
 template<class T>
 Matrix<T> proj_matrix(const Vector<T>& u){
     Matrix<T> P(u.rowNum());
-    T rescale = 1.0/u.scalar_product(u);
+    T rescale = T(1.0)/u.scalar_product(u);
     for (uint j = 0;j<u.rowNum();j++){
         for (uint i = 0;i<u.rowNum();i++){
             P(i,j) = u.ix(i)*u.ix(j)*rescale;

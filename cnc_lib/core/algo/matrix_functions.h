@@ -8,6 +8,8 @@
 #endif
 
 #include "lin_alg.h"
+#include "algo.h"
+#include "core/sparse_matrix.h"
 
 namespace cnc {
 namespace algo {
@@ -35,6 +37,12 @@ cmat exp(const cmat& M);
 scalar det22(const vec& a,const vec& b);
 
 vec Re(const cvec& V);
+
+std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id);
+vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v);
+
+std::pair<smat,smat> set_known_variables(const smat& M,const std::vector<uint>& id);
+vec solve_for_kernel_with_known_variables(const smat& M,const std::vector<uint>& id,const std::vector<scalar>& v);
 
 }
 }

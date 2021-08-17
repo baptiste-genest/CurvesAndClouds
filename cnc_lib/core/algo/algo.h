@@ -96,6 +96,16 @@ T clamp(T x,T a,T b)
     return x;
 }
 
+int pos_mod(int x,int a);
+
+template<class T>
+bool belong(const std::vector<T>& V,T x){
+    for (const T& v : V)
+        if (v == x)
+            return true;
+    return false;
+}
+
 }
 
 }

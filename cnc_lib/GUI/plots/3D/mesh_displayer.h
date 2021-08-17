@@ -8,40 +8,103 @@
 #include <QOpenGLShader>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
+#include <QResizeEvent>
+#include <QBasicTimer>
 #include <GL/glu.h>
 #include <GL/gl.h>
-#include "../plottable.h"
+#include <iostream>
+#include "core/algo/inout.h"
+
+#include "core/algo/geometry/simpleglmesh.h"
+#include "geometryengine.h"
+
+#if defined(CNC_LIB)
+#  define CNC_LIB_EXPORT Q_DECL_EXPORT
+#else
+#  define CNC_LIB_EXPORT Q_DECL_IMPORT
+#endif
 
 namespace cnc {
 
-class MeshDisplayer : public Plottable, public QOpenGLWidget,public QOpenGLFunctions
+enum mesh_color_mode {
+    white,
+    interpolate_value,
+    given_color,
+};
+
+class MeshDisplayer : public QOpenGLWidget,protected QOpenGLFunctions
 {
+    Q_OBJECT;
 public:
-    MeshDisplayer();
+    MeshDisplayer(QWidget* parent);
+
+    void load_mesh_from_obj(const std::string& filename,float scale = 1.f);
     virtual ~MeshDisplayer();
 
-    plot_type get_type() const override {return plot_type::boolean_field;}
+    inline algo::geometry::SimpleGLMesh* get_mesh() {
+        if (mesh == nullptr)
+            throw Cnc_error("Mesh isn't build yet");
+        return mesh;
+    }
 
-private:
-    bool ok = false;
+    inline algo::geometry::SimpleGLMesh* set_mesh(uint nb_vertex,uint nb_faces) {
+        mesh = new algo::geometry::SimpleGLMesh(nb_vertex,nb_faces);
+        GE = new GeometryEngine(mesh);
+        return mesh;
+    }
+
+    inline void set_ambient_light(bool p){
+        ambient = p;
+    }
+
+    inline void set_specular_reflection(bool p){
+        specular = p;
+    }
+
+    inline void set_color_mode(mesh_color_mode m) {
+        mcm = m;
+    }
+
+    inline GeometryEngine* get_geometry_engine() {
+        return GE;
+    }
+
+    inline void set_dynamic(bool d) {
+        GE->declare_dynamic(d);
+    }
+protected:
     virtual void initializeGL() override;
+    virtual void resizeGL(int w,int h) override;
     virtual void paintGL() override;
-    virtual void resizeGL(int,int) override;
 
-    void call_draw_axis(frame_draw_object&) const override {}
-    void plot(frame_draw_object&) override {paintGL();}
-    void compute_values(const frame_info&) override {}
-    void compute_value_range(const frame_info&) override {}
+    virtual void mousePressEvent(QMouseEvent* e) override;
+    virtual void mouseReleaseEvent(QMouseEvent* e) override;
+    virtual void timerEvent(QTimerEvent* e) override;
 
-    /*
-    QOpenGLContext* m_open_gl_context;
-    QOpenGLVertexArrayObject m_vao;
-    QOpenGLBuffer m_vbo;
-    QOpenGLShaderProgram *m_program;
-    QOpenGLShader *m_shader;
-    QOpenGLTexture *m_texture;
-    QOpenGLFunctions *m_openGLFunctions;
-    */
+    void initShaders();
+private:
+    algo::geometry::SimpleGLMesh* mesh = nullptr;
+
+    mesh_color_mode mcm = white;
+    bool ambient = false;
+    bool specular = false;
+
+    QOpenGLShaderProgram program;
+    GeometryEngine* GE = nullptr;
+    QMatrix4x4 projection;
+
+    QBasicTimer timer;
+
+    QVector3D camera_pos;
+
+    QVector2D mousePressPosition;
+    QVector3D rotationAxis;
+    qreal angularSpeed = 0;
+    QQuaternion rotation;
+
+signals:
+    void gl_initialized();
+
 };
 
 }

@@ -166,8 +166,6 @@ public:
      */
     formula* add_text_frame(const std::string& ts,formula_disposition d = centered);
 
-    MeshDisplayer *add_mesh_displayer();
-
     ~PlotLayer();
 
     friend class PlotFrame;

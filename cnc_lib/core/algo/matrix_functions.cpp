@@ -108,3 +108,65 @@ cnc::cmat cnc::algo::sqrt(const cnc::mat &M)
 {
     return sqrt(complexify(M));
 }
+
+std::pair<cnc::mat, cnc::mat> cnc::algo::set_known_variables(const cnc::mat &M, const std::vector<uint> &id)
+{
+    if (!std::is_sorted(id.begin(),id.end()))
+        throw Cnc_error("Coords of known variables must be sorted");
+    uint m = id.size();
+    uint N = M.rowNum();
+    uint n = N - m;
+    mat M1(n),M2(n,m);
+    auto inM1 = [id] (uint i,uint j) {
+        return !belong<uint>(id,i) && !belong<uint>(id,j);
+    };
+    auto inM2 = [id] (uint i,uint j) {
+        return belong<uint>(id,i) && !belong<uint>(id,j);
+    };
+    uint M1j = 0,M2j = 0;
+    for (uint j = 0;j<N;j++){
+        uint M1i = 0,M2i = 0;
+        for (uint i = 0;i<N;i++){
+            if (inM1(i,j)){
+                M1(M1i,M1j) = M(i,j);
+                M1i++;
+            }
+            else if (inM2(i,j)){
+                M2(M2i,M2j) = M(i,j);
+                M2i++;
+            }
+        }
+        if (!belong(id,j)){
+            M2j++;
+            M1j++;
+        }
+    }
+
+    return {M1,M2};
+}
+
+cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, const std::vector<uint> &id, const std::vector<cnc::scalar> &v)
+{
+    if (id.size() != v.size())
+        throw Cnc_error("must have as much values as known variables");
+    auto P = set_known_variables(M,id);
+    vec B(v),X(M.rowNum());
+    auto x = P.first.solve(P.second*B*(-1),1e-8);
+    uint i = 0,j=0;
+    for (uint k = 0;k<M.rowNum();k++){
+        if (belong(id,k)){
+            X(k) = v[i];
+            i++;
+        }
+        else{
+            X(k) = x(j);
+            j++;
+        }
+    }
+    return X;
+}
+
+std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &M, const std::vector<uint> &id)
+{
+
+}

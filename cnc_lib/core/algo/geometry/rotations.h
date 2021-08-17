@@ -9,6 +9,11 @@
 #include "cnc_types.h"
 #include "../lin_alg.h"
 
+#if defined(CNC_LIB)
+#  define CNC_LIB_EXPORT Q_DECL_EXPORT
+#else
+#  define CNC_LIB_EXPORT Q_DECL_IMPORT
+#endif
 
 namespace cnc {
 

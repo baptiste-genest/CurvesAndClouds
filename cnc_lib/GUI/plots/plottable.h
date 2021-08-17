@@ -147,6 +147,7 @@ public:
 
 protected:
 
+    bool isGL = false;
     bool dynamic;
 
     PlotGroup* pg;

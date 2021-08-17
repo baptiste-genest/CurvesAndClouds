@@ -14,6 +14,7 @@
 #include "fstream"
 #include "core/algo/lin_alg.h"
 #include "core/algo/statistics/statistics.h"
+#include "core/algo/geometry/simpleglmesh.h"
 #include <regex>
 
 namespace cnc {
@@ -34,6 +35,9 @@ std::vector<std::string> split(const std::string& str, char delim);
 bool is_integer(const std::string& s);
 
 void export_cloud(const std::string& output_file,const cloud& C);
+
+algo::geometry::SimpleGLMesh import_mesh_from_obj(const std::string& input_file,float scale = 1.f);
+
 }
 
 }

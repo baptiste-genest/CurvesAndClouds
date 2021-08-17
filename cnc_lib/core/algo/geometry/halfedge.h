@@ -6,6 +6,7 @@
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+
 #include "cnc_types.h"
 #include "core/algo/lin_alg.h"
 
@@ -17,11 +18,14 @@ namespace geometry {
 
 class Triangle;
 
+struct VertexInfo;
+
 struct halfedge
 {
-    vec* vertex = nullptr;
+    uint vertex_id = 0;
 
     halfedge* next = nullptr;
+    halfedge* prev = nullptr;
     halfedge* opposite = nullptr;
     uint face_id = 0;
     scalar length;

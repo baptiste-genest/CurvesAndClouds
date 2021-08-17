@@ -33,9 +33,13 @@ public:
     }
 
 private:
+
+    void insert_vertex_from_adress(vec*);
+    int nb_vertex = 0;
+
     std::vector<halfedge*> h_edges;
     std::vector<Triangle> faces;
-    constexpr static uint dim = 2;
+    std::vector<vec> vertices;
 };
 
 }}}

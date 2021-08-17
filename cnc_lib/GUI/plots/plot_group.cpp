@@ -8,7 +8,6 @@ PlotGroup *PlotFrame::add_plot_group()
     return g;
 }
 
-
 PlotGroup::PlotGroup(QWidget *parent) : PlotLayer(parent)
 {
 

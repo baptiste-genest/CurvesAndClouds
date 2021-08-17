@@ -7,6 +7,7 @@ PlotLayer::PlotLayer(QWidget* parent) : QWidget(parent)
 
 }
 
+
 void PlotLayer::display_layer(frame_draw_object& fdo)
 {
     std::vector<uint> free_pl,dependant;
@@ -151,13 +152,6 @@ formula* PlotLayer::add_text_frame(const std::string& ts,formula_disposition d)
 {
     tex_stream text; text << ts << tex::endl;
     return add_text_frame_from_tex_stream(text,d);
-}
-
-MeshDisplayer *PlotLayer::add_mesh_displayer()
-{
-    MeshDisplayer* MD = new MeshDisplayer();
-    insert_plot(MD);
-    return (MD);
 }
 
 formula* PlotLayer::add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d)

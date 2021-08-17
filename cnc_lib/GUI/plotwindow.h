@@ -58,7 +58,7 @@ protected:
     std::vector<QLabel*> sliders_text;
 
 private:
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
 
     friend class MutableValueCursor;
     friend class MutableValueTicker;

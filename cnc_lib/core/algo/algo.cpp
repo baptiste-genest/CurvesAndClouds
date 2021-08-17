@@ -93,3 +93,12 @@ void cnc::algo::extend_range(cnc::range &A, const cnc::range &B)
     A.first = std::min(A.first,B.first);
     A.second = std::max(A.second,B.second);
 }
+
+int cnc::algo::pos_mod(int x, int a)
+{
+    if (x < 0)
+        return pos_mod(x+a,a);
+    if (x >= a)
+        return pos_mod(x-a,a);
+    return x;
+}

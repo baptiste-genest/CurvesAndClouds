@@ -93,3 +93,46 @@ void cnc::algo::export_cloud(const std::string &output_file, const cnc::cloud &C
     }
     file.close();
 }
+
+cnc::algo::geometry::SimpleGLMesh cnc::algo::import_mesh_from_obj(const std::string &input_file,float scale)
+{
+    std::ifstream file(input_file);
+    if (!file.is_open())
+        throw Cnc_error("Can't open the file: " + input_file);
+
+    std::vector<QVector3D> vpos;
+    std::vector<QVector3D> vnormals;
+    std::vector<uint> faces;
+
+    QVector3D tmp;
+    std::string buffer;
+    std::vector<std::string> tokens;
+    while (getline(file,buffer)){
+        if (buffer.size() == 0)
+            continue;
+        tokens = split(buffer,' ');
+        if (tokens[0] == "v"){
+            uint offset = 1;
+            for (uint k = 0;k<3;k++){
+                if (tokens[k+offset] == "")
+                    offset++;
+                std::stringstream ss(tokens[k+offset]);
+                ss >> tmp[k];
+            }
+            vpos.push_back(tmp*scale);
+        } else if (tokens[0] == "vn"){
+            for (uint k = 0;k<3;k++){
+                std::stringstream ss(tokens[k+1]);
+                ss >> tmp[k];
+            }
+            vnormals.push_back(tmp);
+        } else if (tokens[0] == "f") {
+            uint offset = (tokens[1] == "" ? 2 : 1);
+            for (uint k = 0;k<3;k++){
+                std::vector<std::string> ids = split(tokens[k+offset],'/');
+                faces.push_back(std::stoi(ids[0])-1);
+            }
+        }
+    }
+    return algo::geometry::SimpleGLMesh(vpos,vnormals,faces);
+}

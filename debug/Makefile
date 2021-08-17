@@ -56,6 +56,7 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/GUI/algo/mutablevalue.cpp \
 		../cnc_lib/GUI/algo/mutablevaluecursor.cpp \
 		../cnc_lib/GUI/algo/mutablevalueticker.cpp \
+		../cnc_lib/GUI/plots/3D/geometryengine.cpp \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.cpp \
 		../cnc_lib/GUI/plots/boolean_field.cpp \
 		../cnc_lib/GUI/plots/colormap.cpp \
@@ -97,17 +98,23 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/core/algo/calculus/vector_calculus.cpp \
 		../cnc_lib/core/algo/geometry/geometry.cpp \
 		../cnc_lib/core/algo/geometry/halfedge.cpp \
+		../cnc_lib/core/algo/geometry/marching_cubes.cpp \
 		../cnc_lib/core/algo/geometry/mesh.cpp \
+		../cnc_lib/core/algo/geometry/parametrization.cpp \
 		../cnc_lib/core/algo/geometry/quadtree.cpp \
 		../cnc_lib/core/algo/geometry/quadtreemesher.cpp \
 		../cnc_lib/core/algo/geometry/rotations.cpp \
+		../cnc_lib/core/algo/geometry/simpleglmesh.cpp \
 		../cnc_lib/core/algo/geometry/triangle.cpp \
+		../cnc_lib/core/algo/geometry/vertex.cpp \
 		../cnc_lib/core/algo/inout.cpp \
 		../cnc_lib/core/algo/lin_alg.cpp \
 		../cnc_lib/core/algo/matrix_functions.cpp \
 		../cnc_lib/core/algo/statistics/random_var.cpp \
 		../cnc_lib/core/algo/statistics/statistics.cpp \
-		../cnc_lib/core/quaternion.cpp moc_plot_frame.cpp \
+		../cnc_lib/core/quaternion.cpp \
+		../cnc_lib/core/sparse_matrix.cpp moc_mesh_displayer.cpp \
+		moc_plot_frame.cpp \
 		moc_plot_tab.cpp \
 		moc_plottable.cpp \
 		moc_stat_list_window.cpp \
@@ -117,6 +124,7 @@ OBJECTS       = algo_gui.o \
 		mutablevalue.o \
 		mutablevaluecursor.o \
 		mutablevalueticker.o \
+		geometryengine.o \
 		mesh_displayer.o \
 		boolean_field.o \
 		colormap.o \
@@ -158,17 +166,23 @@ OBJECTS       = algo_gui.o \
 		vector_calculus.o \
 		geometry.o \
 		halfedge.o \
+		marching_cubes.o \
 		mesh.o \
+		parametrization.o \
 		quadtree.o \
 		quadtreemesher.o \
 		rotations.o \
+		simpleglmesh.o \
 		triangle.o \
+		vertex.o \
 		inout.o \
 		lin_alg.o \
 		matrix_functions.o \
 		random_var.o \
 		statistics.o \
 		quaternion.o \
+		sparse_matrix.o \
+		moc_mesh_displayer.o \
 		moc_plot_frame.o \
 		moc_plot_tab.o \
 		moc_plottable.o \
@@ -361,6 +375,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		GUI/plot_layer.h \
 		GUI/plot_policy.h \
 		GUI/plot_tab.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../cnc_lib/GUI/plots/boolean_field.h \
 		../cnc_lib/GUI/plots/colormap.h \
@@ -406,11 +421,16 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/calculus/vector_calculus.h \
 		../cnc_lib/core/algo/geometry/geometry.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/algo/geometry/marching_cubes.h \
+		../cnc_lib/core/algo/geometry/marching_table.h \
 		../cnc_lib/core/algo/geometry/mesh.h \
+		../cnc_lib/core/algo/geometry/parametrization.h \
 		../cnc_lib/core/algo/geometry/quadtree.h \
 		../cnc_lib/core/algo/geometry/quadtreemesher.h \
 		../cnc_lib/core/algo/geometry/rotations.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../cnc_lib/core/algo/geometry/triangle.h \
+		../cnc_lib/core/algo/geometry/vertex.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/lin_alg.h \
 		../cnc_lib/core/algo/matrix_functions.h \
@@ -418,13 +438,17 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/statistics/statistics.h \
 		../cnc_lib/core/matrix_algo.h \
 		../cnc_lib/core/quaternion.h \
+		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/curvesandcloudCore.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
-		../cnc_lib/curvesandcloud.h ../cnc_lib/GUI/algo/algo_gui.cpp \
+		../cnc_lib/curvesandcloud.h \
+		../cnc_lib/GUI/plots/3D/vshader.glsl \
+		../cnc_lib/GUI/plots/3D/fshader.glsl ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/GUI/algo/mutablevalue.cpp \
 		../cnc_lib/GUI/algo/mutablevaluecursor.cpp \
 		../cnc_lib/GUI/algo/mutablevalueticker.cpp \
+		../cnc_lib/GUI/plots/3D/geometryengine.cpp \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.cpp \
 		../cnc_lib/GUI/plots/boolean_field.cpp \
 		../cnc_lib/GUI/plots/colormap.cpp \
@@ -466,17 +490,22 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/calculus/vector_calculus.cpp \
 		../cnc_lib/core/algo/geometry/geometry.cpp \
 		../cnc_lib/core/algo/geometry/halfedge.cpp \
+		../cnc_lib/core/algo/geometry/marching_cubes.cpp \
 		../cnc_lib/core/algo/geometry/mesh.cpp \
+		../cnc_lib/core/algo/geometry/parametrization.cpp \
 		../cnc_lib/core/algo/geometry/quadtree.cpp \
 		../cnc_lib/core/algo/geometry/quadtreemesher.cpp \
 		../cnc_lib/core/algo/geometry/rotations.cpp \
+		../cnc_lib/core/algo/geometry/simpleglmesh.cpp \
 		../cnc_lib/core/algo/geometry/triangle.cpp \
+		../cnc_lib/core/algo/geometry/vertex.cpp \
 		../cnc_lib/core/algo/inout.cpp \
 		../cnc_lib/core/algo/lin_alg.cpp \
 		../cnc_lib/core/algo/matrix_functions.cpp \
 		../cnc_lib/core/algo/statistics/random_var.cpp \
 		../cnc_lib/core/algo/statistics/statistics.cpp \
-		../cnc_lib/core/quaternion.cpp
+		../cnc_lib/core/quaternion.cpp \
+		../cnc_lib/core/sparse_matrix.cpp
 QMAKE_TARGET  = cnc_lib
 DESTDIR       = 
 TARGET        = libcnc_lib.so.1.0.0
@@ -877,8 +906,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/quaternion.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/geometryengine.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/marching_cubes.h ../cnc_lib/core/algo/geometry/marching_table.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/parametrization.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/simpleglmesh.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/geometry/vertex.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/core/sparse_matrix.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h ../cnc_lib/GUI/plots/3D/vshader.glsl ../cnc_lib/GUI/plots/3D/fshader.glsl $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/sparse_matrix.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -911,9 +940,165 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_plot_frame.cpp moc_plot_tab.cpp moc_plottable.cpp moc_stat_list_window.cpp moc_stat_window.cpp moc_plotwindow.cpp
+compiler_moc_header_make_all: moc_mesh_displayer.cpp moc_plot_frame.cpp moc_plot_tab.cpp moc_plottable.cpp moc_stat_list_window.cpp moc_stat_window.cpp moc_plotwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_plot_frame.cpp moc_plot_tab.cpp moc_plottable.cpp moc_stat_list_window.cpp moc_stat_window.cpp moc_plotwindow.cpp
+	-$(DEL_FILE) moc_mesh_displayer.cpp moc_plot_frame.cpp moc_plot_tab.cpp moc_plottable.cpp moc_stat_list_window.cpp moc_stat_window.cpp moc_plotwindow.cpp
+moc_mesh_displayer.cpp: ../cnc_lib/GUI/plots/3D/mesh_displayer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qwidget.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpalette.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qcolor.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qrgb.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qrgba64.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qbrush.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qline.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qimage.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpixmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qfont.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qfontmetrics.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qfontinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qcursor.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qkeysequence.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qurl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qurlquery.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qfile.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qfiledevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/statistics/statistics.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/algo/calculus/optimization.h \
+		../cnc_lib/core/algo/calculus/vector_calculus.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
+		moc_predefs.h \
+		../../Qt/5.15.2/gcc_64/bin/moc
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/3D/mesh_displayer.h -o moc_mesh_displayer.cpp
+
 moc_plot_frame.cpp: ../cnc_lib/GUI/plots/plot_frame.h \
 		../cnc_lib/GUI/plots/plot_layer.h \
 		../cnc_lib/GUI/plots/plottable.h \
@@ -1133,12 +1318,20 @@ moc_plot_frame.cpp: ../cnc_lib/GUI/plots/plot_frame.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
 	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_frame.h -o moc_plot_frame.cpp
@@ -1363,12 +1556,20 @@ moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
@@ -1748,11 +1949,19 @@ moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1988,12 +2197,20 @@ moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -2234,18 +2451,25 @@ moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
@@ -2618,18 +2842,25 @@ mutablevalue.o: ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutable
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
@@ -2864,18 +3095,25 @@ mutablevaluecursor.o: ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
@@ -3112,18 +3350,25 @@ mutablevalueticker.o: ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
@@ -3131,6 +3376,115 @@ mutablevalueticker.o: ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qslider.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractslider.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mutablevalueticker.o ../cnc_lib/GUI/algo/mutablevalueticker.cpp
+
+geometryengine.o: ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/geometryengine.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/sparse_matrix.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o geometryengine.o ../cnc_lib/GUI/plots/3D/geometryengine.cpp
 
 mesh_displayer.o: ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
@@ -3264,45 +3618,26 @@ mesh_displayer.o: ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plot
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../cnc_lib/GUI/plots/plottable.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QPainter \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qpainter.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qtextoption.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qpen.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QColor \
-		../cnc_lib/cnc_error.h \
-		../cnc_lib/core/algo/calculus/calculus.h \
-		../cnc_lib/core/algo/algo.h \
-		../cnc_lib/cnc_types.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/core/matrix_algo.h \
-		../cnc_lib/GUI/display_info.h \
-		../cnc_lib/GUI/plots/plot_policy.h \
-		../cnc_lib/GUI/algo/algo_gui.h \
 		../cnc_lib/core/algo/statistics/statistics.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/calculus/optimization.h \
 		../cnc_lib/core/algo/calculus/vector_calculus.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QString \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QPoint \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QGuiApplication \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QScreen \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qscreen.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QList \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QRect \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QSize \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QSizeF \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QTransform \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qboxlayout.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayout.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayoutitem.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qgridlayout.h
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh_displayer.o ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp
 
 boolean_field.o: ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/boolean_field.h \
@@ -4967,7 +5302,16 @@ grid_layer.o: ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/grid_laye
 		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o grid_layer.o ../cnc_lib/GUI/plots/grid_layer.cpp
 
 level_curve.o: ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/level_curve.h \
@@ -5337,12 +5681,20 @@ plot_frame.o: ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_fram
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_frame.o ../cnc_lib/GUI/plots/plot_frame.cpp
 
 plot_group.o: ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_group.h \
@@ -5564,13 +5916,21 @@ plot_group.o: ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_grou
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/plot_frame.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_group.o ../cnc_lib/GUI/plots/plot_group.cpp
 
 plot_layer.o: ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_layer.h \
@@ -5790,7 +6150,16 @@ plot_layer.o: ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_laye
 		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_layer.o ../cnc_lib/GUI/plots/plot_layer.cpp
 
 plot_stat_display.o: ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/functionplot.h \
@@ -6020,11 +6389,19 @@ plot_stat_display.o: ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/p
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -6258,12 +6635,20 @@ plot_tab.o: ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
@@ -6936,11 +7321,19 @@ stat_list_window.o: ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plo
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -7174,12 +7567,20 @@ stat_window.o: ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/stat_wi
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -7713,18 +8114,25 @@ plotwindow.o: ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h
@@ -7924,7 +8332,52 @@ geometry.o: ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geom
 		../cnc_lib/core/algo/lin_alg.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
-		../cnc_lib/core/matrix_algo.h
+		../cnc_lib/core/matrix_algo.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o geometry.o ../cnc_lib/core/algo/geometry/geometry.cpp
 
 halfedge.o: ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/halfedge.h \
@@ -7934,6 +8387,64 @@ halfedge.o: ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geom
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/core/matrix_algo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o halfedge.o ../cnc_lib/core/algo/geometry/halfedge.cpp
+
+marching_cubes.o: ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/marching_cubes.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/algo/geometry/marching_table.h \
+		../cnc_lib/core/algo/bit_operations.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o marching_cubes.o ../cnc_lib/core/algo/geometry/marching_cubes.cpp
 
 mesh.o: ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/mesh.h \
 		../cnc_lib/core/algo/geometry/triangle.h \
@@ -7946,8 +8457,106 @@ mesh.o: ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/mes
 		../cnc_lib/core/matrix_algo.h \
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/matrix_functions.h \
+		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/core/algo/geometry/halfedge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh.o ../cnc_lib/core/algo/geometry/mesh.cpp
+
+parametrization.o: ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/parametrization.h \
+		../cnc_lib/core/algo/geometry/geometry.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector2D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parametrization.o ../cnc_lib/core/algo/geometry/parametrization.cpp
 
 quadtree.o: ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtree.h \
 		../cnc_lib/core/algo/algo.h \
@@ -7972,7 +8581,53 @@ quadtreemesher.o: ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/co
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/geometry/triangle.h \
 		../cnc_lib/core/algo/matrix_functions.h \
+		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/core/algo/geometry/geometry.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		../cnc_lib/core/algo/geometry/mesh.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/algo/statistics/random_var.h \
@@ -7990,6 +8645,99 @@ rotations.o: ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/ge
 		../cnc_lib/core/matrix_algo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rotations.o ../cnc_lib/core/algo/geometry/rotations.cpp
 
+simpleglmesh.o: ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../cnc_lib/cnc_error.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/sparse_matrix.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o simpleglmesh.o ../cnc_lib/core/algo/geometry/simpleglmesh.cpp
+
 triangle.o: ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/triangle.h \
 		../cnc_lib/core/algo/algo.h \
 		../cnc_lib/cnc_types.h \
@@ -7999,8 +8747,12 @@ triangle.o: ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geom
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/core/matrix_algo.h \
 		../cnc_lib/cnc_error.h \
-		../cnc_lib/core/algo/matrix_functions.h
+		../cnc_lib/core/algo/matrix_functions.h \
+		../cnc_lib/core/sparse_matrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o triangle.o ../cnc_lib/core/algo/geometry/triangle.cpp
+
+vertex.o: ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/geometry/vertex.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o vertex.o ../cnc_lib/core/algo/geometry/vertex.cpp
 
 inout.o: ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/lin_alg.h \
@@ -8013,7 +8765,90 @@ inout.o: ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/calculus/optimization.h \
-		../cnc_lib/core/algo/calculus/vector_calculus.h
+		../cnc_lib/core/algo/calculus/vector_calculus.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o inout.o ../cnc_lib/core/algo/inout.cpp
 
 lin_alg.o: ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/lin_alg.h \
@@ -8028,7 +8863,11 @@ matrix_functions.o: ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/al
 		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
-		../cnc_lib/core/matrix_algo.h
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/core/sparse_matrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o matrix_functions.o ../cnc_lib/core/algo/matrix_functions.cpp
 
 random_var.o: ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/random_var.h \
@@ -8066,6 +8905,17 @@ quaternion.o: ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/quaternion.h \
 		../cnc_lib/core/matrix_algo.h \
 		../cnc_lib/cnc_error.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o quaternion.o ../cnc_lib/core/quaternion.cpp
+
+sparse_matrix.o: ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/core/sparse_matrix.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sparse_matrix.o ../cnc_lib/core/sparse_matrix.cpp
+
+moc_mesh_displayer.o: moc_mesh_displayer.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mesh_displayer.o moc_mesh_displayer.cpp
 
 moc_plot_frame.o: moc_plot_frame.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_plot_frame.o moc_plot_frame.cpp

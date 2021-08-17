@@ -14,6 +14,7 @@ SOURCES += \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/3D/geometryengine.cpp \
     GUI/plots/3D/mesh_displayer.cpp \
     GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
@@ -55,17 +56,22 @@ SOURCES += \
     core/algo/calculus/vector_calculus.cpp \
     core/algo/geometry/geometry.cpp \
     core/algo/geometry/halfedge.cpp \
+    core/algo/geometry/marching_cubes.cpp \
     core/algo/geometry/mesh.cpp \
+    core/algo/geometry/parametrization.cpp \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
     core/algo/geometry/rotations.cpp \
+    core/algo/geometry/simpleglmesh.cpp \
     core/algo/geometry/triangle.cpp \
+    core/algo/geometry/vertex.cpp \
     core/algo/inout.cpp \
     core/algo/lin_alg.cpp \
     core/algo/matrix_functions.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
-    core/quaternion.cpp
+    core/quaternion.cpp \
+    core/sparse_matrix.cpp
 
 HEADERS += \
     GUI/algo/algo_gui.h \
@@ -77,6 +83,7 @@ HEADERS += \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/3D/geometryengine.h \
     GUI/plots/3D/mesh_displayer.h \
     GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
@@ -122,11 +129,16 @@ HEADERS += \
     core/algo/calculus/vector_calculus.h \
     core/algo/geometry/geometry.h \
     core/algo/geometry/halfedge.h \
+    core/algo/geometry/marching_cubes.h \
+    core/algo/geometry/marching_table.h \
     core/algo/geometry/mesh.h \
+    core/algo/geometry/parametrization.h \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \
     core/algo/geometry/rotations.h \
+    core/algo/geometry/simpleglmesh.h \
     core/algo/geometry/triangle.h \
+    core/algo/geometry/vertex.h \
     core/algo/inout.h \
     core/algo/lin_alg.h \
     core/algo/matrix_functions.h \
@@ -134,10 +146,13 @@ HEADERS += \
     core/algo/statistics/statistics.h \
     core/matrix_algo.h \
     core/quaternion.h \
+    core/sparse_matrix.h \
     curvesandcloudCore.h \
     core/matrix.h \
     core/matrix_errors.h \
-    curvesandcloud.h
+    curvesandcloud.h \
+    GUI/plots/3D/vshader.glsl \
+    GUI/plots/3D/fshader.glsl
 
 # Default rules for deployment.
 unix {
