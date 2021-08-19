@@ -9,7 +9,7 @@ heat_diffusion::heat_diffusion(SimpleGLMesh *m,GeometryEngine* ge) :  QObject(nu
 }
 
 void heat_diffusion::compute() {
-    v = LB->conjugate_gradient(v,1e-2);
+    v = LB->conjugate_gradient(v,1);
     for (uint i = 0;i<N;i++)
         M->set_vertex_value(i,v(i));
     GE->declare_update_need();

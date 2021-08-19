@@ -123,12 +123,11 @@ void cnc::algo::geometry::SimpleGLMesh::set_iso_lines_color(uint nb_lines)
     std::vector<scalar> v = get_vertex_values().data();
     std::sort(v.begin(),v.end());
     std::vector<scalar> iso(nb_lines);
-    const scalar width = 0.05f/nb_lines;
+    const scalar width = 0.1f/nb_lines;
     for (uint i = 0;i<nb_lines;i++){
         iso[i] = v[i*nb_vertices/(nb_lines-1)];
-        std::cout << iso[i] << " ";
     }
-        std::cout << std::endl;
+    iso[nb_lines - 1] = 1.f;
     for (uint k = 0;k<nb_vertices;k++){
         scalar val = vertices[k].value;
         vertices[k].color = QVector3D(val,0,1-val);

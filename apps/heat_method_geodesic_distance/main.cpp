@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     auto mesh = F3D->get_mesh();
 
     scalar h = mesh->mean_spacing();
-    scalar t = h*h*70,eps = 1e-8;
+    scalar t = h*h*80,eps = 1e-10;
     std::cout << "time step: " << t <<  std::endl;
 
     auto M_tLcot = mesh->compute_weight_plus_dt_cot_matrix(t);
