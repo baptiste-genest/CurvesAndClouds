@@ -8911,7 +8911,10 @@ sparse_matrix.o: ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/core/sparse_matrix
 		../cnc_lib/core/algo/lin_alg.h \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
-		../cnc_lib/core/matrix_algo.h
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/cnc_error.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sparse_matrix.o ../cnc_lib/core/sparse_matrix.cpp
 
 moc_mesh_displayer.o: moc_mesh_displayer.cpp 

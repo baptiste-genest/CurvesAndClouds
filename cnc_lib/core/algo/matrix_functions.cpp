@@ -145,13 +145,14 @@ std::pair<cnc::mat, cnc::mat> cnc::algo::set_known_variables(const cnc::mat &M, 
     return {M1,M2};
 }
 
-cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, const std::vector<uint> &id, const std::vector<cnc::scalar> &v)
+cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, const std::vector<uint> &id, const std::vector<cnc::scalar> &v,scalar eps)
 {
     if (id.size() != v.size())
         throw Cnc_error("must have as much values as known variables");
     auto P = set_known_variables(M,id);
     vec B(v),X(M.rowNum());
-    auto x = P.first.solve(P.second*B*(-1),1e-8);
+    vec Y = P.second*B*(-1);
+    auto x = P.first.solve(Y,eps);
     uint i = 0,j=0;
     for (uint k = 0;k<M.rowNum();k++){
         if (belong(id,k)){
@@ -164,9 +165,4 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, con
         }
     }
     return X;
-}
-
-std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &M, const std::vector<uint> &id)
-{
-
 }

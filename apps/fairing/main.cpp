@@ -2,8 +2,10 @@
 
 using namespace cnc;
 
+
 namespace constants {
 int layers = 20,resolution = 30;
+//int layers = 8,resolution = 8;
 }
 
 std::pair<std::vector<uint>,std::vector<QVector3D>> build_cylinder(algo::geometry::SimpleGLMesh* M){
@@ -40,20 +42,29 @@ std::pair<std::vector<uint>,std::vector<QVector3D>> build_cylinder(algo::geometr
             }
         }
     }
-    M->initialize_halfedges(false);
+    M->initialize_halfedges();
     return {ids,pos};
 }
 
+#define SPARSE
 void compute_fairing(algo::geometry::SimpleGLMesh* M) {
+
     auto borders = build_cylinder(M);
-    auto L = M->compute_laplace_beltrami_matrix();
+#ifdef DENSE
+    auto L = M->compute_laplace_beltrami_matrix(false);
+#endif
+#ifdef SPARSE
+    auto L = M->compute_sparse_laplace_beltrami_matrix(false);
+    L.multiply_by_scalar(-1);
+#endif
+
     std::vector<QVector3D> p(M->get_nb_vertices());
     for (uint k = 0;k<3;k++){
-        std::vector<float> f(borders.first.size());
+        std::vector<scalar> f(borders.first.size());
         for (uint j = 0;j<borders.first.size();j++)
             f[j] = borders.second[j][k];
-        auto X = algo::solve_for_kernel_with_known_variables(L,borders.first,f);
-        std::cout << (L*X).norm() << std::endl;
+        vec X = cnc::algo::solve_for_kernel_with_known_variables(L,borders.first,f,1e-5);
+        std::cout << "NORM " << (L*X).norm() << std::endl;
         for (uint j = 0;j<X.rowNum();j++)
             p[j][k] = X(j);
     }
@@ -72,6 +83,16 @@ int main(int argc, char *argv[])
     F->set_ambient_light(true);
     F->set_color_mode(mesh_color_mode::given_color);
     auto M = F->set_mesh(constants::layers*constants::resolution,(constants::layers-1)*2*constants::resolution);
+
+    /*
+    build_cylinder(M);
+    auto L = M->compute_sparse_laplace_beltrami_matrix(false);
+    L.multiply_by_scalar(-1);
+    //auto L = M->compute_laplace_beltrami_matrix(false);
+    std::cout << L << std::endl;
+    return 0;
+    */
+
     compute_fairing(M);
     w.show();
     return App.exec();

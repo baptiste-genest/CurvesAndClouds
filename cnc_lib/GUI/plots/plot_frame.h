@@ -85,7 +85,7 @@ private:
     uint current_frame;
     std::vector<PlotLayer*> layers;
 
-    inline void draw_current_layer(frame_draw_object& fdo,QPaintEvent* e){
+    inline void draw_current_layer(frame_draw_object& fdo,QPaintEvent*){
         if (layers.size())
             layers[current_frame]->display_layer(fdo);
     }

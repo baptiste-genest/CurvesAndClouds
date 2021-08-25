@@ -53,10 +53,10 @@ void cnc::MeshDisplayer::paintGL()
 
 void cnc::MeshDisplayer::initShaders()
 {
-    if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/vshader.glsl"))
+    if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex,vertex_shader_loc.data()))
         throw Cnc_error("Couldn't compile vertex shader");
 
-    if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment, "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/fshader.glsl"))
+    if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment,fragment_shader_loc.data()))
         throw Cnc_error("Couldn't compile fragment shader");
 
     if (!program.link())

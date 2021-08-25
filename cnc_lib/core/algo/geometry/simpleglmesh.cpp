@@ -45,7 +45,7 @@ void cnc::algo::geometry::SimpleGLMesh::set_vertex_color(uint vertex_id, const Q
     vertices[vertex_id].color = v;
 }
 
-void cnc::algo::geometry::SimpleGLMesh::set_vertex_value(uint vertex_id, float v)
+void cnc::algo::geometry::SimpleGLMesh::set_vertex_value(uint vertex_id, cnc::scalar v)
 {
     if (vertex_id >= nb_vertices)
         throw Cnc_error("vertex id out of range");
@@ -94,15 +94,24 @@ cnc::vec cnc::algo::geometry::SimpleGLMesh::get_vertex_values() const
     return sample;
 }
 
-float cnc::algo::geometry::SimpleGLMesh::sum_faces_areas(cnc::algo::geometry::vref x) const
+std::vector<uint> cnc::algo::geometry::SimpleGLMesh::get_boundary_vertices() const
 {
-    float sa = 0;
+    std::vector<uint> B;
+    for (halfedge* h : halfedges)
+        if (h->opposite == nullptr)
+            B.push_back(h->vertex_id);
+    return B;
+}
+
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::sum_faces_areas(cnc::algo::geometry::vref x) const
+{
+    scalar sa = 0;
     for (halfedge* f : vertices[x].emerging)
         sa += area_from_halfedge(f);
     return sa;
 }
 
-float cnc::algo::geometry::SimpleGLMesh::area_from_halfedge(cnc::algo::geometry::halfedge *h) const
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::area_from_halfedge(cnc::algo::geometry::halfedge *h) const
 {
     qvr v1 = vertices[h->vertex_id].vpos;
     qvr v2 = vertices[h->next->vertex_id].vpos;
@@ -110,7 +119,7 @@ float cnc::algo::geometry::SimpleGLMesh::area_from_halfedge(cnc::algo::geometry:
     return QVector3D::crossProduct(v2-v1,v3-v1).length()*0.5f;
 }
 
-float cnc::algo::geometry::SimpleGLMesh::face_area(uint f) const
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::face_area(uint f) const
 {
     qvr v1 = vertices[faces[f*3]].vpos;
     qvr v2 = vertices[faces[f*3+1]].vpos;
@@ -139,6 +148,50 @@ void cnc::algo::geometry::SimpleGLMesh::set_iso_lines_color(uint nb_lines)
     }
 }
 
+void cnc::algo::geometry::SimpleGLMesh::truncate_mesh(const std::function<bool (qvr)> &exclude_condition)
+{
+    std::vector<uint> new_faces;
+    for (uint f = 0;f<nb_faces;f++){
+        bool exclude = true;
+        for (uint k = 0;k<3;k++)
+            exclude &= exclude_condition(vertices[faces[f*3+k]].vpos);
+        if (!exclude) {
+            for (uint k = 0;k<3;k++)
+                new_faces.push_back(faces[f*3+k]);
+        }
+    }
+    std::vector<bool> vertex_keept(nb_vertices,false);
+    std::vector<uint> new_ids(nb_vertices);
+    for (uint i = 0;i<new_faces.size();i++)
+        vertex_keept[new_faces[i]] = true;
+    std::vector<VertexInfo> new_vertex;
+    uint k = 0;
+    for (uint i = 0;i<nb_vertices;i++)
+        if (vertex_keept[i]){
+            new_vertex.push_back(vertices[i]);
+            new_vertex.back().emerging.clear();
+            new_vertex.back().id = k;
+            new_ids[i] = k;
+            k++;
+        }
+    for (uint i = 0;i<new_faces.size();i++){
+        new_faces[i] = new_ids[new_faces[i]];
+    }
+    std::cout << "truncated " << nb_faces - new_faces.size()/3 << " faces" << std::endl;
+    nb_faces = new_faces.size()/3;
+    std::cout << "truncated " << nb_vertices - new_vertex.size() << " vertices" << std::endl;
+    nb_vertices = new_vertex.size();
+    faces = new_faces;
+    vertices = new_vertex;
+    for (halfedge* h : halfedges){
+        if (h != nullptr)
+            delete h;
+    }
+    initialize_halfedges(true);
+    new_vertex.clear();
+    new_faces.clear();
+}
+
 QVector3D cnc::algo::geometry::SimpleGLMesh::get_face_normal(uint f) const
 {
     uint id = f*3;
@@ -148,21 +201,23 @@ QVector3D cnc::algo::geometry::SimpleGLMesh::get_face_normal(uint f) const
     return QVector3D::crossProduct(v2-v1,v3-v1).normalized();
 }
 
-cnc::mat cnc::algo::geometry::SimpleGLMesh::compute_laplace_beltrami_matrix() const
+cnc::mat cnc::algo::geometry::SimpleGLMesh::compute_laplace_beltrami_matrix(bool weighted) const
 {
     mat LB(nb_vertices);
-    float A;
-    for (uint i = 0;i<nb_vertices;i++){
-        A = 0.5f/barycentric_area(i);
-        for (uint j = i+1;j<nb_vertices;j++){
-            if (get_edge(i,j) != nullptr){
-                LB(i,j) = -cotan_weight(i,j)*A;
-                LB(j,i) = -cotan_weight(i,j)*A;
+    scalar A;
+    for (uint j = 0;j<nb_vertices;j++){
+        A = weighted ? 1/barycentric_area(j) : 1;
+        auto N = one_ring_neighbors(j);
+        for (vref n : N){
+            if (n > j){
+                //printf("%i %i %f \n",n,j,-cotan_weight(n,j)*A);
+                LB(n,j) = -cotan_weight(j,n)*A;
+                LB(j,n) = LB(n,j);
             }
         }
     }
     for (uint i = 0;i<nb_vertices;i++){
-        float s = 0.f;
+        scalar s = 0.f;
         for (uint j = 0;j<nb_vertices;j++){
             s -= LB(i,j);
         }
@@ -183,7 +238,7 @@ cnc::mat cnc::algo::geometry::SimpleGLMesh::compute_uniform_laplacian_matrix() c
         }
     }
     for (uint i = 0;i<nb_vertices;i++){
-        float s = 0.f;
+        cnc::scalar s = 0.f;
         for (uint j = 0;j<nb_vertices;j++){
             s -= LB(i,j);
         }
@@ -195,9 +250,9 @@ cnc::mat cnc::algo::geometry::SimpleGLMesh::compute_uniform_laplacian_matrix() c
 cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_matrix(bool weighted,bool pos) const
 {
     smat LB(nb_vertices);
-    float A;
+    scalar A;
     for (uint j = 0;j<nb_vertices;j++){
-        A = (weighted ? 0.5f/barycentric_area(j) : 1.f);
+        A = (weighted ? 1/barycentric_area(j) : 1);
         auto N = one_ring_neighbors(j);
         N.push_back(j);
         std::sort(N.begin(),N.end());
@@ -207,8 +262,10 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_mat
                 LB.add_in_row(n,0.);
                 diag_index = LB.get_current_index();
             }
-            else
-                LB.add_in_row(n,-cotan_weight(n,j,pos)*A);
+            else{
+                //printf("%i %i %f \n",n,j,-cotan_weight(n,j,pos)*A);
+                LB.add_in_row(n,cotan_weight(n,j,pos)*A);
+            }
         }
         LB.new_row();
         LB.set_at_index(diag_index,-LB.row_sum(j));
@@ -220,14 +277,14 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_mat
 cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_identity_plus_dt_sparse_laplace_beltrami_matrix(cnc::scalar dt,bool weighted,bool pos) const
 {
     smat LB(nb_vertices);
-    float A;
+    scalar A;
     for (uint j = 0;j<nb_vertices;j++){
-        A = (weighted ? 0.5f/barycentric_area(j) : 1.f);
+        A = (weighted ? 0.5f/barycentric_area(j) : 0.5);
         auto N = one_ring_neighbors(j);
         N.push_back(j);
         std::sort(N.begin(),N.end());
         uint diag_index = 0;
-        float s = 0;
+        cnc::scalar s = 0;
         for (vref n : N){
             if (n == j){
                 LB.add_in_row(n,0.);
@@ -261,7 +318,7 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_weight_plus_dt_cot_matrix(c
                 diag_index = LB.get_current_index();
             }
             else {
-                scalar w = -cotan_weight(n,j)*dt;
+                scalar w = cotan_weight(n,j)*dt;
                 s -= w;
                 LB.add_in_row(n,w);
             }
@@ -274,7 +331,17 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_weight_plus_dt_cot_matrix(c
 
 }
 
-float cnc::algo::geometry::SimpleGLMesh::mean_curvature(cnc::algo::geometry::vref x) const
+cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_mass_matrix() const
+{
+    smat W(nb_vertices);
+    for (uint j = 0;j<nb_vertices;j++){
+        W.add_in_row(j,barycentric_area(j));
+        W.new_row();
+    }
+    return W;
+}
+
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::mean_curvature(cnc::algo::geometry::vref x) const
 {
     auto f = [] (const VertexInfo* x){
         return x->vpos;
@@ -343,26 +410,51 @@ cnc::scalar cnc::algo::geometry::SimpleGLMesh::mean_spacing() const
     return ms/nb_vertices;
 }
 
+cnc::vec cnc::algo::geometry::SimpleGLMesh::get_geodesic_distance_from_vertex(uint vertex_id) const
+{
+    scalar h = mean_spacing();
+    scalar t = h*h*80,eps = 1e-10;
+
+    auto M_tLcot = compute_weight_plus_dt_cot_matrix(-t);
+
+    vec v(get_nb_vertices());
+    v(vertex_id) = 1.f;
+
+    vec u = M_tLcot.conjugate_gradient(v,eps,true);
+    auto grad = gradient_per_triangle(u);
+
+    std::vector<QVector3D> X(get_nb_faces());
+    for (uint k = 0;k<get_nb_faces();k++)
+        X[k] = -grad[k].normalized();
+
+    auto div = integrated_divergence_per_vertex(X,false);
+
+    auto Lcot = compute_sparse_laplace_beltrami_matrix(false);
+    auto dist = Lcot.conjugate_gradient(div,0.1,true);
+    return dist.scale_from_0_to_1();
+}
+
 cnc::algo::geometry::SimpleGLMesh::~SimpleGLMesh()
 {
     for (href h: halfedges)
         delete h;
 }
 
-std::vector<float> cnc::algo::geometry::SimpleGLMesh::test()
+cnc::vec cnc::algo::geometry::SimpleGLMesh::test()
 {
-    std::vector<float> C(nb_vertices);
+    vec C(nb_vertices);
     for (uint k = 0;k<nb_vertices;k++)
-        C[k] = algo::clamp<float>(mean_curvature(k),0.f,2.f);
+        C(k) = algo::clamp<cnc::scalar>(mean_curvature(k),0.f,20.f);
+        //C(k) = mean_curvature(k);
     return C;
 }
 
-float cnc::algo::geometry::SimpleGLMesh::barycentric_area(vref vr) const
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::barycentric_area(vref vr) const
 {
     return sum_faces_areas(vr)/3.f;
 }
 
-float cnc::algo::geometry::SimpleGLMesh::cotan_weight(vref a,vref b,bool pos) const
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::cotan_weight(vref a,vref b,bool pos) const
 {
     halfedge* e = get_edge(a,b);
     if (a == b)
@@ -389,7 +481,7 @@ float cnc::algo::geometry::SimpleGLMesh::cotan_weight(vref a,vref b,bool pos) co
         w = (cotan1 + cotan2)*0.5f;
         if (std::isnan(w))
             return 0.f;
-        const float eps = 1e-6,
+        const cnc::scalar eps = 1e-6,
                 maxcot = std::cos(eps)/std::sin(eps);
         if (w >= maxcot)
             return maxcot;
@@ -411,7 +503,7 @@ float cnc::algo::geometry::SimpleGLMesh::cotan_weight(vref a,vref b,bool pos) co
     }
 }
 
-float cnc::algo::geometry::SimpleGLMesh::cotan_weight(cnc::algo::geometry::halfedge *h,bool pos) const
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::cotan_weight(cnc::algo::geometry::halfedge *h,bool pos) const
 {
     if (pos) {
         scalar e3 = (vertices[h->vertex_id].vpos - vertices[h->prev->vertex_id].vpos).length();//a
@@ -421,7 +513,7 @@ float cnc::algo::geometry::SimpleGLMesh::cotan_weight(cnc::algo::geometry::halfe
         scalar w = cos / sqrt(1.0f - cos * cos);
         if (std::isnan(w))
             return 0.f;
-        const float eps = 1e-6,
+        const cnc::scalar eps = 1e-6,
                 maxcot = std::cos(eps)/std::sin(eps);
         if (w >= maxcot)
             return maxcot;

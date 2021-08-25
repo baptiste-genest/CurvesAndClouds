@@ -31,7 +31,7 @@ namespace algo {
 cloud parse_from_uchar(const std::string& filename,uint chunk_size,int max_size = -1);
 
 cloud parse_csv(const std::string& filename);
-std::vector<std::string> split(const std::string& str, char delim);
+std::vector<std::string> split(const std::string& str, char delim,bool non_void = false);
 bool is_integer(const std::string& s);
 
 void export_cloud(const std::string& output_file,const cloud& C);

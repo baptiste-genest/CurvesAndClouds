@@ -39,10 +39,8 @@ scalar det22(const vec& a,const vec& b);
 vec Re(const cvec& V);
 
 std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id);
-vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v);
+vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
 
-std::pair<smat,smat> set_known_variables(const smat& M,const std::vector<uint>& id);
-vec solve_for_kernel_with_known_variables(const smat& M,const std::vector<uint>& id,const std::vector<scalar>& v);
 
 }
 }

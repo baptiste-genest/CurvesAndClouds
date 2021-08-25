@@ -17,11 +17,12 @@ public:
     }
 private:
     smat* LB;
+    smat* W;
     uint N;
     vec v;
     SimpleGLMesh* M;
     GeometryEngine* GE;
-    const float dt = 1e-3;
+    const float dt = -1e-2;
     const float heat_max = 3.f;
 public slots:
     void compute();

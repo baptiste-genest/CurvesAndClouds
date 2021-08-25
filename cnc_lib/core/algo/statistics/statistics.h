@@ -63,7 +63,7 @@ struct cloud{
     }
 
     /**
-    * @brief set_mean translate cloud so it's mean is the given one
+    * @brief set_mean translate cloud so its mean is the given one
     * @param new_mean
     */
     void set_mean(const cnc::vec& new_mean);
@@ -223,6 +223,8 @@ mat compute_kernel_matrix(const cloud& c,const kernel& k);
  * @return projector
  */
 projector get_KPCA_projector(const cloud& c,const kernel& ker, uint dim = 2);
+
+cloud project_on_plane(const cloud& c,const vec& n,scalar val = 0);
 
 // WIP
 cloud project_by_min_dist(const cloud& c,uint dim = 2);

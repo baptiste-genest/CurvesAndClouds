@@ -29,6 +29,10 @@ public:
         return d2_curve;
     }
 
+    inline void set_line_width(uint w) {
+        Curves::line_width = w;
+    }
+
 protected:
     D2Curve() {}
     virtual void compute_value_range(const frame_info& fi) override;

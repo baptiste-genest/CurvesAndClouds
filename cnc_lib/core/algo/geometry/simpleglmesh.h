@@ -28,7 +28,7 @@ struct VertexInfo {
     QVector3D vpos;
     QVector3D normal;
     QVector3D color;
-    float value;
+    scalar value;
     std::vector<halfedge*> emerging;
     uint id;
 };
@@ -46,7 +46,7 @@ public:
     void set_vertex_pos(uint vertex_id,const QVector3D& v);
     void set_vertex_normal(uint vertex_id,const QVector3D& v);
     void set_vertex_color(uint vertex_id,const QVector3D& v);
-    void set_vertex_value(uint vertex_id,float v);
+    void set_vertex_value(uint vertex_id,scalar v);
     void set_vertex_values(const vec& v);
     void set_face(uint face_id,uint v1,uint v2,uint v3);
 
@@ -84,6 +84,13 @@ public:
         return vertices[faces[f*3+i]].vpos;
     }
 
+    inline QVector3D get_mean_point() const {
+        QVector3D mean;
+        for (const auto& p : vertices)
+            mean += p.vpos;
+        return mean/nb_vertices;
+    }
+
     inline vec get_vertex_values() const;
 
     template <class T>
@@ -92,18 +99,22 @@ public:
         if (N.size() == 0)
             throw Cnc_error("vertex has no neighbors");
         T LB = T();
+        T val_at_vertex = fpv(&vertices[x]);
         for (vref n : N)
-            LB += cotan_weight(x,n)*(fpv(&vertices[n])-fpv(&vertices[x]));
-        return 0.5f*LB/(1e-6 + barycentric_area(x));
+            LB += cotan_weight(x,n)*(fpv(&vertices[n])-val_at_vertex);
+        return LB/(1e-6 + barycentric_area(x));
     }
 
+    std::vector<uint> get_boundary_vertices() const;
 
-    mat compute_laplace_beltrami_matrix() const;
+
+    mat compute_laplace_beltrami_matrix(bool weighted = true) const;
     mat compute_uniform_laplacian_matrix() const ;
     smat compute_sparse_laplace_beltrami_matrix(bool weighted = true,bool pos = true) const;
     smat compute_identity_plus_dt_sparse_laplace_beltrami_matrix(scalar dt = scalar(1),bool weighted = true,bool pos = true) const;
     smat compute_weight_plus_dt_cot_matrix(scalar dt = scalar(1)) const;
-    float mean_curvature(vref x) const;
+    smat compute_mass_matrix() const;
+    scalar mean_curvature(vref x) const;
 
     std::vector<QVector3D> gradient_per_triangle() const;
     std::vector<QVector3D> gradient_per_triangle(const vec& v) const;
@@ -111,14 +122,19 @@ public:
 
     scalar mean_spacing() const;
 
+    vec get_geodesic_distance_from_vertex(uint vertex_id) const;
+
+    std::vector<uint> get_minimizer_simplex(uint vertex_start,const vec& f) const;
+
     ~SimpleGLMesh();
 
-    std::vector<float> test();
+    vec test();
 
     void initialize_halfedges(bool opposites = true);
-    float face_area(uint f) const ;
+    scalar face_area(uint f) const ;
 
     void set_iso_lines_color(uint nb_lines);
+    void truncate_mesh(const std::function<bool(qvr)>& exclude_condition);
 
 private:
 
@@ -131,11 +147,11 @@ private:
     halfedge* get_edge(vref a,vref b,uint face) const;
     halfedge* get_edge(vref a,vref b) const;
     bool are_well_oriented(halfedge* h1,halfedge* h2) const;
-    float barycentric_area(vref v) const ;
-    float sum_faces_areas(vref x) const ;
-    float area_from_halfedge(halfedge* h) const ;
-    float cotan_weight(vref a,vref b,bool pos = true) const;
-    float cotan_weight(halfedge* h,bool pos = true) const;
+    scalar barycentric_area(vref v) const ;
+    scalar sum_faces_areas(vref x) const ;
+    scalar area_from_halfedge(halfedge* h) const ;
+    scalar cotan_weight(vref a,vref b,bool pos = true) const;
+    scalar cotan_weight(halfedge* h,bool pos = true) const;
     std::vector<vref> one_ring_neighbors(vref x) const;
     bool share_edge(uint f1,uint f2,uint*) const;
 

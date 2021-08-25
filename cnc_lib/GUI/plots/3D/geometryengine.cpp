@@ -36,7 +36,11 @@ void cnc::GeometryEngine::paint_mesh(QOpenGLShaderProgram *program)
 
     int valueLocation = program->attributeLocation("a_value");
     program->enableAttributeArray(valueLocation);
+#if PRECISION == DOUBLE
+    program->setAttributeBuffer(valueLocation, GL_DOUBLE, offset, 1, sizeof(algo::geometry::VertexInfo));
+#else
     program->setAttributeBuffer(valueLocation, GL_FLOAT, offset, 1, sizeof(algo::geometry::VertexInfo));
+#endif
 
     testBuf.bind();
 

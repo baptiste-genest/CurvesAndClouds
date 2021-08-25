@@ -257,3 +257,11 @@ cnc::cloud cnc::algo::stat::project_by_min_dist(const cnc::cloud &c, uint dim)
             R[j](i) = pc(j*dim + i);
     return R;
 }
+
+cnc::cloud cnc::algo::stat::project_on_plane(const cnc::cloud &c, const cnc::vec &n, cnc::scalar val)
+{
+    cloud p = c;
+    for (vec& x : p.points)
+        x = x + n*(val-x.scalar_product(n));
+    return p;
+}

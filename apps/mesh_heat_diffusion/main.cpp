@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     auto F3D = T->add_3D_frame();
     F3D->set_ambient_light(false);
-    F3D->set_color_mode(mesh_color_mode::interpolate_value);
+    F3D->set_color_mode(mesh_color_mode::given_color);
 
     F3D->load_mesh_from_obj("../../data/bunny.obj",0.6f);
     auto Mesh = F3D->get_mesh();

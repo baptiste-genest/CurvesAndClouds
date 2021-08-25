@@ -8,27 +8,32 @@ int main(int argc, char *argv[])
     PlotWindow w; w.resize(500,500);
 
     PlotTab* T = w.add_tab("fucking 3D RABBIT");
-    /*
+    auto F= T->add_3D_frame();
+    if (true)
     {
-        auto F= T->add_3D_frame();
-        F->load_mesh_from_obj("/home/eulerson/Documents/armadillo.obj",0.6f);
-    }
-    */
-    {
-        auto F= T->add_3D_frame();
         F->load_mesh_from_obj("../../data/bunny.obj",0.6f);
+        F->set_color_mode(mesh_color_mode::given_color);
+        /*
         F->set_ambient_light(true);
         F->set_specular_reflection(true);
-        //auto M = F->get_mesh();
-        //auto L = M->compute_laplace_beltrami_matrix();
-        /*
+        */
+        auto mesh = F->get_mesh();
+        mesh->truncate_mesh([] (const QVector3D& x) {
+            return x.z() < 0.2;
+        });
+        mesh->compute_normals();
+        auto B = mesh->get_boundary_vertices();
+        for (auto id : B)
+            mesh->set_vertex_color(id,QVector3D(1.,0.,0.));
+    }
+    else
+    {
+        F->load_mesh_from_obj("../../data/bunny.obj",0.6f);
+        F->set_color_mode(mesh_color_mode::interpolate_value);
+        auto M = F->get_mesh();
         auto C = M->test();
-        range minmax = algo::get_min_max_range(C);
-        std::cout << minmax.first << ' ' << minmax.second << std::endl;
-        auto map = algo::calculus::build_range_mapper(minmax,{0.f,1.f});
-        for (uint k = 0;k<M->get_nb_vertices();k++)
-            M->set_vertex_color(k,QVector3D(map(C[k]),0.f,1.f-map(C[k])));
-            */
+        std::cout << C.norm_inf() << std::endl;
+        M->set_vertex_values(C.scale_from_0_to_1());
     }
 
     w.show();

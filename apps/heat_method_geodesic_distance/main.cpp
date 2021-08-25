@@ -20,13 +20,12 @@ int main(int argc, char *argv[])
     scalar t = h*h*80,eps = 1e-10;
     std::cout << "time step: " << t <<  std::endl;
 
-    auto M_tLcot = mesh->compute_weight_plus_dt_cot_matrix(t);
-    auto Lcot = mesh->compute_sparse_laplace_beltrami_matrix(false);
+    auto M_tLcot = mesh->compute_weight_plus_dt_cot_matrix(-t);
 
     vec v(mesh->get_nb_vertices());
     v(0) = 1.f;
 
-    vec u = M_tLcot.conjugate_gradient(v,eps);
+    vec u = M_tLcot.conjugate_gradient(v,eps,true);
     auto grad = mesh->gradient_per_triangle(u);
 
     std::vector<QVector3D> X(mesh->get_nb_faces());
@@ -35,7 +34,8 @@ int main(int argc, char *argv[])
 
     auto div = mesh->integrated_divergence_per_vertex(X,false);
 
-    auto dist = Lcot.conjugate_gradient(div,div,1e-3);
+    auto Lcot = mesh->compute_sparse_laplace_beltrami_matrix(false);
+    auto dist = Lcot.conjugate_gradient(div,0.1,true);
 
     mesh->set_vertex_values(dist.scale_from_0_to_1());
     mesh->set_iso_lines_color(10);

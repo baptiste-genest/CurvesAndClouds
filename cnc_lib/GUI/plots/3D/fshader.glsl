@@ -24,7 +24,7 @@ void main()
         if (specular == 1 && dot(I,v_normal) < 0.f){
                 vec3 R = reflect(I,v_normal);
                 vec3 toCam = normalize(cam_pos - v_position);
-                light += max(dot(R,toCam),0.f)*0.4f;
+                light += max(dot(R,toCam),0.f)*0.2f;
                 clamp(light,0.f,1.f);
         }
         vec3 color = vec3(1.,1.,1.);

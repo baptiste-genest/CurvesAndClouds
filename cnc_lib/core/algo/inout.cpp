@@ -62,13 +62,19 @@ cnc::cloud cnc::algo::parse_csv(const std::string &filename)
     return R;
 }
 
-std::vector<std::string> cnc::algo::split(const std::string &str, char delim)
+std::vector<std::string> cnc::algo::split(const std::string &str, char delim,bool non_void)
 {
     std::vector<std::string> tokens;
     std::string token;
     std::istringstream tokenStream(str);
     while (std::getline(tokenStream, token, delim)){
-        tokens.push_back(token);
+        if (non_void){
+            if (token.size())
+                tokens.push_back(token);
+        }
+        else {
+            tokens.push_back(token);
+        }
     }
     return tokens;
 }
@@ -107,16 +113,14 @@ cnc::algo::geometry::SimpleGLMesh cnc::algo::import_mesh_from_obj(const std::str
     QVector3D tmp;
     std::string buffer;
     std::vector<std::string> tokens;
+    bool quad_mesh = false;
     while (getline(file,buffer)){
         if (buffer.size() == 0)
             continue;
-        tokens = split(buffer,' ');
+        tokens = split(buffer,' ',true);
         if (tokens[0] == "v"){
-            uint offset = 1;
             for (uint k = 0;k<3;k++){
-                if (tokens[k+offset] == "")
-                    offset++;
-                std::stringstream ss(tokens[k+offset]);
+                std::stringstream ss(tokens[k+1]);
                 ss >> tmp[k];
             }
             vpos.push_back(tmp*scale);
@@ -127,12 +131,22 @@ cnc::algo::geometry::SimpleGLMesh cnc::algo::import_mesh_from_obj(const std::str
             }
             vnormals.push_back(tmp);
         } else if (tokens[0] == "f") {
-            uint offset = (tokens[1] == "" ? 2 : 1);
+            bool quad = tokens.size() == 6;
+            std::vector<uint> ids;
             for (uint k = 0;k<3;k++){
-                std::vector<std::string> ids = split(tokens[k+offset],'/');
-                faces.push_back(std::stoi(ids[0])-1);
+                ids.push_back(std::stoi(split(tokens[k+1],'/')[0])-1);
+                faces.push_back(ids.back());
+            }
+            if (quad){
+                quad_mesh = true;
+                ids.push_back(std::stoi(split(tokens[4],'/')[0])-1);
+                faces.push_back(ids[2]);
+                faces.push_back(ids[3]);
+                faces.push_back(ids[0]);
             }
         }
     }
+    if (quad_mesh)
+        std::cout << "quad detected" << std::endl;
     return algo::geometry::SimpleGLMesh(vpos,vnormals,faces);
 }
