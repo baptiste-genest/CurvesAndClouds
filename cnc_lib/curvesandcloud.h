@@ -10,6 +10,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#include <windows.h>
 #include "curvesandcloudCore.h"
 #include <QApplication>
 #include "GUI/plotwindow.h"

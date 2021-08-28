@@ -14,11 +14,14 @@
 #include "plot_frame.h"
 #include "cnc_error.h"
 #include "GUI/display_info.h"
-#include "3D/mesh_displayer.h"
 #include <vector>
 #include <QWidget>
 #include <QGridLayout>
 #include <QTimer>
+
+#if CNC_OPENGL == TRUE
+#include "3D/mesh_displayer.h"
+#endif
 
 namespace cnc {
 
@@ -56,8 +59,10 @@ public:
      */
     PlotFrame* add_frame(int w = 1,int h = 1);
 
+#if CNC_OPENGL == TRUE
     MeshDisplayer* add_3D_frame(int w = 1,int h = 1);
     MeshDisplayer *add_3D_frame_at(int px,int py,int w = 1,int h = 1);
+#endif
 
     float get_tab_ratio() const;
 
@@ -78,7 +83,10 @@ private:
 
     std::vector<QRect> frame_grid;
     std::vector<PlotFrame*> frames;
+
+#if CNC_OPENGL == TRUE
     std::vector<MeshDisplayer*> frames3D;
+#endif
 
 
     static constexpr int MAX_CELL_WIDTH = 10;
@@ -86,7 +94,9 @@ private:
     static constexpr int CELL_SIZE = 100;
 
     PlotFrame* insert_frame(const QRect&);
+#if CNC_OPENGL == TRUE
     MeshDisplayer* insert_3D_frame(const QRect&);
+#endif
 };
 
 }

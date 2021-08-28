@@ -18,8 +18,10 @@ void PlotTab::paintEvent(QPaintEvent *e)
     drawWidget(qp);
 
     QWidget::paintEvent(e);
+    /*
     for (auto f: frames3D)
         f->show();
+        */
 }
 
 void PlotTab::drawWidget(QPainter&)
@@ -90,6 +92,7 @@ PlotFrame *PlotTab::insert_frame(const QRect& R)
     return f;
 }
 
+#if CNC_OPENGL == TRUE
 MeshDisplayer *PlotTab::insert_3D_frame(const QRect &R)
 {
     frame_grid.push_back(R);
@@ -113,6 +116,17 @@ MeshDisplayer *PlotTab::insert_3D_frame(const QRect &R)
 
 }
 
+MeshDisplayer *PlotTab::add_3D_frame(int w, int h)
+{
+    return insert_3D_frame(get_frame_free_pos(w,h));
+}
+
+MeshDisplayer *PlotTab::add_3D_frame_at(int px, int py, int w, int h)
+{
+    return insert_3D_frame(check_frame_free_pos(px,py,w,h));
+}
+#endif
+
 PlotFrame* PlotTab::add_frame_at(int px, int py, int w, int h)
 {
     return insert_frame(check_frame_free_pos(px,py,w,h));
@@ -123,15 +137,6 @@ PlotFrame* PlotTab::add_frame(int w,int h)
     return insert_frame(get_frame_free_pos(w,h));
 }
 
-MeshDisplayer *PlotTab::add_3D_frame(int w, int h)
-{
-    return insert_3D_frame(get_frame_free_pos(w,h));
-}
-
-MeshDisplayer *PlotTab::add_3D_frame_at(int px, int py, int w, int h)
-{
-    return insert_3D_frame(check_frame_free_pos(px,py,w,h));
-}
 
 float PlotTab::get_tab_ratio() const
 {

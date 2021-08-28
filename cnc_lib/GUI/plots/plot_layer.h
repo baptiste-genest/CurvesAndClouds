@@ -25,7 +25,7 @@
 #include "vector_field.h"
 #include "formula_tex.h"
 #include "trajectory.h"
-#include "3D/mesh_displayer.h"
+//#include "3D/mesh_displayer.h"
 
 namespace cnc {
 

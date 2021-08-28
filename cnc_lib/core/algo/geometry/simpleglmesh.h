@@ -8,7 +8,6 @@
 #endif
 #include <QVector3D>
 #include <cnc_error.h>
-#include <QOpenGLFunctions>
 #include <iostream>
 #include <fstream>
 

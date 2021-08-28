@@ -1,11 +1,14 @@
 #ifndef GEOMETRYENGINE_H
 #define GEOMETRYENGINE_H
 
+
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+
+#if CNC_OPENGL == TRUE
 
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -44,5 +47,6 @@ private:
 };
 
 }
+#endif
 
 #endif // GEOMETRYENGINE_H

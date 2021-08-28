@@ -1,3 +1,4 @@
+#if CNC_OPENGL == TRUE
 #include "mesh_displayer.h"
 
 cnc::MeshDisplayer::MeshDisplayer(QWidget* parent)
@@ -122,3 +123,5 @@ void cnc::MeshDisplayer::timerEvent(QTimerEvent *)
         update();
     }
 }
+
+#endif

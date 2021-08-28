@@ -98,7 +98,9 @@ PlotFrame *PlotFrame::duplicate_frame(QWidget* parent) const{
     return D;
 }
 
+/*
 MeshDisplayer* PlotFrame::add_mesh_viewer() {
     MeshDisplayer* MD = new MeshDisplayer(this);
     return MD;
 }
+*/
