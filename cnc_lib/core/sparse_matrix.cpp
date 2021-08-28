@@ -122,7 +122,7 @@ std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &
         ids[i] = true;
 
     for (uint j = 0;j<N;j++){
-        std::cout << j << std::endl;
+        std::cout << j << " over " << N << std::endl;
         uint M1i = 0,M2i = 0;
         if (M.rowptr[j] == M.rowptr[j+1]){
             for (uint i = 0;i<M.w;i++){

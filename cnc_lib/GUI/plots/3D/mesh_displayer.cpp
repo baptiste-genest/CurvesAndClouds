@@ -9,6 +9,7 @@ cnc::MeshDisplayer::MeshDisplayer(QWidget* parent)
 void cnc::MeshDisplayer::load_mesh_from_obj(const std::string &filename,float scale)
 {
     mesh = new algo::geometry::SimpleGLMesh(algo::import_mesh_from_obj(filename,scale));
+    std::cout << "Loading of " << filename << " done" << std::endl;
     GE = new GeometryEngine(mesh);
 }
 
