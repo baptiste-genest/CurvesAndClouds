@@ -1,6 +1,8 @@
 #ifndef MESH_DISPLAYER_H
 #define MESH_DISPLAYER_H
 
+#if CNC_OPENGL == TRUE
+
 #include <QOpenGLWidget>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
@@ -18,11 +20,13 @@
 #include "core/algo/geometry/simpleglmesh.h"
 #include "geometryengine.h"
 
+/*
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+*/
 
 namespace cnc {
 
@@ -111,4 +115,6 @@ signals:
 };
 
 }
+
+#endif
 #endif // MESH_DISPLAYER_H

@@ -13,7 +13,7 @@
 
 #include "plot_layer.h"
 #include "grid_layer.h"
-#include "3D/mesh_displayer.h"
+//#include "3D/mesh_displayer.h"
 #include "GUI/display_info.h"
 #include <vector>
 #include <QFrame>
@@ -49,7 +49,7 @@ public:
 
     PlotGroup* add_plot_group();
 
-    MeshDisplayer* add_mesh_viewer();
+    //MeshDisplayer* add_mesh_viewer();
 
     /**
      * @brief set_nb_layer_per_second changes the rythm to update the frame

@@ -1,3 +1,4 @@
+#if CNC_OPENGL == TRUE
 #include "geometryengine.h"
 
 cnc::GeometryEngine::GeometryEngine(algo::geometry::SimpleGLMesh *M) :
@@ -63,3 +64,5 @@ void cnc::GeometryEngine::initialize()
     indexBuf.allocate(mesh->get_faces().data(),nb_index);
 
 }
+
+#endif

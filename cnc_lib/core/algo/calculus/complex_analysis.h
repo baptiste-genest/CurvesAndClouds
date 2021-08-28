@@ -1,5 +1,11 @@
 #ifndef COMPLEX_ANALYSIS_H
 #define COMPLEX_ANALYSIS_H
+#if defined(CNC_LIB)
+#  define CNC_LIB_EXPORT Q_DECL_EXPORT
+#else
+#  define CNC_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
 
 #include "calculus.h"
 
