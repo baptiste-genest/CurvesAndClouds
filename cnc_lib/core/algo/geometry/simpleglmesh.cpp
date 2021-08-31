@@ -192,6 +192,24 @@ void cnc::algo::geometry::SimpleGLMesh::truncate_mesh(const std::function<bool (
     new_faces.clear();
 }
 
+bool cnc::algo::geometry::SimpleGLMesh::is_vertex_on_boundary(uint id) const
+{
+    const VertexInfo& v = vertices[id];
+    for (halfedge* h : v.emerging)
+        if (h->opposite == nullptr || h->prev->opposite == nullptr)
+            return true;
+    return false;
+}
+
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::angle_from_incident_angle(cnc::algo::geometry::halfedge *h) const
+{
+    const QVector3D& p = vertices[h->prev->vertex_id].vpos;
+    QVector3D a = (vertices[h->vertex_id].vpos - p).normalized();
+    QVector3D b = (vertices[h->next->vertex_id].vpos - p).normalized();
+    return std::acos(QVector3D::dotProduct(a,b));
+}
+
+
 QVector3D cnc::algo::geometry::SimpleGLMesh::get_face_normal(uint f) const
 {
     uint id = f*3;
@@ -347,6 +365,15 @@ cnc::scalar cnc::algo::geometry::SimpleGLMesh::mean_curvature(cnc::algo::geometr
         return x->vpos;
     };
     return laplace_beltrami_operator<QVector3D>(x,f).length()*0.5f;
+}
+
+cnc::scalar cnc::algo::geometry::SimpleGLMesh::gaussian_curvature(cnc::algo::geometry::vref x) const
+{
+    const static scalar tau = 2*M_PI,itau = 1/tau;
+    scalar th_sum = 0;
+    for (halfedge* h : vertices[x].emerging)
+        th_sum += angle_from_incident_angle(h);
+    return (tau - th_sum)*itau;
 }
 
 std::vector<QVector3D> cnc::algo::geometry::SimpleGLMesh::gradient_per_triangle() const
@@ -546,6 +573,11 @@ std::vector<uint> cnc::algo::geometry::SimpleGLMesh::one_ring_neighbors(uint x) 
             N.push_back(h->next->vertex_id);
     }
     return N;
+}
+
+void cnc::algo::geometry::SimpleGLMesh::export_as_obj(std::string out_file) const
+{
+    algo::export_mesh_as_obj(this,out_file);
 }
 
 void cnc::algo::geometry::SimpleGLMesh::set_halfedge(int HE_id, int face_id)

@@ -3,6 +3,7 @@
 cnc::SparseMatrix::SparseMatrix(int dimension, bool is_symetric) :
     SparseMatrix(dimension,dimension,is_symetric)
 {
+    nb_threads = 20;
 }
 
 cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
@@ -10,6 +11,7 @@ cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
     h(_h),
     symetric(is_symetric)
 {
+    nb_threads = 20;
     rowptr.push_back(0);
     nnz = 0;
 }
@@ -63,24 +65,19 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
 {
     if (x.rowNum() != w)
         throw Cnc_error("mat width must be equal to vec height");
-    uint N = x.rowNum();
     uint srow = 0;
     vec y(h);
-    if (N > 100){
-        uint nb_threads = std::thread::hardware_concurrency();
-        uint nb_rows_per_thread = N/nb_threads;
+    if (h > 100){
+        uint nb_rows_per_thread = h/nb_threads;
         uint last_row_in_thread = nb_threads*nb_rows_per_thread;
-        srow = N - last_row_in_thread;
+        srow = last_row_in_thread;
         std::vector<std::thread> threads(nb_threads);
         for (uint k = 0;k<nb_threads;k++)
-            threads[k] = std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,*this,x,std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread);
+            threads[k] = std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,this,x,std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread);
         for (std::thread& t : threads)
             t.join();
     }
-    for (uint i = srow;i<h;i++){
-        for (uint k = rowptr[i];k<rowptr[i+1];k++)
-            y(i) += v[k]*x(colind[k]);
-    }
+    parralel_sparse_matrix_vector_mult(x,y,srow,h);
     return y;
 }
 
@@ -115,7 +112,7 @@ void cnc::SparseMatrix::print() const
     }
 }
 
-void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow)
+void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
 {
     for (uint j = frow;j<lrow;j++){
         for (uint k = rowptr[j];k<rowptr[j+1];k++)

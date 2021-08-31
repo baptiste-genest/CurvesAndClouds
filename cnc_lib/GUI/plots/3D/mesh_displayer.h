@@ -19,6 +19,7 @@
 
 #include "core/algo/geometry/simpleglmesh.h"
 #include "geometryengine.h"
+#include "examples/mesh_bank.h"
 
 /*
 #if defined(CNC_LIB)
@@ -43,6 +44,11 @@ public:
     MeshDisplayer(QWidget* parent);
 
     void load_mesh_from_obj(const std::string& filename,float scale = 1.f);
+
+    inline void load_mesh(bank_mesh_names name) {
+        load_mesh_from_obj(data_prefix + MESH_BANK[name].filename,MESH_BANK[name].scale_factor);
+    }
+
     virtual ~MeshDisplayer();
 
     inline algo::geometry::SimpleGLMesh* get_mesh() {
@@ -76,6 +82,10 @@ public:
     inline void set_dynamic(bool d) {
         GE->declare_dynamic(d);
     }
+
+    inline void set_light_pos(const QVector3D& p){
+        light_pos = p;
+    }
 protected:
     virtual void initializeGL() override;
     virtual void resizeGL(int w,int h) override;
@@ -87,6 +97,8 @@ protected:
 
     void initShaders();
 private:
+
+    QVector3D light_pos;
     algo::geometry::SimpleGLMesh* mesh = nullptr;
 
     mesh_color_mode mcm = white;

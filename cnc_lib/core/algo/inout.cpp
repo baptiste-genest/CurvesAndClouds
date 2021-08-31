@@ -150,3 +150,31 @@ cnc::algo::geometry::SimpleGLMesh cnc::algo::import_mesh_from_obj(const std::str
         std::cout << "quad detected" << std::endl;
     return algo::geometry::SimpleGLMesh(vpos,vnormals,faces);
 }
+
+void cnc::algo::export_mesh_as_obj(const cnc::algo::geometry::SimpleGLMesh *m, std::string out_file)
+{
+    std::ofstream out(out_file);
+    if (!out.is_open())
+        throw Cnc_error("coundn't open/create output obj file");
+    for (uint k = 0;k<m->get_nb_vertices();k++){
+        out << "v ";
+        for (uint i = 0;i<3;i++)
+            out << m->get_vpos(k)[i] << " ";
+        out << std::endl;
+    }
+    for (uint k = 0;k<m->get_nb_vertices();k++){
+        out << "vn ";
+        auto N = m->get_normal(k);
+        for (uint i = 0;i<3;i++)
+            out << N[i] << " ";
+        out << std::endl;
+    }
+    for (uint k = 0;k<m->get_nb_faces();k++){
+        out << "f ";
+        auto F = m->get_face(k);
+        for (uint i = 0;i<3;i++)
+            out << F[i]+1 << "// ";
+        out << std::endl;
+    }
+    std::cout << "exported mesh at " <<out_file << std::endl;
+}

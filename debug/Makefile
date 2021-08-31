@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DCNC_LIB -DPRECISION -DDOUBLE -DQT_QML_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DCNC_LIB -DPRECISION -DDOUBLE -DCNC_OPENGL -DTRUE -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../cnc_lib -I. -I../../Qt/5.15.2/gcc_64/include -I../../Qt/5.15.2/gcc_64/include/QtOpenGL -I../../Qt/5.15.2/gcc_64/include/QtWidgets -I../../Qt/5.15.2/gcc_64/include/QtGui -I../../Qt/5.15.2/gcc_64/include/QtNetwork -I../../Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/libdrm -I../../Qt/5.15.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../cnc_lib -I. -I../../Qt/5.15.2/gcc_64/include -I../../Qt/5.15.2/gcc_64/include/QtWidgets -I../../Qt/5.15.2/gcc_64/include/QtGui -I../../Qt/5.15.2/gcc_64/include/QtNetwork -I../../Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/libdrm -I../../Qt/5.15.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/eulerson/Qt/5.15.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = cnc_lib1.0.0
 DISTDIR = /home/eulerson/Curves-Clouds/debug/.tmp/cnc_lib1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/eulerson/Qt/5.15.2/gcc_64/lib -shared -Wl,-soname,libcnc_lib.so.1
-LIBS          = $(SUBLIBS) /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5OpenGL.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Widgets.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Gui.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Network.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Widgets.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Gui.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Network.so /home/eulerson/Qt/5.15.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -113,7 +113,8 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/core/algo/statistics/random_var.cpp \
 		../cnc_lib/core/algo/statistics/statistics.cpp \
 		../cnc_lib/core/quaternion.cpp \
-		../cnc_lib/core/sparse_matrix.cpp moc_mesh_displayer.cpp \
+		../cnc_lib/core/sparse_matrix.cpp \
+		../cnc_lib/examples/mesh_bank.cpp moc_mesh_displayer.cpp \
 		moc_plot_frame.cpp \
 		moc_plot_tab.cpp \
 		moc_plottable.cpp \
@@ -182,6 +183,7 @@ OBJECTS       = algo_gui.o \
 		statistics.o \
 		quaternion.o \
 		sparse_matrix.o \
+		mesh_bank.o \
 		moc_mesh_displayer.o \
 		moc_plot_frame.o \
 		moc_plot_tab.o \
@@ -444,7 +446,8 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/curvesandcloud.h \
 		../cnc_lib/GUI/plots/3D/vshader.glsl \
-		../cnc_lib/GUI/plots/3D/fshader.glsl ../cnc_lib/GUI/algo/algo_gui.cpp \
+		../cnc_lib/GUI/plots/3D/fshader.glsl \
+		../cnc_lib/examples/mesh_bank.h ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/GUI/algo/mutablevalue.cpp \
 		../cnc_lib/GUI/algo/mutablevaluecursor.cpp \
 		../cnc_lib/GUI/algo/mutablevalueticker.cpp \
@@ -505,7 +508,8 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/statistics/random_var.cpp \
 		../cnc_lib/core/algo/statistics/statistics.cpp \
 		../cnc_lib/core/quaternion.cpp \
-		../cnc_lib/core/sparse_matrix.cpp
+		../cnc_lib/core/sparse_matrix.cpp \
+		../cnc_lib/examples/mesh_bank.cpp
 QMAKE_TARGET  = cnc_lib
 DESTDIR       = 
 TARGET        = libcnc_lib.so.1.0.0
@@ -906,8 +910,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/geometryengine.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/marching_cubes.h ../cnc_lib/core/algo/geometry/marching_table.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/parametrization.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/simpleglmesh.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/geometry/vertex.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/core/sparse_matrix.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h ../cnc_lib/GUI/plots/3D/vshader.glsl ../cnc_lib/GUI/plots/3D/fshader.glsl $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/sparse_matrix.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/geometryengine.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/marching_cubes.h ../cnc_lib/core/algo/geometry/marching_table.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/parametrization.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/simpleglmesh.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/geometry/vertex.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/core/sparse_matrix.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h ../cnc_lib/GUI/plots/3D/vshader.glsl ../cnc_lib/GUI/plots/3D/fshader.glsl ../cnc_lib/examples/mesh_bank.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/examples/mesh_bank.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1095,9 +1099,10 @@ moc_mesh_displayer.cpp: ../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
+		../cnc_lib/examples/mesh_bank.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/3D/mesh_displayer.h -o moc_mesh_displayer.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/3D/mesh_displayer.h -o moc_mesh_displayer.cpp
 
 moc_plot_frame.cpp: ../cnc_lib/GUI/plots/plot_frame.h \
 		../cnc_lib/GUI/plots/plot_layer.h \
@@ -1290,51 +1295,15 @@ moc_plot_frame.cpp: ../cnc_lib/GUI/plots/plot_frame.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_frame.h -o moc_plot_frame.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_frame.h -o moc_plot_frame.cpp
 
 moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../cnc_lib/GUI/plots/plot_frame.h \
@@ -1528,6 +1497,13 @@ moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -1558,22 +1534,16 @@ moc_plot_tab.cpp: ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_tab.h -o moc_plot_tab.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plot_tab.h -o moc_plot_tab.cpp
 
 moc_plottable.cpp: ../cnc_lib/GUI/plots/plottable.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QPainter \
@@ -1720,7 +1690,7 @@ moc_plottable.cpp: ../cnc_lib/GUI/plots/plottable.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qgridlayout.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plottable.h -o moc_plottable.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/plottable.h -o moc_plottable.cpp
 
 moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
@@ -1921,47 +1891,11 @@ moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1975,7 +1909,7 @@ moc_stat_list_window.cpp: ../cnc_lib/GUI/plots/stat_list_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_list_window.h -o moc_stat_list_window.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_list_window.h -o moc_stat_list_window.cpp
 
 moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../cnc_lib/cnc_types.h \
@@ -2169,48 +2103,12 @@ moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -2224,7 +2122,7 @@ moc_stat_window.cpp: ../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_window.h -o moc_stat_window.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plots/stat_window.h -o moc_stat_window.cpp
 
 moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
@@ -2423,6 +2321,13 @@ moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -2453,19 +2358,13 @@ moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
@@ -2475,7 +2374,7 @@ moc_plotwindow.cpp: ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		moc_predefs.h \
 		../../Qt/5.15.2/gcc_64/bin/moc
-	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtOpenGL -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plotwindow.h -o moc_plotwindow.cpp
+	/home/eulerson/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include /home/eulerson/Curves-Clouds/debug/moc_predefs.h -I/home/eulerson/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I/home/eulerson/Curves-Clouds/cnc_lib -I/home/eulerson/Qt/5.15.2/gcc_64/include -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtGui -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtNetwork -I/home/eulerson/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10 -I/usr/include/c++/10/backward -I/usr/lib/gcc/x86_64-linux-gnu/10/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../cnc_lib/GUI/plotwindow.h -o moc_plotwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -2814,6 +2713,13 @@ mutablevalue.o: ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutable
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -2844,19 +2750,13 @@ mutablevalue.o: ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutable
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
@@ -3067,6 +2967,13 @@ mutablevaluecursor.o: ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -3097,19 +3004,13 @@ mutablevaluecursor.o: ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
@@ -3322,6 +3223,13 @@ mutablevalueticker.o: ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -3352,19 +3260,13 @@ mutablevalueticker.o: ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
@@ -3637,7 +3539,8 @@ mesh_displayer.o: ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plot
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h
+		../cnc_lib/GUI/plots/3D/geometryengine.h \
+		../cnc_lib/examples/mesh_bank.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh_displayer.o ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp
 
 boolean_field.o: ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/boolean_field.h \
@@ -5274,44 +5177,7 @@ grid_layer.o: ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/grid_laye
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkreply.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
-		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h
+		../cnc_lib/GUI/plots/trajectory.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o grid_layer.o ../cnc_lib/GUI/plots/grid_layer.cpp
 
 level_curve.o: ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/level_curve.h \
@@ -5653,48 +5519,12 @@ plot_frame.o: ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_fram
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_frame.o ../cnc_lib/GUI/plots/plot_frame.cpp
 
 plot_group.o: ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_group.h \
@@ -5888,49 +5718,13 @@ plot_group.o: ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_grou
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/plot_frame.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_group.o ../cnc_lib/GUI/plots/plot_group.cpp
 
 plot_layer.o: ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_layer.h \
@@ -6122,44 +5916,7 @@ plot_layer.o: ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_laye
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkreply.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
-		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h
+		../cnc_lib/GUI/plots/trajectory.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plot_layer.o ../cnc_lib/GUI/plots/plot_layer.cpp
 
 plot_stat_display.o: ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/functionplot.h \
@@ -6361,47 +6118,11 @@ plot_stat_display.o: ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/p
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -6607,6 +6328,13 @@ plot_tab.o: ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -6637,19 +6365,13 @@ plot_tab.o: ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plot_tab.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
@@ -7293,47 +7015,11 @@ stat_list_window.o: ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plo
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/GUI/plots/stat_window.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -7539,48 +7225,12 @@ stat_window.o: ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/stat_wi
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
-		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVertexArrayObject \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLBuffer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglbuffer.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShaderProgram \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLShader \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLTexture \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
-		../cnc_lib/core/algo/inout.h \
-		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
-		../cnc_lib/core/algo/geometry/halfedge.h \
-		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/GUI/plots/3D/geometryengine.h \
 		../cnc_lib/GUI/plots/grid_layer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
@@ -8086,6 +7736,13 @@ plotwindow.o: ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
 		../../Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		../cnc_lib/GUI/plots/trajectory.h \
+		../cnc_lib/GUI/plots/grid_layer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
 		../cnc_lib/GUI/plots/3D/mesh_displayer.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QOpenGLWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/qopenglwidget.h \
@@ -8116,19 +7773,13 @@ plotwindow.o: ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/plotwindow.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopengltexture.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QResizeEvent \
 		../../Qt/5.15.2/gcc_64/include/QtCore/QBasicTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
 		../cnc_lib/core/algo/inout.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h \
 		../cnc_lib/GUI/plots/3D/geometryengine.h \
-		../cnc_lib/GUI/plots/grid_layer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QFrame \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QTimer \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
-		../../Qt/5.15.2/gcc_64/include/QtWidgets/QGridLayout \
+		../cnc_lib/examples/mesh_bank.h \
 		../cnc_lib/GUI/plots/plot_group.h \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QTabWidget \
 		../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
@@ -8515,41 +8166,6 @@ parametrization.o: ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/algo/algo.h \
 		../cnc_lib/core/algo/calculus/calculus.h \
@@ -8692,41 +8308,6 @@ simpleglmesh.o: ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/a
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		../cnc_lib/cnc_error.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/cnc_types.h \
 		../cnc_lib/core/algo/lin_alg.h \
@@ -8812,41 +8393,6 @@ inout.o: ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/inout.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
-		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
-		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/sparse_matrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o inout.o ../cnc_lib/core/algo/inout.cpp
@@ -8916,6 +8462,10 @@ sparse_matrix.o: ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/core/sparse_matrix
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/cnc_error.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sparse_matrix.o ../cnc_lib/core/sparse_matrix.cpp
+
+mesh_bank.o: ../cnc_lib/examples/mesh_bank.cpp ../cnc_lib/examples/mesh_bank.h \
+		../cnc_lib/cnc_types.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh_bank.o ../cnc_lib/examples/mesh_bank.cpp
 
 moc_mesh_displayer.o: moc_mesh_displayer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mesh_displayer.o moc_mesh_displayer.cpp

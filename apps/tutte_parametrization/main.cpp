@@ -7,7 +7,7 @@ vec qtv(const QVector3D& x){
     return vec({x.x(),x.y(),x.z()});
 }
 
-#define rabbit
+#define nefertiti
 
 int main(int argc, char *argv[])
 {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     F3D->set_color_mode(mesh_color_mode::white);
 
 #ifdef nefertiti
-    F3D->load_mesh_from_obj("../../data/nefertiti.obj",0.6);
+    F3D->load_mesh(face_mask);
 #endif
 #ifdef rabbit
     F3D->load_mesh_from_obj("../../data/bunny.obj",0.6);

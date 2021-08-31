@@ -20,6 +20,7 @@ namespace cnc {
 
 namespace algo {
 
+
 namespace geometry {
 class SimpleGLMesh;
 
@@ -79,6 +80,10 @@ public:
         return vertices[k].vpos;
     }
 
+    inline QVector3D get_normal(uint k) const {
+        return vertices[k].normal;
+    }
+
     inline QVector3D get_vpos_by_face(uint f,uint i) const {
         return vertices[faces[f*3+i]].vpos;
     }
@@ -113,7 +118,19 @@ public:
     smat compute_identity_plus_dt_sparse_laplace_beltrami_matrix(scalar dt = scalar(1),bool weighted = true,bool pos = true) const;
     smat compute_weight_plus_dt_cot_matrix(scalar dt = scalar(1)) const;
     smat compute_mass_matrix() const;
+
+
+
     scalar mean_curvature(vref x) const;
+
+    inline vec mean_curvature() const {
+        return per_vertex_function(&SimpleGLMesh::mean_curvature);
+    }
+
+    scalar gaussian_curvature(vref x) const;
+    inline vec gaussian_curvature() const {
+        return per_vertex_function(&SimpleGLMesh::gaussian_curvature);
+    }
 
     std::vector<QVector3D> gradient_per_triangle() const;
     std::vector<QVector3D> gradient_per_triangle(const vec& v) const;
@@ -135,9 +152,23 @@ public:
     void set_iso_lines_color(uint nb_lines);
     void truncate_mesh(const std::function<bool(qvr)>& exclude_condition);
 
-private:
+    bool is_vertex_on_boundary(uint id) const;
+    scalar angle_from_incident_angle(halfedge*) const;
 
     QVector3D get_face_normal(uint f) const;
+    std::vector<vref> one_ring_neighbors(vref x) const;
+
+    void export_as_obj(std::string out_file) const;
+
+private:
+
+    inline vec per_vertex_function(scalar (SimpleGLMesh::*f)(vref) const) const {
+        vec v(get_nb_vertices());
+        for (uint k = 0;k<get_nb_vertices();k++)
+            v(k) = (this->*f)(k);
+        return v;
+    }
+
 
     std::vector<uint> get_faces(uint vid) const;
     void set_halfedge(int HE_id,int face_id);
@@ -151,7 +182,6 @@ private:
     scalar area_from_halfedge(halfedge* h) const ;
     scalar cotan_weight(vref a,vref b,bool pos = true) const;
     scalar cotan_weight(halfedge* h,bool pos = true) const;
-    std::vector<vref> one_ring_neighbors(vref x) const;
     bool share_edge(uint f1,uint f2,uint*) const;
 
     std::vector<VertexInfo> vertices;
@@ -164,6 +194,7 @@ private:
 };
 
 }
+void export_mesh_as_obj(const algo::geometry::SimpleGLMesh* m,std::string out_file);
 }
 }
 

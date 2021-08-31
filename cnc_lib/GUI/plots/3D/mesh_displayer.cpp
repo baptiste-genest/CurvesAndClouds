@@ -5,6 +5,7 @@ cnc::MeshDisplayer::MeshDisplayer(QWidget* parent)
     : QOpenGLWidget(parent)
 {
     camera_pos = QVector3D(0,0,5);
+    light_pos = QVector3D(10.,-10.,0.);
 }
 
 void cnc::MeshDisplayer::load_mesh_from_obj(const std::string &filename,float scale)
@@ -44,7 +45,7 @@ void cnc::MeshDisplayer::paintGL()
 
     program.setUniformValue("mvp_matrix", projection * matrix);
     program.setUniformValue("cam_pos", rotation.inverted()*camera_pos);
-    program.setUniformValue("light_pos", QVector3D(10.,-10.,0.));
+    program.setUniformValue("light_pos", light_pos);
     program.setUniformValue("ambient_light", (int)ambient);
     program.setUniformValue("specular", (int)specular);
     program.setUniformValue("color_mode", (int)mcm);

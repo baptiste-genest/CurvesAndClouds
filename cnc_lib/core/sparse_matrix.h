@@ -71,8 +71,9 @@ public:
     }
 
 private:
+    uint nb_threads;
 
-    void parralel_sparse_matrix_vector_mult(const vec& x,vec& b,uint frow,uint lrow);
+    void parralel_sparse_matrix_vector_mult(const vec& x,vec& b,uint frow,uint lrow) const;
     uint w;
     uint h;
     int nnz;

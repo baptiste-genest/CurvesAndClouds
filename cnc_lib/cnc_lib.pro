@@ -3,7 +3,7 @@ QT += gui core widgets network# opengl
 TEMPLATE = lib
 DEFINES += CNC_LIB
 DEFINES += PRECISION DOUBLE
-DEFINES += CNC_OPENGL FALSE
+DEFINES += CNC_OPENGL TRUE
 CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -72,7 +72,8 @@ SOURCES += \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
     core/quaternion.cpp \
-    core/sparse_matrix.cpp
+    core/sparse_matrix.cpp \
+    examples/mesh_bank.cpp
 
 HEADERS += \
     GUI/algo/algo_gui.h \
@@ -153,7 +154,8 @@ HEADERS += \
     core/matrix_errors.h \
     curvesandcloud.h \
     GUI/plots/3D/vshader.glsl \
-    GUI/plots/3D/fshader.glsl
+    GUI/plots/3D/fshader.glsl \
+    examples/mesh_bank.h
 
 # Default rules for deployment.
 unix {
