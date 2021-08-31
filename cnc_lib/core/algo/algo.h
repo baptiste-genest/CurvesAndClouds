@@ -106,6 +106,11 @@ bool belong(const std::vector<T>& V,T x){
     return false;
 }
 
+template<class T>
+T sq(const T& x){
+    return x*x;
+}
+
 }
 
 }

@@ -216,6 +216,15 @@ public:
     }
 
     inline std::vector<T> get_values() const {	return v;	}
+
+    inline T trace() const {
+        if (h != w)
+            throw MatrixException(MATRIX_DIFF_HEIGHT);
+        T tr = 0;
+        for (uint k = 0;k<h;k++)
+            tr += ix(k,k);
+        return tr;
+    }
 };
 
 template<class T>

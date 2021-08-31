@@ -3,7 +3,7 @@ QT += gui core widgets network# opengl
 TEMPLATE = lib
 DEFINES += CNC_LIB
 DEFINES += PRECISION DOUBLE
-DEFINES += CNC_OPENGL TRUE
+DEFINES += CNC_OPENGL FALSE
 CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.

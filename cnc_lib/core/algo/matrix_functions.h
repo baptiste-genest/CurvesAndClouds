@@ -36,10 +36,15 @@ cmat exp(const cmat& M);
 
 scalar det22(const vec& a,const vec& b);
 
+scalar det33(const mat& A);
+
+
 vec Re(const cvec& V);
 
 std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id);
 vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
+
+std::array<scalar,3> symetric_3x3_eigenvalue_solver(const mat& A);
 
 
 }

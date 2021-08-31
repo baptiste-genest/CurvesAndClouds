@@ -166,3 +166,52 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, con
     }
     return X;
 }
+
+std::array<cnc::scalar,3> cnc::algo::symetric_3x3_eigenvalue_solver(const mat &A)
+{
+    std::array<cnc::scalar,3> eig;
+    scalar p1 = A(1,2)*A(1,2) + A(1,3)*A(1,3) + A(2,3)*A(2,3);
+    if (std::abs(p1) < 1e-10){
+       // A is diagonal.
+       eig[0] = A(1,1);
+       eig[1] = A(2,2);
+       eig[2] = A(3,3);
+    }
+    else {
+       scalar q = A.trace()/3;               // trace(A) is the sum of all diagonal values
+       scalar p2 = sq(A(1,1) - q) + sq(A(2,2) - q) + sq(A(3,3) - q) + 2 * p1;
+       scalar p = std::sqrt(p2 / 6);
+       mat B = (A - chaskal::Id<scalar>(3) * q) * (1 / p);//     I is the identity matrix
+       scalar r = det33(B) / 2;
+
+       // In exact arithmetic for a symmetric matrix  -1 <= r <= 1
+       // but computation error can leave it slightly outside this range.
+       scalar phi;
+       if (r <= -1)
+          phi = M_PI / 3;
+       else if (r >= 1)
+          phi = 0;
+       else
+          phi = std::acos(r) / 3;
+
+       // the eigenvalues satisfy eig3 <= eig2 <= eig1
+       eig[0] = q + 2 * p * std::cos(phi);
+       eig[2] = q + 2 * p * std::cos(phi + (2*M_PI/3));
+       eig[1] = 3 * q - eig[0] - eig[2];//    since trace(A) = eig1 + eig2 + eig3;
+    }
+    return eig;
+}
+
+cnc::scalar cnc::algo::det33(const mat &A)
+{
+    const scalar&  a  = A( 0 , 0 );
+    const scalar&  b  = A( 1 , 0 );
+    const scalar&  c  = A( 2 , 0 );
+    const scalar&  d  = A( 0 , 1 );
+    const scalar&  e  = A( 1 , 1 );
+    const scalar&  f  = A( 2 , 1 );
+    const scalar&  g  = A( 0 , 2 );
+    const scalar&  h  = A( 1 , 2 );
+    const scalar&  i  = A( 2 , 2 );
+    return a*(e*i-f*h) - b*(d*i-f*g) + c*(d*h-e*g);
+}
