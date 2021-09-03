@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DCNC_LIB -DPRECISION -DDOUBLE -DCNC_OPENGL -DTRUE -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DCNC_LIB -DPRECISION -DFLOAT -DCNC_OPENGL -DTRUE -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../cnc_lib -I. -I../../Qt/5.15.2/gcc_64/include -I../../Qt/5.15.2/gcc_64/include/QtWidgets -I../../Qt/5.15.2/gcc_64/include/QtGui -I../../Qt/5.15.2/gcc_64/include/QtNetwork -I../../Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/libdrm -I../../Qt/5.15.2/gcc_64/mkspecs/linux-g++
@@ -8109,6 +8109,51 @@ mesh.o: ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/mes
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/matrix_functions.h \
 		../cnc_lib/core/sparse_matrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		../cnc_lib/core/algo/geometry/halfedge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh.o ../cnc_lib/core/algo/geometry/mesh.cpp
 
@@ -8198,7 +8243,6 @@ quadtreemesher.o: ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/co
 		../cnc_lib/core/algo/geometry/triangle.h \
 		../cnc_lib/core/algo/matrix_functions.h \
 		../cnc_lib/core/sparse_matrix.h \
-		../cnc_lib/core/algo/geometry/geometry.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
@@ -8244,6 +8288,7 @@ quadtreemesher.o: ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/co
 		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../cnc_lib/core/algo/geometry/geometry.h \
 		../cnc_lib/core/algo/geometry/mesh.h \
 		../cnc_lib/core/algo/geometry/halfedge.h \
 		../cnc_lib/core/algo/statistics/random_var.h \
@@ -8329,7 +8374,52 @@ triangle.o: ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geom
 		../cnc_lib/core/matrix_algo.h \
 		../cnc_lib/cnc_error.h \
 		../cnc_lib/core/algo/matrix_functions.h \
-		../cnc_lib/core/sparse_matrix.h
+		../cnc_lib/core/sparse_matrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o triangle.o ../cnc_lib/core/algo/geometry/triangle.cpp
 
 vertex.o: ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/geometry/vertex.h
@@ -8413,7 +8503,52 @@ matrix_functions.o: ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/al
 		../cnc_lib/core/algo/algo.h \
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/cnc_error.h \
-		../cnc_lib/core/sparse_matrix.h
+		../cnc_lib/core/sparse_matrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o matrix_functions.o ../cnc_lib/core/algo/matrix_functions.cpp
 
 random_var.o: ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/random_var.h \

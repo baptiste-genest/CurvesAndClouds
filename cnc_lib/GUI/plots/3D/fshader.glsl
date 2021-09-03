@@ -34,6 +34,15 @@ void main()
         }
         else if (color_mode == 2)
                 color = v_color;
+        else if (color_mode == 3){
+                float v = clamp(v_value,-1.,1.);
+                if (v < 0.f){
+                    color = vec3(0.,0.,-v);
+                }
+                else{
+                    color = vec3(v,0.,0.);
+                }
+        }
         gl_FragColor = vec4(color,1.)*light;
 }
 

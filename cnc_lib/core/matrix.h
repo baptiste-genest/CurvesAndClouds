@@ -1476,6 +1476,15 @@ public:
         return S;
     }
 
+    inline Vector scale_from_minus_1_to_1() const {
+        Vector S(Matrix<T>::rowNum());
+        auto mm = std::minmax_element(Matrix<T>::v.begin(),Matrix<T>::v.end());
+        T s = T(1)/(*mm.second - *mm.first);
+        for (uint k = 0;k<S.rowNum();k++)
+            S(k) = 2*((ix(k)-*mm.first)*s-0.5);
+        return S;
+    }
+
     T colinearity(const Vector& other) const;
     T ix(uint) const;
     T& at(uint);

@@ -2,7 +2,7 @@ QT += gui core widgets network
 
 CONFIG += c++11
 
-DEFINES += PRECISION FLOAT
+DEFINES += PRECISION DOUBLE
 
 DEPENDPATH += . ../../cnc_lib
 INCLUDEPATH += ../../cnc_lib

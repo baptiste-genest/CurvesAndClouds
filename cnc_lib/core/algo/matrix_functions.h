@@ -10,6 +10,7 @@
 #include "lin_alg.h"
 #include "algo.h"
 #include "core/sparse_matrix.h"
+#include <QVector3D>
 
 namespace cnc {
 namespace algo {
@@ -45,6 +46,7 @@ std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id)
 vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
 
 std::array<scalar,3> symetric_3x3_eigenvalue_solver(const mat& A);
+QVector3D symetric_3x3_eigenvector(const mat& A,scalar eigenvalue);
 
 
 }

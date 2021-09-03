@@ -33,8 +33,9 @@ namespace cnc {
 
 enum mesh_color_mode {
     white,
-    interpolate_value,
+    interpolate_pos_value,
     given_color,
+    interpolate_value
 };
 
 class MeshDisplayer : public QOpenGLWidget,protected QOpenGLFunctions

@@ -170,7 +170,7 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::mat &M, con
 std::array<cnc::scalar,3> cnc::algo::symetric_3x3_eigenvalue_solver(const mat &A)
 {
     std::array<cnc::scalar,3> eig;
-    scalar p1 = A(1,2)*A(1,2) + A(1,3)*A(1,3) + A(2,3)*A(2,3);
+    scalar p1 = sq(A(0,1)) + sq(A(0,2)) + sq(A(1,2));
     if (std::abs(p1) < 1e-10){
        // A is diagonal.
        eig[0] = A(1,1);
@@ -179,7 +179,7 @@ std::array<cnc::scalar,3> cnc::algo::symetric_3x3_eigenvalue_solver(const mat &A
     }
     else {
        scalar q = A.trace()/3;               // trace(A) is the sum of all diagonal values
-       scalar p2 = sq(A(1,1) - q) + sq(A(2,2) - q) + sq(A(3,3) - q) + 2 * p1;
+       scalar p2 = sq(A(0,0) - q) + sq(A(1,1) - q) + sq(A(2,2) - q) + 2 * p1;
        scalar p = std::sqrt(p2 / 6);
        mat B = (A - chaskal::Id<scalar>(3) * q) * (1 / p);//     I is the identity matrix
        scalar r = det33(B) / 2;
@@ -214,4 +214,31 @@ cnc::scalar cnc::algo::det33(const mat &A)
     const scalar&  h  = A( 1 , 2 );
     const scalar&  i  = A( 2 , 2 );
     return a*(e*i-f*h) - b*(d*i-f*g) + c*(d*h-e*g);
+}
+
+QVector3D cnc::algo::symetric_3x3_eigenvector(const cnc::mat &A, cnc::scalar eigenvalue)
+{
+    QVector3D row0(A(0,0)-eigenvalue,A(1,0),A(2,0));
+    QVector3D row1(A(0,1),A(1,1)-eigenvalue,A(2,1));
+    QVector3D row2(A(0,2),A(1,2),A(2,2)-eigenvalue);
+    QVector3D r0xr1 = QVector3D::crossProduct(row0,row1);
+    QVector3D r0xr2 = QVector3D::crossProduct(row0,row2);
+    QVector3D r1xr2 = QVector3D::crossProduct(row1,row2);
+    scalar d0 = r0xr1.lengthSquared();
+    scalar d1 = r0xr2.lengthSquared();
+    scalar d2 = r1xr2.lengthSquared();
+    scalar dmax = d0;
+    int imax = 0;
+    if (d1 > dmax) {
+        imax = 1;
+        dmax = d1;
+    }
+    if (d2 > dmax) {
+        imax = 2;
+    }
+    if (imax == 0)
+        return r0xr1.normalized();
+    if (imax == 1)
+        return r0xr2.normalized();
+    return r1xr2.normalized();
 }
