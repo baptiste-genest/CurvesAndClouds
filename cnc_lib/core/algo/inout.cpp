@@ -178,3 +178,21 @@ void cnc::algo::export_mesh_as_obj(const cnc::algo::geometry::SimpleGLMesh *m, s
     }
     std::cout << "exported mesh at " <<out_file << std::endl;
 }
+
+std::array<cnc::vec, 3> cnc::algo::load_img_as_vec(const std::string &filename, uint &w, uint &h)
+{
+    QImage img(filename.c_str());
+    w = img.width();
+    h = img.height();
+    std::array<cnc::vec, 3> I;
+    for (uint k = 0;k<3;k++)
+        I[k] = vec(w*h);
+    for (uint j = 0;j<h;j++)
+        for (uint i = 0;i<w;i++){
+            auto pix = QColor(img.pixel(i,j));
+            I[0](j*w + i) =pix.redF();
+            I[1](j*w + i) =pix.greenF();
+            I[2](j*w + i) =pix.blueF();
+        }
+    return I;
+}
