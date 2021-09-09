@@ -58,71 +58,77 @@ std::function<uint(uint)> build_index_mapper(uint w1,uint h1,uint w2,uint h2,uin
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc,argv);
-    PlotWindow W; W.resize(500,500);
-    auto T = W.add_tab("copy paste");
+    try {
+        QApplication a(argc,argv);
+        PlotWindow W;// W.resize(500,500);
+        auto T = W.add_tab("copy paste");
 
-    uint w1,h1;
-    auto G = algo::load_img_as_vec("../../data/rushmore.jpg",w1,h1);
-    std::cout << w1 << ' ' << h1 << std::endl;
+        uint w1,h1;
+        auto G = algo::load_img_as_vec("../../data/rushmore2.jpg",w1,h1);
+        std::cout << w1 << ' ' << h1 << std::endl;
 
-    uint w2,h2;
-    auto F = algo::load_img_as_vec("../../data/face_small.jpg",w2,h2);
-    std::cout << w2 << ' ' << h2 << std::endl;
-    uint lc = 40,bc = 30;
-    T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
+        uint w2,h2;
+        auto F = algo::load_img_as_vec("../../data/face_small.jpg",w2,h2);
+        std::cout << w2 << ' ' << h2 << std::endl;
+        uint lc = 0,bc = 30;
+        T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
 
-        int x = int(i) - lc;int y = int(j) - bc;
-        QColor C;
-        if (x< w2 && x >= 0 && y <h2 && y >= 0){
-            uint id = y*w2 + x;
-            C.setRedF(F[0](id));
-            C.setGreenF(F[1](id));
-            C.setBlueF(F[2](id));
+            int x = int(i) - lc;int y = int(j) - bc;
+            QColor C;
+            if (x< w2 && x >= 0 && y <h2 && y >= 0){
+                uint id = y*w2 + x;
+                C.setRedF(F[0](id));
+                C.setGreenF(F[1](id));
+                C.setBlueF(F[2](id));
+            }
+            else {
+                uint id = j*w1 + i;
+                C.setRedF(G[0](id));
+                C.setGreenF(G[1](id));
+                C.setBlueF(G[2](id));
+            }
+            return C;
+        });
+
+
+        smat Lap = build_sparse_2D_laplacian(w2,h2);
+        std::vector<uint> del_omega = compute_boundary_id(w2,h2);
+
+        std::cout << std::is_sorted(del_omega.begin(),del_omega.end()) << std::endl;
+        auto KV = algo::set_known_variables(Lap,del_omega);
+        uint N = del_omega.size();
+        auto M = build_index_mapper(w1,h1,w2,h2,lc,bc);
+        for (uint k = 0;k<3;k++){
+            std::vector<scalar> v(N);
+            for (uint i = 0;i<N;i++)
+                v[i] = G[k](M(del_omega[i])) - F[k](del_omega[i]);
+            F[k] = algo::solve_for_kernel_with_known_variables(KV,w2*h2,del_omega,v,1e-3) + F[k];
         }
-        else {
-            uint id = j*w1 + i;
-            C.setRedF(G[0](id));
-            C.setGreenF(G[1](id));
-            C.setBlueF(G[2](id));
-        }
-        return C;
-    });
+
+        T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
+            int x = int(i) - lc;int y = int(j) - bc;
+            QColor C;
+            if (x< w2 && x >= 0 && y <h2 && y >= 0){
+                uint id = y*w2 + x;
+                C.setRedF(F[0](id));
+                C.setGreenF(F[1](id));
+                C.setBlueF(F[2](id));
+            }
+            else {
+                uint id = j*w1 + i;
+                C.setRedF(G[0](id));
+                C.setGreenF(G[1](id));
+                C.setBlueF(G[2](id));
+            }
+            return C;
+        });
 
 
-    smat Lap = build_sparse_2D_laplacian(w2,h2);
-    std::vector<uint> del_omega = compute_boundary_id(w2,h2);
-
-    std::cout << std::is_sorted(del_omega.begin(),del_omega.end()) << std::endl;
-    auto KV = algo::set_known_variables(Lap,del_omega);
-    uint N = del_omega.size();
-    auto M = build_index_mapper(w1,h1,w2,h2,lc,bc);
-    for (uint k = 0;k<3;k++){
-        std::vector<scalar> v(N);
-        for (uint i = 0;i<N;i++)
-            v[i] = G[k](M(del_omega[i])) - F[k](del_omega[i]);
-        F[k] = algo::solve_for_kernel_with_known_variables(KV,w2*h2,del_omega,v,1e-10) + F[k];
+        W.show();
+        return a.exec();
     }
-
-    T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
-        int x = int(i) - lc;int y = int(j) - bc;
-        QColor C;
-        if (x< w2 && x >= 0 && y <h2 && y >= 0){
-            uint id = y*w2 + x;
-            C.setRedF(F[0](id));
-            C.setGreenF(F[1](id));
-            C.setBlueF(F[2](id));
-        }
-        else {
-            uint id = j*w1 + i;
-            C.setRedF(G[0](id));
-            C.setGreenF(G[1](id));
-            C.setBlueF(G[2](id));
-        }
-        return C;
-    });
-
-
-    W.show();
-    return a.exec();
+    catch (MatrixException& e) {
+        std::cout << e.message() << std::endl;
+    }
+    return -1;
 }
