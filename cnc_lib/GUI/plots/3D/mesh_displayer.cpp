@@ -25,6 +25,7 @@ void cnc::MeshDisplayer::initializeGL()
     initShaders();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
 
     GE->initialize();
 

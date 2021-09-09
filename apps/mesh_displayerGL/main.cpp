@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     PlotTab* T = w.add_tab("fucking 3D RABBIT");
     auto F= T->add_3D_frame();
     //F->load_mesh_from_obj("/home/eulerson/Documents/test.obj");
-    F->load_mesh(stanford_bunny);
+    F->load_mesh(bank_mesh_names::stanford_bunny);
 
     if (true) {
         auto M = F->get_mesh();
@@ -27,9 +27,11 @@ int main(int argc, char *argv[])
         }
     }
     else {
+        auto M = F->get_mesh();
+        M->compute_normals();
         F->set_light_pos(QVector3D(1,-5,-10));
         F->set_ambient_light(true);
-        //F->set_specular_reflection(true);
+        F->set_specular_reflection(true);
     }
 
     w.show();

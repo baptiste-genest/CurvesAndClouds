@@ -4,7 +4,7 @@ using namespace cnc;
 using namespace std;
 using namespace std::chrono;
 
-const uint N = 50;
+const uint N = 20;
 const uint T = N*N+1;
 const uint W = 100;
 
@@ -61,16 +61,23 @@ mat build_system(){
     vec nm = -up,ns = up;
     mat S(T,T);
     vec d,ni,nj;
+    uint sparse = 0;
     for (uint j = 0;j<T;j++){
         for (uint i = j+1;i<T;i++){
             ni = (i == T-1) ? ns : nm;
             nj = (j == T-1) ? ns : nm;
             d = mesh[j]-mesh[i];
             scalar id2 = 1./d.scalar_product(d);
-            S(i,j) = dx*d.scalar_product(ni)*d.scalar_product(nj)*id2*id2*visibility(mesh[j],mesh[i]);
-            S(j,i) = S(i,j);
+            if (id2*id2 > 1e-1){
+                S(i,j) = dx*d.scalar_product(ni)*d.scalar_product(nj)*id2*id2*visibility(mesh[j],mesh[i]);
+                S(j,i) = S(i,j);
+            }
+            else
+                sparse += 2;
         }
     }
+    std::cout << "nb void cells " << sparse << " over " << T*T << std::endl;
+    std::cout << "sparsity " << float(sparse)/(T*T)*100 << "%" << std::endl;
     return S;
 }
 

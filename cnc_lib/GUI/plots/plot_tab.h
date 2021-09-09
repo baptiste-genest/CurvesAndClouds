@@ -21,6 +21,7 @@
 
 #if CNC_OPENGL == TRUE
 #include "3D/mesh_displayer.h"
+//#include "3D/scene_viewer.h"
 #endif
 
 namespace cnc {
@@ -62,6 +63,7 @@ public:
 #if CNC_OPENGL == TRUE
     MeshDisplayer* add_3D_frame(int w = 1,int h = 1);
     MeshDisplayer *add_3D_frame_at(int px,int py,int w = 1,int h = 1);
+    //SceneViewer* add_3D_scene(int w = 1,int h = 1);
 #endif
 
     float get_tab_ratio() const;
@@ -86,6 +88,7 @@ private:
 
 #if CNC_OPENGL == TRUE
     std::vector<MeshDisplayer*> frames3D;
+    //std::vector<SceneViewer*> Scenes;
 #endif
 
 
@@ -96,6 +99,7 @@ private:
     PlotFrame* insert_frame(const QRect&);
 #if CNC_OPENGL == TRUE
     MeshDisplayer* insert_3D_frame(const QRect&);
+    //SceneViewer* insert_scene_frame(const QRect&);
 #endif
 };
 

@@ -2,7 +2,7 @@ QT += gui core widgets network# opengl
 
 TEMPLATE = lib
 DEFINES += CNC_LIB
-DEFINES += PRECISION FLOAT
+DEFINES += PRECISION DOUBLE
 DEFINES += CNC_OPENGL TRUE
 CONFIG += c++11
 
@@ -15,8 +15,18 @@ SOURCES += \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/3D/GLWrapper.cpp \
+    GUI/plots/3D/color.cpp \
     GUI/plots/3D/geometryengine.cpp \
+    GUI/plots/3D/light_source.cpp \
     GUI/plots/3D/mesh_displayer.cpp \
+    GUI/plots/3D/object.cpp \
+    GUI/plots/3D/primitives/mesh_primitive.cpp \
+    GUI/plots/3D/primitives/primitive.cpp \
+    GUI/plots/3D/primitives/quad.cpp \
+    GUI/plots/3D/primitives/triangle_primitive.cpp \
+    GUI/plots/3D/scene.cpp \
+    GUI/plots/3D/scene_viewer.cpp \
     GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
     GUI/plots/complex_function_plot.cpp \
@@ -85,8 +95,23 @@ HEADERS += \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/3D/GLWrapper.h \
+    GUI/plots/3D/color.h \
     GUI/plots/3D/geometryengine.h \
+    GUI/plots/3D/graphics.h \
+    GUI/plots/3D/light_source.h \
     GUI/plots/3D/mesh_displayer.h \
+    GUI/plots/3D/object.h \
+    GUI/plots/3D/primitives/mesh_primitive.h \
+    GUI/plots/3D/primitives/primitive.h \
+    GUI/plots/3D/primitives/quad.h \
+    GUI/plots/3D/primitives/triangle_primitive.h \
+    GUI/plots/3D/scene.h \
+    GUI/plots/3D/scene_viewer.h \
+    GUI/plots/3D/shaders/fshader.glsl \
+    GUI/plots/3D/shaders/fshaderGL3.glsl \
+    GUI/plots/3D/shaders/vshader.glsl \
+    GUI/plots/3D/shaders/vshaderGL3.glsl \
     GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
     GUI/plots/complex_function_plot.h \
@@ -152,9 +177,7 @@ HEADERS += \
     curvesandcloudCore.h \
     core/matrix.h \
     core/matrix_errors.h \
-    curvesandcloud.h \
-    GUI/plots/3D/vshader.glsl \
-    GUI/plots/3D/fshader.glsl \
+    curvesandcloud.h
     examples/mesh_bank.h
 
 # Default rules for deployment.

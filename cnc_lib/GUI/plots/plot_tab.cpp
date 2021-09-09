@@ -125,6 +125,36 @@ MeshDisplayer *PlotTab::add_3D_frame_at(int px, int py, int w, int h)
 {
     return insert_3D_frame(check_frame_free_pos(px,py,w,h));
 }
+
+/*
+SceneViewer *PlotTab::insert_scene_frame(const QRect & R)
+{
+    frame_grid.push_back(R);
+    SceneViewer* f = new SceneViewer(this);
+
+    QSizePolicy qsp(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    qsp.setHeightForWidth(true);
+    f->setSizePolicy(qsp);
+
+    Grid->addWidget(f,R.y(),R.x(),R.height(),R.width());
+    Scenes.push_back(f);
+
+    int max_x = 0,max_y = 0;
+    for (const auto& r : frame_grid){
+        max_x = std::max(r.right()+1,max_x);
+        max_y = std::max(r.bottom()+1,max_y);
+    }
+    ratio =  float(max_y)/max_x;
+
+    return f;
+
+}
+
+SceneViewer *PlotTab::add_3D_scene(int w, int h)
+{
+    return insert_scene_frame(get_frame_free_pos(w,h));
+}
+*/
 #endif
 
 PlotFrame* PlotTab::add_frame_at(int px, int py, int w, int h)
