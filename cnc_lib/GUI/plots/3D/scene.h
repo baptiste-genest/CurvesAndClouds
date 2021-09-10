@@ -12,6 +12,8 @@
 #include "object.h"
 #include "GLWrapper.h"
 
+#include <utility>
+
 namespace cnc {
 
 namespace graphics {
@@ -20,12 +22,13 @@ class Scene
 {
 public:
     Scene();
+    ~Scene();
 
     template <typename PrimitiveType,typename ... Args>
-    Object& add_object(Args&& ... args) {
-        PrimitiveType* P = new PrimitiveType(args...);
-        m_objects.push_back(Object(P));
-        return m_objects.back();
+    std::pair<Object*,PrimitiveType*> add_object(Args&& ... args) {
+        PrimitiveType* P = new PrimitiveType(std::forward<Args>(args)...);
+        m_objects.push_back(new Object(P));
+        return {m_objects.back(),P};
     }
 
     void init();
@@ -34,7 +37,7 @@ public:
 
 protected:
     mat4 m_view;
-    std::vector<Object> m_objects;
+    std::vector<Object*> m_objects;
 };
 
 }

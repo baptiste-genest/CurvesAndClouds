@@ -25,7 +25,6 @@ void cnc::graphics::Quad::onDraw(const cnc::graphics::mat4 &view)
 {
     if (!initialized)
         return;
-    std::cout << "draw quad" << std::endl;
     auto f = GLWrapper::get_GL_functions();
     // activer le shader des triangles
     f->glUseProgram(m_shaderId);
@@ -61,7 +60,6 @@ void cnc::graphics::Quad::onDraw(const cnc::graphics::mat4 &view)
 
 void cnc::graphics::Quad::init()
 {
-    std::cout << "init quad" << std::endl;
     m_shaderId = GLWrapper::makeShaderProgram(Primitive::vertex_shader_loc,Primitive::frag_shader_loc);
 
     Primitive::getUniformsLoc();

@@ -55,9 +55,10 @@ void PlotWindow::resizeEvent(QResizeEvent* event)
     QSize S(w,h);
     QResizeEvent qre(S,QMainWindow::size());
     QMainWindow::resizeEvent(&qre);
-    resize(w,h);
-    tabs->resize(w, h);
-    tabs->currentWidget()->resize(w, h-30);
+    const static int tbs = 28;
+    resize(w,h+tbs);
+    tabs->resize(w, h+tbs);
+    tabs->currentWidget()->resize(w, h);
 }
 
 void PlotWindow::call_resize()

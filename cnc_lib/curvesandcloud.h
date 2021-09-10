@@ -17,5 +17,7 @@
 #include "GUI/algo/algo_gui.h"
 #include "GUI/algo/mutablevalue.h"
 #include "GUI/plots/3D/scene_viewer.h"
+#include "GUI/plots/3D/object.h"
+#include "GUI/plots/3D/primitives/quad.h"
 
 #endif // CURVESANDCLOUD_H

@@ -18,6 +18,7 @@ class Quad : public Primitive
 {
 public:
     Quad(const std::vector<vec3>& points);
+    ~Quad() {}
 
     virtual void onDraw(const mat4& view) override;
     virtual void init() override;

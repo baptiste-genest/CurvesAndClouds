@@ -22,7 +22,7 @@ public:
     Primitive();
     virtual ~Primitive() {}
 
-    virtual void init()  = 0;
+    virtual void init() = 0;
     virtual void onDraw(const mat4& view) = 0;
 
 protected:

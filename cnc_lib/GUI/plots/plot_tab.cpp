@@ -126,7 +126,6 @@ MeshDisplayer *PlotTab::add_3D_frame_at(int px, int py, int w, int h)
     return insert_3D_frame(check_frame_free_pos(px,py,w,h));
 }
 
-/*
 SceneViewer *PlotTab::insert_scene_frame(const QRect & R)
 {
     frame_grid.push_back(R);
@@ -154,7 +153,6 @@ SceneViewer *PlotTab::add_3D_scene(int w, int h)
 {
     return insert_scene_frame(get_frame_free_pos(w,h));
 }
-*/
 #endif
 
 PlotFrame* PlotTab::add_frame_at(int px, int py, int w, int h)

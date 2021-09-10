@@ -8,6 +8,8 @@
 
 
 #include "primitives/primitive.h"
+#include "primitives/quad.h"
+
 
 namespace cnc {
 
