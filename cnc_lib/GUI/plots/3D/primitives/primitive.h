@@ -23,11 +23,14 @@ public:
     virtual ~Primitive() {}
 
     virtual void init() = 0;
-    virtual void onDraw(const mat4& view) = 0;
+    virtual void onDraw(const mat4& view);
 
 protected:
-    void getUniformsLoc();
-    void getAttributesLoc();
+    virtual void getUniformsLoc();
+    virtual void getAttributesLoc();
+
+    void loadBuffers();
+    void loadUniforms(const mat4& view);
 
     //shaders adress
     shader_id m_shaderId;

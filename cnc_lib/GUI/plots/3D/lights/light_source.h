@@ -23,4 +23,4 @@ public:
 }
 
 
-#endif // LIGHT_SOURCE_H
+#endif // *LIGHT_SOURCE_H

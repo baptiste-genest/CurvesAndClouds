@@ -11,6 +11,8 @@
 #include <QMatrix4x4>
 #include "object.h"
 #include "GLWrapper.h"
+#include "lights/light_source.h"
+#include "camera.h"
 
 #include <utility>
 
@@ -35,9 +37,11 @@ public:
     void resize(int w,int h);
     void draw();
 
-protected:
-    mat4 m_view;
+private:
     std::vector<Object*> m_objects;
+
+    Camera* cam = nullptr;
+    std::vector<LightSource*> sources;
 };
 
 }

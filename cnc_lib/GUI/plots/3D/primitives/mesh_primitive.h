@@ -13,7 +13,6 @@ namespace cnc {
 
 namespace graphics {
 
-/*
 class Mesh : public Primitive
 {
 public:
@@ -23,7 +22,6 @@ public:
 
 private:
 };
-*/
 
 }
 

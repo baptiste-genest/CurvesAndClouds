@@ -16,9 +16,11 @@ SOURCES += \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
     GUI/plots/3D/GLWrapper.cpp \
+    GUI/plots/3D/camera.cpp \
     GUI/plots/3D/color.cpp \
     GUI/plots/3D/geometryengine.cpp \
-    GUI/plots/3D/light_source.cpp \
+    GUI/plots/3D/lights/light_source.cpp \
+    GUI/plots/3D/lights/uniform_light.cpp \
     GUI/plots/3D/mesh_displayer.cpp \
     GUI/plots/3D/object.cpp \
     GUI/plots/3D/primitives/mesh_primitive.cpp \
@@ -96,10 +98,12 @@ HEADERS += \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
     GUI/plots/3D/GLWrapper.h \
+    GUI/plots/3D/camera.h \
     GUI/plots/3D/color.h \
     GUI/plots/3D/geometryengine.h \
     GUI/plots/3D/graphics.h \
-    GUI/plots/3D/light_source.h \
+    GUI/plots/3D/lights/light_source.h \
+    GUI/plots/3D/lights/uniform_light.h \
     GUI/plots/3D/mesh_displayer.h \
     GUI/plots/3D/object.h \
     GUI/plots/3D/primitives/mesh_primitive.h \

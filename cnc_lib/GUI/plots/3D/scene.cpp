@@ -3,7 +3,7 @@
 
 cnc::graphics::Scene::Scene()
 {
-
+    cam = new Camera();
 }
 
 cnc::graphics::Scene::~Scene()
@@ -11,6 +11,7 @@ cnc::graphics::Scene::~Scene()
     for (Object* o : m_objects)
         delete o;
     m_objects.clear();
+    delete cam;
 }
 
 void cnc::graphics::Scene::init()
@@ -23,20 +24,12 @@ void cnc::graphics::Scene::init()
 
     for (Object* o : m_objects)
         o->get_primitive()->init();
-
-    m_view.setToIdentity();
 }
 
 void cnc::graphics::Scene::resize(int w, int h)
 {
     auto f = GLWrapper::get_GL_functions();
     f->glViewport(0,0,w,h);
-
-    /*
-    float aspect = float(w) / float(h ? h : 1);
-    const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
-    m_view.perspective(fov, aspect, zNear, zFar);
-    */
 }
 
 void cnc::graphics::Scene::draw()
@@ -44,6 +37,7 @@ void cnc::graphics::Scene::draw()
     auto f = GLWrapper::get_GL_functions();
     // effacer l'écran
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    mat4 View = cam->getViewMatrix();
     for (Object* o : m_objects)
-        o->get_primitive()->onDraw(m_view);
+        o->get_primitive()->onDraw(View);
 }

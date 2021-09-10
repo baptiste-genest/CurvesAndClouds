@@ -8,6 +8,7 @@
 
 
 #include <QVector3D>
+#include <QMatrix4x4>
 #include <GL/gl.h>
 #include "color.h"
 

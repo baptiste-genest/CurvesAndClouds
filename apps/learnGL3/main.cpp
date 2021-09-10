@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     points[1][0] = x;
     points[1][1] = x;
     points[3][0] = x;
-    points[3][2] = x;
 
     PlotWindow W;W.resize(500,500);
     auto SV = W.add_tab("3D scene")->add_3D_scene();
