@@ -21,6 +21,7 @@ SOURCES += \
     GUI/plots/3D/geometryengine.cpp \
     GUI/plots/3D/lights/light_source.cpp \
     GUI/plots/3D/lights/uniform_light.cpp \
+    GUI/plots/3D/material.cpp \
     GUI/plots/3D/mesh_displayer.cpp \
     GUI/plots/3D/object.cpp \
     GUI/plots/3D/primitives/mesh_primitive.cpp \
@@ -104,6 +105,7 @@ HEADERS += \
     GUI/plots/3D/graphics.h \
     GUI/plots/3D/lights/light_source.h \
     GUI/plots/3D/lights/uniform_light.h \
+    GUI/plots/3D/material.h \
     GUI/plots/3D/mesh_displayer.h \
     GUI/plots/3D/object.h \
     GUI/plots/3D/primitives/mesh_primitive.h \
@@ -178,6 +180,7 @@ HEADERS += \
     core/matrix_algo.h \
     core/quaternion.h \
     core/sparse_matrix.h \
+    core/time_handling.h \
     curvesandcloudCore.h \
     core/matrix.h \
     core/matrix_errors.h \

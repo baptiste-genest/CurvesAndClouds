@@ -15,7 +15,7 @@ cnc::graphics::Quad::Quad(const std::vector<vec3>& points)
         col(1.f,0,0),
         col(0,1.f,0),
         col(0,0,1.f),
-        col(1.f,0,1.f)
+        col(1.f,0,1.f,0.1)
     };
 
     TRIANGLE_COUNT = 2;

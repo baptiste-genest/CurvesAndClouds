@@ -17,6 +17,15 @@ public:
     }
 
     inline void change_aspect(int w,int h);
+
+    inline vec3 getCamPos() const {
+        return pos;
+    }
+
+    inline void setCamPos(const vec3& x) {
+        pos = x;
+        computeView();
+    }
 private:
     void computeView();
 

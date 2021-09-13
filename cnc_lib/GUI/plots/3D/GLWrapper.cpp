@@ -54,7 +54,6 @@ cnc::graphics::shader_id cnc::graphics::GLWrapper::compileShader(cnc::graphics::
     std::string contents((std::istreambuf_iterator<char>(in)),
         std::istreambuf_iterator<char>());
 
-    std::cout << contents << std::endl;
     auto source = contents.c_str();
 
     f->glShaderSource(shader, 1, &source, NULL);

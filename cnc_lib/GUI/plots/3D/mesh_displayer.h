@@ -119,8 +119,8 @@ private:
     qreal angularSpeed = 0;
     QQuaternion rotation;
 
-    const std::string vertex_shader_loc = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/vshader.glsl";
-    const std::string fragment_shader_loc = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/fshader.glsl";
+    const std::string vertex_shader_loc = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/shaders/vshader.glsl";
+    const std::string fragment_shader_loc = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/shaders/fshader.glsl";
 
 signals:
     void gl_initialized();

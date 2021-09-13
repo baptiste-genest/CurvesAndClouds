@@ -2,6 +2,11 @@
 
 using namespace cnc;
 
+void print(const QVector4D& x){
+    for (uint k = 0;k<4;k++)
+        std::cout << x[k] << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication App(argc,argv);
@@ -12,10 +17,16 @@ int main(int argc, char *argv[])
     points[1][0] = x;
     points[1][1] = x;
     points[3][0] = x;
+    points[3][2] = 0.1;
+    QVector3D offset(-x,-x,0);
+    for (uint k = 0;k<4;k++)
+        points[k] += offset/2;
 
     PlotWindow W;W.resize(500,500);
     auto SV = W.add_tab("3D scene")->add_3D_scene();
     auto S = SV->getScene();
+    graphics::Camera* C = S->getCam();
+    print(C->getViewMatrix()*points[0]);
     std::pair<graphics::Object*,graphics::Quad*> OQ = S->add_object<graphics::Quad>(points);
 
     W.show();

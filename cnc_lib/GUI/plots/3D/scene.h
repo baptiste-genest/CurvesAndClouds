@@ -33,6 +33,10 @@ public:
         return {m_objects.back(),P};
     }
 
+    Camera* getCam() {
+        return cam;
+    }
+
     void init();
     void resize(int w,int h);
     void draw();

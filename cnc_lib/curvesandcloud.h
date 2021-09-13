@@ -19,5 +19,6 @@
 #include "GUI/plots/3D/scene_viewer.h"
 #include "GUI/plots/3D/object.h"
 #include "GUI/plots/3D/primitives/quad.h"
+#include "GUI/plots/3D/camera.h"
 
 #endif // CURVESANDCLOUD_H

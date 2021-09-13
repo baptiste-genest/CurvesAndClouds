@@ -68,7 +68,7 @@ void cnc::graphics::Primitive::loadUniforms(const mat4& view)
 {
     auto f = GLWrapper::get_GL_functions();
     // fournir la matrice au shader
-    f->glUniformMatrix4fv(m_viewMatrixLoc,1,GL_TRUE,view.data());
-    f->glUniformMatrix4fv(m_localMatrixLoc,1,GL_TRUE,local_transform.data());
+    f->glUniformMatrix4fv(m_viewMatrixLoc,1,GL_FALSE,view.data());
+    f->glUniformMatrix4fv(m_localMatrixLoc,1,GL_FALSE,local_transform.data());
 
 }

@@ -3,6 +3,12 @@
 cnc::SceneViewer::SceneViewer(QWidget *parent) : QOpenGLWidget(parent)
 {
     m_scene = new graphics::Scene();
+    updater = new QTimer(this);
+    SceneViewer* ref = this;
+    connect(updater,&QTimer::timeout,[ref] () {
+        ref->update();
+    });
+    updater->start(1000.f/fps);
 }
 
 cnc::SceneViewer::~SceneViewer()

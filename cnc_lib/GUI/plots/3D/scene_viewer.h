@@ -10,6 +10,7 @@
 #include "cnc_error.h"
 #include "scene.h"
 #include <QOpenGLWidget>
+#include <QTimer>
 
 namespace cnc {
 
@@ -26,8 +27,9 @@ public:
         return m_scene;
     }
 
-
 private:
+    static const int fps = 60;
+
     graphics::Scene* m_scene;
 
     void initShaders();
@@ -37,6 +39,7 @@ private:
 
     int m_LightPosLoc = 0;
 
+    QTimer* updater = nullptr;
 };
 
 }
