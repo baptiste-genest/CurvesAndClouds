@@ -1,4 +1,5 @@
 #include "GUI/plots/3D/GLWrapper.h"
+#ifdef CNC_OPENGL
 
 cnc::graphics::shader_id cnc::graphics::GLWrapper::makeShaderProgramFromFiles(const std::string &vertex_loc, const std::string &frag_loc){
     std::string vertexShader,fragShader;
@@ -94,3 +95,4 @@ cnc::graphics::shader_id cnc::graphics::GLWrapper::makeShaderProgram(const std::
 
     return program;
 }
+#endif

@@ -1,4 +1,5 @@
 #include "material.h"
+#ifdef CNC_OPENGL
 
 cnc::graphics::Material::Material()
 {
@@ -52,3 +53,5 @@ void cnc::graphics::Material::init()
 {
     m_shaderId = GLWrapper::makeShaderProgram(buildVertexShader(),buildFragmentShader());
 }
+
+#endif

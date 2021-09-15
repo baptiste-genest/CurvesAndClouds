@@ -7,6 +7,8 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#ifdef CNC_OPENGL
+
 #include "light_source.h"
 #include "../graphics.h"
 
@@ -27,5 +29,7 @@ private:
 }
 
 }
+
+#endif
 
 #endif // UNIFORM_LIGHT_H

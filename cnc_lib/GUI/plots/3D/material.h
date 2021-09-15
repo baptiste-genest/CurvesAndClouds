@@ -2,6 +2,7 @@
 #define MATERIAL_H
 #include "graphics.h"
 #include "GLWrapper.h"
+#ifdef CNC_OPENGL
 
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT
@@ -128,5 +129,6 @@ private:
 }
 
 }
+#endif
 
 #endif // MATERIAL_H

@@ -60,7 +60,7 @@ public:
      */
     PlotFrame* add_frame(int w = 1,int h = 1);
 
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
     MeshDisplayer* add_3D_frame(int w = 1,int h = 1);
     MeshDisplayer *add_3D_frame_at(int px,int py,int w = 1,int h = 1);
     SceneViewer* add_3D_scene(int w = 1,int h = 1);
@@ -86,7 +86,7 @@ private:
     std::vector<QRect> frame_grid;
     std::vector<PlotFrame*> frames;
 
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
     std::vector<MeshDisplayer*> frames3D;
     std::vector<SceneViewer*> Scenes;
 #endif
@@ -97,7 +97,7 @@ private:
     static constexpr int CELL_SIZE = 100;
 
     PlotFrame* insert_frame(const QRect&);
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
     MeshDisplayer* insert_3D_frame(const QRect&);
     SceneViewer* insert_scene_frame(const QRect&);
 #endif

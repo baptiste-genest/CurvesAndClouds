@@ -1,5 +1,12 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#if defined(CNC_LIB)
+#  define CNC_LIB_EXPORT Q_DECL_EXPORT
+#else
+#  define CNC_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
+#ifdef CNC_OPENGL
 
 #include "graphics.h"
 
@@ -44,5 +51,7 @@ private:
 }
 
 }
+
+#endif
 
 #endif // CAMERA_H

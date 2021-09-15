@@ -6,6 +6,7 @@
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+#ifdef CNC_OPENGL
 
 
 #include <QMatrix4x4>
@@ -52,4 +53,5 @@ private:
 
 }
 
+#endif
 #endif // SCENE_H

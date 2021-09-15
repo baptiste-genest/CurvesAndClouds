@@ -6,6 +6,8 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#ifdef CNC_OPENGL
+
 
 namespace cnc {
 
@@ -21,6 +23,8 @@ public:
 }
 
 }
+
+#endif
 
 
 #endif // *LIGHT_SOURCE_H

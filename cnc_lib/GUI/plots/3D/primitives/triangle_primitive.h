@@ -6,6 +6,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#ifdef CNC_OPENGL
 
 #include "primitive.h"
 
@@ -26,5 +27,7 @@ public:
 }
 
 }
+
+#endif
 
 #endif // TRIANGLE_H

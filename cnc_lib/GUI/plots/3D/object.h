@@ -5,6 +5,7 @@
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+#ifdef CNC_OPENGL
 
 
 #include "primitives/primitive.h"
@@ -36,4 +37,5 @@ private:
 }
 
 }
+#endif
 #endif // OBJECT_H

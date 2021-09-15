@@ -8,8 +8,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-#if CNC_OPENGL == TRUE
-
+#ifdef CNC_OPENGL
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>

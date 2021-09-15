@@ -1,4 +1,4 @@
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
 #include "mesh_displayer.h"
 
 cnc::MeshDisplayer::MeshDisplayer(QWidget* parent)

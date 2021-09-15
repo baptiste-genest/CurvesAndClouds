@@ -1,4 +1,4 @@
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
 #include "geometryengine.h"
 
 cnc::GeometryEngine::GeometryEngine(algo::geometry::SimpleGLMesh *M) :

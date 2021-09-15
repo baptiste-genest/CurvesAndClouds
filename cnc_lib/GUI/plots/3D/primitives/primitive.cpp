@@ -1,4 +1,5 @@
 #include "primitive.h"
+#ifdef CNC_OPENGL
 
 cnc::graphics::Primitive::Primitive()
 {
@@ -77,3 +78,5 @@ void cnc::graphics::Primitive::loadUniforms(const mat4& view)
     f->glUniformMatrix4fv(m_localMatrixLoc,1,GL_FALSE,local_transform.data());
 
 }
+
+#endif

@@ -1,4 +1,5 @@
 #include "camera.h"
+#ifdef CNC_OPENGL
 #include <iostream>
 
 cnc::graphics::Camera::Camera()
@@ -30,3 +31,5 @@ void cnc::graphics::Camera::computeView()
     proj.perspective(fov,aspect_ratio,zNear,zFar);
     View = proj*View;
 }
+
+#endif

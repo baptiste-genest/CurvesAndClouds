@@ -6,6 +6,7 @@
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+#ifdef CNC_OPENGL
 
 #include "cnc_error.h"
 #include "scene.h"
@@ -44,4 +45,5 @@ private:
 
 }
 
+#endif
 #endif // SCENE_VIEWER_H

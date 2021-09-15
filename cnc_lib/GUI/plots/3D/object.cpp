@@ -1,4 +1,5 @@
 #include "object.h"
+#ifdef CNC_OPENGL
 
 cnc::graphics::Object::Object(cnc::graphics::Primitive *p)
     :
@@ -11,3 +12,5 @@ cnc::graphics::Object::~Object()
 {
     delete m_p;
 }
+
+#endif

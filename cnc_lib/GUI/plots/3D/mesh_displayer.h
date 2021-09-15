@@ -1,8 +1,7 @@
 #ifndef MESH_DISPLAYER_H
 #define MESH_DISPLAYER_H
 
-#if CNC_OPENGL == TRUE
-
+#ifdef CNC_OPENGL
 #include <QOpenGLWidget>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>

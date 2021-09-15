@@ -92,7 +92,7 @@ PlotFrame *PlotTab::insert_frame(const QRect& R)
     return f;
 }
 
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
 MeshDisplayer *PlotTab::insert_3D_frame(const QRect &R)
 {
     frame_grid.push_back(R);

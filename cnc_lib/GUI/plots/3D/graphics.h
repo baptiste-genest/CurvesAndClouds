@@ -5,6 +5,7 @@
 #else
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
+#ifdef CNC_OPENGL
 
 
 #include <QVector3D>
@@ -26,5 +27,6 @@ using mat4 = QMatrix4x4;
 }
 }
 
+#endif
 
 #endif // GRAPHICS_H

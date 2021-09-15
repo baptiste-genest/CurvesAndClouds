@@ -1,4 +1,5 @@
 #include "scene_viewer.h"
+#ifdef CNC_OPENGL
 
 cnc::SceneViewer::SceneViewer(QWidget *parent) : QOpenGLWidget(parent)
 {
@@ -31,3 +32,5 @@ void cnc::SceneViewer::paintGL()
 {
     m_scene->draw();
 }
+
+#endif

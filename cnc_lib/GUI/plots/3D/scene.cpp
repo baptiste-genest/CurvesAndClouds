@@ -1,4 +1,5 @@
 #include "scene.h"
+#ifdef CNC_OPENGL
 #include "primitives/quad.h"
 
 #include "core/time_handling.h"
@@ -45,3 +46,5 @@ void cnc::graphics::Scene::draw()
     for (Object* o : m_objects)
         o->get_primitive()->onDraw(View);
 }
+
+#endif

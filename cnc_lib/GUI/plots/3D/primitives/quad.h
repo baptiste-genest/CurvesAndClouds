@@ -6,6 +6,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#ifdef CNC_OPENGL
 
 #include "primitive.h"
 #include "../GLWrapper.h"
@@ -34,5 +35,7 @@ private:
 }
 
 }
+
+#endif
 
 #endif // QUAD_H

@@ -6,6 +6,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#ifdef CNC_OPENGL
 
 #include <QOpenGLFunctions>
 #include "cnc_error.h"
@@ -50,5 +51,7 @@ shader_id makeShaderProgram(const std::string& vertexShader,const std::string& f
 }
 
 }
+
+#endif
 
 #endif // GLWRAPPER_H

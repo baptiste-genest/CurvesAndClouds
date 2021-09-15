@@ -6,7 +6,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-
+#ifdef CNC_OPENGL
 #include <QMatrix4x4>
 #include <GL/gl.h>
 #include "../color.h"
@@ -67,5 +67,7 @@ protected:
 }
 
 }
+
+#endif
 
 #endif // PRIMITIVE_H
