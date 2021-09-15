@@ -19,7 +19,7 @@
 #include <QGridLayout>
 #include <QTimer>
 
-#if CNC_OPENGL == TRUE
+#ifdef CNC_OPENGL
 #include "3D/mesh_displayer.h"
 #include "3D/scene_viewer.h"
 #endif

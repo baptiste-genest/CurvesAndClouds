@@ -27,11 +27,12 @@ public:
     }
 
     inline void initPrimitive() {
-        m_p->init();
+        m_p->init(M);
     }
 
 private:
     Primitive* m_p = nullptr;
+    Material M;
 };
 
 }

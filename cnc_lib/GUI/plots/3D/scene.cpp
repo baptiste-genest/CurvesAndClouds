@@ -26,7 +26,7 @@ void cnc::graphics::Scene::init()
     f->glDepthFunc(GL_LESS);
 
     for (Object* o : m_objects)
-        o->get_primitive()->init();
+        o->initPrimitive();
 }
 
 void cnc::graphics::Scene::resize(int w, int h)
