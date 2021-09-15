@@ -18,17 +18,28 @@ namespace graphics {
 class Mesh : public Primitive
 {
 public:
-    Mesh();
+    Mesh(const std::vector<vec3>& pos,const std::vector<vec3>& normals,const std::vector<index> faces);
 
     virtual void init(const Material& M) override;
-    virtual void onDraw(const QMatrix4x4 &mvp) override;
+    virtual void onDraw(const Material& M) override;
+
+    /*
+    inline void add_vertex(const vec3& x);
+    inline void add_face(index,index,index);
+    */
 
 private:
-    std::vector<vec3> m_vertices;
-    std::vector<index> m_varray;
 
+    loc m_normalBufferId;
+    loc m_normalLoc;
+
+    void loadBuffers() override;
+
+    std::vector<vec3> m_vertices;
     std::vector<vec3> m_normals;
-    std::vector<index> m_narray;
+    std::vector<index> m_indexArray;
+
+    //std::vector<index> m_narray;
 };
 
 }

@@ -92,7 +92,12 @@ public:
         return m_attributes.size();
     }
 
+    inline shader_id getShaderId() const {
+        return m_shaderId;
+    }
+
     loc getAttributeLoc(uint k) const;
+    loc getVertexLoc() const;
 
     std::string buildVertexShader();
     std::string buildFragmentShader();
@@ -109,7 +114,11 @@ public:
         return m_attributes;
     }
 
+    void loadProjectors(const mat4& view_proj,const mat4& local);
+    void loadCustomUniforms();
+
     void init();
+    void draw();
 
 private:
     std::string m_vertexShader;
@@ -122,6 +131,14 @@ private:
     std::vector<shader_uniform> m_uniforms;
 
     shader_id m_shaderId;
+    loc m_vpLoc;
+    loc m_localLoc;
+
+    std::vector<loc> m_customUniformsLoc;
+
+    const std::string local_mat_name = "local_mat";
+    const std::string vertex_attrib_name = "vertex";
+    const std::string view_proj_mat_name = "view_proj_mat";
 
     const std::string shader_header = "#version 300 es\n";
 };

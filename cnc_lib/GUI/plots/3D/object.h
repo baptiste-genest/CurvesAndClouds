@@ -19,20 +19,30 @@ namespace graphics {
 class Object
 {
 public:
-    Object(Primitive* p);
+    Object(Primitive* p,Material& M);
     ~Object();
 
     inline Primitive* get_primitive() {
         return m_p;
     }
 
-    inline void initPrimitive() {
-        m_p->init(M);
+    inline void init() {
+        m_M.init();
+        m_p->init(m_M);
     }
+
+    inline void draw(const mat4& view) {
+        m_M.loadProjectors(localProj,view);
+        m_M.loadCustomUniforms();
+        m_p->onDraw(m_M);
+    }
+
+    void loadProjections(shader_id s);
 
 private:
     Primitive* m_p = nullptr;
-    Material M;
+    Material& m_M;
+    mat4 localProj;
 };
 
 }

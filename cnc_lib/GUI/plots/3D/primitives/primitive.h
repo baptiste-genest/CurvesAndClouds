@@ -24,38 +24,20 @@ public:
     virtual ~Primitive() {}
 
     virtual void init(const Material& M) = 0;
-    virtual void onDraw(const mat4& view);
+    virtual void onDraw(const Material& M);
 
 protected:
-    virtual void getUniformsLoc();
-    virtual void getAttributesLoc();
+    virtual void loadBuffers() = 0;
+    void getVertexLoc(const Material& M);
 
-    void loadBuffers();
-    void loadUniforms(const mat4& view);
-
-    std::vector<loc> m_attributesLoc;
-
-    //shaders adress
-    shader_id m_shaderId;
     GLint m_glVertexLoc;
-    GLint m_glColorLoc;
 
     // Buffers
     loc m_VertexBufferId;
     loc m_IndexBufferId;
-    loc m_ColorBufferId;
-
-    loc m_viewMatrixLoc;
-    loc m_localMatrixLoc;
-
-    mat4 local_transform;
 
     std::vector<vec3> m_points;
     std::vector<vec3> m_normals;
-    std::vector<col> m_colors;
-
-    std::string vertex_shader_loc;
-    std::string frag_shader_loc;
 
     int TRIANGLE_COUNT = 0;
 

@@ -3,26 +3,14 @@
 
 cnc::graphics::Primitive::Primitive()
 {
-    std::string prefix = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/shaders/";
 }
 
-void cnc::graphics::Primitive::init(const cnc::graphics::Material &M)
-{
-    m_attributesLoc.resize(M.nbAttributes());
-    for (uint k = 0;k<M.nbAttributes();k++){
-        m_attributesLoc[k] = M.getAttributeLoc(k);
-    }
-}
-
-void cnc::graphics::Primitive::onDraw(const cnc::graphics::mat4 &view)
+void cnc::graphics::Primitive::onDraw(const Material& M)
 {
     if (!initialized)
         return;
     auto f = GLWrapper::get_GL_functions();
     // activer le shader des triangles
-    f->glUseProgram(m_shaderId);
-
-    loadUniforms(view);
 
     loadBuffers();
 
@@ -35,48 +23,18 @@ void cnc::graphics::Primitive::onDraw(const cnc::graphics::mat4 &view)
 
     // désactiver les buffers qui ne sont plus utilisés
     f->glDisableVertexAttribArray(m_glVertexLoc);
-    f->glDisableVertexAttribArray(m_glColorLoc);
     f->glBindBuffer(GL_ARRAY_BUFFER, 0);
     f->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     f->glUseProgram(0);
 }
 
-void cnc::graphics::Primitive::getUniformsLoc()
+void cnc::graphics::Primitive::getVertexLoc(const Material &M)
 {
     auto f = GLWrapper::get_GL_functions();
-    m_localMatrixLoc = f->glGetUniformLocation(m_shaderId, "local_proj");
-    m_viewMatrixLoc = f->glGetUniformLocation(m_shaderId, "view_proj");
+    f->glGetAttribLocation(M.getShaderId(),"");
+    //m_glVertexLoc = f;
 }
 
-void cnc::graphics::Primitive::getAttributesLoc()
-{
-    auto f = GLWrapper::get_GL_functions();
-    m_glVertexLoc = f->glGetAttribLocation(m_shaderId, "glVertex");
-    m_glColorLoc = f->glGetAttribLocation(m_shaderId, "glColor");
-}
-
-void cnc::graphics::Primitive::loadBuffers()
-{
-    auto f = GLWrapper::get_GL_functions();
-    // activer et lier le buffer contenant les coordonnées
-    f->glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferId);
-    f->glEnableVertexAttribArray(m_glVertexLoc);
-    f->glVertexAttribPointer(m_glVertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    // activer et lier le buffer contenant les couleurs
-    f->glBindBuffer(GL_ARRAY_BUFFER, m_ColorBufferId);
-    f->glEnableVertexAttribArray(m_glColorLoc);
-    f->glVertexAttribPointer(m_glColorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
-}
-
-void cnc::graphics::Primitive::loadUniforms(const mat4& view)
-{
-    auto f = GLWrapper::get_GL_functions();
-    // fournir la matrice au shader
-    f->glUniformMatrix4fv(m_viewMatrixLoc,1,GL_FALSE,view.data());
-    f->glUniformMatrix4fv(m_localMatrixLoc,1,GL_FALSE,local_transform.data());
-
-}
 
 #endif
