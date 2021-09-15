@@ -26,9 +26,9 @@ void cnc::graphics::Quad::onDraw(const cnc::graphics::mat4 &view)
     Primitive::onDraw(view);
 }
 
-void cnc::graphics::Quad::init()
+void cnc::graphics::Quad::init(const Material&)
 {
-    m_shaderId = GLWrapper::makeShaderProgram(Primitive::vertex_shader_loc,Primitive::frag_shader_loc);
+    m_shaderId = GLWrapper::makeShaderProgramFromFiles(Primitive::vertex_shader_loc,Primitive::frag_shader_loc);
 
     Primitive::getUniformsLoc();
     Primitive::getAttributesLoc();

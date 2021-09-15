@@ -2,7 +2,7 @@ QT += gui core widgets network# opengl
 
 TEMPLATE = lib
 DEFINES += CNC_LIB
-DEFINES += PRECISION DOUBLE
+DEFINES += PRECISION FLOAT
 DEFINES += CNC_OPENGL TRUE
 CONFIG += c++11
 

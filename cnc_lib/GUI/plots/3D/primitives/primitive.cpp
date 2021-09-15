@@ -2,10 +2,15 @@
 
 cnc::graphics::Primitive::Primitive()
 {
-    local_transform.setToIdentity();
     std::string prefix = "/home/eulerson/Curves-Clouds/cnc_lib/GUI/plots/3D/shaders/";
-    vertex_shader_loc = prefix + "basic_vertex_shader.glsl";
-    frag_shader_loc = prefix + "basic_fragment_shader.glsl";
+}
+
+void cnc::graphics::Primitive::init(const cnc::graphics::Material &M)
+{
+    m_attributesLoc.resize(M.nbAttributes());
+    for (uint k = 0;k<M.nbAttributes();k++){
+        m_attributesLoc[k] = M.getAttributeLoc(k);
+    }
 }
 
 void cnc::graphics::Primitive::onDraw(const cnc::graphics::mat4 &view)

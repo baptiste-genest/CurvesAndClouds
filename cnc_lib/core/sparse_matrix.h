@@ -24,6 +24,7 @@ namespace algo{
     vec solve_for_kernel_with_known_variables(const std::pair<SparseMatrix,SparseMatrix>& M,uint N,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
 }
 
+
 class SparseMatrix
 {
 public:
@@ -69,6 +70,8 @@ public:
         for (scalar& val : v)
             val *= lambda;
     }
+
+    bool CG_log = true;
 
 private:
     uint nb_threads;

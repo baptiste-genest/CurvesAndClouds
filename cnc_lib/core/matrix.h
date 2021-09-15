@@ -420,7 +420,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
             }
         }
         else {
-            const uint NTHREAD = 20,dt = rowNum()/NTHREAD,rest = rowNum() - NTHREAD*dt;
+            const uint NTHREAD = 4,dt = rowNum()/NTHREAD,rest = rowNum() - NTHREAD*dt;
             std::vector<std::thread> threads(NTHREAD + ((rest != 0) ? 1 : 0));
             for (uint i = 0; i < NTHREAD; i++)
                 threads[i] = std::thread(parallel_matrix_product<T>,*this,other,std::ref(result),i*dt,(i+1)*dt);

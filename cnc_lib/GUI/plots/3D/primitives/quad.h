@@ -21,7 +21,7 @@ public:
     ~Quad() {}
 
     virtual void onDraw(const mat4& view) override;
-    virtual void init() override;
+    virtual void init(const Material& M) override;
 
 private:
     std::vector<index> m_index;

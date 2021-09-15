@@ -64,11 +64,11 @@ int main(int argc, char *argv[])
         auto T = W.add_tab("copy paste");
 
         uint w1,h1;
-        auto G = algo::load_img_as_vec("../../data/rushmore2.jpg",w1,h1);
+        auto G = algo::load_img_as_vec("../../data/rushmore3.jpg",w1,h1);
         std::cout << w1 << ' ' << h1 << std::endl;
 
         uint w2,h2;
-        auto F = algo::load_img_as_vec("../../data/face_small.jpg",w2,h2);
+        auto F = algo::load_img_as_vec("../../data/face_small2.jpg",w2,h2);
         std::cout << w2 << ' ' << h2 << std::endl;
         uint lc = 0,bc = 30;
         T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
@@ -104,6 +104,8 @@ int main(int argc, char *argv[])
                 v[i] = G[k](M(del_omega[i])) - F[k](del_omega[i]);
             F[k] = algo::solve_for_kernel_with_known_variables(KV,w2*h2,del_omega,v,1e-3) + F[k];
         }
+
+        std::cout << "exec time: "<< timeHandling::getTimeSinceStartMilliseconds() << std::endl;
 
         T->add_frame()->add_layer()->new_figure_from_texturing(w1,h1,[G,F,w1,h1,w2,h2,lc,bc] (uint i,uint j){
             int x = int(i) - lc;int y = int(j) - bc;

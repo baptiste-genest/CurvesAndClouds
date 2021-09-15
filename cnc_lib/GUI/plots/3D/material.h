@@ -31,16 +31,46 @@ enum shader_uniforms_type {
     u_mat4
 };
 
+const static uint shader_type_size[6] = {1,2,3,4,9,16};
+const static std::vector<std::string> type_names = {
+        "float",
+        "vec2",
+        "vec3",
+        "vec4",
+        "mat3",
+        "mat4"
+};
+
 struct shader_attribute {
-    std::string name;
+    inline shader_attribute(const std::string& Name,shader_attributes_type Type,bool isVarying){
+        name = Name;
+        type = Type;
+        varying = isVarying;
+    }
+
+    inline std::string getTypedName() const{
+        return type_names[(int) type] + " " + name;
+    }
+
     shader_attributes_type type;
-    std::vector<float> values;
+    bool varying = false;
+    std::string name;
 };
 
 struct shader_uniform {
-    std::string name;
+    inline shader_uniform(const std::string& Name,shader_uniforms_type Type,const std::vector<float>& Values){
+        name = Name;
+        type = Type;
+        values = Values;
+    }
+
+    inline std::string getTypedName() const{
+        return type_names[(int) type] + " " + name;
+    }
+
     shader_uniforms_type type;
     std::vector<float> values;
+    std::string name;
 };
 
 
@@ -53,12 +83,32 @@ public:
         m_uniforms.push_back(su);
     };
 
-    inline void addAttribute(const shader_attribute& sa){
+    inline void addAttribute(shader_attribute sa){
         m_attributes.push_back(sa);
     };
 
+    inline uint nbAttributes() const {
+        return m_attributes.size();
+    }
+
+    loc getAttributeLoc(uint k) const;
+
     std::string buildVertexShader();
     std::string buildFragmentShader();
+
+    inline void setMainFragmentFunction(const std::string& mff) {
+        main_fragment_function = mff;
+    }
+
+    inline void setMainVertexFunction(const std::string& mvf) {
+        main_vertex_function = mvf;
+    }
+
+    inline const std::vector<shader_attribute>& getAttributes() const {
+        return m_attributes;
+    }
+
+    void init();
 
 private:
     std::string m_vertexShader;
@@ -70,16 +120,9 @@ private:
     std::vector<shader_attribute> m_attributes;
     std::vector<shader_uniform> m_uniforms;
 
-    const std::string shader_header = "#version 300 es\n ";
+    shader_id m_shaderId;
 
-    const std::vector<std::string> type_names = {
-        "float",
-        "vec2",
-        "vec3",
-        "vec4",
-        "mat3",
-        "mat4"
-    };
+    const std::string shader_header = "#version 300 es\n";
 };
 
 }

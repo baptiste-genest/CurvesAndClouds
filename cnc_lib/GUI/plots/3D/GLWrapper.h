@@ -40,7 +40,8 @@ loc create_vbo(const std::vector<type>& values,int vbo_type,int usage) {
 
 shader_id compileShader(index shaderType,const GLchar* source);
 
-shader_id makeShaderProgram(const std::string& vertex_loc,const std::string& frag_loc);
+shader_id makeShaderProgramFromFiles(const std::string& vertex_loc,const std::string& frag_loc);
+shader_id makeShaderProgram(const std::string& vertexShader,const std::string& fragShader);
 
 
 

@@ -20,5 +20,6 @@
 #include "GUI/plots/3D/object.h"
 #include "GUI/plots/3D/primitives/quad.h"
 #include "GUI/plots/3D/camera.h"
+#include "GUI/plots/3D/material.h"
 
 #endif // CURVESANDCLOUD_H

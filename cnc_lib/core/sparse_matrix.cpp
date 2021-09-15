@@ -3,7 +3,6 @@
 cnc::SparseMatrix::SparseMatrix(int dimension, bool is_symetric) :
     SparseMatrix(dimension,dimension,is_symetric)
 {
-    nb_threads = 20;
 }
 
 cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
@@ -11,7 +10,7 @@ cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
     h(_h),
     symetric(is_symetric)
 {
-    nb_threads = 20;
+    nb_threads = 4;
     rowptr.push_back(0);
     nnz = 0;
 }
@@ -71,14 +70,22 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
         uint nb_rows_per_thread = h/nb_threads;
         uint last_row_in_thread = nb_threads*nb_rows_per_thread;
         srow = last_row_in_thread;
-        std::vector<std::thread> threads(nb_threads);
+        std::vector<std::thread> threads;
         for (uint k = 0;k<nb_threads;k++)
-            threads[k] = std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,this,x,std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread);
+            threads.push_back(std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,this,x,std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread));
         for (std::thread& t : threads)
             t.join();
     }
     parralel_sparse_matrix_vector_mult(x,y,srow,h);
     return y;
+}
+
+void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
+{
+    for (uint j = frow;j<lrow;j++){
+        for (uint k = rowptr[j];k<rowptr[j+1];k++)
+            b(j) += v[k]*x(colind[k]);
+    }
 }
 
 cnc::scalar cnc::SparseMatrix::row_sum(uint j) const
@@ -112,13 +119,6 @@ void cnc::SparseMatrix::print() const
     }
 }
 
-void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
-{
-    for (uint j = frow;j<lrow;j++){
-        for (uint k = rowptr[j];k<rowptr[j+1];k++)
-            b(j) += v[k]*x(colind[k]);
-    }
-}
 
 std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &M, const std::vector<uint> &id)
 {
@@ -140,7 +140,7 @@ std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &
         ids[i] = true;
 
     for (uint j = 0;j<N;j++){
-        std::cout << j << " over " << N << std::endl;
+        //std::cout << j << " over " << N << std::endl;
         uint M1i = 0,M2i = 0;
         if (M.rowptr[j] == M.rowptr[j+1]){
             for (uint i = 0;i<M.w;i++){
@@ -254,7 +254,7 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const std::pair<cnc::S
         throw Cnc_error("must have as much values as known variables");
     vec B(v),X(N);
     vec Y = (P.second*B)*(-1);
-    auto x = P.first.conjugate_gradient(Y,eps,true);
+    auto x = P.first.conjugate_gradient(Y,eps,false);
     uint i = 0,j=0;
     for (uint k = 0;k<N;k++){
         if (algo::belong(id,k)){

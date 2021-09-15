@@ -32,5 +32,6 @@
 #include "core/algo/calculus/optimization.h"
 #include "core/algo/calculus/fourier.h"
 #include "core/sparse_matrix.h"
+#include "core/time_handling.h"
 
 #endif // CURVESANDCLOUDCORE_H

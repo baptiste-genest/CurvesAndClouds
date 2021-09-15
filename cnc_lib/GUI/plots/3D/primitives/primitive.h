@@ -12,6 +12,7 @@
 #include "../color.h"
 #include "../graphics.h"
 #include "../GLWrapper.h"
+#include "../material.h"
 
 namespace cnc {
 
@@ -22,7 +23,7 @@ public:
     Primitive();
     virtual ~Primitive() {}
 
-    virtual void init() = 0;
+    virtual void init(const Material& M) = 0;
     virtual void onDraw(const mat4& view);
 
 protected:
@@ -31,6 +32,8 @@ protected:
 
     void loadBuffers();
     void loadUniforms(const mat4& view);
+
+    std::vector<loc> m_attributesLoc;
 
     //shaders adress
     shader_id m_shaderId;
@@ -57,6 +60,7 @@ protected:
     int TRIANGLE_COUNT = 0;
 
     bool initialized = false;
+
 };
 
 

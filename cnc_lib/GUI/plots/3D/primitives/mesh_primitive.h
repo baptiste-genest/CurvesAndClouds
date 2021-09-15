@@ -18,9 +18,15 @@ class Mesh : public Primitive
 public:
     Mesh();
 
+    virtual void init(const Material& M) override;
     virtual void onDraw(const QMatrix4x4 &mvp) override;
 
 private:
+    std::vector<vec3> m_vertices;
+    std::vector<index> m_varray;
+
+    std::vector<vec3> m_normals;
+    std::vector<index> m_narray;
 };
 
 }
