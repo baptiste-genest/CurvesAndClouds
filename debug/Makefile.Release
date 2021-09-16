@@ -13,7 +13,7 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DCNC_LIB -DPRECISION -DFLOAT -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_QML_DEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DCNC_LIB -DPRECISION -DFLOAT -DCNC_OPENGL -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_QML_DEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -fno-keep-inline-dllexport -O2 -Wall -Wextra -Wextra $(DEFINES)
 CXXFLAGS      = -fno-keep-inline-dllexport -O2 -std=gnu++11 -Wall -Wextra -Wextra -fexceptions -mthreads $(DEFINES)
 INCPATH       = -I..\cnc_lib -I. -ID:\Qt\5.15.2\mingw81_64\include -ID:\Qt\5.15.2\mingw81_64\include\QtWidgets -ID:\Qt\5.15.2\mingw81_64\include\QtGui -ID:\Qt\5.15.2\mingw81_64\include\QtANGLE -ID:\Qt\5.15.2\mingw81_64\include\QtNetwork -ID:\Qt\5.15.2\mingw81_64\include\QtCore -Irelease -I/include -ID:\Qt\5.15.2\mingw81_64\mkspecs\win32-g++ 
@@ -3769,7 +3769,35 @@ release/mesh_primitive.o: ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.cpp 
 		D:/Qt/5.15.2/mingw81_64/include/QtGui/qsurfaceformat.h \
 		D:/Qt/5.15.2/mingw81_64/include/QtGui/qopenglversionfunctions.h \
 		../cnc_lib/cnc_error.h \
-		../cnc_lib/GUI/plots/3D/material.h
+		../cnc_lib/GUI/plots/3D/material.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/statistics/statistics.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/calculus/optimization.h \
+		../cnc_lib/core/algo/calculus/vector_calculus.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/QImage \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qimage.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qcolor.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qrgb.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qrgba64.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qpaintdevice.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qwindowdefs.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qwindowdefs_win.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qpixelformat.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qtransform.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qmatrix.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qpolygon.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtGui/qregion.h \
+		D:/Qt/5.15.2/mingw81_64/include/QtCore/qline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mesh_primitive.o ..\cnc_lib\GUI\plots\3D\primitives\mesh_primitive.cpp
 
 release/primitive.o: ../cnc_lib/GUI/plots/3D/primitives/primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/primitive.h \

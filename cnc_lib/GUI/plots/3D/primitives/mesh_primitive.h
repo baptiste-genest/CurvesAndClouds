@@ -25,11 +25,6 @@ public:
     virtual void init(const Material& M) override;
     virtual void onDraw(const Material& M) override;
 
-    /*
-    inline void add_vertex(const vec3& x);
-    inline void add_face(index,index,index);
-    */
-
 private:
 
     loc m_normalBufferId;
@@ -40,8 +35,6 @@ private:
     std::vector<vec3> m_vertices;
     std::vector<vec3> m_normals;
     std::vector<index> m_indexArray;
-
-    //std::vector<index> m_narray;
 };
 
 }

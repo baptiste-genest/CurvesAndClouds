@@ -15,20 +15,26 @@ namespace cnc {
 
 namespace graphics {
 
-/*
 class Quad : public Primitive
 {
 public:
-    Quad(const std::vector<vec3>& points);
-    ~Quad() {}
+    Quad(const std::vector<vec3>& pos);
+    Quad(const std::string& loc,float scale);
 
-    virtual void onDraw(const mat4& view) override;
     virtual void init(const Material& M) override;
+    virtual void onDraw(const Material& M) override;
 
 private:
-    std::vector<index> m_index;
+
+    loc m_normalBufferId;
+    loc m_normalLoc;
+
+    void loadBuffers() override;
+
+    std::vector<vec3> m_vertices;
+    std::vector<vec3> m_normals;
+    std::vector<index> m_indexArray;
 };
-*/
 
 
 }
