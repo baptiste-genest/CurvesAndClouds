@@ -18,7 +18,7 @@
 #include "GUI/algo/mutablevalue.h"
 #include "GUI/plots/3D/scene_viewer.h"
 #include "GUI/plots/3D/object.h"
-#include "GUI/plots/3D/primitives/quad.h"
+#include "GUI/plots/3D/primitives/mesh_primitive.h"
 #include "GUI/plots/3D/camera.h"
 #include "GUI/plots/3D/material.h"
 

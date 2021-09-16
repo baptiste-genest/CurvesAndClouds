@@ -15,6 +15,7 @@ namespace cnc {
 
 namespace graphics {
 
+/*
 class Quad : public Primitive
 {
 public:
@@ -26,10 +27,8 @@ public:
 
 private:
     std::vector<index> m_index;
-
-
-
 };
+*/
 
 
 }

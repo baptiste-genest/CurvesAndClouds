@@ -42,11 +42,17 @@ const static std::vector<std::string> type_names = {
         "mat4"
 };
 
+enum attribute_passing_type {
+    in,
+    out,
+    inout
+};
+
 struct shader_attribute {
-    inline shader_attribute(const std::string& Name,shader_attributes_type Type,bool isVarying){
+    inline shader_attribute(const std::string& Name,shader_attributes_type Type,attribute_passing_type _apt){
         name = Name;
         type = Type;
-        varying = isVarying;
+        apt = _apt;
     }
 
     inline std::string getTypedName() const{
@@ -54,7 +60,7 @@ struct shader_attribute {
     }
 
     shader_attributes_type type;
-    bool varying = false;
+    attribute_passing_type apt;
     std::string name;
 };
 
@@ -97,7 +103,7 @@ public:
     }
 
     loc getAttributeLoc(uint k) const;
-    loc getVertexLoc() const;
+    loc getAttributeLoc(const std::string& name) const;
 
     std::string buildVertexShader();
     std::string buildFragmentShader();
@@ -141,6 +147,7 @@ private:
     const std::string view_proj_mat_name = "view_proj_mat";
 
     const std::string shader_header = "#version 300 es\n";
+    std::string precision = " highp ";
 };
 
 }

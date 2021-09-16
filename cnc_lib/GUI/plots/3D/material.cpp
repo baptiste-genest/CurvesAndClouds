@@ -12,29 +12,37 @@ cnc::graphics::loc cnc::graphics::Material::getAttributeLoc(uint k) const
     return f->glGetAttribLocation(m_shaderId,m_attributes[k].name.c_str());
 }
 
-cnc::graphics::loc cnc::graphics::Material::getVertexLoc() const
+cnc::graphics::loc cnc::graphics::Material::getAttributeLoc(const std::string &name) const
 {
     auto f = GLWrapper::get_GL_functions();
-    return f->glGetAttribLocation(m_shaderId,vertex_attrib_name.c_str());
+    auto L = f->glGetAttribLocation(m_shaderId,name.c_str());
+    if (L < 0){
+        std::cerr << "WARNING LOC OF " << name << " WASN'T FOUND" << std::endl;
+    }
+    return L;
 }
 
 std::string cnc::graphics::Material::buildVertexShader()
 {
     std::string shader = shader_header;
-    shader += "precision mediump float;\n";
-    shader += "in vec3 vertex;\n";
-    shader += "out vec3 fragVertex;\n";
-
-    shader += "uniform mat4 " + local_mat_name + ";\n";
-    shader += "uniform mat4 " + view_proj_mat_name + ";\n";
+    shader += "uniform"+precision + " mat4 " + local_mat_name + ";\n";
+    shader += "uniform "+precision + "mat4 " + view_proj_mat_name + ";\n";
 
     for (const shader_uniform& su : m_uniforms)
-        shader += "uniform " + su.getTypedName() + ";\n";
+        shader += "uniform"+precision + " " + su.getTypedName() + ";\n";
+
+    shader += "in"+precision + " vec3 vertex;\n";
+    shader += "out"+precision + " vec3 fragVertex;\n";
 
     for (const shader_attribute& sa : m_attributes){
-        shader += "in " + sa.getTypedName() + ";\n";
-        if (sa.varying)
-            shader += "out " + type_names[(int)sa.type] + " v_" + sa.name + ";\n";
+        if (sa.apt == in)
+            shader += "in"+precision + sa.getTypedName() + ";\n";
+        else if (sa.apt == out)
+            shader += "out"+precision + sa.getTypedName() + ";\n";
+        else {
+            shader += "in"+precision + sa.getTypedName() + ";\n";
+            shader += "out"+precision + type_names[(int)sa.type] + " frag_" + sa.name + ";\n";
+        }
 
     }
 
@@ -46,14 +54,18 @@ std::string cnc::graphics::Material::buildVertexShader()
 std::string cnc::graphics::Material::buildFragmentShader()
 {
     std::string shader = shader_header;
-    shader += "out vec4 glFragColor;\n";
-    shader += "in vec3 fragVertex;\n";
+    shader += "precision mediump float;\n";
+    shader += "out"+precision + "vec4 glFragColor;\n";
+    shader += "in"+precision + "vec3 fragVertex;\n";
 
     for (const shader_attribute& sa : m_attributes){
-        if (sa.varying)
-            shader += "in " + type_names[(int)sa.type]+ " v_" + sa.name + ";\n";
+        if (sa.apt == inout){
+            shader += "in"+precision + type_names[(int)sa.type]+ " frag_" + sa.name + ";\n";
+        }
+        else if (sa.apt == out){
+            shader += "in"+precision + sa.getTypedName() + ";\n";
+        }
     }
-
     shader += "void main(){\n" + main_fragment_function + "\n}";
 
     return shader;
@@ -105,6 +117,7 @@ void cnc::graphics::Material::init()
     m_customUniformsLoc.resize(m_uniforms.size());
     for (uint k = 0;k<m_uniforms.size();k++){
         m_customUniformsLoc[k] = f->glGetUniformLocation(m_shaderId,m_uniforms[k].name.c_str());
+        std::cout << "loc of " << m_uniforms[k].name << " : " << m_customUniformsLoc[k] << std::endl;
     }
 }
 

@@ -27,6 +27,8 @@ public:
     }
 
     inline void init() {
+        auto f = GLWrapper::get_GL_functions();
+        f->glUseProgram(m_M.getShaderId());
         m_M.init();
         m_p->init(m_M);
     }

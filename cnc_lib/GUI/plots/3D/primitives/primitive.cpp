@@ -11,6 +11,7 @@ void cnc::graphics::Primitive::onDraw(const Material& M)
         return;
     auto f = GLWrapper::get_GL_functions();
     // activer le shader des triangles
+    f->glUseProgram(M.getShaderId());
 
     loadBuffers();
 
@@ -32,8 +33,7 @@ void cnc::graphics::Primitive::onDraw(const Material& M)
 void cnc::graphics::Primitive::getVertexLoc(const Material &M)
 {
     auto f = GLWrapper::get_GL_functions();
-    f->glGetAttribLocation(M.getShaderId(),"");
-    //m_glVertexLoc = f;
+    m_glVertexLoc = f->glGetAttribLocation(M.getShaderId(),"vertex");
 }
 
 

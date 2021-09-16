@@ -26,7 +26,7 @@ void cnc::graphics::Scene::init()
     f->glDepthFunc(GL_LESS);
 
     for (Object* o : m_objects)
-        o->initPrimitive();
+        o->init();
 }
 
 void cnc::graphics::Scene::resize(int w, int h)
@@ -44,7 +44,7 @@ void cnc::graphics::Scene::draw()
 
     mat4 View = cam->getViewMatrix();
     for (Object* o : m_objects)
-        o->get_primitive()->onDraw(View);
+        o->draw(View);
 }
 
 #endif

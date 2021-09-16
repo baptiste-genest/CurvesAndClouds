@@ -2,6 +2,7 @@
 #ifdef CNC_OPENGL
 #include <QOpenGLContext>
 
+/*
 cnc::graphics::Quad::Quad(const std::vector<vec3>& points)
     : Primitive()
 {
@@ -40,5 +41,6 @@ void cnc::graphics::Quad::init(const Material&)
 
     initialized = true;
 }
+*/
 
 #endif

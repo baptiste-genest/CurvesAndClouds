@@ -4272,7 +4272,35 @@ mesh_primitive.o: ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.cpp ../cnc_l
 		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
 		../cnc_lib/cnc_error.h \
-		../cnc_lib/GUI/plots/3D/material.h
+		../cnc_lib/GUI/plots/3D/material.h \
+		../cnc_lib/core/algo/inout.h \
+		../cnc_lib/core/algo/lin_alg.h \
+		../cnc_lib/cnc_types.h \
+		../cnc_lib/core/matrix.h \
+		../cnc_lib/core/matrix_errors.h \
+		../cnc_lib/core/matrix_algo.h \
+		../cnc_lib/core/algo/statistics/statistics.h \
+		../cnc_lib/core/algo/algo.h \
+		../cnc_lib/core/algo/calculus/calculus.h \
+		../cnc_lib/core/algo/calculus/optimization.h \
+		../cnc_lib/core/algo/calculus/vector_calculus.h \
+		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../cnc_lib/core/algo/geometry/halfedge.h \
+		../cnc_lib/core/sparse_matrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QImage \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qimage.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qcolor.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qrgb.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qrgba64.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mesh_primitive.o ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.cpp
 
 primitive.o: ../cnc_lib/GUI/plots/3D/primitives/primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/primitive.h \

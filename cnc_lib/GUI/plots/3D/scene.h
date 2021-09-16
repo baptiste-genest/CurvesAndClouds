@@ -28,9 +28,9 @@ public:
     ~Scene();
 
     template <typename PrimitiveType,typename ... Args>
-    std::pair<Object*,PrimitiveType*> add_object(Args&& ... args) {
+    std::pair<Object*,PrimitiveType*> add_object(Material& M,Args&& ... args) {
         PrimitiveType* P = new PrimitiveType(std::forward<Args>(args)...);
-        m_objects.push_back(new Object(P));
+        m_objects.push_back(new Object(P,M));
         return {m_objects.back(),P};
     }
 
