@@ -41,6 +41,10 @@ public:
 
     void loadProjections(shader_id s);
 
+    inline void setObjectPos(const vec3& p){
+        localProj.translate(p);
+    }
+
 private:
     Primitive* m_p = nullptr;
     Material& m_M;

@@ -6,7 +6,7 @@ cnc::graphics::Quad::Quad(const std::vector<vec3> &pos)
     : m_vertices(pos)
 {
     m_indexArray = std::vector<index>({0,1,2,1,3,2});
-    vec3 n1 = QVector3D::crossProduct(pos[1]-pos[0],pos[2]-pos[0]).normalized();
+    vec3 n1 = -QVector3D::crossProduct(pos[1]-pos[0],pos[2]-pos[0]).normalized();
     vec3 n2 = QVector3D::crossProduct(pos[1]-pos[3],pos[2]-pos[3]).normalized();
     vec3 avg = (n1+n2).normalized();
     m_normals.resize(4);
@@ -18,6 +18,7 @@ cnc::graphics::Quad::Quad(const std::vector<vec3> &pos)
 
 void cnc::graphics::Quad::init(const Material &M)
 {
+    initialized = true;
     TRIANGLE_COUNT = 2;
     m_glVertexLoc = M.getAttributeLoc("vertex");
     m_normalLoc =  M.getAttributeLoc("normal");

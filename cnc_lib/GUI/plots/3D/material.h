@@ -64,11 +64,18 @@ struct shader_attribute {
     std::string name;
 };
 
+enum uniform_shader_dest {
+    fragment,
+    vertex,
+    vertex_fragment
+};
+
 struct shader_uniform {
-    inline shader_uniform(const std::string& Name,shader_uniforms_type Type,const std::vector<float>& Values){
+    inline shader_uniform(const std::string& Name,shader_uniforms_type Type,uniform_shader_dest usd,const std::vector<float>& Values){
         name = Name;
         type = Type;
         values = Values;
+        dest = usd;
     }
 
     inline std::string getTypedName() const{
@@ -76,6 +83,7 @@ struct shader_uniform {
     }
 
     shader_uniforms_type type;
+    uniform_shader_dest dest;
     std::vector<float> values;
     std::string name;
 };
@@ -124,7 +132,9 @@ public:
     void loadCustomUniforms();
 
     void init();
-    void draw();
+    //void draw();
+
+    static Material shadedUniformColor(const std::vector<float>& color);
 
 private:
     std::string m_vertexShader;

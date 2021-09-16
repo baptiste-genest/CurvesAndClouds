@@ -36,9 +36,6 @@ protected:
     loc m_VertexBufferId;
     loc m_IndexBufferId;
 
-    std::vector<vec3> m_points;
-    std::vector<vec3> m_normals;
-
     int TRIANGLE_COUNT = 0;
 
     bool initialized = false;

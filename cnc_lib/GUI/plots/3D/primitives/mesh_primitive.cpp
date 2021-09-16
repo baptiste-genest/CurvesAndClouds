@@ -68,7 +68,7 @@ cnc::graphics::Mesh::Mesh(const std::string &input_file, float scale)
 
 void cnc::graphics::Mesh::init(const cnc::graphics::Material &M)
 {
-    puts("init mesh");
+    initialized = true;
     TRIANGLE_COUNT = m_indexArray.size()/3;
     m_glVertexLoc = M.getAttributeLoc("vertex");
     m_normalLoc =  M.getAttributeLoc("normal");
@@ -84,7 +84,6 @@ void cnc::graphics::Mesh::onDraw(const cnc::graphics::Material &M)
 
 void cnc::graphics::Mesh::loadBuffers()
 {
-    puts("load mesh buffer");
     auto f = GLWrapper::get_GL_functions();
 
     f->glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferId);
