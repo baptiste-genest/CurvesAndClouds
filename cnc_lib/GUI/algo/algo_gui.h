@@ -31,6 +31,9 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <QVector3D>
+
+
 
 namespace cnc{
 
@@ -87,6 +90,10 @@ double point_to_pixel(double points);
 QColor vec_to_color(const cnc::vec& v);
 
 typedef std::function<QColor(uint,uint)> texture_function;
+
+inline QVector3D toQt(const vec& x){
+    return QVector3D(x(0),x(1),x(2));
+}
 
 }
 

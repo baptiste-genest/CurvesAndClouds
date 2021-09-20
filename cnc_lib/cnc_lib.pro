@@ -86,6 +86,7 @@ SOURCES += \
     core/algo/matrix_functions.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
+    core/algo/time_handling.cpp \
     core/quaternion.cpp \
     core/sparse_matrix.cpp \
     examples/mesh_bank.cpp
