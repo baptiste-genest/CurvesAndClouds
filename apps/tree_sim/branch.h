@@ -15,10 +15,14 @@ public:
         return width;
     }
 
-    scalar computeVolume() const override;
-    scalar collectOutEnergy() override;
+    virtual scalar computeVolume() const override;
+    virtual scalar collectOutEnergy() override;
     virtual scalar collectInEnergy(const QVector3D& sol_pos,scalar time) override;
     void growth(scalar in_energy) override;
+
+    void performLifeCycle();
+
+    scalar getCumulatedHeight() const;
 
 private:
     Branch(Branch* parent,const QVector3D& _pos,const QVector3D& _dir);
@@ -27,15 +31,19 @@ private:
     QVector3D pos;
     scalar length;
     scalar width;
+    scalar strength;
     std::vector<TreeElement*> splits;
-    std::vector<scalar> branches_energy;
+    std::vector<scalar> splits_lengths_from_root;
+
+    std::vector<scalar> branches_in_energy;
+    std::vector<scalar> branches_out_energy;
     scalar energy_cost;
     scalar energy_gain;
     TreeElement* directSon = nullptr;
-    Branch* father = nullptr;
+
 
     constexpr static int POWER_SPLITTING = 2;
-    void computeRedistributiveWeights(std::vector<scalar>& w) const;
+    std::vector<scalar> computeRedistributiveWeights() const;
 
     inline bool isSonLeaf() const
     {
@@ -56,7 +64,18 @@ private:
 
     scalar collectInEnergy() const;
 
-    scalar branch_self_prioritizing = 0.2;
+    inline scalar width_growth_kernel() const {
+        scalar y = width/MAX_WIDTH;
+        return std::exp(-y)*(1-y);
+    }
+
+    inline scalar length_growth_kernel() const {
+        scalar y = length/MAX_WIDTH;
+        return std::exp(-y)*(1-y);
+    }
+
+
+    scalar branch_self_prioritizing = 0.4;
 
 };
 

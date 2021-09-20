@@ -17,9 +17,7 @@ public:
         return 0;
     }
 
-    virtual inline scalar collectOutEnergy() override {
-        return 0;
-    }
+    virtual inline scalar collectOutEnergy() override;
 
     virtual scalar collectInEnergy(const QVector3D& sol_pos,scalar time) override;
 
@@ -27,8 +25,10 @@ public:
 
 private:
     scalar radius;
+    scalar collected_energy;
     QVector3D leaf_normal;
     QVector3D pos;
+    inline scalar computeLeafArea() const;
 };
 
 #endif // LEAF_H
