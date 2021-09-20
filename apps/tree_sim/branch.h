@@ -20,12 +20,15 @@ public:
     virtual scalar collectInEnergy(const QVector3D& sol_pos,scalar time) override;
     void growth(scalar in_energy) override;
 
-    void performLifeCycle();
+    void performLifeCycle(const QVector3D& sol_pos,scalar time);
 
-    scalar getCumulatedHeight() const;
+    QVector3D getPosition() const override;
+    scalar getAltitude() const override;
+
+    virtual void log(uint offset = 0) const override;
 
 private:
-    Branch(Branch* parent,const QVector3D& _pos,const QVector3D& _dir);
+    Branch(Branch* parent,scalar dff,const QVector3D& _dir);
 
     QVector3D dir;
     QVector3D pos;
@@ -34,6 +37,7 @@ private:
     scalar strength;
     std::vector<TreeElement*> splits;
     std::vector<scalar> splits_lengths_from_root;
+    scalar dist_from_father_root = 0;
 
     std::vector<scalar> branches_in_energy;
     std::vector<scalar> branches_out_energy;
@@ -60,6 +64,11 @@ private:
     inline bool isRoot() const
     {
         return father == nullptr;
+    }
+
+    inline bool hasNoSon() const
+    {
+        return directSon == nullptr && !splits.size();
     }
 
     scalar collectInEnergy() const;

@@ -2,6 +2,7 @@
 #define LEAF_H
 
 #include "tree_element.h"
+#include "branch.h"
 
 class Leaf : public TreeElement
 {
@@ -22,12 +23,16 @@ public:
     virtual scalar collectInEnergy(const QVector3D& sol_pos,scalar time) override;
 
     virtual void growth(scalar in_energy) override;
+    inline QVector3D getPosition() const override { return father->getPosition(); }
+    inline scalar getAltitude() const override { return father->getAltitude(); }
+    virtual void log(uint offset = 0) const override;
 
 private:
     scalar radius;
     scalar collected_energy;
     QVector3D leaf_normal;
     QVector3D pos;
+    Branch* father;
     inline scalar computeLeafArea() const;
 };
 

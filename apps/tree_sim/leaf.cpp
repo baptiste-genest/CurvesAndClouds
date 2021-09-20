@@ -16,6 +16,17 @@ void Leaf::growth(scalar in_energy)
 
 }
 
+void Leaf::log(uint offset) const
+{
+    std::string off;
+    for (uint k = 0;k<offset;k++)
+        off += "	";
+    std::cout << off << "LEAF:" << std::endl;
+    std::cout << off << "radius:" << radius << std::endl;
+}
+
+
+
 scalar Leaf::computeLeafArea() const
 {
     return radius*radius*M_PI;

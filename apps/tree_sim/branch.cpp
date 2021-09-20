@@ -29,6 +29,8 @@ scalar Branch::collectOutEnergy()
 scalar Branch::collectInEnergy(const QVector3D &sol_pos,scalar time)
 {
     scalar C = 0;
+    if (father == nullptr)
+        C = SOIL_ENERGY;
     int offset = (directSon != nullptr) ? 1 : 0;
     if (offset){
         scalar x = directSon->collectInEnergy(sol_pos,time);
@@ -46,16 +48,24 @@ scalar Branch::collectInEnergy(const QVector3D &sol_pos,scalar time)
 
 void Branch::growth(scalar in_energy)
 {
-    scalar energy_for_self = in_energy*branch_self_prioritizing;
-    scalar remaining_energy = in_energy - energy_for_self;
-    int offset = (directSon != nullptr) ? 1 : 0;
-    if (offset)
-        directSon->growth(remaining_energy);
+    scalar energy_for_self, remaining_energy;
+    if (hasNoSon()){
+        remaining_energy = 0;
+        energy_for_self = in_energy;
+    }
     else {
-        std::vector<scalar> w = computeRedistributiveWeights();
+        remaining_energy = in_energy*branch_self_prioritizing;
+        energy_for_self = in_energy - remaining_energy;
         int offset = (directSon != nullptr) ? 1 : 0;
-        for (uint k = 0;k<splits.size();k++)
-            splits[k+offset]->growth(in_energy*w[k+offset]);
+        if (offset) {
+            directSon->growth(remaining_energy);
+        }
+        else {
+            std::vector<scalar> w = computeRedistributiveWeights();
+            int offset = (directSon != nullptr) ? 1 : 0;
+            for (uint k = 0;k<splits.size();k++)
+                splits[k+offset]->growth(remaining_energy*w[k+offset]);
+        }
     }
     scalar length_growth_factor = length_growth_kernel();
     if (length < MAX_LENGTH)
@@ -66,14 +76,22 @@ void Branch::growth(scalar in_energy)
     strength += remaining_energy*(1-width_growth_factor);
 
     if (length >= MAX_LENGTH && directSon == nullptr)
-        directSon = new Branch(this,pos + dir*length,(dir+rand_vec3()*.1).normalized());
+        directSon = new Branch(this,1.f,(dir+rand_vec3()*.1).normalized());
+    scalar split_prob = 0.05*(getAltitude()/MAX_HEIGHT);
+    if (cnc::algo::stat::random_var::random_scalar(0,1) < split_prob)
+        splits.push_back(new Branch(this,length/MAX_LENGTH,(dir+rand_vec3()*.9).normalized()));
 }
 
-Branch::Branch(Branch *parent, const QVector3D &_pos, const QVector3D &_dir)
+void Branch::performLifeCycle(const QVector3D &sol_pos, scalar time)
+{
+    collectInEnergy(sol_pos,time);
+}
+
+Branch::Branch(Branch *parent,scalar dff, const QVector3D &_dir)
     :	Branch()
 {
     father = parent;
-    pos = _pos;
+    dist_from_father_root = dff;
     dir = _dir;
 }
 
@@ -100,11 +118,29 @@ std::vector<scalar> Branch::computeRedistributiveWeights() const
     return w;
 }
 
-scalar Branch::getCumulatedHeight() const
+QVector3D Branch::getPosition() const
+{
+    if (father == nullptr)
+        return QVector3D();
+    return father->getPosition() + father->dir*father->length*dist_from_father_root;
+}
+
+scalar Branch::getAltitude() const
 {
     if (father == nullptr)
         return 0;
-    return length + father->getCumulatedHeight();
+    return father->getAltitude() + father->length*dist_from_father_root;
+}
+
+void Branch::log(uint offset) const
+{
+    std::string off;
+    for (uint k = 0;k<offset;k++)
+        off += "	";
+    if (father == nullptr)
+        std::cout << off <<  "ROOT:" << std::endl;
+    else
+        std::cout << off << "BRANCH:" << std::endl;
 }
 
 scalar Branch::computeVolume() const
