@@ -82,6 +82,42 @@ void cnc::graphics::Mesh::onDraw(const cnc::graphics::Material &M)
     Primitive::onDraw(M);
 }
 
+void cnc::graphics::Mesh::computeNormals()
+{
+    std::vector<scalar> face_areas(TRIANGLE_COUNT);
+    std::vector<vec3> face_normals(TRIANGLE_COUNT);
+    for (index f = 0;f<(index)TRIANGLE_COUNT;f++){
+        face_areas[f] = computeFaceArea(f);
+        face_normals[f] = computeFaceNormal(f);
+    }
+    m_normals.clear();
+    m_normals.resize(m_vertices.size(),vec3());
+    for (index f = 0;f<(index)TRIANGLE_COUNT;f++){
+        for (ushort i = 0;i<3;i++){
+            index id = f*3+i;
+            m_normals[id] += face_normals[f]/face_areas[f];
+        }
+    }
+    for (vec3& n : m_normals)
+        n.normalize();
+}
+
+cnc::scalar cnc::graphics::Mesh::computeFaceArea(cnc::graphics::index f) const
+{
+    const vec3& a = m_vertices[f*3];
+    const vec3& b = m_vertices[f*3+1];
+    const vec3& c = m_vertices[f*3+2];
+    return vec3::crossProduct(b-a,c-a).length()*0.5;
+}
+
+cnc::graphics::vec3 cnc::graphics::Mesh::computeFaceNormal(cnc::graphics::index f) const
+{
+    const vec3& a = m_vertices[f*3];
+    const vec3& b = m_vertices[f*3+1];
+    const vec3& c = m_vertices[f*3+2];
+    return vec3::crossProduct(b-a,c-a).normalized();
+}
+
 void cnc::graphics::Mesh::loadBuffers()
 {
     auto f = GLWrapper::get_GL_functions();

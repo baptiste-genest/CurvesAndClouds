@@ -21,11 +21,17 @@ class Mesh : public Primitive
 public:
     Mesh(const std::vector<vec3>& pos,const std::vector<vec3>& normals,const std::vector<index> faces);
     Mesh(const std::string& loc,float scale);
+    Mesh() {}
 
     virtual void init(const Material& M) override;
     virtual void onDraw(const Material& M) override;
 
-private:
+protected:
+
+    void computeNormals();
+    scalar computeFaceArea(index f) const;
+    vec3 computeFaceNormal(index f) const;
+
 
     loc m_normalBufferId;
     loc m_normalLoc;

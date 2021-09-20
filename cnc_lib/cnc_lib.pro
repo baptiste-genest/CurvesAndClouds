@@ -28,6 +28,7 @@ SOURCES += \
     GUI/plots/3D/primitives/primitive.cpp \
     GUI/plots/3D/primitives/quad.cpp \
     GUI/plots/3D/primitives/triangle_primitive.cpp \
+    GUI/plots/3D/primitives/tube_primitive.cpp \
     GUI/plots/3D/scene.cpp \
     GUI/plots/3D/scene_viewer.cpp \
     GUI/plots/boolean_field.cpp \
@@ -73,6 +74,7 @@ SOURCES += \
     core/algo/geometry/marching_cubes.cpp \
     core/algo/geometry/mesh.cpp \
     core/algo/geometry/parametrization.cpp \
+    core/algo/geometry/polynomial_curve.cpp \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
     core/algo/geometry/rotations.cpp \
@@ -112,6 +114,7 @@ HEADERS += \
     GUI/plots/3D/primitives/primitive.h \
     GUI/plots/3D/primitives/quad.h \
     GUI/plots/3D/primitives/triangle_primitive.h \
+    GUI/plots/3D/primitives/tube_primitive.h \
     GUI/plots/3D/scene.h \
     GUI/plots/3D/scene_viewer.h \
     GUI/plots/3D/shaders/fshader.glsl \
@@ -166,6 +169,7 @@ HEADERS += \
     core/algo/geometry/marching_table.h \
     core/algo/geometry/mesh.h \
     core/algo/geometry/parametrization.h \
+    core/algo/geometry/polynomial_curve.h \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \
     core/algo/geometry/rotations.h \
