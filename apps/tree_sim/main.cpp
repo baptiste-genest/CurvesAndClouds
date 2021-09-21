@@ -1,4 +1,5 @@
 #include <curvesandcloud.h>
+#include "branch.h"
 
 using namespace cnc;
 using namespace cnc::graphics;
@@ -6,6 +7,16 @@ using namespace cnc::graphics;
 
 int main(int argc, char *argv[])
 {
+    vec3 p(0.,0.,100.f);
+    float dt = 0.1;
+
+    Branch* B = new Branch();
+
+    for (uint k = 0;k<100;k++)
+        B->performLifeCycle(p,dt);
+    B->log();
+
+    return 0;
     QApplication App(argc,argv);
     PlotWindow w; w.resize(500,500);
 

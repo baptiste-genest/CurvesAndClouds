@@ -2,6 +2,7 @@
 #define TUBE_PRIMITIVE_H
 
 #include "mesh_primitive.h"
+#include <QMatrix3x3>
 
 
 namespace cnc {

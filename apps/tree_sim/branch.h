@@ -30,6 +30,9 @@ public:
 private:
     Branch(Branch* parent,scalar dff,const QVector3D& _dir);
 
+    inline void addSon();
+    inline void addSplit();
+
     QVector3D dir;
     QVector3D pos;
     scalar length;
@@ -79,7 +82,7 @@ private:
     }
 
     inline scalar length_growth_kernel() const {
-        scalar y = length/MAX_WIDTH;
+        scalar y = length/MAX_LENGTH;
         return std::exp(-y)*(1-y);
     }
 

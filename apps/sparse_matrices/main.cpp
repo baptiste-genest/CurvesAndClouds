@@ -3,22 +3,40 @@
 using namespace cnc;
 using namespace cnc::algo;
 
+smat build_sparse_2D_laplacian(uint w,uint h){
+    int A = w*h;
+    smat L(A);
+    for (int j = 0;j<A;j++){
+
+        int y = j/w, x = j%w;
+        int nb_non_null = 0;
+        if (y>0)
+            nb_non_null++;
+        if (x>0)
+            nb_non_null++;
+        if (x+1<w)
+            nb_non_null++;
+        if (y+1<h)
+            nb_non_null++;
+        if (y>0)
+            L.add_in_row(j - w,1);
+        if (x>0)
+            L.add_in_row(j - 1,1);
+        L.add_in_row(j,-nb_non_null);
+        if (x+1<w)
+            L.add_in_row(j + 1,1);
+        if (y+1<h)
+            L.add_in_row(j + w,1);
+        L.new_row();
+    }
+    L.end_construct();
+    return L;
+}
 
 int main()
 {
-    mat D(4,4);
-    smat S(4,4);
-    S.add_in_row(3,1.f);D(3,0) = 1.f;
-    S.new_row();
-    S.add_in_row(1,2.f);D(1,1) = 2.f;
-    S.new_row();
-    S.add_in_row(0,3.f);D(0,2) = 3.f;
-    S.new_row();
-    S.add_in_row(2,4.f);D(2,3) = 4.f;
-    S.end_construct();
-    //S.print();
-    std::vector<uint> id({0,1,3});
-    set_known_variables(S,id).first.print();
-    std::cout << set_known_variables(D,id).first << std::endl;
+    smat A = build_sparse_2D_laplacian(65,118);
+    vec b(65*118);
+    A*b;
     return 0;
 }

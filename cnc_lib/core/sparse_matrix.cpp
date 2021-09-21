@@ -82,6 +82,7 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
 
 void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
 {
+    std::cout << "Address " << this << " " <<(int) frow << " " <<(int) lrow << std::endl;
     for (uint j = frow;j<lrow;j++){
         for (uint k = rowptr[j];k<rowptr[j+1];k++)
             b(j) += v[k]*x(colind[k]);

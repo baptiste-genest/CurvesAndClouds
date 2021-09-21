@@ -1,6 +1,6 @@
 CONFIG += c++11
 
-DEFINES += PRECISION DOUBLE
+DEFINES += PRECISION FLOAT
 
 DEPENDPATH += . ../../cnc_lib
 INCLUDEPATH += ../../cnc_lib

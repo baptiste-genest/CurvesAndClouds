@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
         });
 
 
+        std::cout << "ui:" << w2 << ' ' << h2 << std::endl;
         smat Lap = build_sparse_2D_laplacian(w2,h2);
         std::vector<uint> del_omega = compute_boundary_id(w2,h2);
 
