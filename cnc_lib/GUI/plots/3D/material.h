@@ -89,7 +89,7 @@ struct shader_uniform {
 };
 
 
-class Material
+class Material : public QOpenGLFunctions
 {
 public:
     Material();
@@ -135,6 +135,7 @@ public:
     //void draw();
 
     static Material shadedUniformColor(const std::vector<float>& color);
+    static Material uniformColor(const std::vector<float>& color);
 
 private:
     std::string m_vertexShader;

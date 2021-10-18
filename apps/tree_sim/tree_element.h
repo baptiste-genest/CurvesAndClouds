@@ -24,6 +24,8 @@ public:
     virtual QVector3D getPosition() const = 0;
     virtual scalar getAltitude() const = 0;
     virtual void log(uint offset) const = 0;
+    virtual void buildMesh(graphics::Scene* S) = 0;
+    virtual void directSonChain(std::vector<QVector3D>& p,std::vector<scalar>& r,graphics::Scene* S) = 0;
 protected:
     static scalar growth_kernel(scalar x);
 

@@ -35,8 +35,15 @@ smat build_sparse_2D_laplacian(uint w,uint h){
 
 int main()
 {
-    smat A = build_sparse_2D_laplacian(65,118);
-    vec b(65*118);
-    A*b;
+
+    uint w = 1000;
+    mat A(w);// = build_sparse_2D_laplacian(w,w);
+    vec b(w);
+    for (uint k = 0;k<10;k++){
+        auto start_time = std::chrono::high_resolution_clock::now();
+        A*b;
+        auto current_time = std::chrono::high_resolution_clock::now();
+        std::cout << "time elapsed " << std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count()*0.001 << std::endl;
+    }
     return 0;
 }

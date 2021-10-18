@@ -25,13 +25,18 @@ public:
     QVector3D getPosition() const override;
     scalar getAltitude() const override;
 
+
     virtual void log(uint offset = 0) const override;
+    virtual void buildMesh(graphics::Scene* S) override;
+    virtual void directSonChain(std::vector<QVector3D>& p,std::vector<scalar>& r,graphics::Scene* S) override;
 
 private:
     Branch(Branch* parent,scalar dff,const QVector3D& _dir);
 
     inline void addSon();
     inline void addSplit();
+
+    graphics::Material branchMat = graphics::Material::shadedUniformColor({1.,1.,0.3});
 
     QVector3D dir;
     QVector3D pos;

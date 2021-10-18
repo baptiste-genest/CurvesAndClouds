@@ -53,6 +53,7 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
+		../cnc_lib/GUI/algo/compute_shader.cpp \
 		../cnc_lib/GUI/algo/mutablevalue.cpp \
 		../cnc_lib/GUI/algo/mutablevaluecursor.cpp \
 		../cnc_lib/GUI/algo/mutablevalueticker.cpp \
@@ -72,6 +73,7 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp \
 		../cnc_lib/GUI/plots/3D/scene.cpp \
 		../cnc_lib/GUI/plots/3D/scene_viewer.cpp \
+		../cnc_lib/GUI/plots/3D/texture.cpp \
 		../cnc_lib/GUI/plots/boolean_field.cpp \
 		../cnc_lib/GUI/plots/colormap.cpp \
 		../cnc_lib/GUI/plots/complex_function_plot.cpp \
@@ -120,6 +122,7 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		../cnc_lib/core/algo/geometry/quadtreemesher.cpp \
 		../cnc_lib/core/algo/geometry/rotations.cpp \
 		../cnc_lib/core/algo/geometry/simpleglmesh.cpp \
+		../cnc_lib/core/algo/geometry/smooth_interpolator.cpp \
 		../cnc_lib/core/algo/geometry/triangle.cpp \
 		../cnc_lib/core/algo/geometry/vertex.cpp \
 		../cnc_lib/core/algo/inout.cpp \
@@ -138,6 +141,7 @@ SOURCES       = ../cnc_lib/GUI/algo/algo_gui.cpp \
 		moc_stat_window.cpp \
 		moc_plotwindow.cpp
 OBJECTS       = algo_gui.o \
+		compute_shader.o \
 		mutablevalue.o \
 		mutablevaluecursor.o \
 		mutablevalueticker.o \
@@ -157,6 +161,7 @@ OBJECTS       = algo_gui.o \
 		tube_primitive.o \
 		scene.o \
 		scene_viewer.o \
+		texture.o \
 		boolean_field.o \
 		colormap.o \
 		complex_function_plot.o \
@@ -205,6 +210,7 @@ OBJECTS       = algo_gui.o \
 		quadtreemesher.o \
 		rotations.o \
 		simpleglmesh.o \
+		smooth_interpolator.o \
 		triangle.o \
 		vertex.o \
 		inout.o \
@@ -401,6 +407,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/5.15.2/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt/5.15.2/gcc_64/mkspecs/features/lex.prf \
 		../cnc_lib/cnc_lib.pro ../cnc_lib/GUI/algo/algo_gui.h \
+		../cnc_lib/GUI/algo/compute_shader.h \
 		../cnc_lib/GUI/algo/mutablevalue.h \
 		../cnc_lib/GUI/algo/mutablevaluecursor.h \
 		../cnc_lib/GUI/algo/mutablevalueticker.h \
@@ -430,6 +437,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/GUI/plots/3D/shaders/fshaderGL3.glsl \
 		../cnc_lib/GUI/plots/3D/shaders/vshader.glsl \
 		../cnc_lib/GUI/plots/3D/shaders/vshaderGL3.glsl \
+		../cnc_lib/GUI/plots/3D/texture.h \
 		../cnc_lib/GUI/plots/boolean_field.h \
 		../cnc_lib/GUI/plots/colormap.h \
 		../cnc_lib/GUI/plots/complex_function_plot.h \
@@ -483,6 +491,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/geometry/quadtreemesher.h \
 		../cnc_lib/core/algo/geometry/rotations.h \
 		../cnc_lib/core/algo/geometry/simpleglmesh.h \
+		../cnc_lib/core/algo/geometry/smooth_interpolator.h \
 		../cnc_lib/core/algo/geometry/triangle.h \
 		../cnc_lib/core/algo/geometry/vertex.h \
 		../cnc_lib/core/algo/inout.h \
@@ -498,6 +507,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/matrix.h \
 		../cnc_lib/core/matrix_errors.h \
 		../cnc_lib/curvesandcloud.h ../cnc_lib/GUI/algo/algo_gui.cpp \
+		../cnc_lib/GUI/algo/compute_shader.cpp \
 		../cnc_lib/GUI/algo/mutablevalue.cpp \
 		../cnc_lib/GUI/algo/mutablevaluecursor.cpp \
 		../cnc_lib/GUI/algo/mutablevalueticker.cpp \
@@ -517,6 +527,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp \
 		../cnc_lib/GUI/plots/3D/scene.cpp \
 		../cnc_lib/GUI/plots/3D/scene_viewer.cpp \
+		../cnc_lib/GUI/plots/3D/texture.cpp \
 		../cnc_lib/GUI/plots/boolean_field.cpp \
 		../cnc_lib/GUI/plots/colormap.cpp \
 		../cnc_lib/GUI/plots/complex_function_plot.cpp \
@@ -565,6 +576,7 @@ DIST          = ../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../cnc_lib/core/algo/geometry/quadtreemesher.cpp \
 		../cnc_lib/core/algo/geometry/rotations.cpp \
 		../cnc_lib/core/algo/geometry/simpleglmesh.cpp \
+		../cnc_lib/core/algo/geometry/smooth_interpolator.cpp \
 		../cnc_lib/core/algo/geometry/triangle.cpp \
 		../cnc_lib/core/algo/geometry/vertex.cpp \
 		../cnc_lib/core/algo/inout.cpp \
@@ -976,8 +988,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/GLWrapper.h ../cnc_lib/GUI/plots/3D/camera.h ../cnc_lib/GUI/plots/3D/color.h ../cnc_lib/GUI/plots/3D/geometryengine.h ../cnc_lib/GUI/plots/3D/graphics.h ../cnc_lib/GUI/plots/3D/lights/light_source.h ../cnc_lib/GUI/plots/3D/lights/uniform_light.h ../cnc_lib/GUI/plots/3D/material.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/3D/object.h ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.h ../cnc_lib/GUI/plots/3D/primitives/primitive.h ../cnc_lib/GUI/plots/3D/primitives/quad.h ../cnc_lib/GUI/plots/3D/primitives/triangle_primitive.h ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.h ../cnc_lib/GUI/plots/3D/scene.h ../cnc_lib/GUI/plots/3D/scene_viewer.h ../cnc_lib/GUI/plots/3D/shaders/fshader.glsl ../cnc_lib/GUI/plots/3D/shaders/fshaderGL3.glsl ../cnc_lib/GUI/plots/3D/shaders/vshader.glsl ../cnc_lib/GUI/plots/3D/shaders/vshaderGL3.glsl ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/marching_cubes.h ../cnc_lib/core/algo/geometry/marching_table.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/parametrization.h ../cnc_lib/core/algo/geometry/polynomial_curve.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/simpleglmesh.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/geometry/vertex.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/core/sparse_matrix.h ../cnc_lib/core/time_handling.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/GLWrapper.cpp ../cnc_lib/GUI/plots/3D/camera.cpp ../cnc_lib/GUI/plots/3D/color.cpp ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/lights/light_source.cpp ../cnc_lib/GUI/plots/3D/lights/uniform_light.cpp ../cnc_lib/GUI/plots/3D/material.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/3D/object.cpp ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/quad.cpp ../cnc_lib/GUI/plots/3D/primitives/triangle_primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp ../cnc_lib/GUI/plots/3D/scene.cpp ../cnc_lib/GUI/plots/3D/scene_viewer.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/polynomial_curve.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/algo/time_handling.cpp ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/examples/mesh_bank.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.h ../cnc_lib/GUI/algo/compute_shader.h ../cnc_lib/GUI/algo/mutablevalue.h ../cnc_lib/GUI/algo/mutablevaluecursor.h ../cnc_lib/GUI/algo/mutablevalueticker.h ../cnc_lib/GUI/display_info.h GUI/plot_frame.h GUI/plot_layer.h GUI/plot_policy.h GUI/plot_tab.h ../cnc_lib/GUI/plots/3D/GLWrapper.h ../cnc_lib/GUI/plots/3D/camera.h ../cnc_lib/GUI/plots/3D/color.h ../cnc_lib/GUI/plots/3D/geometryengine.h ../cnc_lib/GUI/plots/3D/graphics.h ../cnc_lib/GUI/plots/3D/lights/light_source.h ../cnc_lib/GUI/plots/3D/lights/uniform_light.h ../cnc_lib/GUI/plots/3D/material.h ../cnc_lib/GUI/plots/3D/mesh_displayer.h ../cnc_lib/GUI/plots/3D/object.h ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.h ../cnc_lib/GUI/plots/3D/primitives/primitive.h ../cnc_lib/GUI/plots/3D/primitives/quad.h ../cnc_lib/GUI/plots/3D/primitives/triangle_primitive.h ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.h ../cnc_lib/GUI/plots/3D/scene.h ../cnc_lib/GUI/plots/3D/scene_viewer.h ../cnc_lib/GUI/plots/3D/shaders/fshader.glsl ../cnc_lib/GUI/plots/3D/shaders/fshaderGL3.glsl ../cnc_lib/GUI/plots/3D/shaders/vshader.glsl ../cnc_lib/GUI/plots/3D/shaders/vshaderGL3.glsl ../cnc_lib/GUI/plots/3D/texture.h ../cnc_lib/GUI/plots/boolean_field.h ../cnc_lib/GUI/plots/colormap.h ../cnc_lib/GUI/plots/complex_function_plot.h ../cnc_lib/GUI/plots/curves.h ../cnc_lib/GUI/plots/d2_curve.h ../cnc_lib/GUI/plots/euclidean_geometry.h ../cnc_lib/GUI/plots/field.h ../cnc_lib/GUI/plots/figure.h ../cnc_lib/GUI/plots/formula_tex.h ../cnc_lib/GUI/plots/functionplot.h ../cnc_lib/GUI/plots/grid_layer.h ../cnc_lib/GUI/plots/level_curve.h ../cnc_lib/GUI/plots/plot_frame.h ../cnc_lib/GUI/plots/plot_group.h ../cnc_lib/GUI/plots/plot_layer.h ../cnc_lib/GUI/plots/plot_policy.h ../cnc_lib/GUI/plots/plot_tab.h ../cnc_lib/GUI/plots/plottable.h GUI/plots/plotwindow.h ../cnc_lib/GUI/plots/point_cloud.h ../cnc_lib/GUI/plots/scalar_field.h ../cnc_lib/GUI/plots/stat_list_window.h ../cnc_lib/GUI/plots/stat_window.h ../cnc_lib/GUI/plots/trajectory.h ../cnc_lib/GUI/plots/vector_field.h ../cnc_lib/GUI/plotwindow.h ../cnc_lib/GUI/ColorWheel.h ../cnc_lib/cnc_error.h ../cnc_lib/cnc_types.h ../cnc_lib/core/algo/algo.h ../cnc_lib/core/algo/bit_operations.h ../cnc_lib/core/algo/calculus/calculus.h ../cnc_lib/core/algo/calculus/complex_analysis.h ../cnc_lib/core/algo/calculus/differential_equations.h ../cnc_lib/core/algo/calculus/finite_differences.h ../cnc_lib/core/algo/calculus/finite_elements/finite_elements.h ../cnc_lib/core/algo/calculus/fourier.h ../cnc_lib/core/algo/calculus/integration_scheme.h ../cnc_lib/core/algo/calculus/lagrange_interpolator.h ../cnc_lib/core/algo/calculus/optimization.h ../cnc_lib/core/algo/calculus/spline.h ../cnc_lib/core/algo/calculus/vector_calculus.h ../cnc_lib/core/algo/geometry/geometry.h ../cnc_lib/core/algo/geometry/halfedge.h ../cnc_lib/core/algo/geometry/marching_cubes.h ../cnc_lib/core/algo/geometry/marching_table.h ../cnc_lib/core/algo/geometry/mesh.h ../cnc_lib/core/algo/geometry/parametrization.h ../cnc_lib/core/algo/geometry/polynomial_curve.h ../cnc_lib/core/algo/geometry/quadtree.h ../cnc_lib/core/algo/geometry/quadtreemesher.h ../cnc_lib/core/algo/geometry/rotations.h ../cnc_lib/core/algo/geometry/simpleglmesh.h ../cnc_lib/core/algo/geometry/smooth_interpolator.h ../cnc_lib/core/algo/geometry/triangle.h ../cnc_lib/core/algo/geometry/vertex.h ../cnc_lib/core/algo/inout.h ../cnc_lib/core/algo/lin_alg.h ../cnc_lib/core/algo/matrix_functions.h ../cnc_lib/core/algo/statistics/random_var.h ../cnc_lib/core/algo/statistics/statistics.h ../cnc_lib/core/matrix_algo.h ../cnc_lib/core/quaternion.h ../cnc_lib/core/sparse_matrix.h ../cnc_lib/core/time_handling.h ../cnc_lib/curvesandcloudCore.h ../cnc_lib/core/matrix.h ../cnc_lib/core/matrix_errors.h ../cnc_lib/curvesandcloud.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/compute_shader.cpp ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevaluecursor.cpp ../cnc_lib/GUI/algo/mutablevalueticker.cpp ../cnc_lib/GUI/plots/3D/GLWrapper.cpp ../cnc_lib/GUI/plots/3D/camera.cpp ../cnc_lib/GUI/plots/3D/color.cpp ../cnc_lib/GUI/plots/3D/geometryengine.cpp ../cnc_lib/GUI/plots/3D/lights/light_source.cpp ../cnc_lib/GUI/plots/3D/lights/uniform_light.cpp ../cnc_lib/GUI/plots/3D/material.cpp ../cnc_lib/GUI/plots/3D/mesh_displayer.cpp ../cnc_lib/GUI/plots/3D/object.cpp ../cnc_lib/GUI/plots/3D/primitives/mesh_primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/quad.cpp ../cnc_lib/GUI/plots/3D/primitives/triangle_primitive.cpp ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp ../cnc_lib/GUI/plots/3D/scene.cpp ../cnc_lib/GUI/plots/3D/scene_viewer.cpp ../cnc_lib/GUI/plots/3D/texture.cpp ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/colormap.cpp ../cnc_lib/GUI/plots/complex_function_plot.cpp ../cnc_lib/GUI/plots/curves.cpp ../cnc_lib/GUI/plots/d2_curve.cpp ../cnc_lib/GUI/plots/euclidean_geometry.cpp ../cnc_lib/GUI/plots/field.cpp ../cnc_lib/GUI/plots/figure.cpp ../cnc_lib/GUI/plots/formula_tex.cpp ../cnc_lib/GUI/plots/functionplot.cpp ../cnc_lib/GUI/plots/grid_layer.cpp ../cnc_lib/GUI/plots/level_curve.cpp ../cnc_lib/GUI/plots/plot_frame.cpp ../cnc_lib/GUI/plots/plot_group.cpp ../cnc_lib/GUI/plots/plot_layer.cpp ../cnc_lib/GUI/plots/plot_stat_display.cpp ../cnc_lib/GUI/plots/plot_tab.cpp ../cnc_lib/GUI/plots/plottable.cpp ../cnc_lib/GUI/plots/point_cloud.cpp ../cnc_lib/GUI/plots/scalar_field.cpp ../cnc_lib/GUI/plots/stat_list_window.cpp ../cnc_lib/GUI/plots/stat_window.cpp ../cnc_lib/GUI/plots/trajectory.cpp ../cnc_lib/GUI/plots/vector_field.cpp ../cnc_lib/GUI/plotwindow.cpp ../cnc_lib/GUI/ColorWheel.cpp ../cnc_lib/core/algo/algo.cpp ../cnc_lib/core/algo/bit_operations.cpp ../cnc_lib/core/algo/calculus/calculus.cpp ../cnc_lib/core/algo/calculus/complex_analysis.cpp ../cnc_lib/core/algo/calculus/differential_equations.cpp ../cnc_lib/core/algo/calculus/finite_differences.cpp ../cnc_lib/core/algo/calculus/fourier.cpp ../cnc_lib/core/algo/calculus/integration_scheme.cpp ../cnc_lib/core/algo/calculus/lagrange_interpolator.cpp ../cnc_lib/core/algo/calculus/optimization.cpp ../cnc_lib/core/algo/calculus/spline.cpp ../cnc_lib/core/algo/calculus/vector_calculus.cpp ../cnc_lib/core/algo/geometry/geometry.cpp ../cnc_lib/core/algo/geometry/halfedge.cpp ../cnc_lib/core/algo/geometry/marching_cubes.cpp ../cnc_lib/core/algo/geometry/mesh.cpp ../cnc_lib/core/algo/geometry/parametrization.cpp ../cnc_lib/core/algo/geometry/polynomial_curve.cpp ../cnc_lib/core/algo/geometry/quadtree.cpp ../cnc_lib/core/algo/geometry/quadtreemesher.cpp ../cnc_lib/core/algo/geometry/rotations.cpp ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/algo/geometry/smooth_interpolator.cpp ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/vertex.cpp ../cnc_lib/core/algo/inout.cpp ../cnc_lib/core/algo/lin_alg.cpp ../cnc_lib/core/algo/matrix_functions.cpp ../cnc_lib/core/algo/statistics/random_var.cpp ../cnc_lib/core/algo/statistics/statistics.cpp ../cnc_lib/core/algo/time_handling.cpp ../cnc_lib/core/quaternion.cpp ../cnc_lib/core/sparse_matrix.cpp ../cnc_lib/examples/mesh_bank.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -2617,6 +2629,106 @@ algo_gui.o: ../cnc_lib/GUI/algo/algo_gui.cpp ../cnc_lib/GUI/algo/algo_gui.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o algo_gui.o ../cnc_lib/GUI/algo/algo_gui.cpp
+
+compute_shader.o: ../cnc_lib/GUI/algo/compute_shader.cpp ../cnc_lib/GUI/algo/compute_shader.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qt_windows.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopengles2ext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglext.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglcontext.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QSurfaceFormat \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qsurfaceformat.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglversionfunctions.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../cnc_lib/GUI/plots/3D/GLWrapper.h \
+		../cnc_lib/cnc_error.h \
+		../cnc_lib/GUI/plots/3D/graphics.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector3D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector3d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QMatrix4x4 \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix4x4.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qvector4d.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qquaternion.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qgenericmatrix.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		../cnc_lib/GUI/plots/3D/color.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QVector4D \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLFunctions_4_3_Core \
+		../../Qt/5.15.2/gcc_64/include/QtGui/qopenglfunctions_4_3_core.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QOpenGLVersionFunctions
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o compute_shader.o ../cnc_lib/GUI/algo/compute_shader.cpp
 
 mutablevalue.o: ../cnc_lib/GUI/algo/mutablevalue.cpp ../cnc_lib/GUI/algo/mutablevalue.h \
 		../cnc_lib/cnc_types.h \
@@ -4746,7 +4858,9 @@ tube_primitive.o: ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp ../cnc_l
 		../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
 		../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
-		../../Qt/5.15.2/gcc_64/include/QtCore/qline.h
+		../../Qt/5.15.2/gcc_64/include/QtCore/qline.h \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QMatrix3x3 \
+		../../Qt/5.15.2/gcc_64/include/QtGui/QQuaternion
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tube_primitive.o ../cnc_lib/GUI/plots/3D/primitives/tube_primitive.cpp
 
 scene.o: ../cnc_lib/GUI/plots/3D/scene.cpp ../cnc_lib/GUI/plots/3D/scene.h \
@@ -4995,6 +5109,9 @@ scene_viewer.o: ../cnc_lib/GUI/plots/3D/scene_viewer.cpp ../cnc_lib/GUI/plots/3D
 		../../Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
 		../../Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene_viewer.o ../cnc_lib/GUI/plots/3D/scene_viewer.cpp
+
+texture.o: ../cnc_lib/GUI/plots/3D/texture.cpp ../cnc_lib/GUI/plots/3D/texture.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o texture.o ../cnc_lib/GUI/plots/3D/texture.cpp
 
 boolean_field.o: ../cnc_lib/GUI/plots/boolean_field.cpp ../cnc_lib/GUI/plots/boolean_field.h \
 		../cnc_lib/GUI/plots/field.h \
@@ -9941,6 +10058,9 @@ simpleglmesh.o: ../cnc_lib/core/algo/geometry/simpleglmesh.cpp ../cnc_lib/core/a
 		../cnc_lib/core/algo/calculus/calculus.h \
 		../cnc_lib/core/sparse_matrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o simpleglmesh.o ../cnc_lib/core/algo/geometry/simpleglmesh.cpp
+
+smooth_interpolator.o: ../cnc_lib/core/algo/geometry/smooth_interpolator.cpp ../cnc_lib/core/algo/geometry/smooth_interpolator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o smooth_interpolator.o ../cnc_lib/core/algo/geometry/smooth_interpolator.cpp
 
 triangle.o: ../cnc_lib/core/algo/geometry/triangle.cpp ../cnc_lib/core/algo/geometry/triangle.h \
 		../cnc_lib/core/algo/algo.h \

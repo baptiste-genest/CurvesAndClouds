@@ -10,7 +10,15 @@ INCLUDEPATH += ../../cnc_lib
 LIBS += -L../../debug -L../../cnc_lib -lcnc_lib
 
 SOURCES += \
-        main.cpp
+        cell.cpp \
+        main.cpp \
+        scell.cpp \
+        skiplist.cpp
+
+HEADERS += \
+    cell.h \
+    scell.h \
+    skiplist.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

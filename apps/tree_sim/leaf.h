@@ -26,6 +26,8 @@ public:
     inline QVector3D getPosition() const override { return father->getPosition(); }
     inline scalar getAltitude() const override { return father->getAltitude(); }
     virtual void log(uint offset = 0) const override;
+    virtual void buildMesh(graphics::Scene* S) override {}
+    virtual void directSonChain(std::vector<QVector3D>& p,std::vector<scalar>& r,graphics::Scene* S) override {}
 
 private:
     scalar radius;

@@ -3,6 +3,7 @@
 
 #include "mesh_primitive.h"
 #include <QMatrix3x3>
+#include <QQuaternion>
 
 
 namespace cnc {

@@ -12,6 +12,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 SOURCES += \
     GUI/algo/algo_gui.cpp \
+    GUI/algo/compute_shader.cpp \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
     GUI/plots/3D/primitives/tube_primitive.cpp \
     GUI/plots/3D/scene.cpp \
     GUI/plots/3D/scene_viewer.cpp \
+    GUI/plots/3D/texture.cpp \
     GUI/plots/boolean_field.cpp \
     GUI/plots/colormap.cpp \
     GUI/plots/complex_function_plot.cpp \
@@ -79,6 +81,7 @@ SOURCES += \
     core/algo/geometry/quadtreemesher.cpp \
     core/algo/geometry/rotations.cpp \
     core/algo/geometry/simpleglmesh.cpp \
+    core/algo/geometry/smooth_interpolator.cpp \
     core/algo/geometry/triangle.cpp \
     core/algo/geometry/vertex.cpp \
     core/algo/inout.cpp \
@@ -93,6 +96,7 @@ SOURCES += \
 
 HEADERS += \
     GUI/algo/algo_gui.h \
+    GUI/algo/compute_shader.h \
     GUI/algo/mutablevalue.h \
     GUI/algo/mutablevaluecursor.h \
     GUI/algo/mutablevalueticker.h \
@@ -122,6 +126,7 @@ HEADERS += \
     GUI/plots/3D/shaders/fshaderGL3.glsl \
     GUI/plots/3D/shaders/vshader.glsl \
     GUI/plots/3D/shaders/vshaderGL3.glsl \
+    GUI/plots/3D/texture.h \
     GUI/plots/boolean_field.h \
     GUI/plots/colormap.h \
     GUI/plots/complex_function_plot.h \
@@ -175,6 +180,7 @@ HEADERS += \
     core/algo/geometry/quadtreemesher.h \
     core/algo/geometry/rotations.h \
     core/algo/geometry/simpleglmesh.h \
+    core/algo/geometry/smooth_interpolator.h \
     core/algo/geometry/triangle.h \
     core/algo/geometry/vertex.h \
     core/algo/inout.h \

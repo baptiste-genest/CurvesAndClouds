@@ -8,38 +8,38 @@ cnc::graphics::Tube::Tube(const std::vector<cnc::graphics::vec3> &nodes,const st
 {
     m_vertices.clear();
     m_indexArray.clear();
-    const static QVector3D x(1,0.456,.123);
-    QVector3D ring[circular_resolution];
-    for (uint k = 0;k<circular_resolution;k++){
-        scalar th = 2*M_PI*k/(circular_resolution-1);
-        ring[k] = QVector3D(cos(th),sin(th),0);
+    const static vec3 x(0.321,0.534,.551);
+
+    const float th = 360./circular_resolution;
+    vec3 d,d_p;
+    for (uint k = 0;k<nodes.size();k++){
+        if ( k < nodes.size()-1){
+            d = (nodes[k+1]-nodes[k]).normalized();
+            d_p = QVector3D::crossProduct(d,x);
+        }
+        for (uint i = 0;i<circular_resolution;i++){
+            QQuaternion R = QQuaternion::fromAxisAndAngle(d,th*i);
+            auto y = R*d_p;
+            m_vertices.push_back(nodes[k] + y.normalized()*radiuses[k]);
+        }
     }
-    //std::vector<QVector3D> rings(nodes.size());
-    for (uint k = 0;k<nodes.size()-1;k++){
-        QMatrix4x4 B;
-        std::array<QVector3D,3> b;
-        b[0] = (nodes[k+1] - nodes[k]).normalized();
-        b[1] = QVector3D::crossProduct(b[0],x).normalized();
-        b[2] = QVector3D::crossProduct(b[0],b[1]).normalized();
-        for (uint j = 0;j<3;j++)
-            for (uint i = 0;i<3;i++)
-                B(j,i) = b[2-j][i];
-        for (const auto& r : ring)
-            m_vertices.push_back(B*r*radiuses[k] + nodes[k]);
-    }
+    uint rez = circular_resolution;
     for (uint k = 0;k<nodes.size()-1;k++){
         for (uint i = 0;i<circular_resolution;i++){
-            uint i0 =(k)*circular_resolution+i;
-            uint i1 =(k)*circular_resolution+((i+1)%circular_resolution);
-            uint i2 =(k+1)*circular_resolution;
-            uint i3 =(k+1)*circular_resolution+((i+1)%circular_resolution);
+            uint i0 =(k)*rez+i;
+            uint i1 =(k)*rez+((i+1)%circular_resolution);
+            uint i2 =(k+1)*rez+i;
+            uint i3 =(k+1)*rez+((i+1)%circular_resolution);
             m_indexArray.push_back(i0);
+            m_indexArray.push_back(i2);
+            m_indexArray.push_back(i1);
             m_indexArray.push_back(i1);
             m_indexArray.push_back(i2);
             m_indexArray.push_back(i3);
         }
     }
-    computeNormals();
+    Mesh::TRIANGLE_COUNT = m_indexArray.size()/3;
+    Mesh::computeNormals();
 }
 
 cnc::graphics::Tube::Tube(const std::vector<cnc::graphics::vec3> &nodes, cnc::scalar radius, uint circular_resolution, uint height_resolution)

@@ -66,13 +66,13 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
         throw Cnc_error("mat width must be equal to vec height");
     uint srow = 0;
     vec y(h);
-    if (h > 100){
+    if (h > 100 && false){
         uint nb_rows_per_thread = h/nb_threads;
         uint last_row_in_thread = nb_threads*nb_rows_per_thread;
         srow = last_row_in_thread;
         std::vector<std::thread> threads;
         for (uint k = 0;k<nb_threads;k++)
-            threads.push_back(std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,this,x,std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread));
+            threads.push_back(std::thread(&SparseMatrix::parralel_sparse_matrix_vector_mult,this,std::ref(x),std::ref(y),k*nb_rows_per_thread,(k+1)*nb_rows_per_thread));
         for (std::thread& t : threads)
             t.join();
     }
@@ -82,7 +82,7 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
 
 void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
 {
-    std::cout << "Address " << this << " " <<(int) frow << " " <<(int) lrow << std::endl;
+    //std::cout << "Address " << this << " " <<(int) frow << " " <<(int) lrow << std::endl;
     for (uint j = frow;j<lrow;j++){
         for (uint k = rowptr[j];k<rowptr[j+1];k++)
             b(j) += v[k]*x(colind[k]);

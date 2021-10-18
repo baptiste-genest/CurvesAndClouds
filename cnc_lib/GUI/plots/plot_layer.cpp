@@ -154,6 +154,23 @@ formula* PlotLayer::add_text_frame(const std::string& ts,formula_disposition d)
     return add_text_frame_from_tex_stream(text,d);
 }
 
+euclid::Point *PlotLayer::add_point(const euclid::placer &p, int r)
+{
+    using namespace euclid;
+    Point* P = new Point(p,r);
+    insert_plot(P);
+    return (P);
+}
+
+euclid::Line *PlotLayer::add_line(const euclid::placer &p1, const euclid::placer &p2, int w)
+{
+    using namespace euclid;
+    Line* L = new Line(p1,p2,w);
+    insert_plot(L);
+    return (L);
+
+}
+
 formula* PlotLayer::add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d)
 {
     formula* F = new formula(ts,d);

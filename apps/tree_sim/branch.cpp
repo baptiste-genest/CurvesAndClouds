@@ -58,14 +58,14 @@ void Branch::growth(scalar in_energy)
         energy_for_self = in_energy*branch_self_prioritizing;
         remaining_energy = in_energy - energy_for_self;
         int offset = (directSon != nullptr) ? 1 : 0;
-        if (offset) {
+        if (offset && splits.size() == 0) {
             directSon->growth(remaining_energy);
         }
         else {
             std::vector<scalar> w = computeRedistributiveWeights();
             int offset = (directSon != nullptr) ? 1 : 0;
             for (uint k = 0;k<splits.size();k++)
-                splits[k+offset]->growth(remaining_energy*w[k+offset]);
+                splits[k]->growth(remaining_energy*w[k+offset]);
         }
     }
     scalar length_growth_factor = length_growth_kernel();
@@ -76,9 +76,9 @@ void Branch::growth(scalar in_energy)
         width += energy_for_self*width_growth_factor;
     strength += energy_for_self*(1-width_growth_factor);
 
-    if (length >= MAX_LENGTH*0.5 && directSon == nullptr)
+    if (length >= MAX_LENGTH*0.2 && directSon == nullptr)
         addSon();
-    scalar split_prob = 0.05*(getAltitude()/MAX_HEIGHT);
+    scalar split_prob = 0.02*(2*getAltitude()/(MAX_HEIGHT*(1+splits.size())));
     if (energy_for_self > 1e-1){
         if (cnc::algo::stat::random_var::random_scalar(0,1) < split_prob)
             addSplit();
@@ -171,6 +171,29 @@ void Branch::log(uint offset) const
         directSon->log(offset+1);
     for (auto s : splits)
         s->log(offset+1);
+}
+
+void Branch::buildMesh(graphics::Scene *S)
+{
+    std::vector<QVector3D> p;
+    std::vector<scalar> r;
+    if (father != nullptr){
+        p.push_back(father->getPosition());
+        r.push_back(father->getWidth());
+    }
+    directSonChain(p,r,S);
+}
+
+void Branch::directSonChain(std::vector<QVector3D> &p, std::vector<scalar> &r, graphics::Scene *S)
+{
+    p.push_back(getPosition());
+    r.push_back(width);
+    if (directSon == nullptr)
+        S->add_object<graphics::Tube>(branchMat,p,r,20,1);
+    else
+        directSon->directSonChain(p,r,S);
+    for (auto s : splits)
+        s->buildMesh(S);
 }
 
 scalar Branch::computeVolume() const

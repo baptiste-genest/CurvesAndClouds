@@ -136,10 +136,24 @@ cnc::graphics::Material cnc::graphics::Material::shadedUniformColor(const std::v
 "fragVertex = (local_mat*vec4(vertex,1)).xyz;\n"
 "gl_Position = view_proj_mat*local_mat*vec4(vertex,1.f);\n");
     M.setMainFragmentFunction(""
-"float shade = max(dot(-frag_normal,vec3(0,0,-1)),0.f);\n"
+"float shade = max(dot(-frag_normal,normalize(vec3(0,1,1))),0.f);\n"
 "glFragColor = vec4(mat_color*shade,1);"
 );
     return M;
+}
+
+cnc::graphics::Material cnc::graphics::Material::uniformColor(const std::vector<float> &color)
+{
+    graphics::Material M;
+    M.addUniform(shader_uniform("mat_color",u_vec3,fragment,color));
+
+    M.setMainVertexFunction(
+"gl_Position = view_proj_mat*local_mat*vec4(vertex,1.f);\n");
+    M.setMainFragmentFunction(""
+"glFragColor = vec4(mat_color,1);"
+);
+    return M;
+
 }
 
 #endif

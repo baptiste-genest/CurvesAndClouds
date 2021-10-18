@@ -10,6 +10,8 @@ namespace timeHandling {
 
 //static std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
 
+using PointInTime = std::chrono::time_point<std::chrono::high_resolution_clock>;
+
 inline static scalar getTimeSinceStartMilliseconds(){
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     auto current_time = std::chrono::high_resolution_clock::now();
