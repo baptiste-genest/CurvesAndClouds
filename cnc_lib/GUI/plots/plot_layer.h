@@ -21,7 +21,7 @@
 #include "point_cloud.h"
 #include "complex_function_plot.h"
 #include "level_curve.h"
-#include "euclidean_geometry.h"
+#include "2D_GEOM/euclidean_plane.h"
 #include "boolean_field.h"
 #include "vector_field.h"
 #include "formula_tex.h"
@@ -167,8 +167,8 @@ public:
      */
     formula* add_text_frame(const std::string& ts,formula_disposition d = centered);
 
-    euclid::Point* add_point(const euclid::placer& p,int r);
-    euclid::Line* add_line(const euclid::placer& p1,const euclid::placer& p2,int w);
+    euclid::EuclideanPlane* add_euclidean_plane(range rx,range ry);
+    euclid::EuclideanPlane* add_euclidean_plane();
 
     ~PlotLayer();
 

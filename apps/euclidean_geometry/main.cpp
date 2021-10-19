@@ -35,8 +35,6 @@ int main(int argc, char *argv[])
     range r2{-4,4};
 
     PlotTab* T = w.add_tab("Pendule Simple");
-    GridLayer* G1 = T->add_frame()->add_grid_layer(r2,r2,false);
-    GridLayer* G2 = T->add_frame()->add_grid_layer(r,r,false);
 
     auto th = w.add_mutable_scalar_by_cursor(r2,"theta",100);
 
@@ -45,11 +43,9 @@ int main(int argc, char *argv[])
     euclid::placer pl1 = [](){
         return P.get_pos();
     };
-    euclid::placer plA = [](){
+
+    euclid::placer pl2 = [](){
         return vec({0,1});
-    };
-    euclid::placer plB = [pl1](){
-        return pl1();
     };
 
     auto f = [](scalar x){
@@ -63,11 +59,19 @@ int main(int argc, char *argv[])
             P.integrate();
         return vec({P.th,f(P.th)});
     };
-
-    G1->new_function_plot(f,r2);
-    G1->add_point(pl_graph,4);
-    G2->add_point(pl1,4);
-    G2->add_line(plA,plB,2);
+    {
+        auto L = T->add_frame()->add_layer();
+        L->new_function_plot(f,r2);
+        auto E = L->add_euclidean_plane(r2,r2);
+        E->add_object<euclid::Point>(pl_graph,4);
+    }
+    {
+        auto L = T->add_frame()->add_layer();
+        auto E = L->add_euclidean_plane(r,r);
+        auto p1 = E->add_object<euclid::Point>(pl1,4);
+        auto p2 = E->add_object<euclid::Point>(pl2,0);
+        E->add_object<euclid::Segment>(p1,p2,2);
+    }
 
 
     w.show();

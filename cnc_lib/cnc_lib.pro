@@ -16,6 +16,8 @@ SOURCES += \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/2D_GEOM/euclidean_geometry.cpp \
+    GUI/plots/2D_GEOM/euclidean_plane.cpp \
     GUI/plots/3D/GLWrapper.cpp \
     GUI/plots/3D/camera.cpp \
     GUI/plots/3D/color.cpp \
@@ -38,7 +40,6 @@ SOURCES += \
     GUI/plots/complex_function_plot.cpp \
     GUI/plots/curves.cpp \
     GUI/plots/d2_curve.cpp \
-    GUI/plots/euclidean_geometry.cpp \
     GUI/plots/field.cpp \
     GUI/plots/figure.cpp \
     GUI/plots/formula_tex.cpp \
@@ -105,6 +106,8 @@ HEADERS += \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/2D_GEOM/euclidean_geometry.h \
+    GUI/plots/2D_GEOM/euclidean_plane.h \
     GUI/plots/3D/GLWrapper.h \
     GUI/plots/3D/camera.h \
     GUI/plots/3D/color.h \
@@ -132,7 +135,6 @@ HEADERS += \
     GUI/plots/complex_function_plot.h \
     GUI/plots/curves.h \
     GUI/plots/d2_curve.h \
-    GUI/plots/euclidean_geometry.h \
     GUI/plots/field.h \
     GUI/plots/figure.h \
     GUI/plots/formula_tex.h \
