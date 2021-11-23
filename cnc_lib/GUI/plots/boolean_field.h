@@ -16,7 +16,7 @@ namespace cnc {
 class BooleanField : public Field
 {
 public:
-    BooleanField(const cnc::algo::calculus::property_2D&,range x,range y);
+    BooleanField(const cnc::algo::calculus::property_2D&,range x,range y,const QColor& c = QColorConstants::Red);
 
     inline plot_type get_type() const override
     {
@@ -35,6 +35,8 @@ private:
     inline void plot (frame_draw_object& fdo) override {
         fdo.painter.drawPixmap(0,0,fdo.fi.width,fdo.fi.height,img);
     }
+
+    QColor own_color;
 
     /*
     static const uint MAX_WIDTH = 200;

@@ -132,7 +132,7 @@ enum formula_disposition {
 
 /**
  * @brief The formula class is a plot to display latex style text/formulas, one can interact with it with the tex_stream which works as std::cout,
- * WARNING: since it works when an online API to generate latex, you must be connected to internet
+ * WARNING: since it works with an online API to generate latex, you must be connected to internet
  */
 class formula : public Plottable
 {

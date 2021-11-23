@@ -2,7 +2,7 @@ QT += gui core widgets network# opengl
 
 TEMPLATE = lib
 DEFINES += CNC_LIB
-DEFINES += PRECISION FLOAT
+DEFINES += PRECISION DOUBLE
 DEFINES += CNC_OPENGL
 CONFIG += c++11
 
@@ -91,6 +91,7 @@ SOURCES += \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
     core/algo/time_handling.cpp \
+    core/dual_numbers.cpp \
     core/quaternion.cpp \
     core/sparse_matrix.cpp \
     examples/mesh_bank.cpp
@@ -190,6 +191,7 @@ HEADERS += \
     core/algo/matrix_functions.h \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
+    core/dual_numbers.h \
     core/matrix_algo.h \
     core/quaternion.h \
     core/sparse_matrix.h \

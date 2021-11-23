@@ -8,12 +8,25 @@
 namespace cnc {
 namespace timeHandling {
 
-//static std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
-
 using PointInTime = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
-inline static scalar getTimeSinceStartMilliseconds(){
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
+extern PointInTime start_time;
+
+inline PointInTime currentTime(){
+    return std::chrono::high_resolution_clock::now();
+}
+
+inline int getTimeSinceTimePointInMilliseconds(const PointInTime& pit){
+    auto now = currentTime();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(now - pit).count();
+}
+
+inline int getTimeSinceTimePointInMicroseconds(const PointInTime& pit){
+    auto now = currentTime();
+    return std::chrono::duration_cast<std::chrono::microseconds>(now - pit).count();
+}
+
+inline scalar getTimeSinceStartMilliseconds(){
     auto current_time = std::chrono::high_resolution_clock::now();
     return std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count()*0.001;
 }

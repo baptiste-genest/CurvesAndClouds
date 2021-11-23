@@ -99,8 +99,8 @@ ComplexFunctionPlot *PlotLayer::new_complex_function_plot(const algo::calculus::
     return CFP;
 }
 
-BooleanField* PlotLayer::new_boolean_field(const algo::calculus::property_2D& p,const range& x,const range& y){
-    BooleanField* BF = new BooleanField(p,x,y);
+BooleanField* PlotLayer::new_boolean_field(const algo::calculus::property_2D& p, const range& x, const range& y, const QColor &c){
+    BooleanField* BF = new BooleanField(p,x,y,c);
     insert_plot(BF);
     return (BF);
 }

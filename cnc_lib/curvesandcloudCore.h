@@ -34,5 +34,6 @@
 #include "core/sparse_matrix.h"
 #include "core/time_handling.h"
 #include "core/algo/geometry/polynomial_curve.h"
+#include "core/dual_numbers.h"
 
 #endif // CURVESANDCLOUDCORE_H

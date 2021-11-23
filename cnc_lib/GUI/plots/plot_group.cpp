@@ -21,7 +21,6 @@ void PlotGroup::display_layer(frame_draw_object &fdo)
     for (uint p = 0;p<plots.size();p++){
         if (plots[p]->dynamic)
             plots[p]->compute_values(fdo.fi);
-        plots[p]->compute_values(fdo.fi);
         if (plots[p]->range_reference == nullptr)
             free_pl.push_back(p);
         else

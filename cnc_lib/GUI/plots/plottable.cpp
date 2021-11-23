@@ -7,6 +7,11 @@ Plottable::Plottable()
     pg = nullptr;
 }
 
+Plottable::Plottable(const QColor &c) : Plottable()
+{
+    plot_color = c;
+}
+
 void Plottable::change_label(axis axis_id, const std::string &str)
 {
     if (std::regex_match(str, std::regex("[a-zA-Z0-9]+"))){

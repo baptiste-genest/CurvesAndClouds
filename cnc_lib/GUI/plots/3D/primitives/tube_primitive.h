@@ -4,6 +4,8 @@
 #include "mesh_primitive.h"
 #include <QMatrix3x3>
 #include <QQuaternion>
+#include "../graphics.h"
+#ifdef CNC_OPENGL
 
 
 namespace cnc {
@@ -27,3 +29,4 @@ protected:
 }
 
 #endif // TUBE_PRIMITIVE_H
+#endif

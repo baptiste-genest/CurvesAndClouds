@@ -101,7 +101,7 @@ public:
 
     ComplexFunctionPlot* new_complex_function_plot(const algo::calculus::complex_function& f,const range& re,const range& im);
 
-    BooleanField* new_boolean_field(const algo::calculus::property_2D& p,const range& x_range,const range& y_range);
+    BooleanField* new_boolean_field(const algo::calculus::property_2D& p,const range& x_range,const range& y_range,const QColor& c = QColorConstants::Red);
 
     /**
      * @brief new_level_curve adds the plot of a 2D scalar function, plot in the x and y range, by displaying it's level curves

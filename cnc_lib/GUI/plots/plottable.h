@@ -53,6 +53,7 @@ class Plottable : protected QWidget
     Q_OBJECT
 public:
     Plottable();
+    Plottable(const QColor& c);
 
     /*! \fn void change_label(axis axis_id, const std::string& str)
      *  \brief A function to change the name of a label.
