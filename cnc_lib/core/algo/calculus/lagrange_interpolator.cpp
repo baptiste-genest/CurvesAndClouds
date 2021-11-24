@@ -72,7 +72,7 @@ cnc::algo::calculus::nodes cnc::algo::calculus::get_tchebytchev_points(uint N, c
     nodes T(N);
 
     for (uint k = 0;k<N;k++)
-        T[k] = mid + half_length*std::cos(M_PI*(2*k+1)/(2*N));
+        T[k] = mid - half_length*std::cos(M_PI*(2*k+1)/(2*N));
 
     return T;
 }

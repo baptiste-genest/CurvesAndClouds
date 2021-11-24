@@ -1517,6 +1517,7 @@ public:
     }
 
     T distance(const Vector<T>& b) const;
+    T distance2(const Vector<T>& b) const;
 
     T norm1() const;
     T norm_inf() const;
@@ -1627,7 +1628,7 @@ Vector<T> Vector<T>::apply(const std::function<T(T)>& f) const{
 }
 
 template<class T>
-T Vector<T>::distance(const Vector<T> &b) const
+T Vector<T>::distance2(const Vector<T> &b) const
 {
     T d = 0;
     T tmp;
@@ -1635,7 +1636,13 @@ T Vector<T>::distance(const Vector<T> &b) const
         tmp = ix(k) - b.ix(k);
         d += tmp*tmp;
     }
-    return std::sqrt(d);
+    return d;
+}
+
+template<class T>
+T Vector<T>::distance(const Vector<T> &b) const
+{
+    return std::sqrt(distance2(b));
 }
 
 template<class T>

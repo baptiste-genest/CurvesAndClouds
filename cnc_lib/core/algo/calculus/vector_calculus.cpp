@@ -182,3 +182,10 @@ cnc::algo::calculus::vector_function cnc::algo::vector_calculus::build_gradient(
     };
 }
 
+
+algo::calculus::scalar_function algo::vector_calculus::differentiate(const calculus::scalar_function &f, const calculus::vector_function &X, scalar dx)
+{
+    return [f,X,dx] (const vec& x){
+        return (f(x+ X(x)*dx) - f(x))/dx;
+    };
+}

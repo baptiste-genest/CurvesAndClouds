@@ -41,8 +41,8 @@ enum plot_type {
     vector_field,
     boolean_field,
     text,
+    point_cloud,
     figure,
-    point_cloud
 };
 
 /*! \class Plottable

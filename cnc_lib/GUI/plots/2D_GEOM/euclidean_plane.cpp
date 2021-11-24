@@ -11,7 +11,10 @@ cnc::euclid::EuclideanPlane::EuclideanPlane(cnc::range x, cnc::range y)
 void cnc::euclid::EuclideanPlane::plot(cnc::frame_draw_object &fdo)
 {
     for (EuclideanPrimitive* p : m_objects)
-        p->draw(fdo);
+        if (fixed_range)
+            p->draw(fdo,x_range,y_range);
+        else
+            p->draw(fdo);
 }
 
 void cnc::euclid::EuclideanPlane::compute_values(const cnc::frame_info &)
@@ -21,10 +24,11 @@ void cnc::euclid::EuclideanPlane::compute_values(const cnc::frame_info &)
             p->update_values();
 }
 
-void cnc::euclid::EuclideanPlane::compute_value_range(const cnc::frame_info &fi)
+void cnc::euclid::EuclideanPlane::compute_value_range(const cnc::frame_info &)
 {
     if (fixed_range)
         return;
+
     x_range = range{0,0};
     y_range = range{0,0};
     for (EuclideanPrimitive* p : m_objects){
@@ -34,5 +38,4 @@ void cnc::euclid::EuclideanPlane::compute_value_range(const cnc::frame_info &fi)
         algo::extend_range(x_range,rx);
         algo::extend_range(y_range,ry);
     }
-
 }

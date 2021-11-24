@@ -16,7 +16,10 @@ class EuclideanPrimitive {
 public:
     EuclideanPrimitive(){
     }
-    virtual void draw(frame_draw_object& p) = 0;
+    virtual void draw(frame_draw_object& p,range x,range y) = 0;
+    virtual void draw(frame_draw_object& p){
+        draw(p,get_x_range(),get_y_range());
+    };
     virtual void update_values() = 0;
     virtual ~EuclideanPrimitive(){}
 
@@ -36,7 +39,7 @@ protected:
 
 class Point : public EuclideanPrimitive {
 public:
-    Point(const placer& p,int rad) : pos_updater(p),radius(rad){
+    Point(const placer& p,int rad = 2) : pos_updater(p),radius(rad){
     }
 
     range get_x_range() const override{
@@ -50,7 +53,7 @@ public:
         return pos;
     }
 
-    virtual void draw(frame_draw_object& p) override;
+    virtual void draw(frame_draw_object& p,range rx,range ry) override;
     virtual void update_values() override;
 
 private:
@@ -65,7 +68,7 @@ private:
 
 class Segment : public EuclideanPrimitive {
 public:
-    Segment(Point* p1,Point* p2,int w) :
+    Segment(Point* p1,Point* p2,int w = 2) :
         point1(p1),
         point2(p2),
         width(w){
@@ -73,7 +76,7 @@ public:
         pos1 = vec(2);
         pos2 = vec(2);
     }
-    virtual void draw(frame_draw_object& p) override;
+    virtual void draw(frame_draw_object& p,range rx,range ry) override;
     virtual void update_values() override;
     range get_x_range() const override{
         range rx = point1->get_x_range();

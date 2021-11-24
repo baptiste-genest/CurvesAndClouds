@@ -7,7 +7,7 @@ cnc::MutableValueCursor::MutableValueCursor(PlotWindow* W,cnc::range v,uint nb_s
     slider->setMinimum(0);
     slider->setMaximum(nb_ticks);
     slider->setTracking(true);
-    slider->setValue(0);
+    slider->setValue(nb_ticks/2);
 
     W->sliders_box->addWidget(slider);
 

@@ -145,6 +145,15 @@ calculus::scalar_function_2D build_divergence(const calculus::vector_function_2D
  */
 calculus::scalar_function_2D build_rot_norm(const calculus::vector_function_2D& f,scalar dx = 0.001f);
 
+/**
+ * @brief differentiate a function f with respect of X as a differential operator (takes the directionnal derivative along the direction given by the vector field)
+ * @param f
+ * @param X
+ * @param dx
+ * @return differentiated function
+ */
+calculus::scalar_function differentiate(const calculus::scalar_function& f,const calculus::vector_function& X,scalar dx);
+
 }
 
 }
