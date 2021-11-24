@@ -32,14 +32,23 @@ public:
         return true;
     }
 
+    inline QColor getColor() const {
+        return color;
+    }
+
+    inline virtual void set_color(const QColor& C) {
+        color = C;
+    }
+
 protected:
     bool dynamic = true;
     static constexpr float range_eps = 0.001;
+    QColor color;
 };
 
 class Point : public EuclideanPrimitive {
 public:
-    Point(const placer& p,int rad = 2) : pos_updater(p),radius(rad){
+    Point(const placer& p,int rad = 2) : pos_updater(p),radius(rad),color(QColorConstants::Blue){
     }
 
     range get_x_range() const override{
@@ -89,7 +98,6 @@ public:
         return ry;
     }
 private:
-    QColor color = QColorConstants::Blue;
     vec pos1 = vec(2);
     vec pos2 = vec(2);
     Point* point1;

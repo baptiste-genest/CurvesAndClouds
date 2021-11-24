@@ -10,11 +10,14 @@ cnc::euclid::EuclideanPlane::EuclideanPlane(cnc::range x, cnc::range y)
 
 void cnc::euclid::EuclideanPlane::plot(cnc::frame_draw_object &fdo)
 {
-    for (EuclideanPrimitive* p : m_objects)
+    for (EuclideanPrimitive* p : m_objects){
+        fdo.painter.setBrush(p->getColor());
+        fdo.painter.setPen(p->getColor());
         if (fixed_range)
             p->draw(fdo,x_range,y_range);
         else
             p->draw(fdo);
+    }
 }
 
 void cnc::euclid::EuclideanPlane::compute_values(const cnc::frame_info &)
