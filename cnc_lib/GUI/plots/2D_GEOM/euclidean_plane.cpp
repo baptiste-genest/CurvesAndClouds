@@ -12,7 +12,7 @@ void cnc::euclid::EuclideanPlane::plot(cnc::frame_draw_object &fdo)
 {
     for (EuclideanPrimitive* p : m_objects){
         fdo.painter.setBrush(p->getColor());
-        fdo.painter.setPen(p->getColor());
+        fdo.painter.setPen(QColorConstants::Black);
         if (fixed_range)
             p->draw(fdo,x_range,y_range);
         else

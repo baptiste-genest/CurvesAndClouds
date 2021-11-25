@@ -30,11 +30,11 @@ public:
 
     void perform_djikstra(int source);
 
-    void plot(cnc::euclid::EuclideanPlane* E);
+    void plot(cnc::euclid::EuclideanPlane* E,int goal);
+    inline int get_index(int i,int j) const;
 
 private:
 
-    inline int get_index(int i,int j) const;
     std::vector<int> get_neighbors(int i,int j);
     std::vector<int> get_neighbors(int index);
     float distance(int id1,int id2) const;

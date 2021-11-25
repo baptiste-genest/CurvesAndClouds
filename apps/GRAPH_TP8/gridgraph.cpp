@@ -16,7 +16,7 @@ GridGraph::GridGraph(const std::string &filename)
 void GridGraph::perform_djikstra(int source)
 {
     auto cmp = [](const djikstra_data& a,const djikstra_data& b) {
-        return a.path_length < b.path_length;
+        return a.path_length > b.path_length;
     };
     //define priority queue
     std::priority_queue<djikstra_data, std::vector<djikstra_data>, decltype(cmp)> Q(cmp);
@@ -33,11 +33,13 @@ void GridGraph::perform_djikstra(int source)
     Q.push(djikstra_table[source]);
     while (Q.size()){
         djikstra_data y = Q.top(); Q.pop();
-        if (y.s == visited)
+        if (djikstra_table[y.id].s == visited)
             continue;
+        y.s = visited;
+        djikstra_table[y.id] = y;
         auto N = get_neighbors(y.id);
         for (int n_id : N){
-            djikstra_data n = djikstra_table[n_id];
+            djikstra_data& n = djikstra_table[n_id];
             if (n.s == visited)
                 continue;
             float d = distance(y.id,n_id);
@@ -46,27 +48,37 @@ void GridGraph::perform_djikstra(int source)
                 n.path_length = nd;
                 n.s = to_visit;
                 n.predecessor_id = y.id;
-                Q.push(n);
+                Q.push(djikstra_data(n));
             }
         }
-        y.s = visited;
-        djikstra_table[y.id] = y;
     }
 }
 
-void GridGraph::plot(cnc::euclid::EuclideanPlane *E)
+void GridGraph::plot(cnc::euclid::EuclideanPlane *E, int goal)
 {
+    float max_d = std::max_element(djikstra_table.begin(),djikstra_table.end(),[](const djikstra_data& A,const djikstra_data& B){
+        return A.path_length < B.path_length;
+    })->path_length;
     float x,y;
+    std::vector<cnc::euclid::Point*> points(W*H);
     for (int j = 0;j<H;j++){
         y = float(j)/H;
         for (int i = 0;i<W;i++){
             x = float(i)/W;
-            auto P = E->add_object<cnc::euclid::Point>([x,y](){
+            points[get_index(i,j)] = E->add_object<cnc::euclid::Point>([x,y](){
                 return cnc::vec({x,y});
-            },2);
-            float d = std::min(djikstra_table[get_index(i,j)].path_length/300.,1.0);
-            P->set_color(QColor::fromRgb(d*255,0,(1-d)*255));
+            },15);
+            float d = djikstra_table[get_index(i,j)].path_length/max_d;
+            points[get_index(i,j)]->set_color(QColor::fromRgb(d*255,0,(1-d)*255));
         }
+    }
+    int id = goal,next;
+    while (true){
+        next = djikstra_table[id].predecessor_id;
+        if (next == -1)
+            return;
+        E->add_object<cnc::euclid::Segment>(points[next],points[id]);
+        id = next;
     }
 }
 
@@ -80,11 +92,11 @@ std::vector<int> GridGraph::get_neighbors(int i, int j)
     std::vector<int> N;
     if (i > 0)
         N.push_back(get_index(i-1,j));
-    if (i < W)
+    if (i < W-1)
         N.push_back(get_index(i+1,j));
     if (j > 0)
         N.push_back(get_index(i,j-1));
-    if (j < H)
+    if (j < H-1)
         N.push_back(get_index(i,j+1));
     return N;
 }
