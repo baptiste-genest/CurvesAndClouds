@@ -15,11 +15,12 @@ GridGraph::GridGraph(const std::string &filename)
 
 void GridGraph::perform_djikstra(int source)
 {
-    auto cmp = [](const djikstra_data& a,const djikstra_data& b) {
-        return a.path_length > b.path_length;
+    using djk = std::pair<int,float>;
+    auto cmp = [](const djk& a,const djk& b) {
+        return a.second > b.second;
     };
     //define priority queue
-    std::priority_queue<djikstra_data, std::vector<djikstra_data>, decltype(cmp)> Q(cmp);
+    std::priority_queue<djk, std::vector<djk>, decltype(cmp)> Q(cmp);
 
     //set ids in data table
     for (uint k = 0;k<djikstra_table.size();k++)
@@ -30,15 +31,14 @@ void GridGraph::perform_djikstra(int source)
     djikstra_table[source].path_length = 0;
 
     //add source to queue
-    Q.push(djikstra_table[source]);
+    Q.push({source,0.f});
     while (Q.size()){
-        djikstra_data y = Q.top(); Q.pop();
+        djk H = Q.top(); Q.pop();
+        auto y = djikstra_table[H.first];
         if (djikstra_table[y.id].s == visited)
             continue;
-        y.s = visited;
-        djikstra_table[y.id] = y;
-        auto N = get_neighbors(y.id);
-        for (int n_id : N){
+        djikstra_table[y.id].s = visited;
+        for (int n_id : get_neighbors(y.id)){
             djikstra_data& n = djikstra_table[n_id];
             if (n.s == visited)
                 continue;
@@ -48,7 +48,7 @@ void GridGraph::perform_djikstra(int source)
                 n.path_length = nd;
                 n.s = to_visit;
                 n.predecessor_id = y.id;
-                Q.push(djikstra_data(n));
+                Q.push({n_id,n.path_length});
             }
         }
     }
@@ -108,7 +108,7 @@ std::vector<int> GridGraph::get_neighbors(int index)
 
 float GridGraph::distance(int id1, int id2) const
 {
-    float hdiff = altitude[id1] -altitude[id2];
+    float hdiff = altitude[id1] - altitude[id2];
     return std::sqrt(1+hdiff*hdiff);
 }
 
