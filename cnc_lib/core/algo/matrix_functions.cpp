@@ -254,3 +254,12 @@ cnc::scalar cnc::algo::det33(const cnc::vec &a, const cnc::vec &b, const cnc::ve
     }
     return det33(A);
 }
+
+cnc::vec cnc::algo::cross(const vec &u, const vec &v)
+{
+    vec x(3);
+    x(0) = u(1)*v(2)-u(2)*v(1);
+    x(1) = u(2)*v(1)-u(0)*v(2);
+    x(2) = u(0)*v(1)-u(1)*v(0);
+    return x;
+}

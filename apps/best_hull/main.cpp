@@ -81,10 +81,10 @@ void expandHull(const cloudpoint& X,const Hyperplane& H,hull& R){
     });
     cloudpoint A,B;
     for (auto& p : rem){
-            if (H1.dist2ToSeg(p) < H2.dist2ToSeg(p))
-                A.push_back(p);
-            else
-                B.push_back(p);
+        if (H1.dist2ToSeg(p) < H2.dist2ToSeg(p))
+            A.push_back(p);
+        else
+            B.push_back(p);
     }
     expandHull(A,H1,R);
     expandHull(B,H2,R);
@@ -123,43 +123,38 @@ int main(int argc, char *argv[])
     PlotLayer* Layer = F->add_layer();
 
 
-    /*
-    auto C = algo::stat::random_var::sample_uniform_in_square(2,1,20);
-    std::vector<int> U,L;
-    auto H = BestHull(C,U,L);
-    std::cout << H.size()<< std::endl;
+    if (false){
+        auto C = algo::stat::random_var::sample_uniform_in_square(2,1,200);
+        auto H = BestHull(C);
 
-    range R(-2,2);
-    auto E = Layer->add_euclidean_plane(R,R);
-    std::vector<euclid::Point*> P;
+        range R(-2,2);
+        auto E = Layer->add_euclidean_plane(R,R);
+        std::vector<euclid::Point*> P;
 
-    for (int i = 0;i<C.size();i++){
-        P.push_back(E->add_object<euclid::Point>(C[i],6));
-        if (find(U.begin(), U.end(), i) != U.end())
-            P.back()->set_color(QColorConstants::Red);
-        if (find(L.begin(), L.end(), i) != L.end())
-            P.back()->set_color(QColorConstants::Blue);
+        for (int i = 0;i<C.size();i++){
+            P.push_back(E->add_object<euclid::Point>(C[i],6));
+        }
+        for (const auto& seg : H)
+            E->add_object<euclid::Segment>(P[seg.first],P[seg.second]);
+
     }
-    for (const auto& seg : H)
-        E->add_object<euclid::Segment>(P[seg.first],P[seg.second]);
+    else {
+        auto X = algo::stat::random_var::sample_uniform_in_square(1,1,10);
+        cloud C;
+        for (auto& x : X.points)
+            C.add_point(vec({x(0),x(0)*x(0)}));
+        auto H = BestHull(C);
 
-    w.show();
-    */
-    auto X = algo::stat::random_var::sample_uniform_in_square(1,1,10);
-    cloud C;
-    for (auto& x : X.points)
-        C.add_point(vec({x(0),x(0)*x(0)}));
-    auto H = BestHull(C);
+        range R(-2,2);
+        auto E = Layer->add_euclidean_plane(R,R);
+        std::vector<euclid::Point*> P;
 
-    range R(-2,2);
-    auto E = Layer->add_euclidean_plane(R,R);
-    std::vector<euclid::Point*> P;
+        for (const auto& x : C.points)
+            P.push_back(E->add_object<euclid::Point>(x,6));
 
-    for (const auto& x : C.points)
-        P.push_back(E->add_object<euclid::Point>(x,6));
-
-    for (const auto& seg : H)
-        E->add_object<euclid::Segment>(P[seg.first],P[seg.second]);
+        for (const auto& seg : H)
+            E->add_object<euclid::Segment>(P[seg.first],P[seg.second]);
+    }
 
     w.show();
     return App.exec();

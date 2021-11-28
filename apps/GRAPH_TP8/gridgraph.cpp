@@ -68,7 +68,8 @@ void GridGraph::plot(cnc::euclid::EuclideanPlane *E, int goal)
             points[get_index(i,j)] = E->add_object<cnc::euclid::Point>([x,y](){
                 return cnc::vec({x,y});
             },15);
-            float d = djikstra_table[get_index(i,j)].path_length/max_d;
+            //float d = djikstra_table[get_index(i,j)].path_length/max_d;
+            float d = std::min(1.f,djikstra_table[get_index(i,j)].path_length/30);
             points[get_index(i,j)]->set_color(QColor::fromRgb(d*255,0,(1-d)*255));
         }
     }
@@ -109,6 +110,6 @@ std::vector<int> GridGraph::get_neighbors(int index)
 float GridGraph::distance(int id1, int id2) const
 {
     float hdiff = altitude[id1] - altitude[id2];
-    return std::sqrt(1+hdiff*hdiff);
+    return std::sqrt(hdiff*hdiff + 1);
 }
 

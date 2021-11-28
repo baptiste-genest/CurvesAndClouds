@@ -40,6 +40,7 @@ scalar det22(const vec& a,const vec& b);
 scalar det33(const mat& A);
 scalar det33(const vec& a,const vec& b,const vec& c);
 
+vec cross(const vec& u,const vec& v);
 
 vec Re(const cvec& V);
 

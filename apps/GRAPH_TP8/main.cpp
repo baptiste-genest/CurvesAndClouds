@@ -4,7 +4,7 @@
 using namespace cnc;
 
 float height(float x,float y){
-    return (y>0.5f)*sin(x*5*M_PI)*sin(y*5*M_PI);
+    return (y>0.5f)*x*sin(x*5*M_PI)*sin(y*5*M_PI);
     return sin(x*M_PI)*sin(y*M_PI);//*sin(M_PI*y*2);
 }
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     auto T = w.add_tab("graph");
     range r = {-0.1,1.1};
     auto EP = T->add_frame()->add_layer()->add_euclidean_plane(r,r);
-    auto HM = T->add_frame()->add_layer()->new_colormap(height,{0,1},{0,1},color_policy::from_zero);
+    T->add_frame()->add_layer()->new_colormap(height,{0,1},{0,1},color_policy::from_zero);
 
     G.plot(EP,30*30-1);
 
