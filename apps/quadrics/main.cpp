@@ -70,12 +70,34 @@ std::vector<vec> travel_on_quadric(const vec& x0,const mat& A,scalar dt,uint N){
     return traj;
 }
 
+std::function<vec(scalar,scalar)> QuadricParam(const mat& A,scalar t1,scalar t2,scalar dt){
+    mat S1(3);
+    S1(0,1) = 1;
+    S1(1,0) = -1;
+    mat S2(3);
+    S2(2,1) = -1;
+    S2(1,2) = 1;
+    scalar ta =algo::stat::random_var::random_scalar(0,1);
+    scalar tb =algo::stat::random_var::random_scalar(0,1);
+    std::cout << exp((S1*ta + S2*tb)*A) << std::endl;
+    std::cout << exp(S1*A*ta)*exp(S2*A*tb) << std::endl;
+    /*
+    std::cout << S1*S2 << std::endl;
+    std::cout << S2*S1 << std::endl;
+    mat pulse1 = exp(S1*A*2.0*dt);
+    mat pulse2 = exp(S2*A*2.0*dt);
+    */
+}
+
 int main(int argc, char *argv[])
 {
-    srand(time(NULL));
-
     mat A = algo::stat::random_var::random_mat(-2,2,3);
     A = (A + A.transpose())*0.5;
+    QuadricParam(A,0,0,0.1);
+
+    return 0;
+    srand(time(NULL));
+
     auto RS = get_polar_decomposition(A);
     std::cout << A << std::endl;
     std::cout << RS.second << std::endl;
@@ -89,11 +111,11 @@ int main(int argc, char *argv[])
 
 
     QApplication App(argc,argv);
-    Plot_window w; w.resize(500,500);
+    PlotWindow w; w.resize(500,500);
 
-    Plot_tab* T = w.add_tab("Quadrics");
-    Plot_frame* F= T->add_frame();
-    Plot_layer* L = F->add_layer();
+    PlotTab* T = w.add_tab("Quadrics");
+    PlotFrame* F= T->add_frame();
+    PlotLayer* L = F->add_layer();
 
     scalar dt = 0.05;
     for (uint k = 0;k<N;k++){

@@ -48,6 +48,9 @@ protected:
 
 class Point : public EuclideanPrimitive {
 public:
+    Point(const vec& p,int rad = 2) : radius(rad),color(QColorConstants::Blue){
+        pos_updater = [p] () {return p;};
+    }
     Point(const placer& p,int rad = 2) : pos_updater(p),radius(rad),color(QColorConstants::Blue){
     }
 
@@ -67,11 +70,10 @@ public:
 
 private:
 
-    QColor color = QColorConstants::Red;
-
     vec pos = vec(2);
     placer pos_updater;
     int radius;
+    QColor color = QColorConstants::Red;
 
 };
 

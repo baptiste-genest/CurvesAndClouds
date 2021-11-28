@@ -26,6 +26,7 @@
 #include "vector_field.h"
 #include "formula_tex.h"
 #include "trajectory.h"
+#include "graphplotter.h"
 //#include "3D/mesh_displayer.h"
 
 namespace cnc {
@@ -169,6 +170,8 @@ public:
 
     euclid::EuclideanPlane* add_euclidean_plane(range rx,range ry);
     euclid::EuclideanPlane* add_euclidean_plane();
+
+    GraphPlotter* addGraphPlotter(algo::Graph& G);
 
     ~PlotLayer();
 

@@ -44,6 +44,7 @@ SOURCES += \
     GUI/plots/figure.cpp \
     GUI/plots/formula_tex.cpp \
     GUI/plots/functionplot.cpp \
+    GUI/plots/graphplotter.cpp \
     GUI/plots/grid_layer.cpp \
     GUI/plots/level_curve.cpp \
     GUI/plots/plot_frame.cpp \
@@ -85,6 +86,7 @@ SOURCES += \
     core/algo/geometry/smooth_interpolator.cpp \
     core/algo/geometry/triangle.cpp \
     core/algo/geometry/vertex.cpp \
+    core/algo/graph/graph.cpp \
     core/algo/inout.cpp \
     core/algo/lin_alg.cpp \
     core/algo/matrix_functions.cpp \
@@ -140,6 +142,7 @@ HEADERS += \
     GUI/plots/figure.h \
     GUI/plots/formula_tex.h \
     GUI/plots/functionplot.h \
+    GUI/plots/graphplotter.h \
     GUI/plots/grid_layer.h \
     GUI/plots/level_curve.h \
     GUI/plots/plot_frame.h \
@@ -186,6 +189,7 @@ HEADERS += \
     core/algo/geometry/smooth_interpolator.h \
     core/algo/geometry/triangle.h \
     core/algo/geometry/vertex.h \
+    core/algo/graph/graph.h \
     core/algo/inout.h \
     core/algo/lin_alg.h \
     core/algo/matrix_functions.h \

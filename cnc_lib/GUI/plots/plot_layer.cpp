@@ -170,6 +170,13 @@ euclid::EuclideanPlane *PlotLayer::add_euclidean_plane()
     return (P);
 }
 
+GraphPlotter *PlotLayer::addGraphPlotter(algo::Graph &G)
+{
+    GraphPlotter* P = new GraphPlotter(G);
+    insert_plot(P);
+    return (P);
+}
+
 formula* PlotLayer::add_text_frame_from_tex_stream(const tex_stream& ts,formula_disposition d)
 {
     formula* F = new formula(ts,d);

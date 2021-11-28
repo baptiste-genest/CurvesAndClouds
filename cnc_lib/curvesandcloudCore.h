@@ -30,6 +30,7 @@
 #include "core/algo/statistics/random_var.h"
 #include "core/algo/statistics/statistics.h"
 #include "core/algo/calculus/optimization.h"
+#include "core/algo/graph/graph.h"
 #include "core/algo/calculus/fourier.h"
 #include "core/sparse_matrix.h"
 #include "core/time_handling.h"

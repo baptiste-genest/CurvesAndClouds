@@ -242,3 +242,15 @@ QVector3D cnc::algo::symetric_3x3_eigenvector(const cnc::mat &A, cnc::scalar eig
         return r0xr2.normalized();
     return r1xr2.normalized();
 }
+
+cnc::scalar cnc::algo::det33(const cnc::vec &a, const cnc::vec &b, const cnc::vec &c)
+{
+    mat A(3);
+    vec X[3] = {a,b,c};
+    for (uint i = 0;i<3;i++){
+        for (uint j = 0;j<3;j++){
+            A(i,j) = X[i](j);
+        }
+    }
+    return det33(A);
+}

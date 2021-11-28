@@ -98,6 +98,13 @@ struct cloud{
             p = v*p;
         return D;
     }
+    inline cloud filter(const std::function<bool(const vec& x)>& P) const {
+        cloud D;
+        for (const vec& p : points)
+            if (P(p))
+                D.add_point(p);
+        return D;
+    }
 };
 /**
  * @brief operator + merge operator, creates a new cloud with all the points of A and B

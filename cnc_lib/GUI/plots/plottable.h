@@ -43,6 +43,7 @@ enum plot_type {
     text,
     point_cloud,
     figure,
+    graphplotter
 };
 
 /*! \class Plottable
