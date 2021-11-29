@@ -33,6 +33,23 @@ scalar Area(const vec& a,const vec& b,const vec& c,const vec& d){
     return std::abs(algo::det33(b-a,c-a,d-a))*0.5;
 }
 
+bool SameSide(const vec& v1,const vec& v2,const vec& v3,const vec& v4,const vec& p)
+{
+    vec normal = algo::cross(v2 - v1, v3 - v1);
+    scalar dotV4 = algo::dot(normal, v4 - v1);
+    scalar dotP = algo::dot(normal, p - v1);
+    return dotV4 * dotP > 0;
+}
+
+bool PointInTetrahedron(const vec& v1,const vec& v2,const vec& v3,const vec& v4,const vec& p)
+{
+    return SameSide(v1, v2, v3, v4, p) &&
+           SameSide(v2, v3, v4, v1, p) &&
+           SameSide(v3, v4, v1, v2, p) &&
+           SameSide(v4, v1, v2, v3, p);
+}
+
+
 struct seg{
     vec a,b;
     scalar l2;
@@ -95,9 +112,9 @@ struct Hyperplane{
     scalar dist2ToFace(const point& x) const {
         using namespace algo;
         auto p = proj(x.first);
-        vec A = a.first-x.first;
-        vec B = b.first-x.first;
-        vec C = c.first-x.first;
+        vec A = a.first-p;
+        vec B = b.first-p;
+        vec C = c.first-p;
         vec u = cross(B,C);
         vec v = cross(C,A);
         vec w = cross(A,B);
@@ -121,22 +138,27 @@ void expandHull(const cloudpoint& X,const Hyperplane& H,hull& R){
     auto H1 = Hyperplane(H.a,H.b,F);
     auto H2 = Hyperplane(H.b,H.c,F);
     auto H3 = Hyperplane(H.a,H.c,F);
-    scalar AT = Area(H.a,H.b,H.c,F);
-    auto rem = filter(X,[H,H1,H2,H3,AT](const point& p){
-        return (H.bary(p) + H1.bary(p) + H2.bary(p) + H3.bary(p)) > AT+1e-3 && !H1.isVertex(p) && !H2.isVertex(p) && !H3.isVertex(p);
+    //scalar AT = Area(H.a,H.b,H.c,F);
+    std::vector<vec> C(4);
+    C[0] = H.a.first;
+    C[1] = H.b.first;
+    C[2] = H.c.first;
+    C[3] = F.first;
+    auto rem = filter(X,[C,H1,H2,H3](const point& p){
+        return !PointInTetrahedron(C[0],C[1],C[2],C[3],p.first) && !H1.isVertex(p) && !H2.isVertex(p) && !H3.isVertex(p);
     });
-    cloudpoint C[3];
-    for (auto& p : rem){
+    cloudpoint C2[3];
+    for (const auto& p : rem){
         std::vector<scalar> D = {H1.dist2ToFace(p),H2.dist2ToFace(p),H3.dist2ToFace(p)};
         auto M = std::min_element(D.begin(),D.end());
-        C[M-D.begin()].push_back(p);
+        C2[M-D.begin()].push_back(p);
     }
-    expandHull(C[0],H1,R);
-    expandHull(C[1],H2,R);
-    expandHull(C[2],H3,R);
+    expandHull(C2[0],H1,R);
+    expandHull(C2[1],H2,R);
+    expandHull(C2[2],H3,R);
 }
 
-hull BestHull(const cloud& X){
+hull BestHull(const cloud& X,std::vector<int>& L,std::vector<int>& U){
     auto C = toCP(X);
 
     auto cmp1 = [](const point& a,const point& b){
@@ -150,6 +172,7 @@ hull BestHull(const cloud& X){
     auto ZM = *std::max_element(C.begin(),C.end(),cmp2);
     if (ZM.second == LM.second ||ZM.second == RM.second)
         ZM = *std::min_element(C.begin(),C.end(),cmp2);
+    std::cout << LM.second << ' ' << RM.second << ' ' << ZM.second << std::endl;
 
     Hyperplane H(LM,RM,ZM);
 
@@ -159,6 +182,10 @@ hull BestHull(const cloud& X){
     cloudpoint B = filter(C,[LM,RM,ZM](const point& x){
         return algo::det33(x.first-LM.first,RM.first-LM.first,ZM.first-LM.first) < 0 && (x.second != LM.second) && (x.second != RM.second) && (x.second != ZM.second);
     });
+    for (const auto& x : A)
+        L.push_back(x.second);
+    for (const auto& x : B)
+        U.push_back(x.second);
     hull R;
     expandHull(A,H,R);
     expandHull(B,H,R);
@@ -193,24 +220,66 @@ int main(int argc, char *argv[])
 
     if (true){
         auto C = algo::stat::random_var::sample_uniform_in_square(3,1,20);
-        auto H = BestHull(C);
+        std::vector<int> U,L;
+        auto H = BestHull(C,U,L);
 
         range R(-2,2);
         auto E = Layer->add_euclidean_plane(R,R);
         E->set_dynamic();
         std::vector<euclid::Point*> P;
 
-        for (const auto& x : C.points)
+        for (int i = 0;i<C.size();i++){
+            auto x = C[i];
             P.push_back(E->add_object<euclid::Point>([Pr,x](){
                 return Pr(x);
-            },6));
+            },4));
+            if (std::find(U.begin(),U.end(),i) != U.end())
+                P.back()->set_color(QColorConstants::Red);
+            if (std::find(L.begin(),L.end(),i) != L.end())
+                P.back()->set_color(QColorConstants::Blue);
+        }
 
         for (const auto& face : H){
             for (uint i =0;i<3;i++)
                 E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
         }
     }
+    else if (true){
+        uint N = 8000;
+        auto C = toCP(algo::stat::random_var::sample_uniform_in_square(3,1,4));
+        auto X = toCP(algo::stat::random_var::sample_uniform_in_square(3,1.4,N));
+        auto H = Hyperplane(C[0],C[1],C[2]);
+        auto H1 = Hyperplane(C[0],C[1],C[3]);
+        auto H2 = Hyperplane(C[0],C[2],C[3]);
+        auto H3 = Hyperplane(C[1],C[2],C[3]);
+
+        range R(-2,2);
+        auto E = Layer->add_euclidean_plane(R,R);
+        E->set_dynamic();
+        std::vector<euclid::Point*> P;
+
+        int r= 4;
+        for (const auto& x : C ){
+            P.push_back(E->add_object<euclid::Point>([Pr,x](){
+                return Pr(x.first);
+            },r));
+        }
+        for (uint i =0;i<4;i++){
+            E->add_object<euclid::Segment>(P[i],P[(i+1)%4]);
+        }
+        //scalar AT = Area(H.a,H.b,H.c,C[4]);
+        auto rem = filter(X,[C](const point& p){
+            return PointInTetrahedron(C[0].first,C[1].first,C[2].first,C[3].first,p.first);
+        });
+        for (auto& x : rem){
+            auto p = x.first;
+            P.push_back(E->add_object<euclid::Point>([Pr,p](){
+                return Pr(p);
+            },2));
+        }
+    }
     else {
+        /*
         auto X = algo::stat::random_var::sample_uniform_in_square(2,1,10);
         cloud C;
         for (auto& x : X.points)
@@ -228,6 +297,7 @@ int main(int argc, char *argv[])
             for (uint i =0;i<3;i++)
                 E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
         }
+        */
     }
 
     w.show();

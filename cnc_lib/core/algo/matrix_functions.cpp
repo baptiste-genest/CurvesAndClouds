@@ -259,7 +259,12 @@ cnc::vec cnc::algo::cross(const vec &u, const vec &v)
 {
     vec x(3);
     x(0) = u(1)*v(2)-u(2)*v(1);
-    x(1) = u(2)*v(1)-u(0)*v(2);
+    x(1) = u(2)*v(0)-u(0)*v(2);
     x(2) = u(0)*v(1)-u(1)*v(0);
     return x;
+}
+
+cnc::scalar cnc::algo::dot(const vec &x, const vec &y)
+{
+    return x.scalar_product(y);
 }
