@@ -29,25 +29,34 @@ void cnc::GraphPlotter::compute_nodes_pos()
     using namespace algo::stat::random_var;
     for (uint k = 0;k<V;k++)
         nodes_pos[k] = std::polar(R,2*k*M_PI/(V));
-    static constexpr uint nb_iter = 10;
+    using state = std::vector<pos>;
+    state vel(V);
+    float dt = 0.01f;
+    static constexpr uint nb_iter = 200;
 
     uint V = ref.nb_nodes;
+    static std::function<float(float)> S = [](float d){
+        return 1.f/(1+exp(-5*(d-1)));
+    };
 
     for (uint k = 0;k<nb_iter;k++){
-        std::vector<pos> npos(V,pos());
+        std::vector<pos> acc(V,pos());
         for (uint i = 0;i<V;i++){
-            for (auto n : ref.edges[i])
-                npos[i] += nodes_pos[n];
-            npos[i] /= ref.edges[i].size();
-
-            for (uint j = 0;j<V;j++)
+            for (uint j = 0;j<V;j++){
                 if (i != j){
-                    auto D = (npos[i] - nodes_pos[j]);
-                    auto d = std::abs(D);
-                    npos[i] += 0.1f*D/(d*d);
+                    pos dir = nodes_pos[j]-nodes_pos[i];
+                    float d = std::abs(dir);
+                    dir /= d;
+                    if (ref.areConnected(i,j))
+                        acc[i] += d*dir;
+                    acc[i] += -dir*float(1.f/(d*d));
                 }
+            }
         }
-        nodes_pos = npos;
+        for (uint i = 0;i<V;i++){
+            vel[i] += acc[i]*dt;
+            nodes_pos[i] += vel[i]*dt;
+        }
     }
 }
 
