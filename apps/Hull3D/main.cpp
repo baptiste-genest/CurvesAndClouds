@@ -44,9 +44,9 @@ bool SameSide(const vec& v1,const vec& v2,const vec& v3,const vec& v4,const vec&
 bool PointInTetrahedron(const vec& v1,const vec& v2,const vec& v3,const vec& v4,const vec& p)
 {
     return SameSide(v1, v2, v3, v4, p) &&
-           SameSide(v2, v3, v4, v1, p) &&
-           SameSide(v3, v4, v1, v2, p) &&
-           SameSide(v4, v1, v2, v3, p);
+            SameSide(v2, v3, v4, v1, p) &&
+            SameSide(v3, v4, v1, v2, p) &&
+            SameSide(v4, v1, v2, v3, p);
 }
 
 
@@ -154,18 +154,57 @@ void expandHull(const cloudpoint& X,const Hyperplane& H,hull& R){
         C2[M-D.begin()].push_back(p);
     }
     expandHull(C2[0],H1,R);
+    /*
     expandHull(C2[1],H2,R);
     expandHull(C2[2],H3,R);
+    */
 }
 
-hull BestHull(const cloud& X,std::vector<int>& L,std::vector<int>& U){
-    auto C = toCP(X);
+scalar slope(const vec& A,const vec& B){
+    return (B(1)-A(1))/(B(0)-A(0));
+}
 
+hull get_first_points_on_hull(const cloud& X,std::vector<point>& F){
+    auto C = toCP(X);
     auto cmp1 = [](const point& a,const point& b){
         return a.first(0) < b.first(0);
     };
-    auto cmp2 = [](const point& a,const point& b){
-        return a.first(1) < b.first(1);
+    auto LM = *std::min_element(C.begin(),C.end(),cmp1);
+    auto cmp2 = [LM](const point& a,const point& b){
+        if (LM.second == a.second)
+            return true;
+        if (LM.second == b.second)
+            return false;
+        if (slope(LM.first,a.first) < slope(LM.first,b.first))
+            return true;
+        return false;
+    };
+    auto TM = *std::max_element(C.begin(),C.end(),cmp2);
+    auto x = LM.first, y = TM.first;
+    auto cmp3 = [x,y](const point& a,const point& b){
+        vec na = algo::cross(y-x,a.first-x).normalize();
+        vec nb = algo::cross(y-x,b.first-x).normalize();
+        return na(0) < nb(0);
+    };
+    auto NM = *std::max_element(C.begin(),C.end(),cmp3);
+    Hyperplane H(LM,TM,NM);
+    hull R;
+    C = filter(C,[LM,TM,NM] (const point& p){
+        return p.second != LM.second && p.second != TM.second && p.second != NM.second;
+    });
+    F = {LM,TM,NM};
+    expandHull(C,H,R);
+    return R;
+}
+
+hull BestHull(const cloud& X,std::vector<int>& L,std::vector<int>& U,int i = 0){
+    auto C = toCP(X);
+
+    auto cmp1 = [i](const point& a,const point& b){
+        return a.first(i) < b.first(i);
+    };
+    auto cmp2 = [i](const point& a,const point& b){
+        return a.first((i+1)%3) < b.first((i+1)%3);
     };
     auto LM = *std::min_element(C.begin(),C.end(),cmp1);
     auto RM = *std::max_element(C.begin(),C.end(),cmp1);
@@ -188,7 +227,7 @@ hull BestHull(const cloud& X,std::vector<int>& L,std::vector<int>& U){
         U.push_back(x.second);
     hull R;
     expandHull(A,H,R);
-    expandHull(B,H,R);
+    //expandHull(B,H,R);
     return R;
 }
 
@@ -210,33 +249,67 @@ int main(int argc, char *argv[])
     auto th = w.add_mutable_scalar_by_cursor({0,2*M_PI},"theta");
 
     PlotTab* T = w.add_tab("my first tab");
+    /*
     PlotFrame* F= T->add_frame();
     PlotLayer* Layer = F->add_layer();
+    */
 
     auto Pr = [th] (const vec& y){
         vec x = Rot(th)*y;
         return vec({x(0),x(1)});
     };
 
-    if (true){
+    if (false){
         auto C = algo::stat::random_var::sample_uniform_in_square(3,1,20);
-        std::vector<int> U,L;
-        auto H = BestHull(C,U,L);
+        for (int i = 0;i<2;i++){
+            PlotFrame* F= T->add_frame();
+            PlotLayer* Layer = F->add_layer();
+            std::vector<int> U,L;
+            auto H = BestHull(C,U,L,i);
+            range R(-2,2);
+            auto E = Layer->add_euclidean_plane(R,R);
+            E->set_dynamic();
+            std::vector<euclid::Point*> P;
 
+            for (int i = 0;i<C.size();i++){
+                auto x = C[i];
+                P.push_back(E->add_object<euclid::Point>([Pr,x](){
+                    return Pr(x);
+                },4));
+                if (std::find(U.begin(),U.end(),i) != U.end())
+                    P.back()->set_color(QColorConstants::Red);
+                if (std::find(L.begin(),L.end(),i) != L.end())
+                    P.back()->set_color(QColorConstants::Blue);
+            }
+
+            for (const auto& face : H){
+                for (uint i =0;i<3;i++)
+                    E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
+            }
+        }
+    }
+    else {
+        auto C = algo::stat::random_var::sample_uniform_in_square(3,1,20);
+        PlotFrame* F= T->add_frame();
+        PlotLayer* Layer = F->add_layer();
+        std::vector<point> B;
+        auto H = get_first_points_on_hull(C,B);
         range R(-2,2);
         auto E = Layer->add_euclidean_plane(R,R);
         E->set_dynamic();
         std::vector<euclid::Point*> P;
 
-        for (int i = 0;i<C.size();i++){
+        for (uint i = 0;i<C.size();i++){
             auto x = C[i];
             P.push_back(E->add_object<euclid::Point>([Pr,x](){
                 return Pr(x);
             },4));
-            if (std::find(U.begin(),U.end(),i) != U.end())
+            bool isf = false;
+            for (auto p : B)
+                isf ^= p.second == int(i);
+            if (isf)
                 P.back()->set_color(QColorConstants::Red);
-            if (std::find(L.begin(),L.end(),i) != L.end())
-                P.back()->set_color(QColorConstants::Blue);
+
         }
 
         for (const auto& face : H){
@@ -244,61 +317,61 @@ int main(int argc, char *argv[])
                 E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
         }
     }
+    /*
     else if (true){
-        uint N = 8000;
-        auto C = toCP(algo::stat::random_var::sample_uniform_in_square(3,1,4));
-        auto X = toCP(algo::stat::random_var::sample_uniform_in_square(3,1.4,N));
-        auto H = Hyperplane(C[0],C[1],C[2]);
-        auto H1 = Hyperplane(C[0],C[1],C[3]);
-        auto H2 = Hyperplane(C[0],C[2],C[3]);
-        auto H3 = Hyperplane(C[1],C[2],C[3]);
+    uint N = 8000;
+    auto C = toCP(algo::stat::random_var::sample_uniform_in_square(3,1,4));
+    auto X = toCP(algo::stat::random_var::sample_uniform_in_square(3,1.4,N));
+    auto H = Hyperplane(C[0],C[1],C[2]);
+    auto H1 = Hyperplane(C[0],C[1],C[3]);
+    auto H2 = Hyperplane(C[0],C[2],C[3]);
+    auto H3 = Hyperplane(C[1],C[2],C[3]);
 
-        range R(-2,2);
-        auto E = Layer->add_euclidean_plane(R,R);
-        E->set_dynamic();
-        std::vector<euclid::Point*> P;
+    range R(-2,2);
+    auto E = Layer->add_euclidean_plane(R,R);
+    E->set_dynamic();
+    std::vector<euclid::Point*> P;
 
-        int r= 4;
-        for (const auto& x : C ){
-            P.push_back(E->add_object<euclid::Point>([Pr,x](){
-                return Pr(x.first);
-            },r));
-        }
-        for (uint i =0;i<4;i++){
-            E->add_object<euclid::Segment>(P[i],P[(i+1)%4]);
-        }
-        //scalar AT = Area(H.a,H.b,H.c,C[4]);
-        auto rem = filter(X,[C](const point& p){
-            return PointInTetrahedron(C[0].first,C[1].first,C[2].first,C[3].first,p.first);
-        });
-        for (auto& x : rem){
-            auto p = x.first;
-            P.push_back(E->add_object<euclid::Point>([Pr,p](){
-                return Pr(p);
-            },2));
-        }
+    int r= 4;
+    for (const auto& x : C ){
+    P.push_back(E->add_object<euclid::Point>([Pr,x](){
+    return Pr(x.first);
+    },r));
+    }
+    for (uint i =0;i<4;i++){
+    E->add_object<euclid::Segment>(P[i],P[(i+1)%4]);
+    }
+    //scalar AT = Area(H.a,H.b,H.c,C[4]);
+    auto rem = filter(X,[C](const point& p){
+    return PointInTetrahedron(C[0].first,C[1].first,C[2].first,C[3].first,p.first);
+    });
+    for (auto& x : rem){
+    auto p = x.first;
+    P.push_back(E->add_object<euclid::Point>([Pr,p](){
+    return Pr(p);
+    },2));
+    }
     }
     else {
-        /*
-        auto X = algo::stat::random_var::sample_uniform_in_square(2,1,10);
-        cloud C;
-        for (auto& x : X.points)
-            C.add_point(vec({x(0),x(1),x(0)*x(0) + x(1)*x(1)}));
-        auto H = BestHull(C);
+    auto X = algo::stat::random_var::sample_uniform_in_square(2,1,10);
+    cloud C;
+    for (auto& x : X.points)
+    C.add_point(vec({x(0),x(1),x(0)*x(0) + x(1)*x(1)}));
+    auto H = BestHull(C);
 
-        range R(-2,2);
-        auto E = Layer->add_euclidean_plane(R,R);
-        std::vector<euclid::Point*> P;
+    range R(-2,2);
+    auto E = Layer->add_euclidean_plane(R,R);
+    std::vector<euclid::Point*> P;
 
-        for (const auto& x : C.points)
-            P.push_back(E->add_object<euclid::Point>(Pr(x),6));
+    for (const auto& x : C.points)
+    P.push_back(E->add_object<euclid::Point>(Pr(x),6));
 
-        for (const auto& face : H){
-            for (uint i =0;i<3;i++)
-                E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
-        }
-        */
+    for (const auto& face : H){
+    for (uint i =0;i<3;i++)
+    E->add_object<euclid::Segment>(P[face[i]],P[face[(i+1)%3]]);
     }
+    }
+    */
 
     w.show();
     return App.exec();
