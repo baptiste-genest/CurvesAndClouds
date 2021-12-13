@@ -73,6 +73,7 @@ SOURCES += \
     core/algo/calculus/optimization.cpp \
     core/algo/calculus/spline.cpp \
     core/algo/calculus/vector_calculus.cpp \
+    core/algo/geometry/combinatorial_complexes.cpp \
     core/algo/geometry/geometry.cpp \
     core/algo/geometry/halfedge.cpp \
     core/algo/geometry/marching_cubes.cpp \
@@ -175,6 +176,7 @@ HEADERS += \
     core/algo/calculus/optimization.h \
     core/algo/calculus/spline.h \
     core/algo/calculus/vector_calculus.h \
+    core/algo/geometry/combinatorial_complexes.h \
     core/algo/geometry/geometry.h \
     core/algo/geometry/halfedge.h \
     core/algo/geometry/marching_cubes.h \
