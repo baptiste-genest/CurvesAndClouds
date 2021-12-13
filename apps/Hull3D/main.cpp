@@ -249,10 +249,6 @@ int main(int argc, char *argv[])
     auto th = w.add_mutable_scalar_by_cursor({0,2*M_PI},"theta");
 
     PlotTab* T = w.add_tab("my first tab");
-    /*
-    PlotFrame* F= T->add_frame();
-    PlotLayer* Layer = F->add_layer();
-    */
 
     auto Pr = [th] (const vec& y){
         vec x = Rot(th)*y;

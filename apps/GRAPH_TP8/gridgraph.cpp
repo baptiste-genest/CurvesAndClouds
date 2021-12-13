@@ -67,7 +67,7 @@ void GridGraph::plot(cnc::euclid::EuclideanPlane *E, int goal)
             x = float(i)/W;
             points[get_index(i,j)] = E->add_object<cnc::euclid::Point>([x,y](){
                 return cnc::vec({x,y});
-            },15);
+            },10);
             //float d = djikstra_table[get_index(i,j)].path_length/max_d;
             float d = std::min(1.f,djikstra_table[get_index(i,j)].path_length/30);
             points[get_index(i,j)]->set_color(QColor::fromRgb(d*255,0,(1-d)*255));

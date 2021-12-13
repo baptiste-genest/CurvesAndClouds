@@ -33,18 +33,30 @@ cnc::algo::geometry::GeometricContext::GeometricContext(const cloud &C) : points
 {
 }
 
-cnc::vec cnc::algo::geometry::GeometricContext::get_vec_edge(const cnc::algo::topo::edge &e){
+cnc::vec cnc::algo::geometry::GeometricContext::get_vec_edge(const cnc::algo::topology::edge &e) const {
     return points[e[1]] - points[e[0]];
 }
 
-cnc::vec cnc::algo::geometry::GeometricContext::face_direction(const cnc::algo::topo::edge &E, cnc::algo::topo::vertex O){
+cnc::vec cnc::algo::geometry::GeometricContext::face_direction(const cnc::algo::topology::edge &E, cnc::algo::topology::vertex O) const {
     auto ev = get_vec_edge(E).normalize();
     auto ov = get_vec_edge({E[0],O});
     return algo::cross(algo::cross(ev,ov).normalize(),ev);
 }
 
-cnc::scalar cnc::algo::geometry::GeometricContext::facet_angle(const cnc::algo::topo::face &F, cnc::algo::topo::vertex O){
-    auto CE = topo::get_common_edge(F,O);
-    auto CEv = get_vec_edge(CE);
-    return algo::dot(face_direction(CE,O),face_direction(CE,topo::get_other(F,CE)));
+cnc::scalar cnc::algo::geometry::GeometricContext::facet_angle(const cnc::algo::topology::face &F,const cnc::algo::topology::edge& E, cnc::algo::topology::vertex O)const {
+    auto CEv = get_vec_edge(E);
+    return algo::dot(face_direction(E,O),face_direction(E,topology::get_other(F,E)));
+}
+
+cnc::algo::topology::vertices cnc::algo::geometry::GeometricContext::getVertices() const
+{
+    topology::vertices V;
+    for (int i = 0;i<(int)points.size();i++)
+        V.insert(i);
+    return V;
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::operator()(const cnc::algo::topology::vertex &v) const
+{
+    return points[v];
 }

@@ -30,11 +30,15 @@ scalar isotropy_score(const vec& a,const vec& b,const vec& c);
 vec cross(const vec& a,const vec& b);
 
 class GeometricContext {
+public:
     GeometricContext(const cloud& C);
 
-    vec get_vec_edge(const topo::edge& e);
-    vec face_direction(const topo::edge& E,topo::vertex O);
-    scalar facet_angle(const topo::face& F,topo::vertex O);
+    vec get_vec_edge(const topology::edge& e) const;
+    vec face_direction(const topology::edge& E,topology::vertex O) const;
+    scalar facet_angle(const topology::face& F,const topology::edge& E,topology::vertex O) const;
+    topology::vertices getVertices() const;
+
+    vec operator()(const topology::vertex& v) const;
 
 private:
     cloud points;
