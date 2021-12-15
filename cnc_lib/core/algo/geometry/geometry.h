@@ -37,8 +37,12 @@ public:
     vec face_direction(const topology::edge& E,topology::vertex O) const;
     scalar facet_angle(const topology::face& F,const topology::edge& E,topology::vertex O) const;
     topology::vertices getVertices() const;
+    topology::indexed_vertices getIndexedVertices() const;
 
     vec operator()(const topology::vertex& v) const;
+
+    const cloud& getPoints() const;
+    cloud& getPoints();
 
 private:
     cloud points;

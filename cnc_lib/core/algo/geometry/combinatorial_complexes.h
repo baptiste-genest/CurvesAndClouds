@@ -20,7 +20,7 @@ using indexed_vertices = std::vector<vertex>;
 using edge = std::array<vertex,2>;
 using face = std::array<edge,3>;
 
-struct faceComp{
+struct faceComp{//true if set(vertices) are equal
     bool operator()(const face& a,const face& b);
 };
 struct edgeComp{
@@ -28,6 +28,7 @@ struct edgeComp{
 };
 using faces = std::set<face,faceComp>;
 using edges = std::set<edge,edgeComp>;
+using EdgeFaceConnectivityGraph = std::map<topology::edge,faces,edgeComp>;
 
 bool operator==(const edge& a,const edge& b);
 bool operator==(const face& a,const face& b);

@@ -56,7 +56,24 @@ cnc::algo::topology::vertices cnc::algo::geometry::GeometricContext::getVertices
     return V;
 }
 
+cnc::algo::topology::indexed_vertices cnc::algo::geometry::GeometricContext::getIndexedVertices() const
+{
+    topology::indexed_vertices V(points.size());
+    std::iota(V.begin(),V.end(),0);
+    return V;
+}
+
 cnc::vec cnc::algo::geometry::GeometricContext::operator()(const cnc::algo::topology::vertex &v) const
 {
     return points[v];
+}
+
+const cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints() const
+{
+    return points;
+}
+
+cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints()
+{
+    return points;
 }

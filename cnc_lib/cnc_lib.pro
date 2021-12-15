@@ -74,10 +74,13 @@ SOURCES += \
     core/algo/calculus/spline.cpp \
     core/algo/calculus/vector_calculus.cpp \
     core/algo/geometry/combinatorial_complexes.cpp \
+    core/algo/geometry/convex_hull.cpp \
+    core/algo/geometry/diagrams/diagrams.cpp \
     core/algo/geometry/geometry.cpp \
     core/algo/geometry/halfedge.cpp \
     core/algo/geometry/marching_cubes.cpp \
     core/algo/geometry/mesh.cpp \
+    core/algo/geometry/mesh2.cpp \
     core/algo/geometry/parametrization.cpp \
     core/algo/geometry/polynomial_curve.cpp \
     core/algo/geometry/quadtree.cpp \
@@ -177,11 +180,14 @@ HEADERS += \
     core/algo/calculus/spline.h \
     core/algo/calculus/vector_calculus.h \
     core/algo/geometry/combinatorial_complexes.h \
+    core/algo/geometry/convex_hull.h \
+    core/algo/geometry/diagrams/diagrams.h \
     core/algo/geometry/geometry.h \
     core/algo/geometry/halfedge.h \
     core/algo/geometry/marching_cubes.h \
     core/algo/geometry/marching_table.h \
     core/algo/geometry/mesh.h \
+    core/algo/geometry/mesh2.h \
     core/algo/geometry/parametrization.h \
     core/algo/geometry/polynomial_curve.h \
     core/algo/geometry/quadtree.h \
