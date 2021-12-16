@@ -51,6 +51,17 @@ bool cnc::algo::topology::faceComp::operator()(const cnc::algo::topology::face &
     }
     return false;
 }
+bool cnc::algo::topology::faceComp::operator()(const cnc::algo::topology::face &a, const cnc::algo::topology::face &b) const
+{
+    auto va = get_indexed_vertices(a);
+    auto vb = get_indexed_vertices(b);
+    for (int i = 0;i<3;i++){
+        if (va[i] != vb[i])
+            return va[i] < vb[i];
+    }
+    return false;
+}
+
 
 bool cnc::algo::topology::edgeComp::operator()(const cnc::algo::topology::edge &a, const cnc::algo::topology::edge &b)
 {
@@ -64,6 +75,19 @@ bool cnc::algo::topology::edgeComp::operator()(const cnc::algo::topology::edge &
     }
     return false;
 }
+bool cnc::algo::topology::edgeComp::operator()(const cnc::algo::topology::edge &a, const cnc::algo::topology::edge &b) const
+{
+    indexed_vertices va(a.begin(),a.end());
+    indexed_vertices vb(b.begin(),b.end());
+    std::sort(va.begin(),va.end());
+    std::sort(vb.begin(),vb.end());
+    for (int i = 0;i<2;i++){
+        if (va[i] != vb[i])
+            return va[i] < vb[i];
+    }
+    return false;
+}
+
 
 bool cnc::algo::topology::belong(cnc::algo::topology::vertex x, const cnc::algo::topology::face &F)
 {

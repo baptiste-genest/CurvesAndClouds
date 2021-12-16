@@ -8,6 +8,12 @@
 #include "../matrix_functions.h"
 #include "../statistics/statistics.h"
 
+#if defined(CNC_LIB)
+#  define CNC_LIB_EXPORT Q_DECL_EXPORT
+#else
+#  define CNC_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
 namespace cnc{
 
 namespace algo {
@@ -22,13 +28,16 @@ using face = std::array<edge,3>;
 
 struct faceComp{//true if set(vertices) are equal
     bool operator()(const face& a,const face& b);
+    bool operator()(const face& a,const face& b)const;
 };
 struct edgeComp{
     bool operator()(const edge& a,const edge& b);
+    bool operator()(const edge& a,const edge& b)const;
 };
+
 using faces = std::set<face,faceComp>;
 using edges = std::set<edge,edgeComp>;
-using EdgeFaceConnectivityGraph = std::map<topology::edge,faces,edgeComp>;
+using EdgeFaceConnectivityGraph = std::map<edge,faces,edgeComp>;
 
 bool operator==(const edge& a,const edge& b);
 bool operator==(const face& a,const face& b);
@@ -43,6 +52,8 @@ edges get_edges(const face& F);
 edge get_common_edge(const face& F,vertex O);
 vertex get_other(const face& F,const edge& e);
 face assemble_face(const edge& E,const vertex& x);
+
+constexpr static edge NULL_EDGE{-1,-1};
 
 }
 }

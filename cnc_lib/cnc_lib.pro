@@ -16,6 +16,7 @@ SOURCES += \
     GUI/algo/mutablevalue.cpp \
     GUI/algo/mutablevaluecursor.cpp \
     GUI/algo/mutablevalueticker.cpp \
+    GUI/plots/2D_GEOM/diagramplotter.cpp \
     GUI/plots/2D_GEOM/euclidean_geometry.cpp \
     GUI/plots/2D_GEOM/euclidean_plane.cpp \
     GUI/plots/3D/GLWrapper.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     GUI/plot_layer.h \
     GUI/plot_policy.h \
     GUI/plot_tab.h \
+    GUI/plots/2D_GEOM/diagramplotter.h \
     GUI/plots/2D_GEOM/euclidean_geometry.h \
     GUI/plots/2D_GEOM/euclidean_plane.h \
     GUI/plots/3D/GLWrapper.h \

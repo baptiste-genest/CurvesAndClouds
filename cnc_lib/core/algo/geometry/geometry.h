@@ -24,6 +24,8 @@ struct edge{
     vec* b;
 };
 
+vec get_plane_dual(const vec& N);
+
 scalar isotropy_score(const std::array<vec,3>& v);
 scalar isotropy_score(const vec& a,const vec& b,const vec& c);
 
@@ -31,6 +33,7 @@ vec cross(const vec& a,const vec& b);
 
 class GeometricContext {
 public:
+    GeometricContext() {}
     GeometricContext(const cloud& C);
 
     vec get_vec_edge(const topology::edge& e) const;
@@ -48,13 +51,13 @@ private:
     cloud points;
 };
 
+using line = std::pair<vec,vec>;
+
+vec get_intersection(const line& A,const line& B);
+
 //QVector3D line_line_intersection(const QVector3D& o1,const QVector3D& d1,const QVector3D& o2,const QVector3D& d2);
 
-}
-
-}
-
-}
+}}}
 
 
 #endif // GEOMETRY_H

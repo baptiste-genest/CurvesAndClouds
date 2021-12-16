@@ -77,3 +77,9 @@ cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints()
 {
     return points;
 }
+
+cnc::vec cnc::algo::geometry::get_plane_dual(const vec &N)
+{
+    scalar f = -0.5/N(2);
+    return vec({N(0)*f,N(1)*f,0});
+}
