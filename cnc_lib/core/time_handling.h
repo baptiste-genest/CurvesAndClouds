@@ -3,7 +3,10 @@
 
 #include <time.h>
 #include <chrono>
+#include <QTimer>
 #include "cnc_types.h"
+#include <memory>
+#include <QObject>
 
 namespace cnc {
 namespace timeHandling {
@@ -30,6 +33,20 @@ inline scalar getTimeSinceStartMilliseconds(){
     auto current_time = std::chrono::high_resolution_clock::now();
     return std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count()*0.001;
 }
+
+class Chronometer {
+public:
+    Chronometer() {
+        last = currentTime();
+    }
+    void tick(){
+        auto now = currentTime();
+        std::cout <<"time since last: " << getTimeSinceTimePointInMicroseconds(last) << std::endl;
+        last = now;
+    }
+private:
+    PointInTime last;
+};
 
 }
 

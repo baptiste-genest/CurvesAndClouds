@@ -37,6 +37,14 @@ const cnc::algo::topology::faces &cnc::algo::geometry::Mesh2::getFaces(const top
     return EtoF.at(e);
 }
 
+std::vector<cnc::algo::topology::face> cnc::algo::geometry::Mesh2::getIndexedFaces(const cnc::algo::topology::edge &e) const
+{
+    std::vector<cnc::algo::topology::face> facets;
+    for (const auto& f : getFaces(e))
+        facets.push_back(f);
+    return facets;
+}
+
 const cnc::algo::topology::edges &cnc::algo::geometry::Mesh2::edges() const
 {
     return E;
@@ -50,6 +58,15 @@ const cnc::algo::topology::edges &cnc::algo::geometry::Mesh2::interiorEdges() co
 const cnc::algo::topology::edges &cnc::algo::geometry::Mesh2::boundaryEdges() const
 {
     return boundary;
+}
+
+const cnc::algo::topology::edge &cnc::algo::geometry::Mesh2::getBoundaryEdge(const cnc::algo::topology::face &F) const
+{
+    for (const auto& e : F){
+        if (EtoF.at(e).size() == 1)
+            return e;
+    }
+    throw Cnc_error("no boundary edge in face");
 }
 
 int cnc::algo::geometry::Mesh2::nbVertices() const

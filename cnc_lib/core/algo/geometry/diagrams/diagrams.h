@@ -4,6 +4,7 @@
 #include "../geometry.h"
 #include "../mesh2.h"
 #include "../convex_hull.h"
+#include "../../../time_handling.h"
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT
 #else
@@ -17,7 +18,7 @@ class DiagramPlotter;
 
 namespace algo {
 namespace topology {
-using SimplicialPolygon = std::vector<edge>;
+using edgeBorder = int;
 using CellConnectivityGraph = std::map<edge,edge,edgeComp>;
 }
 
@@ -37,11 +38,12 @@ public:
     friend Diagram Voronoi(const GeometricContext& C);
 
     friend class cnc::DiagramPlotter;
-    void build_lower_hull_dual(const GeometricContext& G,range R);
+    void build_lower_hull_dual(const GeometricContext& G,scalar R);
+    scalar RV;
 };
 
-Diagram Voronoi(const cloud& C,range R);
-Diagram Laguerre(const cloud& C,const vec& psi,range R);
+Diagram Voronoi(const cloud& C,scalar R);
+Diagram Laguerre(const cloud& C,const vec& psi,scalar R);
 
 }
 }

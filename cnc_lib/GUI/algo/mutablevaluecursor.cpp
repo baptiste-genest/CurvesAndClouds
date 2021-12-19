@@ -1,6 +1,6 @@
 #include "mutablevaluecursor.h"
 
-cnc::MutableValueCursor::MutableValueCursor(PlotWindow* W,cnc::range v,uint nb_steps,const QString& label): bounds(v) , nb_ticks(nb_steps)
+cnc::MutableValueCursor::MutableValueCursor(PlotWindow* W, cnc::range v, uint nb_steps, const QString& label, const updateRoutine &update): bounds(v) , nb_ticks(nb_steps)
 {
 
     slider = new QSlider(Qt::Orientation::Horizontal,W->sliders_panel);
@@ -16,11 +16,12 @@ cnc::MutableValueCursor::MutableValueCursor(PlotWindow* W,cnc::range v,uint nb_s
     uint id = W->sliders_text.size()-1;
     const MutableValueCursor* C = this;
     timeHandling::PointInTime* pit = &last_update;
-    QObject::connect(slider,&QSlider::valueChanged,[W,id,C,label,pit] (int) {
+    QObject::connect(slider,&QSlider::valueChanged,[W,id,C,label,pit,update] (int) {
         W->update();
         W->sliders_text[id]->setText(label + QString(":		") + QString::number(C->value()));
         W->sliders_panel->update();
         *pit = std::chrono::high_resolution_clock::now();
+        update(C->value());
     });
 
     /*
@@ -36,7 +37,7 @@ cnc::scalar cnc::MutableValueCursor::value() const
 
 }
 
-cnc::MutScalar cnc::PlotWindow::add_mutable_scalar_by_cursor(range v,const QString& Label,uint nb_steps)
+cnc::MutScalar cnc::PlotWindow::add_mutable_scalar_by_cursor(range v,const QString& Label,uint nb_steps,const updateRoutine& OCR)
 {
     if (sliders_panel == nullptr){
         sliders_box = new QVBoxLayout;
@@ -45,7 +46,7 @@ cnc::MutScalar cnc::PlotWindow::add_mutable_scalar_by_cursor(range v,const QStri
     }
     sliders_text.push_back(new QLabel(Label));
     sliders_box->addWidget(sliders_text.back());
-    MutableValue* V = new MutableValueCursor(this,v,nb_steps,Label);
+    MutableValue* V = new MutableValueCursor(this,v,nb_steps,Label,OCR);
     mv.push_back(V);
     sliders_panel->show();
     return MutScalar(V);

@@ -33,9 +33,11 @@ public:
 
     const topology::faces& faces() const;
     const topology::faces& getFaces(const topology::edge& e) const;
+    std::vector<topology::face> getIndexedFaces(const topology::edge& e) const;
     const topology::edges& edges() const;
     const topology::edges& interiorEdges() const;
     const topology::edges& boundaryEdges() const;
+    const topology::edge& getBoundaryEdge(const topology::face& F) const;
     int nbVertices() const;
     topology::face get_opposite(const topology::face& F,const topology::edge& e) const;
 

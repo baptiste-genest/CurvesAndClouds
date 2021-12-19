@@ -12,6 +12,7 @@
 #include <utility>
 #include <iostream>
 #include <complex>
+#include <functional>
 
 typedef unsigned int uint;
 
@@ -42,5 +43,6 @@ enum axis {
     x_axis,
     y_axis
 };
+using updateRoutine = std::function<void(scalar)>;
 }
 #endif // CNC_TYPES_H

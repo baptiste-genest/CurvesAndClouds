@@ -27,7 +27,6 @@ PlotTab* PlotWindow::add_tab(const QString& tab_name)
     tabs_list.push_back(tab);
     return tab;
 }
-
 int PlotWindow::run()
 {
     /*

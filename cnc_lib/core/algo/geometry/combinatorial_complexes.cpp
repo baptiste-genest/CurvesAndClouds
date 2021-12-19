@@ -101,3 +101,36 @@ bool cnc::algo::topology::belong(cnc::algo::topology::vertex x, const cnc::algo:
 {
     return x == E[0] || x == E[1];
 }
+
+cnc::algo::topology::vertex cnc::algo::topology::get_other(const cnc::algo::topology::edge &E, cnc::algo::topology::vertex x)
+{
+    if (x == E[0])
+        return E[1];
+    if (x != E[1])
+        throw Cnc_error("vertex doesn't belong to edge");
+    return E[0];
+}
+
+cnc::algo::topology::edge cnc::algo::topology::completeCycle(const cnc::algo::topology::SimplicialPolygon &P)
+{
+    if (P.empty())
+        return NULL_EDGE;
+    std::map<vertex,int> counter;
+    for (const auto& e : P){
+        for (int i = 0;i<2;i++)
+            if (counter.find(e[i]) == counter.end())
+                counter[e[i]] = 1;
+            else
+                counter[e[i]]++;
+    }
+    std::vector<int> alones;
+    for (const auto& c : counter){
+        if (c.second == 1)
+            alones.push_back(c.first);
+    }
+    if (alones.size() > 2)
+        throw Cnc_error("More than 1 edge missing in polygon");
+    if (alones.empty())
+        return NULL_EDGE;
+    return {alones[0],alones[1]};
+}

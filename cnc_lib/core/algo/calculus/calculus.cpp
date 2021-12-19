@@ -108,6 +108,8 @@ cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::build_range_mapper(
 {
     scalar l = std::abs(A.first - A.second);
     return [A,B,l] (scalar x) {
+        scalar t = (x-A.first)/l;
+        return (1.f-t)*B.first + t*B.second;
         scalar df = std::abs(A.first - x);
         scalar ds = std::abs(A.second - x);
         if (ds < l && df < l){
@@ -162,4 +164,19 @@ int algo::calculus::get_node_number(const nodes &n, scalar x)
         if (x > n[k] && x < n[k+1])
             return k;
     throw Cnc_error("error while computing node number");
+}
+
+scalar algo::calculus::smallest_positive_quadratic_root(scalar a, scalar b, scalar c)
+{
+    scalar delta = b*b - 4*a*c;
+    if (delta < 0)
+        throw Cnc_error("no roots");
+    scalar droot = std::sqrt(delta);
+    scalar r1 = (-b + droot)/(2*a);
+    scalar r2 = (-b - droot)/(2*a);
+    if (r1 < 0)
+        return r2;
+    if (r2 < 0)
+        return r1;
+    return std::min(r1,r2);
 }

@@ -43,7 +43,7 @@ public:
      * @return pointer to it
      */
     PlotTab* add_tab(const QString&);
-    MutScalar add_mutable_scalar_by_cursor(range v,const QString&,uint = 100);
+    MutScalar add_mutable_scalar_by_cursor(range v,const QString&,uint = 100,const updateRoutine& onChangeRoutine = [](scalar){});
 
     MutScalar get_time_variable(uint tickrate);
 

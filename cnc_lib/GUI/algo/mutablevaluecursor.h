@@ -18,12 +18,21 @@
 
 namespace cnc {
 
+
 class MutableValueCursor : QObject, public MutableValue
 {
 public:
     MutableValueCursor(PlotWindow*,range v,uint nb_steps,const QString& label);
+    MutableValueCursor(PlotWindow*,range v,uint nb_steps,const QString& label,const updateRoutine& update);
+    inline bool hasChanged(){
+        if (!changed)
+            return false;
+        changed = false;
+        return true;
+    }
 
 private:
+    bool changed = false;
     scalar value() const override;
     range bounds;
     uint nb_ticks;

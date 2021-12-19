@@ -37,6 +37,11 @@ cnc::vec cnc::algo::geometry::GeometricContext::get_vec_edge(const cnc::algo::to
     return points[e[1]] - points[e[0]];
 }
 
+cnc::vec cnc::algo::geometry::GeometricContext::get_vec_edge(const cnc::algo::topology::edge &e, cnc::algo::topology::vertex x) const
+{
+    return points[topology::get_other(e,x)] - points[x];
+}
+
 cnc::vec cnc::algo::geometry::GeometricContext::face_direction(const cnc::algo::topology::edge &E, cnc::algo::topology::vertex O) const {
     auto ev = get_vec_edge(E).normalize();
     auto ov = get_vec_edge({E[0],O});
@@ -63,9 +68,30 @@ cnc::algo::topology::indexed_vertices cnc::algo::geometry::GeometricContext::get
     return V;
 }
 
+cnc::algo::topology::vertex cnc::algo::geometry::GeometricContext::add_vertex(const cnc::vec &x)
+{
+    topology::vertex V = points.size();
+    points.add_point(x);
+    return V;
+}
+
+
 cnc::vec cnc::algo::geometry::GeometricContext::operator()(const cnc::algo::topology::vertex &v) const
 {
     return points[v];
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topology::face &F) const
+{
+    vec M(3);
+    for (auto V : topology::get_vertices(F))
+        M += points[V];
+    return M * 0.333333;
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topology::edge &E) const
+{
+    return (points[E[0]] + points[E[1]])*0.5;
 }
 
 const cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints() const
@@ -82,4 +108,41 @@ cnc::vec cnc::algo::geometry::get_plane_dual(const vec &N)
 {
     scalar f = -0.5/N(2);
     return vec({N(0)*f,N(1)*f,0});
+}
+
+cnc::vec cnc::algo::geometry::get_intersection(const cnc::algo::geometry::line &A, const cnc::algo::geometry::line &B)
+{
+    //A = line from A(0) of dir A(1)
+    //a.o + a.d*t = b.o + b.d*t
+    //t = b.o-a.o/(a.d-b.d)
+    for (int i = 0;i<2;i++){
+        auto denum = A.second(i)-B.second(i);
+        if (std::abs(denum) > 1e-8)
+            return A.first + A.second*((B.first(i) - A.first(i))/denum);
+    }
+    throw Cnc_error("couldn't compute line line intersection");
+}
+
+cnc::vec cnc::algo::geometry::smallest_positive_ray_square_intersection(const cnc::vec &O, const cnc::vec &D, cnc::scalar R)
+{
+    std::vector<scalar> roots;
+    for (int i = 0;i<(int)O.size();i++)
+        roots.push_back(calculus::smallest_positive_quadratic_root(D(i)*D(i),2*O(i)*D(i),O(i)*O(i) - R*R));
+    return O + D*(*std::min_element(roots.begin(),roots.end()));
+}
+
+cnc::vec cnc::algo::geometry::get2DOutwardNormal(const cnc::vec &A, const cnc::vec &B, const cnc::vec &C)
+{
+    static auto P = [] (const vec& x){
+        return vec({x(0),x(1),0});
+    };
+    auto e = P(B-A);
+    auto Me = P(A+B)*0.5;
+    auto M = P(Me*2+C)*0.3333;
+    auto eT = vec({-e(1),e(0),0}).normalize();
+    scalar dx = 1e-3;
+    if (M.distance2(Me + eT*dx) < M.distance2(Me - eT*dx))
+        eT *= -1;
+    return eT;
+
 }

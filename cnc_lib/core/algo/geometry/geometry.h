@@ -31,18 +31,26 @@ scalar isotropy_score(const vec& a,const vec& b,const vec& c);
 
 vec cross(const vec& a,const vec& b);
 
+vec get2DOutwardNormal(const vec& A,const vec& B,const vec& C);
+
 class GeometricContext {
 public:
     GeometricContext() {}
     GeometricContext(const cloud& C);
 
     vec get_vec_edge(const topology::edge& e) const;
+    vec get_vec_edge(const topology::edge& e,topology::vertex x) const;
     vec face_direction(const topology::edge& E,topology::vertex O) const;
     scalar facet_angle(const topology::face& F,const topology::edge& E,topology::vertex O) const;
     topology::vertices getVertices() const;
     topology::indexed_vertices getIndexedVertices() const;
 
+    topology::vertex add_vertex(const vec& x);
+    //vec get2DOutwardNormal(const topology::face& F,const topology::edge& E)const;
+
     vec operator()(const topology::vertex& v) const;
+    vec midPoint(const topology::face& F) const;
+    vec midPoint(const topology::edge& E) const;
 
     const cloud& getPoints() const;
     cloud& getPoints();
@@ -52,6 +60,7 @@ private:
 };
 
 using line = std::pair<vec,vec>;
+vec smallest_positive_ray_square_intersection(const vec& O,const vec& D,scalar R);
 
 vec get_intersection(const line& A,const line& B);
 

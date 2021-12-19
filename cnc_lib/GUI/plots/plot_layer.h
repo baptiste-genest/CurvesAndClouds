@@ -27,6 +27,7 @@
 #include "formula_tex.h"
 #include "trajectory.h"
 #include "graphplotter.h"
+#include "2D_GEOM/diagramplotter.h"
 //#include "3D/mesh_displayer.h"
 
 namespace cnc {
@@ -172,6 +173,14 @@ public:
     euclid::EuclideanPlane* add_euclidean_plane();
 
     GraphPlotter* addGraphPlotter(algo::Graph& G);
+
+    template <typename PlottableType,typename ... Args>
+    PlottableType* addPlot(Args&& ... args) {
+        PlottableType* P = new PlottableType(std::forward<Args>(args)...);
+        insert_plot(P);
+        return P;
+    }
+
 
     ~PlotLayer();
 
