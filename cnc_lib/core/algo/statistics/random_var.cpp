@@ -125,3 +125,56 @@ cnc::complex_scalar cnc::algo::stat::random_var::random_complex_scalar(cnc::scal
 {
     return complex_scalar(random_scalar(a,b),random_scalar(a,b));
 }
+
+cnc::cloud cnc::algo::stat::random_var::PoissonSamplingInSphere(cnc::scalar R, cnc::scalar r, uint dim, uint N, cnc::vec center)
+{
+    if (center.rowNum() == 1)
+        center = vec(dim);
+    auto belong = [R,center] (const vec& x){
+        return x.distance2(center) < R*R;
+    };
+    std::vector<vec> P;
+    for (uint k = 0;k<N;k++){
+        auto x = random_vec_in_sphere(R,dim);
+        if (std::find_if(P.begin(),P.end(),[x,r](const vec& p){return x.distance2(p) < r*r;}) == P.end())
+            P.push_back(x);
+    }
+    return cloud(std::move(P));
+    /*
+    uint S = 0.5*R/r;
+    uint NB = S*S;
+    std::cout << "MAX N "  << NB << std::endl;
+    vec offset = -ones(dim)*R;
+    //int rn = std::sqrt(N);
+    cloud P;
+    std::vector<bool> I(NB,false);
+    for (uint k = 0;k<std::min(N,NB);k++){
+        int i = rand()%S,j = rand()%S;
+        scalar x = scalar(i)/S;
+        scalar y = scalar(j)/S;
+        vec p = vec({x*2.*R,y*2.*R}) + offset + random_vec(0,r,dim);
+        if (belong(p) && !I[j*S+i]){
+            P.add_point(p);
+            I[j*S+i] = true;
+        }
+    }
+    return P;
+    */
+}
+
+cnc::vec cnc::algo::stat::random_var::random_vec(cnc::scalar a, cnc::scalar b, uint N)
+{
+    vec X(N);
+    for (uint i = 0;i<N;i++)
+        X(i) = random_scalar(a,b);
+    return X;
+}
+
+cnc::vec cnc::algo::stat::random_var::random_vec_in_sphere(cnc::scalar R, uint dim)
+{
+    auto x = random_vec(-R,R,dim);
+    while (x.norm2() > R*R) {
+        x = random_vec(-R,R,dim);
+    }
+    return x;
+}

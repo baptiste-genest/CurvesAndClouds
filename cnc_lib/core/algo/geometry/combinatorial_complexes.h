@@ -49,12 +49,15 @@ bool belong(vertex x,const edge& E);
 bool belong(const edge& E,const face& F);
 
 vertices get_vertices(const face& F);
+vertices get_vertices(const SimplicialPolygon& P);
 indexed_vertices get_indexed_vertices(const face& F);
+indexed_vertices get_indexed_vertices(const SimplicialPolygon& P);
 edges get_edges(const face& F);
 edge get_common_edge(const face& F,vertex O);
 vertex get_other(const face& F,const edge& e);
 vertex get_other(const edge& F,vertex x);
 face assemble_face(const edge& E,const vertex& x);
+void swap(edge& E);
 
 edge completeCycle(const SimplicialPolygon& P);
 

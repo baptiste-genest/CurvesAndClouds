@@ -148,6 +148,7 @@ int get_node_number(const nodes& n,scalar x);
 
 inline scalar affine_root(scalar a,scalar b) { return -b/a;}
 scalar smallest_positive_quadratic_root(scalar a,scalar b,scalar c);
+std::vector<scalar> quadratic_roots(scalar a,scalar b,scalar c);
 
 }
 

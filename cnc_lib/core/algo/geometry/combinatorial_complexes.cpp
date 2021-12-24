@@ -134,3 +134,26 @@ cnc::algo::topology::edge cnc::algo::topology::completeCycle(const cnc::algo::to
         return NULL_EDGE;
     return {alones[0],alones[1]};
 }
+
+void cnc::algo::topology::swap(cnc::algo::topology::edge &E)
+{
+    auto tmp = E[0];
+    E[0] = E[1];
+    E[1] = tmp;
+}
+
+cnc::algo::topology::indexed_vertices cnc::algo::topology::get_indexed_vertices(const cnc::algo::topology::SimplicialPolygon &P)
+{
+    vertices V = get_vertices(P);
+    return indexed_vertices(V.begin(),V.end());
+}
+
+cnc::algo::topology::vertices cnc::algo::topology::get_vertices(const cnc::algo::topology::SimplicialPolygon &P)
+{
+    vertices V;
+    for (const auto& E : P){
+        V.insert(E[0]);
+        V.insert(E[1]);
+    }
+    return V;
+}

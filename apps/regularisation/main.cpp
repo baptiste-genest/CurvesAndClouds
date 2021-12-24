@@ -22,6 +22,10 @@ scalar convolute(const algo::calculus::scalar_function_1D& f,const algo::calculu
     return algo::calculus::integrate(S,Tc);
 }
 
+scalar g(scalar x){
+    return std::sin(std::abs(x));
+}
+
 int main(int argc, char *argv[])
 {
     auto K = [] (scalar x) {
@@ -69,14 +73,18 @@ int main(int argc, char *argv[])
         }
         return r;
     };
-
-    auto reg = [eps,K_eps,W] (scalar x) {
-        return convolute(K_eps,W,{-eps,eps},x);
+    auto W2 = [a] (scalar x){
+        return std::abs(std::sin(x*a*M_PI));
     };
 
-    //L->new_function_plot(K_eps,R)->set_dynamic();
+
+    auto reg = [eps,K_eps,W2] (scalar x) {
+        return convolute(K_eps,W2,{-eps,eps},x);
+    };
+
+    L->new_function_plot(K_eps,R)->set_dynamic();
     //L->new_function_plot(f,R);
-    L->new_function_plot(W,R)->set_dynamic();
+    L->new_function_plot(W2,R)->set_dynamic();
     L->new_function_plot(reg,R)->set_dynamic();
 
     w.show();

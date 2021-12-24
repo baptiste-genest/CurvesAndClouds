@@ -19,6 +19,7 @@ SOURCES += \
     GUI/plots/2D_GEOM/diagramplotter.cpp \
     GUI/plots/2D_GEOM/euclidean_geometry.cpp \
     GUI/plots/2D_GEOM/euclidean_plane.cpp \
+    GUI/plots/2D_GEOM/mesh2ddisplayer.cpp \
     GUI/plots/3D/GLWrapper.cpp \
     GUI/plots/3D/camera.cpp \
     GUI/plots/3D/color.cpp \
@@ -76,12 +77,14 @@ SOURCES += \
     core/algo/calculus/vector_calculus.cpp \
     core/algo/geometry/combinatorial_complexes.cpp \
     core/algo/geometry/convex_hull.cpp \
+    core/algo/geometry/convexpolygon.cpp \
     core/algo/geometry/diagrams/diagrams.cpp \
     core/algo/geometry/geometry.cpp \
     core/algo/geometry/halfedge.cpp \
     core/algo/geometry/marching_cubes.cpp \
     core/algo/geometry/mesh.cpp \
     core/algo/geometry/mesh2.cpp \
+    core/algo/geometry/meshgeneration.cpp \
     core/algo/geometry/parametrization.cpp \
     core/algo/geometry/polynomial_curve.cpp \
     core/algo/geometry/quadtree.cpp \
@@ -95,6 +98,7 @@ SOURCES += \
     core/algo/inout.cpp \
     core/algo/lin_alg.cpp \
     core/algo/matrix_functions.cpp \
+    core/algo/preconditionners.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
     core/algo/time_handling.cpp \
@@ -117,6 +121,7 @@ HEADERS += \
     GUI/plots/2D_GEOM/diagramplotter.h \
     GUI/plots/2D_GEOM/euclidean_geometry.h \
     GUI/plots/2D_GEOM/euclidean_plane.h \
+    GUI/plots/2D_GEOM/mesh2ddisplayer.h \
     GUI/plots/3D/GLWrapper.h \
     GUI/plots/3D/camera.h \
     GUI/plots/3D/color.h \
@@ -183,6 +188,7 @@ HEADERS += \
     core/algo/calculus/vector_calculus.h \
     core/algo/geometry/combinatorial_complexes.h \
     core/algo/geometry/convex_hull.h \
+    core/algo/geometry/convexpolygon.h \
     core/algo/geometry/diagrams/diagrams.h \
     core/algo/geometry/geometry.h \
     core/algo/geometry/halfedge.h \
@@ -190,6 +196,7 @@ HEADERS += \
     core/algo/geometry/marching_table.h \
     core/algo/geometry/mesh.h \
     core/algo/geometry/mesh2.h \
+    core/algo/geometry/meshgeneration.h \
     core/algo/geometry/parametrization.h \
     core/algo/geometry/polynomial_curve.h \
     core/algo/geometry/quadtree.h \
@@ -203,6 +210,7 @@ HEADERS += \
     core/algo/inout.h \
     core/algo/lin_alg.h \
     core/algo/matrix_functions.h \
+    core/algo/preconditionners.h \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
     core/dual_numbers.h \

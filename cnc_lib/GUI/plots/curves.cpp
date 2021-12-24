@@ -7,7 +7,7 @@ void Curves::plot(frame_draw_object& fdo)
 
     fdo.painter.setPen(QPen(Plottable::plot_color,Curves::line_width));
     for (uint i = 0;i<x_values.size()-1;i++){
-        //set_segment_color(fdo,i);
+        set_segment_color(fdo,i);
         fdo.painter.drawLine(M(QPointF(x_values[i],y_values[i])),M(QPointF(x_values[i+1],y_values[i+1])));
         //std::cout << i << std::endl;
     }

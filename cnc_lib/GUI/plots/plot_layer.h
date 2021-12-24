@@ -28,6 +28,7 @@
 #include "trajectory.h"
 #include "graphplotter.h"
 #include "2D_GEOM/diagramplotter.h"
+#include "2D_GEOM/mesh2ddisplayer.h"
 //#include "3D/mesh_displayer.h"
 
 namespace cnc {

@@ -44,6 +44,9 @@ scalar dot(const vec& x,const vec& y);
 
 vec cross(const vec& u,const vec& v);
 
+mat mat22(const vec& x,const vec& y);
+vec solve22(const mat& A,const vec& b);
+
 vec Re(const cvec& V);
 
 std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id);
@@ -52,6 +55,7 @@ vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& 
 std::array<scalar,3> symetric_3x3_eigenvalue_solver(const mat& A);
 QVector3D symetric_3x3_eigenvector(const mat& A,scalar eigenvalue);
 
+vec ones(uint N);
 
 }
 }

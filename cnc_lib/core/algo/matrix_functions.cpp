@@ -268,3 +268,26 @@ cnc::scalar cnc::algo::dot(const vec &x, const vec &y)
 {
     return x.scalar_product(y);
 }
+
+cnc::vec cnc::algo::ones(uint N)
+{
+    vec O(N);
+    for (uint i = 0;i<N;i++)
+        O(i) = 1;
+    return O;
+}
+
+cnc::mat cnc::algo::mat22(const cnc::vec &x, const cnc::vec &y)
+{
+    mat M(2,2,{x(0),y(0),x(1),y(1)});
+    return M;
+}
+
+cnc::vec cnc::algo::solve22(const cnc::mat &A, const cnc::vec &b)
+{
+    scalar D = A.det();
+    if (std::abs(D) < 1e-9)
+        throw Cnc_error("non solvable system");
+    scalar iD = 1./D;
+    return vec({A(1,1)*b(0) - A(1,0)*b(1),-A(0,1)*b(0) + A(0,0)*b(1)})*iD;
+}

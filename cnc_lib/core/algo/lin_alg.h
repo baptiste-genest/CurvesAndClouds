@@ -28,5 +28,10 @@ typedef chaskal::Vector<complex_scalar> cvec;
 typedef chaskal::Matrix<scalar> mat;
 typedef chaskal::Matrix<complex_scalar> cmat;
 
+/*
+vec vec2(scalar x,scalar y);
+vec vec3(scalar x,scalar y);
+*/
+
 }
 #endif // LIN_ALG_H

@@ -51,6 +51,7 @@ inline scalar_function_1D build_descent_function(const scalar_function& f,const 
 vec gradient_descent(const scalar_function& f,const vec& x0,scalar eps = 1e-5,uint max_iter = 1000);
 vec gradient_descent_fixed_step(const scalar_function& f,const vec& x0,scalar h,scalar eps = 1e-5,scalar dx = 1e-5,uint max_iter = 1000);
 vec gradient_descent_fixed_step(const vector_function& grad,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
+vec gradient_descent_adaptive_step(const vector_function& grad,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
 
 template<class T>
 T argmin(const std::function<scalar(const T&)>& f,const std::vector<T>& X){

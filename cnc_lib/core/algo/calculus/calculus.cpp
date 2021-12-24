@@ -174,9 +174,22 @@ scalar algo::calculus::smallest_positive_quadratic_root(scalar a, scalar b, scal
     scalar droot = std::sqrt(delta);
     scalar r1 = (-b + droot)/(2*a);
     scalar r2 = (-b - droot)/(2*a);
+    if (r1 < 0 && r2 < 0)
+        throw Cnc_error("No positive roots");
     if (r1 < 0)
         return r2;
     if (r2 < 0)
         return r1;
     return std::min(r1,r2);
+}
+
+std::vector<scalar> algo::calculus::quadratic_roots(scalar a, scalar b, scalar c)
+{
+    scalar delta = b*b - 4*a*c;
+    if (delta < 0)
+        return {};
+    scalar droot = std::sqrt(delta);
+    scalar r1 = (-b + droot)/(2*a);
+    scalar r2 = (-b - droot)/(2*a);
+    return {r1,r2};
 }

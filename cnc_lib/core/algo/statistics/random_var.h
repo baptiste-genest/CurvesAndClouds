@@ -16,7 +16,8 @@
 #include "core/algo/statistics/statistics.h"
 
 #include "core/matrix.h"
-
+#include "core/algo/matrix_functions.h"
+#include <set>
 #include <random>
 
 namespace cnc {
@@ -38,6 +39,8 @@ namespace random_var {
  */
 scalar random_scalar(scalar a,scalar b);
 complex_scalar random_complex_scalar(scalar a,scalar b);
+vec random_vec(scalar a,scalar b,uint dim);
+vec random_vec_in_sphere(scalar R,uint dim);
 
 
 /**
@@ -89,6 +92,8 @@ mat random_mat(scalar lb,scalar ub,uint h,uint w);
 
 cmat random_complex_mat(scalar lb,scalar ub,uint n);
 cmat random_complex_mat(scalar lb,scalar ub,uint h,uint w);
+
+cloud PoissonSamplingInSphere(scalar R,scalar r,uint dim,uint N,vec radius = vec());
 
 }
 

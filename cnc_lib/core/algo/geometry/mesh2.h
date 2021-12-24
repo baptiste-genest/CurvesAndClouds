@@ -10,6 +10,7 @@
 #include "combinatorial_complexes.h"
 
 namespace cnc {
+class Mesh2DDisplayer;
 
 namespace algo {
 
@@ -26,10 +27,12 @@ using trianglePredicate = std::function<bool(const Mesh2&,const topology::face&)
 class Mesh2
 {
 public:
-    Mesh2(const GeometricContext& C,const topology::faces& Fa,const EdgeFaceConnectivityGraph& EF,const NormalMap& NM);
+    Mesh2(GeometricContextRef C,const topology::faces& Fa,const EdgeFaceConnectivityGraph& EF,const NormalMap& NM);
+    Mesh2(Mesh2&& O);
 
     vec getNormal(const face& F) const;
     Mesh2 getSubMesh(const trianglePredicate& P) const;
+    void filterFaces(const trianglePredicate& P);
 
     const topology::faces& faces() const;
     const topology::faces& getFaces(const topology::edge& e) const;
@@ -40,18 +43,25 @@ public:
     const topology::edge& getBoundaryEdge(const topology::face& F) const;
     int nbVertices() const;
     topology::face get_opposite(const topology::face& F,const topology::edge& e) const;
+    vec getVertexPosition(vertex v) const;
 
-//private:
-    Mesh2(const GeometricContext& C) : G(C) {}
+    std::array<topology::face,3> insertVertexInFace(const face& F,const vec& x);
+    GeometricContextRef getContext();
+    void insertFace(const topology::face& f);
+
+private:
+    Mesh2(GeometricContextRef C) : G(C) {}
     void induce_from_faces();
 
-    const GeometricContext& G;
+    GeometricContextRef G;
     topology::vertices V;
     topology::edges E;
     topology::faces F;
     topology::edges boundary;
     topology::edges interior_edges;
     topology::EdgeFaceConnectivityGraph EtoF;
+    friend class cnc::Mesh2DDisplayer;
+    friend struct mesh_generation;
     NormalMap N;
 };
 

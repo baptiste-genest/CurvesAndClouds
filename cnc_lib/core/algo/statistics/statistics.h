@@ -20,14 +20,27 @@
 
 namespace cnc {
 
+namespace algo {namespace geometry {class GeometricContext;}}
+
 /**
  * @brief cloud of N-dimensionnal points
  */
 struct cloud{
+
     std::vector<vec> points;
+
+    cloud() {}
+    cloud(const cloud& other) : points(other.points) {}
+    cloud(const std::vector<vec>& p) : points(p) {}
+    cloud(cloud&& other) : points(std::move(other.points)) {}
+    cloud(std::vector<vec>&& other) : points(std::move(other)) {}
 
     uint size() const{
         return points.size();
+    }
+
+    void operator=(const cloud& other){
+        points = other.points;
     }
 
     vec& operator[](uint i) {
@@ -105,6 +118,7 @@ struct cloud{
                 D.add_point(p);
         return D;
     }
+    friend class algo::geometry::GeometricContext;
 };
 /**
  * @brief operator + merge operator, creates a new cloud with all the points of A and B

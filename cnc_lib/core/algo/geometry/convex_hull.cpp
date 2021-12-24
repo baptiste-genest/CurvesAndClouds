@@ -1,7 +1,8 @@
 #include "convex_hull.h"
 
-cnc::algo::geometry::Mesh2 cnc::algo::geometry::giftWrapping(const GeometricContext &G)
+cnc::algo::geometry::Mesh2 cnc::algo::geometry::giftWrapping(GeometricContextRef GR)
 {
+    const GeometricContext& G = *GR;
     using namespace topology;
     auto V = G.getVertices();
     faces H;
@@ -36,7 +37,7 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::giftWrapping(const GeometricCont
             H.insert(NF);
         }
     }
-    return Mesh2(G,H,edges,convex_hull_routines::compute_orientation(G,H));
+    return Mesh2(GR,H,edges,convex_hull_routines::compute_orientation(G,H));
 }
 
 cnc::algo::topology::face cnc::algo::geometry::convex_hull_routines::get_first_facet(const GeometricContext &G)
@@ -86,4 +87,9 @@ cnc::algo::geometry::NormalMap cnc::algo::geometry::convex_hull_routines::comput
         NF[F] = N;
     }
     return NF;
+}
+
+cnc::algo::geometry::Mesh2 cnc::algo::geometry::giftWrapping(const cnc::cloud &C)
+{
+    return giftWrapping(std::make_shared<GeometricContext>(C));
 }

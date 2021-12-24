@@ -33,6 +33,10 @@ cnc::algo::geometry::GeometricContext::GeometricContext(const cloud &C) : points
 {
 }
 
+cnc::algo::geometry::GeometricContext::GeometricContext(cnc::cloud &&C) : points(std::move(C))
+{
+}
+
 cnc::vec cnc::algo::geometry::GeometricContext::get_vec_edge(const cnc::algo::topology::edge &e) const {
     return points[e[1]] - points[e[0]];
 }
@@ -94,6 +98,11 @@ cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topolo
     return (points[E[0]] + points[E[1]])*0.5;
 }
 
+const cnc::vec &cnc::algo::geometry::GeometricContext::getPoint(cnc::algo::topology::vertex x) const
+{
+    return points[x];
+}
+
 const cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints() const
 {
     return points;
@@ -104,10 +113,89 @@ cnc::cloud &cnc::algo::geometry::GeometricContext::getPoints()
     return points;
 }
 
+cnc::scalar cnc::algo::geometry::GeometricContext::PolygonArea(const cnc::algo::topology::SimplicialPolygon &P) const
+{
+    return std::abs(PolygonSignedArea(P));
+}
+
+cnc::scalar cnc::algo::geometry::GeometricContext::ConvexPolygonArea(const cnc::algo::topology::SimplicialPolygon &P) const
+{
+    if (P.size() == 0)
+        return 0;
+    scalar A = 0;
+    auto p = points[P[0][0]];
+    for (const auto& e : P)
+        A += std::abs(det22(points[e[0]]-p,points[e[1]]-p));
+    return A*0.5;
+}
+
+cnc::scalar cnc::algo::geometry::GeometricContext::PolygonSignedArea(const cnc::algo::topology::SimplicialPolygon &P) const
+{
+    scalar A = 0;
+    for (const auto& e : P)
+        A += det22(points[e[0]],points[e[1]]);
+    return A*0.5;
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::compute2DPolygonCentroid(const cnc::algo::topology::SimplicialPolygon &P) const
+{
+    vec C(2);
+    scalar A = PolygonSignedArea(P);
+    for (const auto& e : P){
+        const auto& xc = points[e[0]];
+        const auto& xn = points[e[1]];
+        C(0) += (xc(0) + xn(0))*(xc(0)*xn(1) - xn(0)*xc(1));
+        C(1) += (xc(1) + xn(1))*(xc(0)*xn(1) - xn(0)*xc(1));
+    }
+    return C/(6*A);
+}
+
+void cnc::algo::geometry::GeometricContext::uniformizeOrientation(cnc::algo::topology::SimplicialPolygon &P) const
+{
+    std::map<topology::vertex,topology::vertex> Adj;
+    for (const auto& e : P){
+        Adj[e[0]] = e[1];
+        Adj[e[1]] = e[0];
+    }
+}
+
+cnc::scalar cnc::algo::geometry::GeometricContext::circumRadius(const cnc::algo::topology::face &F) const
+{
+    vec a = get_vec_edge(F[0]);
+    vec b = get_vec_edge(F[1]);
+    vec c = get_vec_edge(F[2]);
+    scalar S = std::abs(det22(c-a,b-a))*0.5;
+    return std::sqrt((a.norm2()*b.norm2()*c.norm2())/(8*S*S));
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::circumCenter(const cnc::algo::topology::face &F) const
+{
+    auto Vi = topology::get_indexed_vertices(F);
+    vec one(3),X(3),Y(3),norms(3);
+    for (uint i =0;i<3;i++){
+        const auto& x = points[Vi[i]];
+        one(i) = 1;
+        X(i) = x(0);
+        Y(i) = x(1);
+        norms(i) = x.norm2();
+    }
+    scalar D = algo::det33(X,Y,one)*2;
+    scalar Cx = algo::det33(norms,Y,one)/D;
+    scalar Cy = -algo::det33(norms,X,one)/D;
+    return vec({Cx,Cy});
+}
+
+cnc::algo::geometry::circum_data cnc::algo::geometry::GeometricContext::circumCenterRadius(const cnc::algo::topology::face &F) const
+{
+    return {circumCenter(F),circumRadius(F)};
+}
+
+
+
 cnc::vec cnc::algo::geometry::get_plane_dual(const vec &N)
 {
     scalar f = -0.5/N(2);
-    return vec({N(0)*f,N(1)*f,0});
+    return vec({N(0)*f,N(1)*f});
 }
 
 cnc::vec cnc::algo::geometry::get_intersection(const cnc::algo::geometry::line &A, const cnc::algo::geometry::line &B)
@@ -133,16 +221,45 @@ cnc::vec cnc::algo::geometry::smallest_positive_ray_square_intersection(const cn
 
 cnc::vec cnc::algo::geometry::get2DOutwardNormal(const cnc::vec &A, const cnc::vec &B, const cnc::vec &C)
 {
-    static auto P = [] (const vec& x){
-        return vec({x(0),x(1),0});
-    };
-    auto e = P(B-A);
-    auto Me = P(A+B)*0.5;
-    auto M = P(Me*2+C)*0.3333;
-    auto eT = vec({-e(1),e(0),0}).normalize();
-    scalar dx = 1e-3;
-    if (M.distance2(Me + eT*dx) < M.distance2(Me - eT*dx))
+    auto e = B-A;
+    auto Me = (A+B)*0.5;
+    auto eT = vec({-e(1),e(0)}).normalize();
+    if (C.distance2(Me + eT) < C.distance2(Me - eT))
         eT *= -1;
     return eT;
 
+}
+
+cnc::scalar cnc::algo::geometry::det22(const cnc::vec &a, const cnc::vec &b)
+{
+    return a(0)*b(1)-a(1)*b(0);
+}
+
+cnc::vec cnc::algo::geometry::rayRayIntersection(const cnc::vec &O1, const cnc::vec &D1, const cnc::vec &O2, const cnc::vec &D2,bool& intersects)
+{
+    vec T;
+    try {
+        T = argLineLineIntersection(O1,D1,O2,D2);
+    }  catch (Cnc_error&) {
+        intersects = false;
+        return vec(2);
+    }
+    intersects = (T(0) > 0 && T(0) < 1 && T(1) > 0 && T(1) < 1);
+    return O1 + D1*T(0);
+}
+
+cnc::vec cnc::algo::geometry::lineLineIntersection(const cnc::vec &O1, const cnc::vec &D1, const cnc::vec &O2, const cnc::vec &D2)
+{
+    bool tmp;
+    return rayRayIntersection(O1,D1,O2,D2,tmp);
+}
+
+cnc::vec cnc::algo::geometry::argLineLineIntersection(const cnc::vec &O1, const cnc::vec &D1, const cnc::vec &O2, const cnc::vec &D2)
+{
+    return solve22(mat22(D1,-D2),O2-O1);
+}
+
+cnc::vec cnc::algo::geometry::segmentSegmentIntersection(const cnc::vec &A1, const cnc::vec &A2, const cnc::vec &B1, const cnc::vec &B2, bool &intersects)
+{
+    return rayRayIntersection(A1,A2-A1,B1,B2-B1,intersects);
 }

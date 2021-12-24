@@ -24,5 +24,6 @@
 #include "GUI/plots/3D/camera.h"
 #include "GUI/plots/3D/material.h"
 #include "GUI/algo/compute_shader.h"
+#include "GUI/plots/2D_GEOM/mesh2ddisplayer.h"
 
 #endif // CURVESANDCLOUD_H

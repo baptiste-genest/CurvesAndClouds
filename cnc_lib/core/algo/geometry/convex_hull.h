@@ -18,7 +18,8 @@ face get_first_facet(const GeometricContext& G);
 
 }
 
-Mesh2 giftWrapping(const GeometricContext& C);
+Mesh2 giftWrapping(GeometricContextRef C);
+Mesh2 giftWrapping(const cloud& C);
 
 }
 
