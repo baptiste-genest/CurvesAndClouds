@@ -9,7 +9,7 @@
 
 #include "core/algo/geometry/geometry.h"
 #include "core/algo/geometry/simpleglmesh.h"
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 #include <QVector2D>
 
 namespace cnc {

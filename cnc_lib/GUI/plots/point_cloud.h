@@ -23,7 +23,7 @@ public:
      * @param coords
      * @param radius
      */
-    PointCloud(const cloud& c, const uint radius);
+    PointCloud(const cloud& c, const uint radius,bool dl = false);
 
     /**
      * @brief Points_cloud's constructor with a different size for each point
@@ -41,6 +41,7 @@ protected:
     void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override;
 
 private:
+    bool display_number;
     constexpr static float zoom_factor = 1.2;
 
     virtual void call_draw_axis(frame_draw_object&) const override;

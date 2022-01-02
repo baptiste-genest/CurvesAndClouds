@@ -95,6 +95,9 @@ cmat random_complex_mat(scalar lb,scalar ub,uint h,uint w);
 
 cloud PoissonSamplingInSphere(scalar R,scalar r,uint dim,uint N,vec radius = vec());
 
+uint weightedChoice(const vec& W);
+cloud PseudoRandomSequenceR2(uint N);
+
 }
 
 }

@@ -4,7 +4,7 @@
 #include "cnc_types.h"
 #include "cnc_error.h"
 #include "../plottable.h"
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 
 namespace cnc {
 

@@ -7,6 +7,11 @@ namespace cnc{
 class Mesh2DDisplayer : public Plottable {
 public:
     Mesh2DDisplayer(const algo::geometry::Mesh2& M);
+    Mesh2DDisplayer(algo::geometry::Mesh2&& M);
+    ~Mesh2DDisplayer(){
+        if (mesh_owner)
+            delete M;
+    }
     inline plot_type get_type() const override{ return plot_type::d2_curve;}
 
 private:
@@ -17,7 +22,7 @@ private:
     virtual void compute_values(const frame_info&) override{}
     virtual void compute_value_range(const frame_info& fi) override;
     const algo::geometry::Mesh2* M;
-
+    bool mesh_owner = false;
 };
 }
 

@@ -96,14 +96,17 @@ SOURCES += \
     core/algo/geometry/vertex.cpp \
     core/algo/graph/graph.cpp \
     core/algo/inout.cpp \
-    core/algo/lin_alg.cpp \
+    core/algo/linear_algebra/iterative_solvers.cpp \
+    core/algo/linear_algebra/lin_alg.cpp \
+    core/algo/linear_algebra/preconditionners.cpp \
+    core/algo/linear_algebra/sparse_matrix_builder.cpp \
     core/algo/matrix_functions.cpp \
-    core/algo/preconditionners.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
     core/algo/time_handling.cpp \
     core/dual_numbers.cpp \
     core/quaternion.cpp \
+    core/algo/calculus/finite_elements/finite_elements.cpp \
     core/sparse_matrix.cpp \
     examples/mesh_bank.cpp
 
@@ -208,9 +211,11 @@ HEADERS += \
     core/algo/geometry/vertex.h \
     core/algo/graph/graph.h \
     core/algo/inout.h \
-    core/algo/lin_alg.h \
+    core/algo/linear_algebra/iterative_solvers.h \
+    core/algo/linear_algebra/lin_alg.h \
+    core/algo/linear_algebra/preconditionners.h \
+    core/algo/linear_algebra/sparse_matrix_builder.h \
     core/algo/matrix_functions.h \
-    core/algo/preconditionners.h \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
     core/dual_numbers.h \

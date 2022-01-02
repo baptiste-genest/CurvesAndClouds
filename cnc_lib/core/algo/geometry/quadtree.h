@@ -8,7 +8,7 @@
 #endif
 
 #include "core/algo/algo.h"
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 #include "cnc_error.h"
 #include "cnc_types.h"
 

@@ -178,3 +178,32 @@ cnc::vec cnc::algo::stat::random_var::random_vec_in_sphere(cnc::scalar R, uint d
     }
     return x;
 }
+
+cnc::cloud cnc::algo::stat::random_var::PseudoRandomSequenceR2(uint N)
+{
+    constexpr static scalar g = 1.32471795724474602596;
+    constexpr static scalar a1 = 1.0/g;
+    constexpr static scalar a2 = 1.0/(g*g);
+    cloud X = stat::init_empty_cloud(N,2);
+    scalar tmp;
+    for (int i = 0;i<(int)N;i++){
+        X[i](0) = std::modf(0.5+a1*i,&tmp);
+        X[i](1) = std::modf(0.5+a2*i,&tmp);
+    }
+    return X;
+}
+
+uint cnc::algo::stat::random_var::weightedChoice(const cnc::vec &W)
+{
+    scalar sum_of_weight = 0;
+    for(uint i=0; i<W.size(); i++) {
+       sum_of_weight += W(i);
+    }
+    scalar rnd = random_scalar(0,sum_of_weight);
+    for(uint i=0; i<W.size(); i++) {
+      if(rnd < W(i))
+        return i;
+      rnd -= W(i);
+    }
+    throw Cnc_error("could pick weighted choice");
+}

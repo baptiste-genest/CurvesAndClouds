@@ -8,7 +8,7 @@
 #endif
 
 #include "cnc_types.h"
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 
 namespace cnc {
 

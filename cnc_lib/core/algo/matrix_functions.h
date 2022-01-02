@@ -7,7 +7,7 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-#include "lin_alg.h"
+#include "linear_algebra/lin_alg.h"
 #include "algo.h"
 #include "core/sparse_matrix.h"
 #include <QVector3D>
@@ -48,6 +48,10 @@ mat mat22(const vec& x,const vec& y);
 vec solve22(const mat& A,const vec& b);
 
 vec Re(const cvec& V);
+
+vec lerp(const vec& A,const vec& B,scalar t);
+
+mat Cholesky(const mat& A);
 
 std::pair<mat,mat> set_known_variables(const mat& M,const std::vector<uint>& id);
 vec solve_for_kernel_with_known_variables(const mat& M,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);

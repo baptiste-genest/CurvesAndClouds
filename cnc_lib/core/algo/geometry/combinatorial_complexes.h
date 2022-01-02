@@ -4,7 +4,7 @@
 #include <set>
 #include <vector>
 #include <array>
-#include "../lin_alg.h"
+#include "../linear_algebra/lin_alg.h"
 #include "../matrix_functions.h"
 #include "../statistics/statistics.h"
 
@@ -40,6 +40,7 @@ using faces = std::set<face,faceComp>;
 using edges = std::set<edge,edgeComp>;
 using indexed_edges = std::vector<edge>;
 using EdgeFaceConnectivityGraph = std::map<edge,faces,edgeComp>;
+using VertexFaceConnectivityGraph = std::map<vertex,faces>;
 
 bool operator==(const edge& a,const edge& b);
 bool operator==(const face& a,const face& b);
@@ -48,6 +49,7 @@ bool belong(vertex x,const face& F);
 bool belong(vertex x,const edge& E);
 bool belong(const edge& E,const face& F);
 
+std::array<edge,2> get_other_edges(const face& f,const edge& e);
 vertices get_vertices(const face& F);
 vertices get_vertices(const SimplicialPolygon& P);
 indexed_vertices get_indexed_vertices(const face& F);
@@ -57,6 +59,7 @@ edge get_common_edge(const face& F,vertex O);
 vertex get_other(const face& F,const edge& e);
 vertex get_other(const edge& F,vertex x);
 face assemble_face(const edge& E,const vertex& x);
+face assemble_face(vertex x1,vertex x2,vertex x3);
 void swap(edge& E);
 
 edge completeCycle(const SimplicialPolygon& P);

@@ -2,7 +2,7 @@
 #define DUAL_NUMBERS_H
 
 #include <cnc_types.h>
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 #include <functional>
 #include "cnc_error.h"
 

@@ -5,7 +5,7 @@
 #define VECTOR_CALCULUS_H
 
 #include "calculus.h"
-#include "../lin_alg.h"
+#include "../linear_algebra/lin_alg.h"
 
 #if defined(CNC_LIB)
 #  define CNC_LIB_EXPORT Q_DECL_EXPORT

@@ -67,7 +67,7 @@ public:
      * @param radius radius of each point (default = 2)
      * @return pointer to the plot
      */
-    PointCloud* new_point_cloud(const cloud& c, const uint radius = 2);
+    PointCloud* new_point_cloud(const cloud& c, const uint radius = 2,bool dl = false);
     /**
      * @brief new_point_cloud adds a point cloud to the layer
      * @param c cloud to plot

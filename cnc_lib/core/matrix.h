@@ -179,8 +179,8 @@ public:
 
 
     //EIGENVALUES/EIGENVECTORS
-    eigen_pair<T> power_method(Vector<T> u) const;
-    eigen_pair<T> power_method() const;
+    eigen_pair<T> power_method(Vector<T> u,double eps = 1e-10) const;
+    eigen_pair<T> power_method(double eps = 1e-10) const;
     std::vector<T> get_eigen_values_QR() const;
     eigen_pair<T> rayleigh_quotient(T mu) const;
     std::vector<eigen_pair<T>> lanczos(int max_nb = -1) const;
@@ -1145,19 +1145,19 @@ Vector<T> rvec(uint n){
 }
 
 template<class T>
-eigen_pair<T> Matrix<T>::power_method() const{
-    return power_method(rvec<T>(rowNum()));
+eigen_pair<T> Matrix<T>::power_method(double eps) const{
+    return power_method(rvec<T>(rowNum()),eps);
 }
 
 template<class T>
-eigen_pair<T> Matrix<T>::power_method(Vector<T> u) const{
+eigen_pair<T> Matrix<T>::power_method(Vector<T> u,double eps) const{
     u = u.normalize();
     Vector<T> x;
 
     double error = 1;
     T beta,old_beta = 0;
     uint iter = 0;
-    while (error > 1e-10 && iter < 40000){
+    while (error > eps && iter < 40000){
         iter++;
         x = (*this)*u;
         beta = 0;

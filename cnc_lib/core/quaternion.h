@@ -7,7 +7,7 @@
 #endif
 
 
-#include "algo/lin_alg.h"
+#include "algo/linear_algebra/lin_alg.h"
 #include "../cnc_error.h"
 
 namespace cnc {

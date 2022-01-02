@@ -291,3 +291,27 @@ cnc::vec cnc::algo::solve22(const cnc::mat &A, const cnc::vec &b)
     scalar iD = 1./D;
     return vec({A(1,1)*b(0) - A(1,0)*b(1),-A(0,1)*b(0) + A(0,0)*b(1)})*iD;
 }
+
+cnc::vec cnc::algo::lerp(const cnc::vec &A, const cnc::vec &B, cnc::scalar t)
+{
+    return A*(1-t) + B*t;
+}
+
+cnc::mat cnc::algo::Cholesky(const cnc::mat &A)
+{
+    uint n = A.rowNum();
+    mat L(n);
+    for (uint i = 0;i<n;i++){
+        for (uint j = 0;j<=i;j++) {
+            scalar sum = 0;
+            for (uint k = 0;k<j;k++)
+                sum += L(k,i)*L(k,j);
+            if (i == j)
+                L(i,i) = std::sqrt(A(i,i)-sum);
+            else
+                L(j,i) = 1.0/L(j,j)*(A(j,i)-sum);
+        }
+    }
+    return L;
+}
+

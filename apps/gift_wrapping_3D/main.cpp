@@ -26,12 +26,14 @@ int main(int argc, char *argv[])
     //L->new_figure_from_texturing(W,W,voronoi_approx);
     //auto D = mesh_generation::Delaunay(X);
 
+    /*
     updateRoutine diagUpdate = [&X,dw,&V,N](scalar val) {
         vec psi(N);
         psi(0) = val;
         V = Laguerre(X,psi,dw);
     };
     w.add_mutable_scalar_by_cursor({-2,2},"PSI_0",40,diagUpdate);
+    */
     L->new_point_cloud(X);
     L->addPlot<DiagramPlotter>(V);
     //L->addPlot<Mesh2DDisplayer>(D);

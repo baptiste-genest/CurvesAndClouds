@@ -104,23 +104,27 @@ cnc::algo::calculus::nodes cnc::algo::calculus::build_integration_mesh(const cnc
     return mesh;
 }
 
-cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::build_range_mapper(const cnc::range &A, const cnc::range &B)
+cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::build_range_mapper(const cnc::range &A, const cnc::range &B,bool constrained)
 {
     scalar l = std::abs(A.first - A.second);
-    return [A,B,l] (scalar x) {
-        scalar t = (x-A.first)/l;
-        return (1.f-t)*B.first + t*B.second;
-        scalar df = std::abs(A.first - x);
-        scalar ds = std::abs(A.second - x);
-        if (ds < l && df < l){
-            scalar t = std::abs(A.first - x)/l;
+    if (!constrained)
+        return [A,B,l] (scalar x) {
+            scalar t = (x-A.first)/l;
             return (1.f-t)*B.first + t*B.second;
-        }
-        if (df > ds)
-            return B.second;
-        else
-            return B.first;
-    };
+        };
+    else
+        return [A,B,l] (scalar x){
+            scalar df = std::abs(A.first - x);
+            scalar ds = std::abs(A.second - x);
+            if (ds < l && df < l){
+                scalar t = std::abs(A.first - x)/l;
+                return (1.f-t)*B.first + t*B.second;
+            }
+            if (df > ds)
+                return B.second;
+            else
+                return B.first;
+        };
 }
 
 cnc::algo::calculus::scalar_function_2D cnc::algo::calculus::build_2D_laplacian(const cnc::algo::calculus::scalar_function_2D &f,scalar dx)

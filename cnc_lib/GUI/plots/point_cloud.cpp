@@ -1,7 +1,7 @@
 #include "point_cloud.h"
 using namespace cnc;
 
-PointCloud::PointCloud(const cloud& c, const uint radius)
+PointCloud::PointCloud(const cloud& c, const uint radius,bool dl) : display_number(dl)
 {
     if (c.size() == 0)
         throw Cnc_error("Can't plot void point cloud");
@@ -53,8 +53,14 @@ void PointCloud::plot(frame_draw_object& fdo)
     for (uint i = 0; i < size; i++){
         if (uniform_radius){
             fdo.painter.drawEllipse(M(projected_2d_coords[i]), point_radius[0], point_radius[0]);
+            if (display_number){
+                QPoint offset(point_radius[0]*2,point_radius[0]*2);
+                fdo.painter.drawText(M(projected_2d_coords[i]) + offset,QString::fromStdString(std::to_string(i)));
+            }
         } else {
             fdo.painter.drawEllipse(M(projected_2d_coords[i]), point_radius[i], point_radius[i]);
+            if (display_number)
+                fdo.painter.drawText(M(projected_2d_coords[i]),QString::fromStdString(std::to_string(i)));
         }
     }
 }

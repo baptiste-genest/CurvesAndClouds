@@ -9,7 +9,7 @@
 
 #include "cnc_types.h"
 #include "cnc_error.h"
-#include "../lin_alg.h"
+#include "../linear_algebra/lin_alg.h"
 #include <QVector3D>
 #include <memory>
 #include "combinatorial_complexes.h"
@@ -41,6 +41,7 @@ vec rayRayIntersection(const vec& O1,const vec& D1,const vec& O2,const vec& D2,b
 vec segmentSegmentIntersection(const vec& A1,const vec& A2,const vec& B1,const vec& B2,bool& intersects);
 vec lineLineIntersection(const vec& O1,const vec& D1,const vec& O2,const vec& D2);
 vec argLineLineIntersection(const vec& O1,const vec& D1,const vec& O2,const vec& D2);
+vec raySegmentIntersection(const vec& O1,const vec& D1,const vec& A,const vec& B,bool& intersects);
 
 vec get2DOutwardNormal(const vec& A,const vec& B,const vec& C);
 
@@ -71,14 +72,19 @@ public:
     cloud& getPoints();
 
     scalar PolygonArea(const topology::SimplicialPolygon& P) const;
+    scalar faceArea(const topology::face& f) const;
     scalar ConvexPolygonArea(const topology::SimplicialPolygon& P) const;
     scalar PolygonSignedArea(const topology::SimplicialPolygon& P) const;
     vec compute2DPolygonCentroid(const topology::SimplicialPolygon& P) const;
     void uniformizeOrientation(topology::SimplicialPolygon& P) const;
 
+    bool insideFace(const topology::face& f,const vec& x) const;
+
     scalar circumRadius(const topology::face& F) const ;
     vec circumCenter(const topology::face& F) const ;
     circum_data circumCenterRadius(const topology::face& F) const;
+    scalar facePerimeter(const topology::face& F) const;
+    scalar inscribedRadius(const topology::face& F) const;
 private:
     friend struct mesh_generation;
     cloud points;

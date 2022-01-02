@@ -49,8 +49,8 @@ protected:
     algo::calculus::nodes z_values;
     range z_range;
 
-    uint MAX_WIDTH = 600;
-    uint MAX_HEIGHT = 600;
+    uint MAX_WIDTH = 200;
+    uint MAX_HEIGHT = 200;
 
     inline void plot(frame_draw_object& fdo) override
     {

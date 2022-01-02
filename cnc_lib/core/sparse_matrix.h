@@ -8,7 +8,7 @@
 #endif
 
 #include "cnc_types.h"
-#include "algo/lin_alg.h"
+#include "algo/linear_algebra/lin_alg.h"
 #include "algo/algo.h"
 #include "cnc_error.h"
 #include <vector>
@@ -16,6 +16,8 @@
 namespace cnc {
 
 class SparseMatrix;
+class SparseMatrixBuilder;
+using SMB = SparseMatrixBuilder;
 
 using smat = SparseMatrix;
 namespace algo{
@@ -30,7 +32,8 @@ class SparseMatrix
 public:
     SparseMatrix(int dimension,bool is_symetric = false);
     SparseMatrix(int w,int h,bool is_symetric = false);
-    SparseMatrix();
+    SparseMatrix(const SparseMatrixBuilder&);
+    SparseMatrix() : w(0),h(0){}
 
     void new_row();
     void add_in_row(int i,scalar x);

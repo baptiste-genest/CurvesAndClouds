@@ -14,6 +14,7 @@ class Mesh2DDisplayer;
 
 namespace algo {
 
+namespace FEM {  class FiniteElementSolver;}
 namespace geometry {
 
 using namespace topology;
@@ -40,6 +41,11 @@ public:
     const topology::edges& edges() const;
     const topology::edges& interiorEdges() const;
     const topology::edges& boundaryEdges() const;
+
+    inline const topology::vertices& interiorVertices() const{
+        return interior_vertices;
+    }
+
     const topology::edge& getBoundaryEdge(const topology::face& F) const;
     int nbVertices() const;
     topology::face get_opposite(const topology::face& F,const topology::edge& e) const;
@@ -47,11 +53,31 @@ public:
 
     std::array<topology::face,3> insertVertexInFace(const face& F,const vec& x);
     GeometricContextRef getContext();
+    const GeometricContextRef getContext() const;
     void insertFace(const topology::face& f);
+    void computeConnectivity();
+    bool isInteriorVertex(vertex x) const;
+    const topology::face& getOppositeFace(const topology::face& f,const topology::edge& e) const;
+    const topology::faces& getAdjacentFaces(const topology::edge& e) const;
+    const topology::faces& getOneRingFaces(topology::vertex v) const;
+
+    void edgeFlip(const topology::edge& e);
+    void edgeSplit(const topology::edge& e);
+    void edgeCollapse(const topology::edge& e);
+
+    scalar maxInscribedRadius() const;
+
+    const topology::vertices& getInteriorVertices() const;
 
 private:
+    bool compute_connectivity = false;
     Mesh2(GeometricContextRef C) : G(C) {}
     void induce_from_faces();
+
+    void checkConnectivity() const {
+        if (!compute_connectivity)
+            throw Cnc_error("Connectivity not computed for this mesh!");
+    }
 
     GeometricContextRef G;
     topology::vertices V;
@@ -59,7 +85,10 @@ private:
     topology::faces F;
     topology::edges boundary;
     topology::edges interior_edges;
+    topology::vertices interior_vertices;
+    topology::vertices boundary_vertices;
     topology::EdgeFaceConnectivityGraph EtoF;
+    topology::VertexFaceConnectivityGraph VtoF;
     friend class cnc::Mesh2DDisplayer;
     friend struct mesh_generation;
     NormalMap N;

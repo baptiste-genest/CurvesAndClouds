@@ -18,7 +18,7 @@
 
 #include "cnc_types.h"
 #include "core/algo/calculus/calculus.h"
-#include "lin_alg.h"
+#include "linear_algebra/lin_alg.h"
 
 namespace cnc {
 

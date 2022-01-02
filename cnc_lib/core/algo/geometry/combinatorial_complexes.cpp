@@ -157,3 +157,32 @@ cnc::algo::topology::vertices cnc::algo::topology::get_vertices(const cnc::algo:
     }
     return V;
 }
+
+cnc::algo::topology::face cnc::algo::topology::assemble_face(cnc::algo::topology::vertex x1, cnc::algo::topology::vertex x2, cnc::algo::topology::vertex x3)
+{
+    face F;
+    F[0] = {x1,x2};
+    F[1] = {x1,x3};
+    F[2] = {x2,x3};
+    return F;
+}
+
+bool cnc::algo::topology::belong(const cnc::algo::topology::edge &E, const cnc::algo::topology::face &F)
+{
+    for (const auto& e : F)
+        if (e==E)
+            return true;
+    return false;
+}
+
+std::array<cnc::algo::topology::edge,2> cnc::algo::topology::get_other_edges(const cnc::algo::topology::face &f, const cnc::algo::topology::edge &e)
+{
+    std::array<cnc::algo::topology::edge,2> others;
+    uint i = 0;
+    for (const auto& ed : f)
+        if (!(ed == e)){
+            others[i] = ed;
+            i++;
+        }
+    return others;
+}

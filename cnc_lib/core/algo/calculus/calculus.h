@@ -13,7 +13,7 @@
 #endif
 
 #include "core/algo/algo.h"
-#include "../lin_alg.h"
+#include "../linear_algebra/lin_alg.h"
 #include "cnc_error.h"
 #include "cnc_types.h"
 
@@ -114,7 +114,7 @@ scalar_function_1D build_1D_linear_interpolator(const nodes& X,const nodes& Y);
  * @param B target range
  * @return mapper from A to B
  */
-scalar_function_1D build_range_mapper(const range& A,const range& B);
+scalar_function_1D build_range_mapper(const range& A,const range& B,bool constrained = false);
 
 /**
  * @brief sample nodes with values of a given function at given points

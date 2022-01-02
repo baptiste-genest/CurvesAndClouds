@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 
     ConvexPolygon P1,P2;
     P1 = convexPrimitive::Circle(1,20);
-    //P2 = convexPrimitive::Square(1,vec({0.7,0.2}));
-    P2 = convexPrimitive::Segment(vec({0.,0.}),vec({1.7,0.2}));
+    P2 = convexPrimitive::Square(1,vec({0.7,0.2}));
+    //P2 = convexPrimitive::Segment(vec({0.,0.}),vec({1.7,0.2}));
 
     auto CPP1 = P1.getIndexedCyclicPoints();
     auto CPP2 = P2.getIndexedCyclicPoints();

@@ -10,10 +10,10 @@
 #  define CNC_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-#include "../../cnc_types.h"
-#include "../matrix.h"
-#include "../matrix_algo.h"
-#include "../matrix_errors.h"
+#include "../../../cnc_types.h"
+#include "../../matrix.h"
+#include "../../matrix_algo.h"
+#include "../../matrix_errors.h"
 
 namespace cnc {
 

@@ -12,7 +12,7 @@
 
 #include "iostream"
 #include "fstream"
-#include "core/algo/lin_alg.h"
+#include "core/algo/linear_algebra/lin_alg.h"
 #include "core/algo/statistics/statistics.h"
 #include "core/algo/geometry/simpleglmesh.h"
 #include <QImage>

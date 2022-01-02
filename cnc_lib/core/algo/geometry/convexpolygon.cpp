@@ -71,6 +71,23 @@ cnc::algo::geometry::indexedConvexPointsCyclic cnc::algo::geometry::ConvexPolygo
     return P;
 }
 
+cnc::algo::geometry::indexedConvexPointsCyclic cnc::algo::geometry::ConvexPolygon::getIndexedPoints() const
+{
+    indexedConvexPointsCyclic P(V.size());
+    int i = 0;
+    const GeometricContext& gc = *G;
+    for (auto v : V){
+        P[i] = gc(v);
+        i++;
+    }
+    return P;
+}
+
+cnc::cloud cnc::algo::geometry::ConvexPolygon::getPointCloud() const
+{
+    return cloud(getIndexedPoints());
+}
+
 cnc::algo::geometry::indexedConvexSegmentsCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicSegments() const
 {
     indexedConvexSegmentsCyclic S;
@@ -81,14 +98,47 @@ cnc::algo::geometry::indexedConvexSegmentsCyclic cnc::algo::geometry::ConvexPoly
     for (auto v = V.begin();n != V.end();++v,++n){
         const auto& c = gc(*v);
         const auto& nv = gc(*n);
-        S[i] = nv-c;
+        S.push_back(nv-c);
         i++;
     }
     return S;
 }
 
+cnc::algo::geometry::indexedConvexEdgesCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicEdges() const
+{
+    indexedConvexEdgesCyclic E;
+    //const GeometricContext& gc = *G;
+    auto n = V.begin();
+    ++n;
+    int i = 0;
+    for (auto v = V.begin();n != V.end();++v,++n){
+        E.push_back({*v,*n});
+        i++;
+    }
+    return E;
+}
+
+cnc::algo::geometry::ConvexPolygon cnc::algo::geometry::ConvexPolygon::subdivide(int N) const
+{
+    GeometricContextRef C = std::make_shared<GeometricContext>();
+    ConvexPolygon S(C);
+    auto P = getIndexedCyclicPoints();
+    uint n = P.size();
+    std::vector<topology::vertex> NV;
+    for (uint i = 0;i<n-1;i++){
+        for (int k = 0;k<N;k++){
+            scalar t = scalar(k)/N;
+            NV.push_back(C.get()->add_vertex(lerp(P[i],P[i+1],t)));
+        }
+    }
+    S.V = std::list<topology::vertex>(NV.begin(),NV.end());
+    return S;
+}
+
 cnc::scalar cnc::algo::geometry::ConvexPolygon::Area() const
 {
+    return std::abs(SignedArea());
+    /*
     if (V.size() < 3)
         return 0;
     scalar A = 0;
@@ -96,6 +146,33 @@ cnc::scalar cnc::algo::geometry::ConvexPolygon::Area() const
     for (int i = 1;i<(int)V.size()-2;i++)
         A+= std::abs(det22(V[i+1]-V[0],V[i]-V[0]));
     return A*0.5;
+        */
+}
+
+cnc::scalar cnc::algo::geometry::ConvexPolygon::SignedArea() const
+{
+    if (V.size() < 3)
+        return 0;
+    scalar A = 0;
+    auto V = getIndexedCyclicPoints();
+    for (int i = 0;i<(int)V.size()-1;i++){
+        A+= det22(V[i+1],V[i]);
+    }
+    return A*0.5;
+
+}
+
+cnc::vec cnc::algo::geometry::ConvexPolygon::Centroid() const
+{
+    scalar A = 0;
+    vec C(2);
+    auto V = getIndexedCyclicPoints();
+    for (int i = 0;i<(int)V.size()-1;i++){
+        scalar D = det22(V[i+1],V[i]);
+        A += D;
+        C += (V[i] + V[i+1])*D;
+    }
+    return C*(1.0/(3*A));
 }
 
 cnc::scalar cnc::algo::geometry::ConvexPolygon::Perimeter() const
@@ -125,6 +202,19 @@ bool cnc::algo::geometry::ConvexPolygon::isInside(const cnc::vec &x) const
             return false;
     }
     return true;
+}
+
+int cnc::algo::geometry::ConvexPolygon::nbVertices() const
+{
+    return V.size();
+}
+
+cnc::algo::geometry::ShapePredicate cnc::algo::geometry::ConvexPolygon::getShapePredicate() const
+{
+    const ConvexPolygon& R = *this;
+    return [R] (const vec& x){
+        return R.isInside(x);
+    };
 }
 
 bool cnc::algo::geometry::ConvexPolygon::pointsToward(const cnc::vec &A1, const cnc::vec &A2, const cnc::vec &B1, const cnc::vec &B2)
@@ -245,4 +335,34 @@ cnc::algo::geometry::ConvexPolygon cnc::algo::geometry::convexPrimitive::Segment
     P.insert(a);
     P.insert(b);
     return P;
+}
+
+cnc::algo::geometry::ConvexPolygon cnc::algo::geometry::convexPrimitive::Triangle(const cnc::vec &a, const cnc::vec &b, const cnc::vec &c)
+{
+    ConvexPolygon P;
+    P.insert(a);
+    P.insert(b);
+    P.insert(c);
+    return P;
+}
+
+cnc::algo::geometry::ShapePredicate cnc::algo::geometry::Union(const cnc::algo::geometry::ShapePredicate &A, const cnc::algo::geometry::ShapePredicate &B)
+{
+    return [A,B] (const vec& x){
+        return A(x)||B(x);
+    };
+}
+
+cnc::algo::geometry::ShapePredicate cnc::algo::geometry::Inter(const cnc::algo::geometry::ShapePredicate &A, const cnc::algo::geometry::ShapePredicate &B)
+{
+    return [A,B] (const vec& x){
+        return A(x)&&B(x);
+    };
+}
+
+cnc::algo::geometry::ShapePredicate cnc::algo::geometry::Not(const cnc::algo::geometry::ShapePredicate &A)
+{
+    return [A] (const vec& x ){
+        return !A(x);
+    };
 }

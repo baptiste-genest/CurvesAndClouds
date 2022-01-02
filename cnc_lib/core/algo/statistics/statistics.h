@@ -13,7 +13,7 @@
 #endif
 
 #include "core/algo/algo.h"
-#include "../lin_alg.h"
+#include "../linear_algebra/lin_alg.h"
 #include "core/algo/calculus/calculus.h"
 #include "core/algo/calculus/optimization.h"
 

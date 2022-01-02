@@ -42,9 +42,9 @@ FunctionPlot *PlotLayer::new_function_plot(const algo::calculus::scalar_function
     return FP;
 }
 
-PointCloud *PlotLayer::new_point_cloud(const cloud &c, const uint radius)
+PointCloud *PlotLayer::new_point_cloud(const cloud &c, const uint radius,bool dl)
 {
-    PointCloud* PC = new PointCloud(c, radius);
+    PointCloud* PC = new PointCloud(c, radius,dl);
     insert_plot(PC);
     return (PC);
 }
