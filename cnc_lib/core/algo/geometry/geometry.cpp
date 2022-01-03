@@ -84,6 +84,11 @@ cnc::vec cnc::algo::geometry::GeometricContext::operator()(const cnc::algo::topo
 {
     return points[v];
 }
+cnc::vec& cnc::algo::geometry::GeometricContext::operator()(const cnc::algo::topology::vertex &v)
+{
+    return points[v];
+}
+
 
 cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topology::face &F) const
 {
@@ -96,6 +101,14 @@ cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topolo
 cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const cnc::algo::topology::edge &E) const
 {
     return (points[E[0]] + points[E[1]])*0.5;
+}
+
+cnc::vec cnc::algo::geometry::GeometricContext::midPoint(const topology::vertices &V) const
+{
+    vec M(2);
+    for (auto v : V)
+        M += points[v];
+    return M*(1./V.size());
 }
 
 const cnc::vec &cnc::algo::geometry::GeometricContext::getPoint(cnc::algo::topology::vertex x) const

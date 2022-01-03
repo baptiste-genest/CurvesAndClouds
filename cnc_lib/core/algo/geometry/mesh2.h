@@ -25,11 +25,14 @@ class Mesh2;
 
 using trianglePredicate = std::function<bool(const Mesh2&,const topology::face&)>;
 
+using MeshRef = std::shared_ptr<Mesh2>;
+
 class Mesh2
 {
 public:
     Mesh2(GeometricContextRef C,const topology::faces& Fa,const EdgeFaceConnectivityGraph& EF,const NormalMap& NM);
     Mesh2(Mesh2&& O);
+    Mesh2(const Mesh2& other);
 
     vec getNormal(const face& F) const;
     Mesh2 getSubMesh(const trianglePredicate& P) const;
@@ -60,6 +63,7 @@ public:
     const topology::face& getOppositeFace(const topology::face& f,const topology::edge& e) const;
     const topology::faces& getAdjacentFaces(const topology::edge& e) const;
     const topology::faces& getOneRingFaces(topology::vertex v) const;
+    topology::vertices getOneRingVertices(topology::vertex v) const;
 
     void edgeFlip(const topology::edge& e);
     void edgeSplit(const topology::edge& e);
@@ -89,6 +93,7 @@ private:
     topology::vertices boundary_vertices;
     topology::EdgeFaceConnectivityGraph EtoF;
     topology::VertexFaceConnectivityGraph VtoF;
+    topology::VertexEdgeConnectivityGraph VtoE;
     friend class cnc::Mesh2DDisplayer;
     friend struct mesh_generation;
     NormalMap N;

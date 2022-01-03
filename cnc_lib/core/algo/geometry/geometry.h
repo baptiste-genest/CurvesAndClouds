@@ -64,8 +64,10 @@ public:
     //vec get2DOutwardNormal(const topology::face& F,const topology::edge& E)const;
 
     vec operator()(const topology::vertex& v) const;
+    vec& operator()(const topology::vertex& v);
     vec midPoint(const topology::face& F) const;
     vec midPoint(const topology::edge& E) const;
+    vec midPoint(const topology::vertices& E) const;
     const vec& getPoint(topology::vertex x) const;
 
     const cloud& getPoints() const;

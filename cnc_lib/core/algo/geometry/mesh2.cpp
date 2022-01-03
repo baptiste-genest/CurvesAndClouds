@@ -24,6 +24,13 @@ cnc::algo::geometry::Mesh2::Mesh2(cnc::algo::geometry::Mesh2 &&O) : G(O.G)
     boundary_vertices = std::move(O.boundary_vertices);
 }
 
+cnc::algo::geometry::Mesh2::Mesh2(const Mesh2 &other)
+{
+    F = other.F;
+    G = other.G;
+    induce_from_faces();
+}
+
 cnc::vec cnc::algo::geometry::Mesh2::getNormal(const topology::face &F) const
 {
     return N.at(F);
@@ -177,8 +184,10 @@ void cnc::algo::geometry::Mesh2::computeConnectivity()
     for (const auto& f : F){
         for (const auto& e : f){
             EtoF[e].insert(f);
-            for (const auto& v : e)
+            for (const auto& v : e){
                 VtoF[v].insert(f);
+                VtoE[v].insert(e);
+            }
         }
     }
     for (const auto& ef : EtoF){
@@ -230,6 +239,14 @@ const cnc::algo::topology::faces &cnc::algo::geometry::Mesh2::getOneRingFaces(cn
         throw Cnc_error("empty one ring");
     return F;
 
+}
+
+cnc::algo::topology::vertices cnc::algo::geometry::Mesh2::getOneRingVertices(vertex v) const
+{
+    vertices V;
+    for (const auto& e : VtoE.at(v))
+        V.insert(topology::get_other(e,v));
+    return V;
 }
 
 void cnc::algo::geometry::Mesh2::edgeFlip(const cnc::algo::topology::edge &e)

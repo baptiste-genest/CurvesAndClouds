@@ -15,6 +15,7 @@ struct mesh_generation {
     static Mesh2 BowyerWatson(const cloud& X);
     static Mesh2 BowyerWatsonWIP(const cloud& X);
     static Mesh2 LloydRelaxation(const ConvexPolygon& B,uint N);
+    static Mesh2 LaplacianRelaxation(const std::vector<ConvexPolygon>& B,const ShapePredicate& P,uint N);
     static Mesh2 FromBoundaryMesh(const std::vector<ConvexPolygon>& B,scalar treshold,const ShapePredicate& P);
 private:
     static std::array<cnc::vec,3> super_triangle(const cloud& X);
