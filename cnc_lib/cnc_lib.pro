@@ -20,6 +20,7 @@ SOURCES += \
     GUI/plots/2D_GEOM/euclidean_geometry.cpp \
     GUI/plots/2D_GEOM/euclidean_plane.cpp \
     GUI/plots/2D_GEOM/mesh2ddisplayer.cpp \
+    GUI/plots/2D_GEOM/valued2dmeshdisplayer.cpp \
     GUI/plots/3D/GLWrapper.cpp \
     GUI/plots/3D/camera.cpp \
     GUI/plots/3D/color.cpp \
@@ -125,6 +126,7 @@ HEADERS += \
     GUI/plots/2D_GEOM/euclidean_geometry.h \
     GUI/plots/2D_GEOM/euclidean_plane.h \
     GUI/plots/2D_GEOM/mesh2ddisplayer.h \
+    GUI/plots/2D_GEOM/valued2dmeshdisplayer.h \
     GUI/plots/3D/GLWrapper.h \
     GUI/plots/3D/camera.h \
     GUI/plots/3D/color.h \

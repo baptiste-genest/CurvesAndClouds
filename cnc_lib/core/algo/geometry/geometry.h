@@ -85,6 +85,7 @@ public:
     circum_data circumCenterRadius(const topology::face& F) const;
     scalar facePerimeter(const topology::face& F) const;
     scalar inscribedRadius(const topology::face& F) const;
+    vec projectOnEdge(topology::vertex v,const topology::edge& e) const;
 private:
     friend struct mesh_generation;
     cloud points;

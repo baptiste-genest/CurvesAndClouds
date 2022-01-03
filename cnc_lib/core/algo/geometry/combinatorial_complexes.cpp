@@ -186,3 +186,11 @@ std::array<cnc::algo::topology::edge,2> cnc::algo::topology::get_other_edges(con
         }
     return others;
 }
+
+cnc::algo::topology::edge cnc::algo::topology::get_opposite_edge(const cnc::algo::topology::face &F, cnc::algo::topology::vertex O)
+{
+    for (const auto& e : F)
+        if (!belong(O,e))
+            return e;
+    return NULL_EDGE;
+}

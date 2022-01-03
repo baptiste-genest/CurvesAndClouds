@@ -56,6 +56,7 @@ indexed_vertices get_indexed_vertices(const face& F);
 indexed_vertices get_indexed_vertices(const SimplicialPolygon& P);
 edges get_edges(const face& F);
 edge get_common_edge(const face& F,vertex O);
+edge get_opposite_edge(const face& F,vertex O);
 vertex get_other(const face& F,const edge& e);
 vertex get_other(const edge& F,vertex x);
 face assemble_face(const edge& E,const vertex& x);

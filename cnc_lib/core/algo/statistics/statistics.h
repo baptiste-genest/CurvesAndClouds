@@ -49,7 +49,7 @@ struct cloud{
         return points[i];
     }
 
-    vec operator[](uint i) const {
+    const vec& operator[](uint i) const {
         if (i >= size())
             throw Cnc_error("index out of cloud range");
         return points[i];

@@ -11,6 +11,7 @@
 
 namespace cnc {
 class Mesh2DDisplayer;
+class Valued2DMeshDisplayer;
 
 namespace algo {
 
@@ -90,6 +91,7 @@ private:
     topology::EdgeFaceConnectivityGraph EtoF;
     topology::VertexFaceConnectivityGraph VtoF;
     friend class cnc::Mesh2DDisplayer;
+    friend class cnc::Valued2DMeshDisplayer;
     friend struct mesh_generation;
     NormalMap N;
 };

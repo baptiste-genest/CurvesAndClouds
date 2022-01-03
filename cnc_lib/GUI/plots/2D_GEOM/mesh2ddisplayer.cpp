@@ -1,13 +1,12 @@
 #include "mesh2ddisplayer.h"
 
-cnc::Mesh2DDisplayer::Mesh2DDisplayer(const cnc::algo::geometry::Mesh2 &mesh) : M(&mesh)
+cnc::Mesh2DDisplayer::Mesh2DDisplayer(meshref mesh) : M(mesh)
 {
 
 }
 
-cnc::Mesh2DDisplayer::Mesh2DDisplayer(cnc::algo::geometry::Mesh2 &&mesh):mesh_owner(true)
-{
-    M = new algo::geometry::Mesh2(std::move(mesh));
+cnc::Mesh2DDisplayer::Mesh2DDisplayer(cnc::algo::geometry::Mesh2 &&mesh){
+    M = std::make_shared<algo::geometry::Mesh2>(std::move(mesh));
 }
 
 void cnc::Mesh2DDisplayer::plot(cnc::frame_draw_object &fdo)

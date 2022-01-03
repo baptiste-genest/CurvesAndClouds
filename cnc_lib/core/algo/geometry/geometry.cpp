@@ -223,6 +223,14 @@ cnc::scalar cnc::algo::geometry::GeometricContext::inscribedRadius(const cnc::al
     return faceArea(F)/facePerimeter(F)*2;
 }
 
+cnc::vec cnc::algo::geometry::GeometricContext::projectOnEdge(cnc::algo::topology::vertex v, const cnc::algo::topology::edge &E) const
+{
+    const auto& x = getPoint(v);
+    auto e = get_vec_edge(E).normalize();
+    const auto& b =getPoint(E[0]);
+    return b + e*(x-b).scalar_product(e);
+}
+
 
 
 cnc::vec cnc::algo::geometry::get_plane_dual(const vec &N)
