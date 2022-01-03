@@ -143,3 +143,26 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::LloydRelaxation
     return mesh_generation::BowyerWatson(X);
 }
 
+cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::LaplacianRelaxation(const std::vector<ConvexPolygon> &B, const ShapePredicate &P, uint N)
+{
+    cloud X;
+    scalar lambda = 0.5;
+    for (const auto& P : B)
+        X += P.getPointCloud();
+    auto r = algo::get_min_max_range(X.points)[0].second;
+    int nb_boundary = X.size();
+    X += algo::stat::random_var::sample_uniform_in_square(2,r,N).filter(P);
+    int n = X.size();
+    auto L = BowyerWatson(X);
+    L.computeConnectivity();
+    auto& C = *L.getContext();
+    cloud M = stat::init_empty_cloud(n-nb_boundary,2);
+    for (uint i = 0;i<10;i++){
+        for (vertex k = nb_boundary;k<n;k++)
+            M[k-nb_boundary] = C.midPoint(L.getOneRingVertices(k));
+        for (vertex k = nb_boundary;k<n;k++)
+            C(k) = algo::lerp(C(k),M[k-nb_boundary],lambda);
+    }
+    return L;
+}
+

@@ -1,6 +1,6 @@
 #include "finite_elements.h"
 
-cnc::algo::FEM::FiniteElementSolver::FiniteElementSolver(cnc::algo::geometry::Mesh2 &&mesh) : M(std::move(mesh))
+cnc::algo::FEM::FiniteElementSolver::FiniteElementSolver(cnc::algo::geometry::MeshRef mesh) : MR(mesh),M(*MR)
 {
     buildP1Basis();
 }
@@ -157,7 +157,7 @@ void cnc::algo::FEM::FiniteElementSolver::buildP1Basis()
     buildRigidityMatrix();
 }
 
-cnc::algo::FEM::PoissonEquation::PoissonEquation(cnc::algo::geometry::Mesh2 &&mesh,const calculus::scalar_function& potential) : FiniteElementSolver(std::move(mesh)), f(potential)
+cnc::algo::FEM::PoissonEquation::PoissonEquation(cnc::algo::geometry::MeshRef mesh,const calculus::scalar_function& potential) : FiniteElementSolver(mesh), f(potential)
 {
 }
 
@@ -189,7 +189,7 @@ const cnc::vec &cnc::algo::FEM::PoissonEquation::solutionVector() const
 }
 
 
-cnc::algo::FEM::LaplaceEigenFunctions::LaplaceEigenFunctions(cnc::algo::geometry::Mesh2 &&mesh, uint n) : FiniteElementSolver(std::move(mesh)) , nth(n)
+cnc::algo::FEM::LaplaceEigenFunctions::LaplaceEigenFunctions(cnc::algo::geometry::MeshRef mesh, uint n) : FiniteElementSolver(mesh) , nth(n)
 {
 
 }

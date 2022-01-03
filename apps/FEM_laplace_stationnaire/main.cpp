@@ -135,10 +135,10 @@ int main(int argc, char *argv[])
     PlotWindow w; w.resize(500,500);
 
     PlotTab* T = w.add_tab("my first tab");
-    PlotFrame* F= T->add_frame();
+    //PlotFrame* F= T->add_frame();
     scalar r = 2;
     range R{-r-1,r+1};
-    PlotLayer* L = F->add_grid_layer(R,R,false);
+    //PlotLayer* L = F->add_grid_layer(R,R,false);
 
     std::vector<ConvexPolygon> B;
     ShapePredicate P;
@@ -146,19 +146,31 @@ int main(int argc, char *argv[])
         B.push_back(convexPrimitive::Rectangle(2*r,r).subdivide(5));
         B.push_back(convexPrimitive::Circle(r/4,20));
         P = Inter(B[0].getShapePredicate(),Not(B[1].getShapePredicate()));
+        //P = B[0].getShapePredicate();
     }
     else {
-        B.push_back(convexPrimitive::Circle(r,20));
+        B.push_back(convexPrimitive::Square(2*r).subdivide(8));
+        //B.push_back(convexPrimitive::Circle(r,20));
         P = B[0].getShapePredicate();
     }
-    //auto S = algo::FEM::LaplaceEigenFunctions(mesh_generation::FromBoundaryMesh(B,0.05,P),1);
-    auto S = algo::FEM::LaplaceEigenFunctions(mesh_generation::LloydRelaxation(B[0],130),8);
-    S.ComputeSolution();
+    //auto S = algo::FEM::LaplaceEigenFunctions(mesh_generation::LaplacianRelaxation(B,P,200),4);
+    //auto M = mesh_generation::LaplacianRelaxation(B,P,130);
+    //auto S = algo::FEM::LaplaceEigenFunctions(,8);
+
+    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B,0.05,P));
+    for (uint i = 0;i<9;i++){
+        auto L = T->add_frame_at(i%3,i/3)->add_grid_layer(R,R,false);
+        auto S = algo::FEM::LaplaceEigenFunctions(M,i+1);
+        S.ComputeSolution();
+        L->addPlot<FEMDisplayer>(S);
+        //plotIsoLines(L,S);
+    }
+    /*
     L->addPlot<Mesh2DDisplayer>(S.getMesh());
     T->add_frame()->add_layer()->new_colormap([&S](scalar x,scalar y){
-        return S.sampleSolution(vec({x,y}));
+    return S.sampleSolution(vec({x,y}));
     },R,R,color_policy::from_zero);
-    //plotIsoLines(L,S);
+    */
     w.show();
     return App.exec();
 }

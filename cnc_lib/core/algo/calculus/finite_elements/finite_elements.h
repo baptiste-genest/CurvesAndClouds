@@ -12,8 +12,11 @@
 #include "../../linear_algebra/iterative_solvers.h"
 
 namespace cnc{
+
+class FEMDisplayer;
 namespace algo {
 namespace FEM {
+
 
 using BarycentricFunction = std::function<scalar(const vec&)>;
 using BarycentricFunctionGrad = vec;
@@ -22,7 +25,7 @@ using P1BaseGradient = std::map<topology::vertex,std::map<topology::face,Barycen
 
 class FiniteElementSolver{
 public:
-    FiniteElementSolver(geometry::Mesh2&& M);
+    FiniteElementSolver(geometry::MeshRef M);
     virtual void ComputeSolution() = 0;
     void buildRigidityMatrix();
     scalar sampleSolution(const vec& x) const;
@@ -36,18 +39,20 @@ public:
     virtual scalar solutionValueAtVertex(uint interior_id) const = 0;
     virtual const vec& solutionVector() const = 0;
     const geometry::Mesh2& getMesh() const;
+    friend class cnc::FEMDisplayer;
 protected:
     void buildP1Basis();
     P1Base B;
     P1BaseGradient BGrad;
     SMB RigidityMatrix;
-    geometry::Mesh2 M;
+    geometry::MeshRef MR;
+    geometry::Mesh2& M;
 };
 
 
 class PoissonEquation : public FiniteElementSolver{
 public:
-    PoissonEquation(geometry::Mesh2&& M,const calculus::scalar_function& f);
+    PoissonEquation(geometry::MeshRef M,const calculus::scalar_function& f);
     void ComputeSolution() override;
     scalar solutionValueAtVertex(uint interior_id) const override;
     virtual const vec& solutionVector() const override;
@@ -59,7 +64,7 @@ private:
 
 class LaplaceEigenFunctions : public FiniteElementSolver {
 public:
-    LaplaceEigenFunctions(geometry::Mesh2&& M,uint n);
+    LaplaceEigenFunctions(geometry::MeshRef M,uint n);
     void ComputeSolution() override;
     scalar solutionValueAtVertex(uint interior_id) const override{
         return solution(interior_id);
@@ -71,7 +76,6 @@ private:
     vec Bh;
     vec solution;
     uint nth;
-    //std::vector<chaskal::eigen_pair<scalar>> eigen;
 };
 
 }

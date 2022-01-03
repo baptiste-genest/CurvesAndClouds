@@ -41,6 +41,7 @@ using edges = std::set<edge,edgeComp>;
 using indexed_edges = std::vector<edge>;
 using EdgeFaceConnectivityGraph = std::map<edge,faces,edgeComp>;
 using VertexFaceConnectivityGraph = std::map<vertex,faces>;
+using VertexEdgeConnectivityGraph = std::map<vertex,edges>;
 
 bool operator==(const edge& a,const edge& b);
 bool operator==(const face& a,const face& b);
