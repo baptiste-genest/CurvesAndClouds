@@ -67,15 +67,24 @@ public:
     LaplaceEigenFunctions(geometry::MeshRef M,uint n);
     void ComputeSolution() override;
     scalar solutionValueAtVertex(uint interior_id) const override{
-        return solution(interior_id);
+        return solution[cursor](interior_id);
     }
     virtual const vec& solutionVector() const override {
-        return solution;
+        return solution[cursor];
+    }
+    vec fullSolutionVector() const;
+    scalar getEigenValue() const{
+        return eigenvalues[cursor];
+    }
+    void setCursor(uint c) {
+        cursor = c;
     }
 private:
     vec Bh;
-    vec solution;
-    uint nth;
+    std::vector<vec> solution;
+    std::vector<scalar> eigenvalues;
+    uint n;
+    uint cursor = 0;
 };
 
 }

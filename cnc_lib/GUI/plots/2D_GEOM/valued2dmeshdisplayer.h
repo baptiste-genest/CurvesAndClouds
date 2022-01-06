@@ -7,10 +7,13 @@
 namespace cnc {
 using meshref = std::shared_ptr<algo::geometry::Mesh2>;
 
+using valueUpdater = std::function<vec()>;
+
 class Valued2DMeshDisplayer : public Mesh2DDisplayer
 {
 public:
     Valued2DMeshDisplayer(meshref m,const vec& v);
+    Valued2DMeshDisplayer(meshref m,const valueUpdater& U);
 
 private:
     virtual void plot(frame_draw_object& fdo) override;
@@ -23,7 +26,7 @@ private:
     std::vector<QColor> vertex_color;
     std::map<algo::topology::face,QColor,algo::topology::faceComp> face_color;
     range vrange;
-    vec values;
+    valueUpdater up;
 };
 
 }

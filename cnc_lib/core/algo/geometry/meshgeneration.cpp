@@ -107,6 +107,7 @@ void cnc::algo::geometry::mesh_generation::insertVertexInDelaunay(const cnc::alg
         }
     }
 }
+/*
 void cnc::algo::geometry::mesh_generation::RBST::insert(const cnc::algo::topology::face &f, cnc::range r)
 {
     insert_left(&head,f,r.first);
@@ -176,6 +177,7 @@ void cnc::algo::geometry::mesh_generation::RBST::insert_left(cnc::algo::geometry
             insert_left(&(*n)->L,f,x);
     }
 }
+*/
 
 cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::BowyerWatsonWIP(const cloud& X){
     GeometricContextRef CR = std::make_shared<GeometricContext>(X);
@@ -261,26 +263,20 @@ void cnc::algo::geometry::mesh_generation::insertCircum(cnc::algo::geometry::mes
     auto CC = C.circumCenterRadius(f);
     const auto& center = CC.first;
     const auto& radius = CC.second;
-    RX.insert(f,{center(0)-radius,center(0)+radius});
-    RY.insert(f,{center(1)-radius,center(1)+radius});
+    RX.insert({center(0)-radius,center(0)+radius},f);
+    RY.insert({center(1)-radius,center(1)+radius},f);
     M[f] = CC;
 }
 
 cnc::algo::topology::faces cnc::algo::geometry::mesh_generation::nonDelaunayTriangles(const cnc::vec &x, const cnc::algo::geometry::mesh_generation::RBST &X, const cnc::algo::geometry::mesh_generation::RBST &Y,const cnc::algo::geometry::mesh_generation::circumMap& M,const faces& T)
 {
-    auto TX = X.get(x(0),T);
-    auto TY = Y.get(x(1),T);
-    faces I;
+    auto TX = X.checkOverlapValues(x(0));
+    auto TY = Y.checkOverlapValues(x(1));
+    faces I,F;
     std::set_intersection(TX.begin(),TX.end(),TY.begin(),TY.end(),std::inserter(I,I.begin()),faceComp());
-    auto it = I.begin();
-    while (it != I.end())
-    {
-        if (M.at(*it).first.distance(x) > M.at(*it).second) {
-            it = I.erase(it);
-        }
-        else {
-            ++it;
-        }
+    for (const auto& f : I){
+        if (T.find(f) != T.end() && M.at(f).first.distance(x) > M.at(f).second)
+            F.insert(f);
     }
-    return I;
+    return F;
 }

@@ -189,7 +189,78 @@ const cnc::vec &cnc::algo::FEM::PoissonEquation::solutionVector() const
 }
 
 
-cnc::algo::FEM::LaplaceEigenFunctions::LaplaceEigenFunctions(cnc::algo::geometry::MeshRef mesh, uint n) : FiniteElementSolver(mesh) , nth(n)
+cnc::algo::FEM::LaplaceEigenFunctions::LaplaceEigenFunctions(cnc::algo::geometry::MeshRef mesh, uint N) : FiniteElementSolver(mesh) , n(N)
 {
 
+}
+
+void cnc::algo::FEM::LaplaceEigenFunctions::ComputeSolution()
+{
+    const auto& C = *M.getContext();
+    const auto& IV = M.getInteriorVertices();
+    SMB MassMatrix(IV.size(),true);
+    for (const auto& e : M.interiorEdges()){
+        int ids[2];
+        bool interior = true;
+        for (uint i = 0;i<2;i++){
+            auto it = std::find(IV.begin(),IV.end(),e[i]);
+            if (it == IV.end())
+                interior = false;
+            else
+                ids[i] = std::distance(IV.begin(),it);
+        }
+        if (interior){
+            scalar S = 0;
+            for (const auto& f : M.getAdjacentFaces(e)){
+                const auto& G1 = B[e[0]][f];
+                const auto& G2 = B[e[1]][f];
+                scalar s = 0;
+                for (const auto& me : f){
+                    auto m = C.midPoint(me);
+                    s += G1(m)*G2(m)*0.33333;
+                }
+                S += s*C.faceArea(f);
+            }
+            MassMatrix(ids[0],ids[1]) = S;
+        }
+    }
+    uint id = 0;
+    for (auto it = IV.begin();it != IV.end();++it){
+        scalar SG = 0;
+        for (const auto& psi : B[*it]){
+            scalar s = 0;
+            for (const auto& me : psi.first){
+                auto m = C.midPoint(me);
+                s += psi.second(m)*psi.second(m)*0.33333;
+            }
+            SG += s*C.faceArea(psi.first);
+        }
+        MassMatrix(id,id) = SG;
+        id++;
+    }
+    auto RM = RigidityMatrix.DenseMatrix();
+    auto MM = MassMatrix.DenseMatrix();
+    auto L = algo::Cholesky(MM);
+    auto ILR = algo::Cholesky(RM).invert_triangular(LOWER);
+    auto IRM = ILR.transpose()*ILR;
+    auto K = L.transpose()*IRM*L;
+    auto eigen = K.lanczos(n);
+    solution.resize(n);
+    eigenvalues.resize(n);
+    for (uint i = 0;i<n;i++){
+        solution[i] = L.transpose().upper_solve(eigen[i].vector).normalize();
+        eigenvalues[i] = 1./(K*solution[i]).norm();
+    }
+}
+
+
+cnc::vec cnc::algo::FEM::LaplaceEigenFunctions::fullSolutionVector() const
+{
+    vec S(M.nbVertices());
+    uint i = 0;
+    for (const auto& v : M.getInteriorVertices()){
+        S(v) = solution[cursor](i);
+        i++;
+    }
+    return S;
 }

@@ -6,77 +6,6 @@ using namespace cnc::algo::geometry;
 
 
 
-void cnc::algo::FEM::LaplaceEigenFunctions::ComputeSolution()
-{
-    const auto& C = *M.getContext();
-    const auto& IV = M.getInteriorVertices();
-    SMB MassMatrix(IV.size(),true);
-    for (const auto& e : M.interiorEdges()){
-        int ids[2];
-        bool interior = true;
-        for (uint i = 0;i<2;i++){
-            auto it = std::find(IV.begin(),IV.end(),e[i]);
-            if (it == IV.end())
-                interior = false;
-            else
-                ids[i] = std::distance(IV.begin(),it);
-        }
-        if (interior){
-            scalar S = 0;
-            for (const auto& f : M.getAdjacentFaces(e)){
-                const auto& G1 = B[e[0]][f];
-                const auto& G2 = B[e[1]][f];
-                scalar s = 0;
-                if (true){
-                    for (const auto& me : f){
-                        auto m = C.midPoint(me);
-                        s += G1(m)*G2(m)*0.33333;
-                    }
-                }
-                else
-                    s = G1(C.midPoint(f))*G2(C.midPoint(f));
-                S += s*C.faceArea(f);
-            }
-            MassMatrix(ids[0],ids[1]) = S;
-        }
-    }
-    uint id = 0;
-    for (auto it = IV.begin();it != IV.end();++it){
-        scalar SG = 0;
-        for (const auto& psi : B[*it]){
-            scalar s = 0;
-            if (true){
-                for (const auto& me : psi.first){
-                    auto m = C.midPoint(me);
-                    s += psi.second(m)*psi.second(m)*0.33333;
-                }
-            }
-            else
-                s = psi.second(C.midPoint(psi.first))*psi.second(C.midPoint(psi.first));
-            SG += s*C.faceArea(psi.first);
-        }
-        MassMatrix(id,id) = SG;
-        id++;
-    }
-    auto RM = RigidityMatrix.DenseMatrix();
-    auto MM = MassMatrix.DenseMatrix();
-    auto L = algo::Cholesky(MM);
-    //auto IL = L.invert_triangular(LOWER);
-    auto ILR = algo::Cholesky(RM).invert_triangular(LOWER);
-    auto IRM = ILR.transpose()*ILR;
-    //auto K = IL*RM*L.transpose().invert_triangular(UPPER);
-    auto K = L.transpose()*IRM*L;
-    //auto eigen = K.power_method(algo::ones(IV.size()),1e-30);
-    auto eigen = K.lanczos(nth)[nth-1];
-    //auto eigen = algo::IterativeSolvers::InversePowerMethod(K,1e-10);
-    //eigen = algo::IterativeSolvers::InversePowerMethod(K*chaskal::ortho_proj_matrix<scalar>({eigen.vector}),1e-10,true);
-    std::cout << (eigen.vector*eigen.value - K*eigen.vector).norm_inf() << std::endl;
-    solution = L.transpose().upper_solve(eigen.vector);
-    //std::cout << (vec(RM*solution) - MM*solution*eigen.value).norm_inf() << std::endl;
-    std::cout << "associated eigen value: " << 1.0/eigen.value << std::endl;
-    auto r = SolutionValueRange();
-    printf("%f from %f\n",r.first,r.second);
-}
 auto f = [] (const vec& x){
     if (x(0) > 0)
         return 1.;
@@ -158,19 +87,56 @@ int main(int argc, char *argv[])
     //auto S = algo::FEM::LaplaceEigenFunctions(,8);
 
     auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B,0.05,P));
-    for (uint i = 0;i<9;i++){
-        auto L = T->add_frame_at(i%3,i/3)->add_grid_layer(R,R,false);
-        auto S = algo::FEM::LaplaceEigenFunctions(M,i+1);
-        S.ComputeSolution();
-        L->addPlot<FEMDisplayer>(S);
-        //plotIsoLines(L,S);
-    }
+    //auto M = std::make_shared<Mesh2>(mesh_generation::LloydRelaxation(B[0],150));
+    //auto M = std::make_shared<Mesh2>(mesh_generation::LaplacianRelaxation(B,P,300));
     /*
-    L->addPlot<Mesh2DDisplayer>(S.getMesh());
-    T->add_frame()->add_layer()->new_colormap([&S](scalar x,scalar y){
-    return S.sampleSolution(vec({x,y}));
-    },R,R,color_policy::from_zero);
+    if (false){
+        uint N = 5;
+        auto S = algo::FEM::LaplaceEigenFunctions(M,N*N);
+        S.ComputeSolution();
+        for (uint i = 0;i<N*N;i++){
+            auto L = T->add_frame_at(i%N,i/N)->add_grid_layer(R,R,false);
+            S.setCursor(i);
+            const auto& x = S.fullSolutionVector();
+            L->addPlot<Valued2DMeshDisplayer>(M,x);
+        }
+    }
+    else{
     */
+        uint N = 50;
+        auto S = algo::FEM::LaplaceEigenFunctions(M,N);
+        S.ComputeSolution();
+        uint n =M->nbVertices();
+        vec U0(n),Utilde(n);
+        const auto& C = *M->getContext();
+        M->computeConnectivity();
+        for (auto v : M.get()->interiorVertices()){
+            const auto& x = C(v);
+            U0(v) = std::exp(-x.norm2());
+        }
+        std::vector<scalar> dots;
+        for (uint i = 0;i<N;i++){
+            S.setCursor(i);
+            const auto& x = S.fullSolutionVector();
+            Utilde += x*x.scalar_product(U0);
+            dots.push_back(x.scalar_product(U0));
+            std::cout << x.scalar_product(U0) << std::endl;
+        }
+        auto t = w.get_time_variable(20);
+        T->add_frame()->add_grid_layer(R,R,false)->addPlot<Valued2DMeshDisplayer>(M,U0);
+        auto up = [n,N,t,&S,dots] () {
+            vec U(n);
+            for (uint i = 0;i<N;i++){
+                S.setCursor(i);
+                U += S.fullSolutionVector()*std::cos(std::sqrt(S.getEigenValue())*t)*dots[i];
+            }
+            return U;
+        };
+        T->add_frame()->add_grid_layer(R,R,false)->addPlot<Valued2DMeshDisplayer>(M,up)->set_dynamic();
+    //}
+
+
+
     w.show();
     return App.exec();
 }

@@ -5,6 +5,7 @@
 #include "convex_hull.h"
 #include "convexpolygon.h"
 #include "../statistics/random_var.h"
+#include "../../algo/data_structures/interval_tree.h"
 
 namespace cnc {
 namespace algo {
@@ -17,6 +18,7 @@ struct mesh_generation {
     static Mesh2 LloydRelaxation(const ConvexPolygon& B,uint N);
     static Mesh2 LaplacianRelaxation(const std::vector<ConvexPolygon>& B,const ShapePredicate& P,uint N);
     static Mesh2 FromBoundaryMesh(const std::vector<ConvexPolygon>& B,scalar treshold,const ShapePredicate& P);
+    using RBST = data_structure::IntervalTree<face>;
 private:
     static std::array<cnc::vec,3> super_triangle(const cloud& X);
     static bool inCircle(const vec& x,const vec& center,scalar r);
@@ -24,6 +26,7 @@ private:
 
     using circumMap = std::map<topology::face,circum_data,topology::faceComp>;
 
+    /*
     struct RBSTnode{
         scalar v;
         bool upper;
@@ -35,8 +38,10 @@ private:
             delete R;
         }
     };
+    */
 
 public:
+    /*
     class RBST {
     public:
         void insert(const face& f,range r);
@@ -50,6 +55,7 @@ public:
         void insert_left(RBSTnode** n,const face& f,scalar x);
         RBSTnode* head = nullptr;
     };
+    */
     static void insertCircum(RBST& RX,RBST& RY,const face& f,const GeometricContext& C,circumMap& M);
     static topology::faces nonDelaunayTriangles(const vec& x,const RBST& X,const RBST& Y,const circumMap& M,const faces& T);
 

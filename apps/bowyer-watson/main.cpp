@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
     PlotLayer* L = F->add_grid_layer(ER,ER,false);
 
 
-    auto Y = convexPrimitive::Circle(1,20).getIndexedPoints();
-    //auto Y = algo::stat::random_var::sample_uniform_in_square(2,R,60);
-    auto D = mesh_generation::BowyerWatson(Y);
+    //auto Y = convexPrimitive::Circle(1,20).getIndexedPoints();
+    auto Y = algo::stat::random_var::sample_uniform_in_square(2,R,60);
+    auto D = std::make_shared<Mesh2>(mesh_generation::BowyerWatsonWIP(Y));
     L->addPlot<Mesh2DDisplayer>(D);
     L->new_point_cloud(Y);
 

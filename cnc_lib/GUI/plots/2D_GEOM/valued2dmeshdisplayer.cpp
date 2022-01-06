@@ -1,8 +1,17 @@
 #include "valued2dmeshdisplayer.h"
 
-cnc::Valued2DMeshDisplayer::Valued2DMeshDisplayer(cnc::meshref m, const cnc::vec &v) : Mesh2DDisplayer(m),values(v)
+cnc::Valued2DMeshDisplayer::Valued2DMeshDisplayer(cnc::meshref m, const cnc::vec &v) : Mesh2DDisplayer(m)
 {
     vertex_color.resize(v.size());
+    up = [v] () {
+        return v;
+    };
+    Valued2DMeshDisplayer::compute_values({});
+}
+
+cnc::Valued2DMeshDisplayer::Valued2DMeshDisplayer(meshref m, const valueUpdater &U) : Mesh2DDisplayer(m),up(U)
+{
+    vertex_color.resize(m->nbVertices());
     Valued2DMeshDisplayer::compute_values({});
 }
 
@@ -11,7 +20,8 @@ void cnc::Valued2DMeshDisplayer::plot(cnc::frame_draw_object &fdo)
     using namespace algo::topology;
     algo_GUI::mapping Mapper = algo_GUI::gen_mapping_value_to_frame(x_range,y_range, fdo.fi);
     const auto& G = *M->getContext();
-    fdo.painter.setPen(QPen(Plottable::plot_color,1));
+    //fdo.painter.setPen(QPen(Plottable::plot_color,1));
+    fdo.painter.setPen(Qt::NoPen);
     const static auto nill = QColor::fromRgb(0,0,0,0);
     for (const auto& f : M->F){
         QVector<QPointF> p;
@@ -45,6 +55,7 @@ void cnc::Valued2DMeshDisplayer::plot(cnc::frame_draw_object &fdo)
 
 void cnc::Valued2DMeshDisplayer::compute_values(const cnc::frame_info &)
 {
+    auto values = up();
     const auto& x = values.data();
     vrange.first = *std::min_element(x.begin(),x.end());
     vrange.second = *std::max_element(x.begin(),x.end());

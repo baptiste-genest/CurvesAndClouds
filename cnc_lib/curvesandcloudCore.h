@@ -43,5 +43,6 @@
 #include "core/time_handling.h"
 #include "core/algo/geometry/polynomial_curve.h"
 #include "core/dual_numbers.h"
+#include "core/algo/data_structures/interval_tree.h"
 
 #endif // CURVESANDCLOUDCORE_H

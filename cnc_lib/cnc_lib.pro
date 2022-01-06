@@ -77,6 +77,7 @@ SOURCES += \
     core/algo/calculus/optimization.cpp \
     core/algo/calculus/spline.cpp \
     core/algo/calculus/vector_calculus.cpp \
+    core/algo/data_structures/interval_tree.cpp \
     core/algo/geometry/combinatorial_complexes.cpp \
     core/algo/geometry/convex_hull.cpp \
     core/algo/geometry/convexpolygon.cpp \
@@ -193,6 +194,7 @@ HEADERS += \
     core/algo/calculus/optimization.h \
     core/algo/calculus/spline.h \
     core/algo/calculus/vector_calculus.h \
+    core/algo/data_structures/interval_tree.h \
     core/algo/geometry/combinatorial_complexes.h \
     core/algo/geometry/convex_hull.h \
     core/algo/geometry/convexpolygon.h \

@@ -163,6 +163,7 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::LaplacianRelaxa
         for (vertex k = nb_boundary;k<n;k++)
             C(k) = algo::lerp(C(k),M[k-nb_boundary],lambda);
     }
+    std::cout << "Meshing complete, h = " << L.maxInscribedRadius() << std::endl;
     return L;
 }
 
