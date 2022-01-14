@@ -45,6 +45,7 @@ vec raySegmentIntersection(const vec& O1,const vec& D1,const vec& A,const vec& B
 
 vec get2DOutwardNormal(const vec& A,const vec& B,const vec& C);
 
+
 using circum_data = std::pair<vec,scalar>;
 
 class GeometricContext {
@@ -88,12 +89,14 @@ public:
     scalar facePerimeter(const topology::face& F) const;
     scalar inscribedRadius(const topology::face& F) const;
     vec projectOnEdge(topology::vertex v,const topology::edge& e) const;
+    scalar edgeLength(const topology::edge& e) const;
 private:
     friend struct mesh_generation;
     cloud points;
 };
 
 using GeometricContextRef = std::shared_ptr<GeometricContext>;
+GeometricContextRef CreateContext();
 
 
 using line = std::pair<vec,vec>;

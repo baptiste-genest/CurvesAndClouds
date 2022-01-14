@@ -20,6 +20,18 @@ cnc::scalar cnc::SparseMatrixBuilder::get(uint i, uint j) const
     return (*it).second;
 }
 
+void cnc::SparseMatrixBuilder::operator*=(cnc::scalar x)
+{
+    for (auto& v : values)
+        v.second*=x;
+}
+
+void cnc::SparseMatrixBuilder::operator+=(const cnc::SMB & other)
+{
+    for (const auto& v: other.values)
+        values[v.first] = values[v.first]+v.second;
+}
+
 cnc::smatbuilder::SMBaccessor cnc::SparseMatrixBuilder::operator()(uint i, uint j)
 {
     return smatbuilder::SMBaccessor(*this,{i,j});

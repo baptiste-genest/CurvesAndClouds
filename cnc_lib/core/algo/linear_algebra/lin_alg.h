@@ -20,13 +20,24 @@ namespace cnc {
 /**
  * @brief vec N dimensional vector
  */
-typedef chaskal::Vector<scalar> vec;
-typedef chaskal::Vector<complex_scalar> cvec;
+using vec = chaskal::Vector<scalar>;
+using cvec = chaskal::Vector<complex_scalar>;
 /**
  * @brief mat NxM matrix
  */
-typedef chaskal::Matrix<scalar> mat;
-typedef chaskal::Matrix<complex_scalar> cmat;
+using mat = chaskal::Matrix<scalar>;
+using cmat = chaskal::Matrix<complex_scalar>;
+
+namespace linear_utils {
+
+inline vec vec2(scalar x= 0,scalar y=0){
+    return vec({x,y});
+}
+inline vec vec3(scalar x,scalar y,scalar z){
+    return vec({x,y,z});
+}
+
+}
 
 /*
 vec vec2(scalar x,scalar y);

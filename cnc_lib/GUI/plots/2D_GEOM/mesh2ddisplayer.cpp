@@ -1,6 +1,6 @@
 #include "mesh2ddisplayer.h"
 
-cnc::Mesh2DDisplayer::Mesh2DDisplayer(meshref mesh) : M(mesh)
+cnc::Mesh2DDisplayer::Mesh2DDisplayer(cnc::algo::geometry::MeshRef mesh) : M(mesh)
 {
 
 }

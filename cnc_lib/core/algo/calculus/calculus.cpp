@@ -126,6 +126,25 @@ cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::build_range_mapper(
                 return B.first;
         };
 }
+cnc::algo::calculus::scalar_function_1D cnc::algo::calculus::build_ordered_range_mapper(const cnc::range &A, const cnc::range &B,bool constrained)
+{
+    scalar l = A.second - A.first;
+    if (!constrained)
+        return [A,B,l] (scalar x) {
+            scalar t = (x-A.first)/l;
+            return B.first*(1-t) + t*B.second;
+        };
+    else
+        return [A,B,l] (scalar x){
+            if (x < A.first)
+                return B.first;
+            else if (x > A.second)
+                return B.second;
+            scalar t = (x-A.first)/l;
+            return B.first*(1-t) + t*B.second;
+        };
+}
+
 
 cnc::algo::calculus::scalar_function_2D cnc::algo::calculus::build_2D_laplacian(const cnc::algo::calculus::scalar_function_2D &f,scalar dx)
 {
@@ -197,3 +216,4 @@ std::vector<scalar> algo::calculus::quadratic_roots(scalar a, scalar b, scalar c
     scalar r2 = (-b - droot)/(2*a);
     return {r1,r2};
 }
+

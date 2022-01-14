@@ -71,6 +71,7 @@ SOURCES += \
     core/algo/calculus/complex_analysis.cpp \
     core/algo/calculus/differential_equations.cpp \
     core/algo/calculus/finite_differences.cpp \
+    core/algo/calculus/finite_elements/vector_finite_elements.cpp \
     core/algo/calculus/fourier.cpp \
     core/algo/calculus/integration_scheme.cpp \
     core/algo/calculus/lagrange_interpolator.cpp \
@@ -89,6 +90,7 @@ SOURCES += \
     core/algo/geometry/mesh2.cpp \
     core/algo/geometry/meshgeneration.cpp \
     core/algo/geometry/parametrization.cpp \
+    core/algo/geometry/polygon.cpp \
     core/algo/geometry/polynomial_curve.cpp \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
@@ -188,6 +190,7 @@ HEADERS += \
     core/algo/calculus/differential_equations.h \
     core/algo/calculus/finite_differences.h \
     core/algo/calculus/finite_elements/finite_elements.h \
+    core/algo/calculus/finite_elements/vector_finite_elements.h \
     core/algo/calculus/fourier.h \
     core/algo/calculus/integration_scheme.h \
     core/algo/calculus/lagrange_interpolator.h \
@@ -207,6 +210,7 @@ HEADERS += \
     core/algo/geometry/mesh2.h \
     core/algo/geometry/meshgeneration.h \
     core/algo/geometry/parametrization.h \
+    core/algo/geometry/polygon.h \
     core/algo/geometry/polynomial_curve.h \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \

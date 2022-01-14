@@ -1,13 +1,12 @@
 #include "convexpolygon.h"
 
-cnc::algo::geometry::ConvexPolygon::ConvexPolygon(GeometricContextRef C) : G(C)
+cnc::algo::geometry::ConvexPolygon::ConvexPolygon(GeometricContextRef C) : Polygon(C)
 {
 
 }
 
-cnc::algo::geometry::ConvexPolygon::ConvexPolygon()
+cnc::algo::geometry::ConvexPolygon::ConvexPolygon() : Polygon(std::make_shared<GeometricContext>())
 {
-    G = std::make_shared<GeometricContext>();
 }
 
 void cnc::algo::geometry::ConvexPolygon::insert(cnc::algo::topology::vertex x)
@@ -51,71 +50,11 @@ const cnc::algo::geometry::convexVertices &cnc::algo::geometry::ConvexPolygon::v
     return V;
 }
 
-cnc::algo::geometry::indexedConvexVerticesCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicVertices() const
+cnc::algo::geometry::indexedVerticesCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicVertices() const
 {
-    indexedConvexVerticesCyclic R(V.begin(),V.end());
+    indexedVerticesCyclic R(V.begin(),V.end());
     R.push_back(*V.begin());
     return R;
-}
-
-cnc::algo::geometry::indexedConvexPointsCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicPoints() const
-{
-    indexedConvexPointsCyclic P(V.size()+1);
-    int i = 0;
-    const GeometricContext& gc = *G;
-    for (auto v : V){
-        P[i] = gc(v);
-        i++;
-    }
-    P.back() = gc(*V.begin());
-    return P;
-}
-
-cnc::algo::geometry::indexedConvexPointsCyclic cnc::algo::geometry::ConvexPolygon::getIndexedPoints() const
-{
-    indexedConvexPointsCyclic P(V.size());
-    int i = 0;
-    const GeometricContext& gc = *G;
-    for (auto v : V){
-        P[i] = gc(v);
-        i++;
-    }
-    return P;
-}
-
-cnc::cloud cnc::algo::geometry::ConvexPolygon::getPointCloud() const
-{
-    return cloud(getIndexedPoints());
-}
-
-cnc::algo::geometry::indexedConvexSegmentsCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicSegments() const
-{
-    indexedConvexSegmentsCyclic S;
-    const GeometricContext& gc = *G;
-    auto n = V.begin();
-    ++n;
-    int i = 0;
-    for (auto v = V.begin();n != V.end();++v,++n){
-        const auto& c = gc(*v);
-        const auto& nv = gc(*n);
-        S.push_back(nv-c);
-        i++;
-    }
-    return S;
-}
-
-cnc::algo::geometry::indexedConvexEdgesCyclic cnc::algo::geometry::ConvexPolygon::getIndexedCyclicEdges() const
-{
-    indexedConvexEdgesCyclic E;
-    //const GeometricContext& gc = *G;
-    auto n = V.begin();
-    ++n;
-    int i = 0;
-    for (auto v = V.begin();n != V.end();++v,++n){
-        E.push_back({*v,*n});
-        i++;
-    }
-    return E;
 }
 
 cnc::algo::geometry::ConvexPolygon cnc::algo::geometry::ConvexPolygon::subdivide(int N) const
@@ -133,54 +72,6 @@ cnc::algo::geometry::ConvexPolygon cnc::algo::geometry::ConvexPolygon::subdivide
     }
     S.V = std::list<topology::vertex>(NV.begin(),NV.end());
     return S;
-}
-
-cnc::scalar cnc::algo::geometry::ConvexPolygon::Area() const
-{
-    return std::abs(SignedArea());
-    /*
-    if (V.size() < 3)
-        return 0;
-    scalar A = 0;
-    auto V = getIndexedCyclicPoints();
-    for (int i = 1;i<(int)V.size()-2;i++)
-        A+= std::abs(det22(V[i+1]-V[0],V[i]-V[0]));
-    return A*0.5;
-        */
-}
-
-cnc::scalar cnc::algo::geometry::ConvexPolygon::SignedArea() const
-{
-    if (V.size() < 3)
-        return 0;
-    scalar A = 0;
-    auto V = getIndexedCyclicPoints();
-    for (int i = 0;i<(int)V.size()-1;i++){
-        A+= det22(V[i+1],V[i]);
-    }
-    return A*0.5;
-
-}
-
-cnc::vec cnc::algo::geometry::ConvexPolygon::Centroid() const
-{
-    scalar A = 0;
-    vec C(2);
-    auto V = getIndexedCyclicPoints();
-    for (int i = 0;i<(int)V.size()-1;i++){
-        scalar D = det22(V[i+1],V[i]);
-        A += D;
-        C += (V[i] + V[i+1])*D;
-    }
-    return C*(1.0/(3*A));
-}
-
-cnc::scalar cnc::algo::geometry::ConvexPolygon::Perimeter() const
-{
-    scalar P = 0;
-    for (const auto& s: getIndexedCyclicSegments())
-        P += s.norm();
-    return P;
 }
 
 cnc::scalar cnc::algo::geometry::ConvexPolygon::segLength() const
@@ -211,10 +102,27 @@ int cnc::algo::geometry::ConvexPolygon::nbVertices() const
 
 cnc::algo::geometry::ShapePredicate cnc::algo::geometry::ConvexPolygon::getShapePredicate() const
 {
-    const ConvexPolygon& R = *this;
+    auto R = *this;
     return [R] (const vec& x){
         return R.isInside(x);
     };
+}
+
+cnc::algo::topology::vertex cnc::algo::geometry::ConvexPolygon::getNthVertex(uint n) const
+{
+    uint i = 0;
+    for (const auto& v : V){
+        if (i ==n )
+            return v;
+        i++;
+    }
+    throw Cnc_error("vertex index out of range");
+}
+
+cnc::algo::geometry::indexedVertices cnc::algo::geometry::ConvexPolygon::Vertices() const
+{
+    indexedVertices Verts(V.begin(),V.end());
+    return Verts;
 }
 
 bool cnc::algo::geometry::ConvexPolygon::pointsToward(const cnc::vec &A1, const cnc::vec &A2, const cnc::vec &B1, const cnc::vec &B2)

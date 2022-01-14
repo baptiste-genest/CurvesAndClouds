@@ -4,10 +4,9 @@
 #include "../plottable.h"
 
 namespace cnc{
-using meshref = std::shared_ptr<algo::geometry::Mesh2>;
 class Mesh2DDisplayer : public Plottable {
 public:
-    Mesh2DDisplayer(meshref M);
+    Mesh2DDisplayer(algo::geometry::MeshRef M);
     Mesh2DDisplayer(algo::geometry::Mesh2&& M);
     inline plot_type get_type() const override{ return plot_type::d2_curve;}
 
@@ -18,7 +17,7 @@ protected:
     virtual void plot(frame_draw_object& fdo) override;
     virtual void compute_values(const frame_info&) override{}
     virtual void compute_value_range(const frame_info& fi) override;
-    meshref M;
+    algo::geometry::MeshRef M;
 };
 }
 

@@ -11,10 +11,12 @@
 #endif
 
 #include "iostream"
+#include "iomanip"
 #include "fstream"
 #include "core/algo/linear_algebra/lin_alg.h"
 #include "core/algo/statistics/statistics.h"
 #include "core/algo/geometry/simpleglmesh.h"
+#include "core/algo/geometry/mesh2.h"
 #include <QImage>
 #include <regex>
 
@@ -41,6 +43,11 @@ algo::geometry::SimpleGLMesh import_mesh_from_obj(const std::string& input_file,
 void export_mesh_as_obj(const algo::geometry::SimpleGLMesh* m,std::string out_file);
 
 std::array<vec,3> load_img_as_vec(const std::string& filename,uint& w,uint& h);
+
+scalar stos(std::string x);
+
+void export_mesh2(const algo::geometry::Mesh2& m,std::string out_file);
+algo::geometry::MeshRef import_mesh2(std::string in_file);
 
 }
 

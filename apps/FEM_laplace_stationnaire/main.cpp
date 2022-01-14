@@ -12,6 +12,7 @@ auto f = [] (const vec& x){
     else
         return -1.;
 };
+/*
 using FEMS = algo::FEM::FiniteElementSolver;
 
 void plotIsoLines(PlotLayer* L,const FEMS& F){
@@ -56,6 +57,7 @@ void plotIsoLines(PlotLayer* L,const FEMS& F){
         L->new_2D_curve(iso_line)->set_color(QColor::fromRgb(R(z),0,B(z)));
     }
 }
+*/
 
 //bool IterativeSolvers::debug = true;
 int main(int argc, char *argv[])
@@ -65,7 +67,7 @@ int main(int argc, char *argv[])
 
     PlotTab* T = w.add_tab("my first tab");
     //PlotFrame* F= T->add_frame();
-    scalar r = 2;
+    scalar r = 3;
     range R{-r-1,r+1};
     //PlotLayer* L = F->add_grid_layer(R,R,false);
 
@@ -86,12 +88,28 @@ int main(int argc, char *argv[])
     //auto M = mesh_generation::LaplacianRelaxation(B,P,130);
     //auto S = algo::FEM::LaplaceEigenFunctions(,8);
 
-    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B,0.05,P));
+    using namespace linear_utils;
+    auto G = CreateContext();
+    auto& C = *G;
+    C.add_vertex(vec2(-1,0));
+    C.add_vertex(vec2(-1,-1));
+    C.add_vertex(vec2(1,-1));
+    C.add_vertex(vec2(1,1));
+    C.add_vertex(vec2(0,1));
+    C.add_vertex(vec2(0,0));
+    auto P1 = Polygon(G,{0,1,2,3,4,5});
+    auto B2 = P1.getPointCloud();
+    auto p = P1.getShapePredicate();
+    //auto M = mesh_generation::Refinement(B2,p,0.18);
+    //auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B,0.05,P));
+
+    std::string file = "../../data/rooms.mesh2";
+    MeshRef M = algo::import_mesh2(file);
+    M->computeConnectivity();
     //auto M = std::make_shared<Mesh2>(mesh_generation::LloydRelaxation(B[0],150));
     //auto M = std::make_shared<Mesh2>(mesh_generation::LaplacianRelaxation(B,P,300));
-    /*
-    if (false){
-        uint N = 5;
+    //if (true){
+        uint N = 3;
         auto S = algo::FEM::LaplaceEigenFunctions(M,N*N);
         S.ComputeSolution();
         for (uint i = 0;i<N*N;i++){
@@ -100,9 +118,9 @@ int main(int argc, char *argv[])
             const auto& x = S.fullSolutionVector();
             L->addPlot<Valued2DMeshDisplayer>(M,x);
         }
+        /*
     }
     else{
-    */
         uint N = 50;
         auto S = algo::FEM::LaplaceEigenFunctions(M,N);
         S.ComputeSolution();
@@ -133,7 +151,8 @@ int main(int argc, char *argv[])
             return U;
         };
         T->add_frame()->add_grid_layer(R,R,false)->addPlot<Valued2DMeshDisplayer>(M,up)->set_dynamic();
-    //}
+    }
+    */
 
 
 

@@ -6,6 +6,7 @@
 #include "convexpolygon.h"
 #include "../statistics/random_var.h"
 #include "../../algo/data_structures/interval_tree.h"
+#include <queue>
 
 namespace cnc {
 namespace algo {
@@ -17,9 +18,14 @@ struct mesh_generation {
     static Mesh2 BowyerWatsonWIP(const cloud& X);
     static Mesh2 LloydRelaxation(const ConvexPolygon& B,uint N);
     static Mesh2 LaplacianRelaxation(const std::vector<ConvexPolygon>& B,const ShapePredicate& P,uint N);
-    static Mesh2 FromBoundaryMesh(const std::vector<ConvexPolygon>& B,scalar treshold,const ShapePredicate& P);
+    static Mesh2 FromBoundaryMesh(cloud B,scalar treshold,const ShapePredicate& P);
+    static MeshRef Refinement(const cloud& B,const ShapePredicate& P,scalar h);
     using RBST = data_structure::IntervalTree<face>;
 private:
+    static void split_long_edges(Mesh2& M,scalar h);
+    static void collapse_short_edges(Mesh2& M,scalar l,scalar h);
+    static void equalize_valences(Mesh2& M);
+    static void relaxation(Mesh2& M);
     static std::array<cnc::vec,3> super_triangle(const cloud& X);
     static bool inCircle(const vec& x,const vec& center,scalar r);
     static void insertVertexInDelaunay(const GeometricContext& C,faces& T,vertex x);

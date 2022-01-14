@@ -10,7 +10,7 @@ namespace cnc {
 class FEMDisplayer : public Plottable
 {
 public:
-    FEMDisplayer(const algo::FEM::FiniteElementSolver& F);
+    FEMDisplayer(const algo::FEM::ScalarFiniteElementSolver& F);
     inline plot_type get_type() const override{ return plot_type::d2_curve;}
 
 private:
@@ -20,7 +20,7 @@ private:
     virtual void plot(frame_draw_object& fdo) override;
     virtual void compute_values(const frame_info&) override{}
     virtual void compute_value_range(const frame_info&) override;
-    const algo::FEM::FiniteElementSolver& solver;
+    const algo::FEM::ScalarFiniteElementSolver& solver;
     //algo::geometry::Diagram D;
     std::vector<QColor> centroids_color;
     std::vector<QPolygonF> cells;

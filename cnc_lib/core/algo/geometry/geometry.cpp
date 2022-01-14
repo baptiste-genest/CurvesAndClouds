@@ -244,7 +244,10 @@ cnc::vec cnc::algo::geometry::GeometricContext::projectOnEdge(cnc::algo::topolog
     return b + e*(x-b).scalar_product(e);
 }
 
-
+cnc::scalar cnc::algo::geometry::GeometricContext::edgeLength(const cnc::algo::topology::edge &e) const
+{
+    return get_vec_edge(e).norm();
+}
 
 cnc::vec cnc::algo::geometry::get_plane_dual(const vec &N)
 {
@@ -327,6 +330,11 @@ cnc::vec cnc::algo::geometry::raySegmentIntersection(const cnc::vec &O, const cn
         intersects = false;
         return vec(2);
     }
-    intersects = (t(1) > 0 && t(1) < 1);
+    intersects = (t(1) > 0 && t(1) < 1 && t(0) > 0);
     return O + D*t(0);
+}
+
+cnc::algo::geometry::GeometricContextRef cnc::algo::geometry::CreateContext()
+{
+    return std::make_shared<GeometricContext>();
 }

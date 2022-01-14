@@ -32,6 +32,7 @@ class Mesh2
 {
 public:
     Mesh2(GeometricContextRef C,const topology::faces& Fa,const EdgeFaceConnectivityGraph& EF,const NormalMap& NM);
+    Mesh2(GeometricContextRef C,const topology::faces& Fa);
     Mesh2(Mesh2&& O);
     Mesh2(const Mesh2& other);
 
@@ -40,6 +41,7 @@ public:
     void filterFaces(const trianglePredicate& P);
 
     const topology::faces& faces() const;
+    const topology::vertices& getVertices() const;
     const topology::faces& getFaces(const topology::edge& e) const;
     std::vector<topology::face> getIndexedFaces(const topology::edge& e) const;
     const topology::edges& edges() const;
@@ -61,44 +63,84 @@ public:
     void insertFace(const topology::face& f);
     void computeConnectivity();
     bool isInteriorVertex(vertex x) const;
+    bool isBoundaryEdge(const topology::edge& e) const;
+    bool isBoundaryVertex(vertex v) const;
     const topology::face& getOppositeFace(const topology::face& f,const topology::edge& e) const;
     const topology::faces& getAdjacentFaces(const topology::edge& e) const;
     const topology::faces& getOneRingFaces(topology::vertex v) const;
     topology::vertices getOneRingVertices(topology::vertex v) const;
+    const topology::edges &getOneRingEdges(topology::vertex v) const;
 
-    void edgeFlip(const topology::edge& e);
-    void edgeSplit(const topology::edge& e);
+    topology::edge edgeFlip(const topology::edge& e);
+    topology::vertex edgeSplit(const topology::edge& e);
     void edgeCollapse(const topology::edge& e);
+    void edgeCollapseInto(const topology::edge& e,topology::vertex v);
+
+    bool shouldFlip(const topology::edge& e) const;
+
+    int vertexValence(topology::vertex v) const;
+    int valenceScore(const topology::edge& e) const;
+
+    vec oneRingBarycenter(topology::vertex v) const;
 
     scalar maxInscribedRadius() const;
 
     const topology::vertices& getInteriorVertices() const;
 
+    cloud getVertexCloud() const;
+
+    void filterDeadVertices();
+    topology::edge mf;
+
+    topology::vertices getBoundaryVertices() const;
+
 private:
     bool compute_connectivity = false;
     Mesh2(GeometricContextRef C) : G(C) {}
     void induce_from_faces();
+    void induce_face_connectivity(const topology::face& f);
+    void induce_edge_connectivity(const topology::edge& e);
+
+    void clear_connectivity();
 
     void checkConnectivity() const {
         if (!compute_connectivity)
             throw Cnc_error("Connectivity not computed for this mesh!");
     }
+    void checkEuler() const {
+        if (!compute_connectivity)
+            return;
+        auto euler = V.size() - E.size() + F.size();
+        if (euler != 1)
+            throw Cnc_error("EULER FORMULA PROBLEM");
+    }
+    void remove_edge(const topology::edge& e);
+    void insert_edge(const topology::edge& e);
+    void remove_face(const topology::face& f);
+    topology::vertex add_vertex(const vec& x);
+    void remove_vertex(topology::vertex v);
 
     GeometricContextRef G;
+
     topology::vertices V;
     topology::edges E;
     topology::faces F;
+
     topology::edges boundary;
     topology::edges interior_edges;
+
     topology::vertices interior_vertices;
     topology::vertices boundary_vertices;
+
     topology::EdgeFaceConnectivityGraph EtoF;
     topology::VertexFaceConnectivityGraph VtoF;
     topology::VertexEdgeConnectivityGraph VtoE;
+
+    NormalMap N;
+
     friend class cnc::Mesh2DDisplayer;
     friend class cnc::Valued2DMeshDisplayer;
     friend struct mesh_generation;
-    NormalMap N;
 };
 
 }}}

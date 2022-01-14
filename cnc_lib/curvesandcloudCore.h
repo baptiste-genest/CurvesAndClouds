@@ -31,6 +31,7 @@
 #include "core/algo/calculus/differential_equations.h"
 #include "core/algo/calculus/complex_analysis.h"
 #include "core/algo/calculus/finite_elements/finite_elements.h"
+#include "core/algo/calculus/finite_elements/vector_finite_elements.h"
 #include "core/algo/statistics/random_var.h"
 #include "core/algo/statistics/statistics.h"
 #include "core/algo/calculus/optimization.h"

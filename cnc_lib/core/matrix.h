@@ -172,6 +172,8 @@ public:
 
     Vector<T> gauss_seidel(const Vector<T>& B,double eps = epsilon) const;
 
+    float sparsity_ratio(T threshold) const;
+
 
     //FOURIER ANALYSIS
     Matrix<std::complex<double>> dft();
@@ -1045,6 +1047,16 @@ Vector<T> Matrix<T>::gauss_seidel(const Vector<T> &B,double eps) const {
         error = ((*this)*X - B).norm();
     }
     return X;
+}
+
+template<class T>
+float Matrix<T>::sparsity_ratio(T threshold) const
+{
+    uint c =  0;
+    for (const auto& x : v)
+        if (std::abs(x) > threshold)
+            c++;
+    return float(c)/size();
 }
 
 template<class T>

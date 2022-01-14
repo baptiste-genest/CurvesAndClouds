@@ -66,6 +66,25 @@ cnc::algo::eigen_mode cnc::algo::IterativeSolvers::InversePowerMethod(const cnc:
     return {(A*x).norm(),x};
 }
 
+cnc::algo::eigen_mode cnc::algo::IterativeSolvers::PowerMethod(const cnc::mat &A, cnc::scalar eps, bool debug)
+{
+    return PowerMethod(A,algo::stat::random_var::random_vec(-1,1,A.rowNum()).normalize(),eps,debug);
+}
+
+cnc::algo::eigen_mode cnc::algo::IterativeSolvers::PowerMethod(const cnc::mat &A, const cnc::vec &x0, cnc::scalar eps, bool debug)
+{
+    vec x = x0,old;
+    scalar err = 2*eps;
+    while (err > eps){
+        old = x;
+        x = ((vec)(A*x)).normalize();
+        err = old.distance(x);
+        if (debug)
+            std::cout << err << std::endl;
+    }
+    return {(A*x).norm(),x};
+}
+
 cnc::vec cnc::algo::IterativeSolvers::PreconditionnedConjugateGradient(const cnc::smat &A, const cnc::vec &b, const cnc::MatrixMultiplicationChain &C, const cnc::vec &x0, cnc::scalar eps, bool debug)
 {
     vec r = b - A*x0,p=ChainSolve(C,r),x = x0,Ap,pr,z = p,pz;

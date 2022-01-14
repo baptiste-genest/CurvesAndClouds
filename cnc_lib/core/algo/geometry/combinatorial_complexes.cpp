@@ -38,6 +38,8 @@ cnc::algo::topology::indexed_vertices cnc::algo::topology::get_indexed_vertices(
 
 cnc::algo::topology::face cnc::algo::topology::assemble_face(const cnc::algo::topology::edge &E, const cnc::algo::topology::vertex &x)
 {
+    if (E[0] == E[1] || E[0] == x || E[1] == x)
+        throw Cnc_error("Can't build face without 3 distinct vertices");
     return {E,{E[0],x},{E[1],x}};
 }
 
@@ -160,6 +162,8 @@ cnc::algo::topology::vertices cnc::algo::topology::get_vertices(const cnc::algo:
 
 cnc::algo::topology::face cnc::algo::topology::assemble_face(cnc::algo::topology::vertex x1, cnc::algo::topology::vertex x2, cnc::algo::topology::vertex x3)
 {
+    if (x1 == x2 || x1 == x3 || x2 == x3)
+        throw Cnc_error("Can't build face without 3 distinct vertices");
     face F;
     F[0] = {x1,x2};
     F[1] = {x1,x3};

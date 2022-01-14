@@ -45,6 +45,9 @@ public:
         return get(i,j);
     }
 
+    void operator*=(scalar x);
+    void operator+=(const SMB&);
+
     void set(uint i,uint j,scalar x);
     const smatbuilder::container& getValues() const{
         return values;

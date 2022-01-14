@@ -32,6 +32,114 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::Delaunay(const 
     return H;
 }
 
+cnc::algo::geometry::MeshRef cnc::algo::geometry::mesh_generation::Refinement(const cloud& B, const ShapePredicate& P, cnc::scalar h){
+    auto MR = std::make_shared<Mesh2>(BowyerWatson(B));
+    auto& M = *MR;
+    M.filterFaces([P](const Mesh2& M,const face& f){
+        return P(M.G->midPoint(f));
+    });
+    M.filterDeadVertices();
+
+    M.computeConnectivity();
+
+    scalar target_edge_length = h*std::sqrt(3);
+    scalar low = target_edge_length*4./5.;
+    scalar high = target_edge_length*4./3.;
+
+    for (uint i = 0;i<10;i++){
+        split_long_edges(M,high);
+        collapse_short_edges(M,low,high);
+        /*
+        equalize_valences(M);
+        relaxation(M);
+        */
+    }
+    //MR->filterDeadVertices();
+    /*
+    try {
+    for (uint i = 0;i<10;i++){
+        split_long_edges(M,high);
+        collapse_short_edges(M,low,high);
+        equalize_valences(M);
+        relaxation(M);
+    }
+    MR->filterDeadVertices();
+    }  catch (Cnc_error&) {
+    }
+    */
+
+    return MR;
+}
+
+void cnc::algo::geometry::mesh_generation::split_long_edges(Mesh2 &M, scalar h)
+{
+    std::queue<topology::edge> to_split;
+    const auto& C = *M.getContext();
+    for (const auto& e : M.edges()){
+        auto l = C.edgeLength(e);
+        if (l > h)
+            to_split.push(e);
+    }
+    while (!to_split.empty()){
+        const auto& e = to_split.front();
+        to_split.pop();
+        auto m = M.edgeSplit(e);
+        for (const auto& ne : M.VtoE[m]){
+            auto l = C.edgeLength(ne);
+            if (l > h){
+                to_split.push(ne);
+            }
+        }
+    }
+}
+
+void cnc::algo::geometry::mesh_generation::collapse_short_edges(Mesh2 &M, scalar low, scalar high)
+{
+    std::vector<topology::edge> to_collapse;
+    const auto& C = *M.getContext();
+    for (const auto& e : M.interiorEdges()){
+        auto l = C.edgeLength(e);
+        if (l < low)
+            to_collapse.push_back(e);
+    }
+    for (const auto& e : to_collapse){
+        if (M.E.find(e) == M.E.end() || M.isBoundaryEdge(e))
+            continue;
+        auto onering = M.getOneRingVertices(e[0]);
+        bool collapse_ok = true;
+        for (auto v : onering){
+            if (C(e[1]).distance(C(v)) > high){
+                collapse_ok = false;
+                break;
+            }
+        }
+        if (collapse_ok)
+            M.edgeCollapseInto(e,e[0]);
+    }
+
+}
+
+void cnc::algo::geometry::mesh_generation::equalize_valences(Mesh2 &M)
+{
+    const topology::edges E = M.interior_edges;
+    //std::cout << M.EtoF.at({31,173}).size() << std::endl;
+    //uint i = 0;
+    for (const auto& e : E){
+        if (M.shouldFlip(e))
+            M.edgeFlip(e);
+    }
+}
+
+void cnc::algo::geometry::mesh_generation::relaxation(Mesh2 &M)
+{
+    std::map<vertex,vec> npos;
+    for (auto v : M.interior_vertices)
+        npos[v] = M.oneRingBarycenter(v);
+    auto& C = *M.getContext();
+    for (const auto& v : npos)
+        C(v.first) = v.second;
+}
+
 std::array<cnc::vec,3> cnc::algo::geometry::mesh_generation::super_triangle(const cnc::cloud &X)
 {
     cnc::scalar eps = 5e-1;
@@ -42,8 +150,8 @@ std::array<cnc::vec,3> cnc::algo::geometry::mesh_generation::super_triangle(cons
     const auto& ymax = B[1].second;
     return {
         vec({xmin-eps,ymin-eps}),
-        vec({xmin+(xmax-xmin)*2 + 3*eps,ymin-eps}),
-        vec({xmin-eps,ymin + 2*(ymax-ymin) + 3*eps}),
+                vec({xmin+(xmax-xmin)*2 + 3*eps,ymin-eps}),
+                vec({xmin-eps,ymin + 2*(ymax-ymin) + 3*eps}),
     };
 }
 
@@ -117,7 +225,7 @@ void cnc::algo::geometry::mesh_generation::RBST::insert(const cnc::algo::topolog
 cnc::algo::topology::faces cnc::algo::geometry::mesh_generation::RBST::get(cnc::scalar x,const faces& T) const
 {
     if (head == nullptr)
-        return {};
+    return {};
     topology::faces f;
     get(head,f,x,T);
     return f;
@@ -126,55 +234,55 @@ cnc::algo::topology::faces cnc::algo::geometry::mesh_generation::RBST::get(cnc::
 void cnc::algo::geometry::mesh_generation::RBST::get(RBSTnode *n, cnc::algo::topology::faces &f, cnc::scalar x,const faces& T) const
 {
     if (n != nullptr){
-        if (n->v < x){
-            if (n->upper)
-                f.erase(n->f);
-            else
-                if (T.find(n->f) != T.end())
-                    f.insert(n->f);
-            get(n->R,f,x,T);
-        }
-        else {
-            if (!n->upper)
-                f.erase(n->f);
-            else{
-                if (T.find(n->f) != T.end())
-                    f.insert(n->f);
-            }
-            get(n->L,f,x,T);
-        }
+    if (n->v < x){
+    if (n->upper)
+    f.erase(n->f);
+    else
+    if (T.find(n->f) != T.end())
+        f.insert(n->f);
+    get(n->R,f,x,T);
+    }
+    else {
+    if (!n->upper)
+    f.erase(n->f);
+    else{
+    if (T.find(n->f) != T.end())
+        f.insert(n->f);
+    }
+    get(n->L,f,x,T);
+    }
     }
 }
 
 void cnc::algo::geometry::mesh_generation::RBST::insert_right(cnc::algo::geometry::mesh_generation::RBSTnode **n, const cnc::algo::topology::face &f, cnc::scalar x)
 {
     if (*n == nullptr){
-        *n = new RBSTnode;
-        (*n)->f = f;
-        (*n)->v = x;
-        (*n)->upper = true;
+    *n = new RBSTnode;
+    (*n)->f = f;
+    (*n)->v = x;
+    (*n)->upper = true;
     }
     else{
-        if ((*n)->v < x)
-            insert_right(&(*n)->R,f,x);
-        else
-            insert_right(&(*n)->L,f,x);
+    if ((*n)->v < x)
+    insert_right(&(*n)->R,f,x);
+    else
+    insert_right(&(*n)->L,f,x);
     }
 }
 
 void cnc::algo::geometry::mesh_generation::RBST::insert_left(cnc::algo::geometry::mesh_generation::RBSTnode **n, const cnc::algo::topology::face &f, cnc::scalar x)
 {
     if (*n == nullptr){
-        *n = new RBSTnode;
-        (*n)->f = f;
-        (*n)->v = x;
-        (*n)->upper = false;
+    *n = new RBSTnode;
+    (*n)->f = f;
+    (*n)->v = x;
+    (*n)->upper = false;
     }
     else{
-        if ((*n)->v < x)
-            insert_left(&(*n)->R,f,x);
-        else
-            insert_left(&(*n)->L,f,x);
+    if ((*n)->v < x)
+    insert_left(&(*n)->R,f,x);
+    else
+    insert_left(&(*n)->L,f,x);
     }
 }
 */
@@ -229,11 +337,8 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::BowyerWatsonWIP
     return D;
 }
 
-cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::FromBoundaryMesh(const std::vector<cnc::algo::geometry::ConvexPolygon> &B, cnc::scalar treshold, const cnc::algo::geometry::ShapePredicate &P)
+cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::FromBoundaryMesh(cloud X, cnc::scalar treshold, const cnc::algo::geometry::ShapePredicate &P)
 {
-    cloud X;
-    for (const auto& p : B)
-        X += p.getPointCloud();
     bool done = false;
     while (!done){
         auto M = mesh_generation::BowyerWatson(X);
@@ -253,6 +358,7 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::FromBoundaryMes
         return P((*M.getContext()).midPoint(f));
     });
     std::cout << "Meshing complete, h = " << final.maxInscribedRadius() << std::endl;
+    final.filterDeadVertices();
     return final;
 }
 

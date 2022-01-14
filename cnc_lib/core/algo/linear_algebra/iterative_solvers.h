@@ -14,6 +14,8 @@ public:
     static vec ConjugateGradient(const smat& A,const vec& b,const vec& x0,scalar eps,bool debug = false);
     static vec ConjugateGradient(const mat& A,const vec& b,const vec& x0,scalar eps,bool debug = false);
     static eigen_mode InversePowerMethod(const mat& A,scalar eps,bool debug = false);
+    static eigen_mode PowerMethod(const mat& A,scalar eps,bool debug = false);
+    static eigen_mode PowerMethod(const mat& A,const vec& x0,scalar eps,bool debug = false);
     static vec PreconditionnedConjugateGradient(const smat& A,const vec& b,const MatrixMultiplicationChain& C,const vec& x0,scalar eps,bool debug = false);
 };
 

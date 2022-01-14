@@ -1,6 +1,6 @@
 #include "femdisplayer.h"
 
-cnc::FEMDisplayer::FEMDisplayer(const algo::FEM::FiniteElementSolver &F) : solver(F)
+cnc::FEMDisplayer::FEMDisplayer(const algo::FEM::ScalarFiniteElementSolver &F) : solver(F)
 {
     const static auto conv = [] (const vec& x){
         return QPointF(x(0),x(1));

@@ -115,6 +115,7 @@ scalar_function_1D build_1D_linear_interpolator(const nodes& X,const nodes& Y);
  * @return mapper from A to B
  */
 scalar_function_1D build_range_mapper(const range& A,const range& B,bool constrained = false);
+scalar_function_1D build_ordered_range_mapper(const range& A,const range& B,bool constrained = false);
 
 /**
  * @brief sample nodes with values of a given function at given points

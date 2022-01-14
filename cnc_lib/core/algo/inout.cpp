@@ -196,3 +196,67 @@ std::array<cnc::vec, 3> cnc::algo::load_img_as_vec(const std::string &filename, 
         }
     return I;
 }
+
+void cnc::algo::export_mesh2(const cnc::algo::geometry::Mesh2 &m, std::string out_file)
+{
+    std::ofstream out(out_file);
+    std::cout << "exporting at " << out_file << std::endl;
+    if (!out.is_open())
+        throw Cnc_error("coundn't open/create output mesh2 file");
+    const auto& C = *m.getContext();
+    out << "VERTICES\n";
+    for (auto v : m.getVertices()){
+        for (uint i = 0;i<2;i++)
+            out << C(v)(i) << " ";
+        out << std::endl;
+    }
+    out << "FACES\n";
+    for (const auto& f : m.faces()){
+        auto F = topology::get_indexed_vertices(f);
+        for (uint i = 0;i<3;i++)
+            out << F[i] << " ";
+        out << std::endl;
+    }
+    std::cout << "exported mesh2 at " <<out_file << std::endl;
+    out.close();
+}
+
+
+
+cnc::algo::geometry::MeshRef cnc::algo::import_mesh2(std::string in_file)
+{
+    using namespace linear_utils;
+    using namespace std;
+    std::ifstream in(in_file);
+    if (!in.is_open())
+        throw Cnc_error("coundn't read input mesh2 file");
+    std::string tmp;
+    do {
+        getline(in,tmp);
+        std::cout <<"pass: " << tmp << std::endl;
+    } while(tmp != "VERTICES");
+    auto C = geometry::CreateContext();
+    getline(in,tmp);
+    while (tmp != "FACES"){
+        auto c = algo::split(tmp,' ');
+        C->add_vertex(vec2(stos(c[0]),stos(c[1])));
+        getline(in,tmp);
+    }
+    topology::faces F;
+    getline(in,tmp);
+    do {
+        auto f = algo::split(tmp,' ');
+        F.insert(topology::assemble_face(std::stoi(f[0]),std::stoi(f[1]),std::stoi(f[2])));
+        getline(in,tmp);
+    } while(in);
+    in.close();
+    return std::make_shared<geometry::Mesh2>(C,F);
+}
+
+cnc::scalar cnc::algo::stos(std::string x)
+{
+    scalar value;
+    std::stringstream out(x);
+    out >> value;
+    return value;
+}

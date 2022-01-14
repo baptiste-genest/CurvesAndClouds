@@ -14,6 +14,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <set>
 #include <vector>
 
 #include "cnc_types.h"
@@ -109,6 +110,15 @@ bool belong(const std::vector<T>& V,T x){
 template<class T>
 T sq(const T& x){
     return x*x;
+}
+
+template<class T>
+const T& nth(const std::set<T>& S,int n){
+    return *std::next(S.begin(), n);
+}
+template<class T,class comp>
+const T& nth(const std::set<T,comp>& S,int n){
+    return *std::next(S.begin(), n);
 }
 
 }
