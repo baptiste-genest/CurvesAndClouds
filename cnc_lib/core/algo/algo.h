@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "cnc_types.h"
-#include "core/algo/calculus/calculus.h"
+#include "cnc_error.h"
 #include "linear_algebra/lin_alg.h"
 
 namespace cnc {
@@ -119,6 +119,16 @@ const T& nth(const std::set<T>& S,int n){
 template<class T,class comp>
 const T& nth(const std::set<T,comp>& S,int n){
     return *std::next(S.begin(), n);
+}
+
+template<class T>
+T fast_pow(const T& A,uint n){
+    if (n == 1)
+        return A;
+    auto SA = fast_pow(A,n/2);
+    if (n%2)
+        return SA*SA*A;
+    return SA*SA;
 }
 
 }

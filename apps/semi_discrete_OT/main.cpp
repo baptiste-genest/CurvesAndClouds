@@ -50,7 +50,7 @@ smat Hessian(const Diagram& L,const SMB& inverse_dist,const ConvexUnion& U){
     }
     if (std::abs(row_sum) > 1e-20)
         H(j,j) = -row_sum;
-    H.print();
+    //H.print();
     return H;
 }
 
@@ -131,18 +131,16 @@ int main(int argc, char *argv[])
     //ConvexPolygon source = convexPrimitive::Circle(R,20);
     ConvexPolygon origin = convexPrimitive::Square(2*R);
     ConvexUnion source;
-    source.push_back(convexPrimitive::Circle(R,20));
+    //source.push_back(convexPrimitive::Circle(R,20));
     //source.push_back(convexPrimitive::Square(2*R));
-    /*
-    source[0] = convexPrimitive::Rectangle(R,2*R,vec({-R,0.}));
-    source[1] = convexPrimitive::Rectangle(R,2*R,vec({+R,0.}));
-    */
+    source.push_back(convexPrimitive::Rectangle(R,2*R,vec({-R*0.5,0.})));
+    source.push_back(convexPrimitive::Rectangle(R,2*R,vec({R*0.5,0.})));
     //ConvexPolygon source = back;
 
 
     PlotLayer* L = F->add_grid_layer({-R-1,R+1},{-R-1,R+1},false);
     auto V = Voronoi(X,R);
-    L->addPlot<DiagramPlotter>(V);
+    //L->addPlot<DiagramPlotter>(V);
 
     scalar tA = 0;
     for (const auto& s : source)
@@ -181,9 +179,9 @@ int main(int argc, char *argv[])
         auto L = Laguerre(X,psi,R);
         return goal-computeCellsArea(L,source);
     };
-    //auto plan = algo::calculus::optimization::gradient_descent_adaptive_step(grad,vec(N),5,2,3000);
+    auto plan = algo::calculus::optimization::gradient_descent_adaptive_step(grad,vec(N),1e-5,0.04,3000);
     //auto plan = algo::calculus::optimization::gradient_descent_fixed_step(grad,vec(N),0.05,0.1,3000);
-    auto plan = PerformSemiDiscreteOptimalTransport(X,goal,source);
+    //auto plan = PerformSemiDiscreteOptimalTransport(X,goal,source);
 
     auto transportPlan = Laguerre(X,vec(N),R);
     L->addPlot<DiagramPlotter>(transportPlan);

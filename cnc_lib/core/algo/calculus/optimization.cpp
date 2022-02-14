@@ -77,20 +77,20 @@ vec algo::calculus::optimization::gradient_descent_fixed_step(const algo::calcul
 
 vec algo::calculus::optimization::gradient_descent_adaptive_step(const algo::calculus::vector_function &grad, const vec &x0, scalar h, scalar eps, uint max_iter)
 {
-    vec x = x0,G,tmp;scalar gn,newn;
+    vec xprev = x0,x,G = grad(x0),Gprev;
+    scalar theta = 10e8,next_h,grad_norm;
+    x = x0 - G*h;
     for (uint iter = 0;iter < max_iter;iter++){
+        Gprev = G;
         G = grad(x);
-        tmp = x - G*h;
-        newn = grad(tmp).norm();
-        while (newn > gn && iter){
-            h *= 0.9;
-            tmp = x - G*h;
-            newn = grad(tmp).norm();
-        }
-        x = tmp;
-        gn = newn;
-        std::cout << "grad norm: " << gn << std::endl;
-        if (gn < eps || h < 1e-4)
+        next_h = std::min(std::sqrt(1+theta)*h,x.distance(xprev)/(2*Gprev.distance(G)));
+        xprev = x;
+        x = x - G*next_h;
+        theta = next_h/h;
+        h = next_h;
+        grad_norm = G.norm_inf();
+        std::cout << "grad norm at " << iter << ": " << grad_norm << std::endl;
+        if (grad_norm < eps)
             return x;
     }
     return x;

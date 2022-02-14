@@ -94,6 +94,9 @@ cnc::cmat cnc::algo::exp(const cnc::cmat& M){
 cnc::scalar cnc::algo::det22(const cnc::vec& a,const cnc::vec& b){
     return a(0)*b(1) - a(1)*b(0);
 }
+cnc::scalar cnc::algo::det22(const cnc::mat& A){
+    return A(0,0)*A(1,1)-A(0,1)*A(1,0);
+}
 
 cnc::vec cnc::algo::Re(const cnc::cvec& V){
     uint h = V.rowNum();
@@ -315,3 +318,34 @@ cnc::mat cnc::algo::Cholesky(const cnc::mat &A)
     return L;
 }
 
+std::vector<cnc::scalar> cnc::algo::get_2x2_eigenvalues(const cnc::mat &A)
+{
+    return algo::calculus::quadratic_roots(1,-trace(A),det22(A));
+}
+
+cnc::scalar cnc::algo::trace(const cnc::mat &A)
+{
+    scalar T = 0;
+    for (uint i = 0;i<A.rowNum();i++)
+        T += A(i,i);
+    return T;
+}
+
+std::vector<cnc::algo::eigenpair> cnc::algo::get_2x2_eigenpaires(const cnc::mat &A)
+{
+    using namespace linear_utils;
+    auto l = get_2x2_eigenvalues(A);
+    return {
+        {vec2(A(1,0),l[0]-A(0,0)).normalize(),l[0]},
+        {vec2(l[1]-A(1,1),A(0,1)).normalize(),l[1]}
+    };
+}
+
+cnc::mat cnc::algo::invert22(const cnc::mat &A)
+{
+    scalar D = A.det();
+    if (std::abs(D) < 1e-9)
+        throw Cnc_error("non inversible matrix");
+    scalar iD = 1./D;
+    return mat(2,2,{A(1,1),- A(1,0),-A(0,1),A(0,0)})*iD;
+}

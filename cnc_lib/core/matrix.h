@@ -185,7 +185,7 @@ public:
     eigen_pair<T> power_method(double eps = 1e-10) const;
     std::vector<T> get_eigen_values_QR() const;
     eigen_pair<T> rayleigh_quotient(T mu) const;
-    std::vector<eigen_pair<T>> lanczos(int max_nb = -1) const;
+    std::vector<eigen_pair<T>> lanczos(int max_nb = -1,double eps = 1e-10) const;
 
 
     //DECOMPOSITIONS
@@ -1383,8 +1383,8 @@ eigen_pair<T> Matrix<T>::rayleigh_quotient(T mu) const {
 }
 
 template<class T>
-std::vector<eigen_pair<T>> Matrix<T>::lanczos(int max_nb) const{
-    eigen_pair<T> ep = power_method();
+std::vector<eigen_pair<T>> Matrix<T>::lanczos(int max_nb,double eps) const{
+    eigen_pair<T> ep = power_method(eps);
     uint n = rowNum();
     uint size = n;
     if (max_nb > 0)
@@ -1394,8 +1394,8 @@ std::vector<eigen_pair<T>> Matrix<T>::lanczos(int max_nb) const{
     eigen_pairs[0] = ep;
     for (uint i = 1;i< size;i++){
         P = P * ortho_proj_matrix(eigen_pairs[i-1].vector);
-        ep = (A*P).power_method();
-        if (std::abs(ep.value) < 1e-6){//no more non-null eigenvalues: generate kernel
+        ep = (A*P).power_method(eps);
+        if (std::abs(ep.value) < eps){//no more non-null eigenvalues: generate kernel
             std::vector<Vector<T>> kernel(size-i);
             for (uint k = i;k<size;k++)
                 kernel[k-i] = (P*rvec<T>(n));

@@ -190,9 +190,9 @@ std::array<cnc::vec, 3> cnc::algo::load_img_as_vec(const std::string &filename, 
     for (uint j = 0;j<h;j++)
         for (uint i = 0;i<w;i++){
             auto pix = QColor(img.pixel(i,j));
-            I[0](j*w + i) =pix.redF();
-            I[1](j*w + i) =pix.greenF();
-            I[2](j*w + i) =pix.blueF();
+            I[0](j*w + i) = pix.redF();
+            I[1](j*w + i) = pix.greenF();
+            I[2](j*w + i) = pix.blueF();
         }
     return I;
 }
@@ -259,4 +259,20 @@ cnc::scalar cnc::algo::stos(std::string x)
     std::stringstream out(x);
     out >> value;
     return value;
+}
+
+cnc::vec cnc::algo::load_bw_img_as_vec(const std::string &filename, uint &w, uint &h)
+{
+    QImage img(filename.c_str());
+    w = img.width();
+    h = img.height();
+    cnc::vec I;
+    I = vec(w*h);
+    for (uint j = 0;j<h;j++)
+        for (uint i = 0;i<w;i++){
+            auto pix = QColor(img.pixel(i,j));
+            I(j*w + i) = pix.redF();
+        }
+    return I;
+
 }

@@ -17,15 +17,15 @@ int main(int argc, char *argv[])
     PlotLayer* L = F->add_grid_layer(r,r,false);
     //auto M = std::make_shared<Mesh2>(mesh_generation::LloydRelaxation(convexPrimitive::Rectangle(3,1.5).subdivide(5),100));
     auto P = convexPrimitive::Rectangle(3,1).subdivide(5);
-    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh({P},0.05,P.getShapePredicate()));
-    /*
+    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(P.getPointCloud(),0.05,P.getShapePredicate()));
     auto S = algo::FEM::LinearElasticity(M,{0,1,2,3,4,5},[](const vec&) {
         return linear_utils::vec2(0,-0.01);
     });
-    */
+    /*
     auto S = algo::FEM::LinearElasticity(M,{0,1,2,3,4,5,10,11,12,13,14,15},[](const vec&) {
         return linear_utils::vec2(0,-0.1);
     });
+    */
     /*
     w.add_mutable_scalar_by_cursor({0,3},"mu",100,[&S](scalar mu){
         S.setMu(mu);

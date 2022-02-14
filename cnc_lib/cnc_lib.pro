@@ -95,6 +95,7 @@ SOURCES += \
     core/algo/geometry/quadtree.cpp \
     core/algo/geometry/quadtreemesher.cpp \
     core/algo/geometry/rotations.cpp \
+    core/algo/geometry/sdf.cpp \
     core/algo/geometry/simpleglmesh.cpp \
     core/algo/geometry/smooth_interpolator.cpp \
     core/algo/geometry/triangle.cpp \
@@ -215,6 +216,7 @@ HEADERS += \
     core/algo/geometry/quadtree.h \
     core/algo/geometry/quadtreemesher.h \
     core/algo/geometry/rotations.h \
+    core/algo/geometry/sdf.h \
     core/algo/geometry/simpleglmesh.h \
     core/algo/geometry/smooth_interpolator.h \
     core/algo/geometry/triangle.h \
