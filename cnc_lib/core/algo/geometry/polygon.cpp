@@ -98,6 +98,15 @@ cnc::algo::geometry::Polygon cnc::algo::geometry::Polygon::subdivideImposeLength
     return S;
 }
 
+cnc::scalar cnc::algo::geometry::Polygon::distanceTo(const cnc::vec &x) const
+{
+    auto V = getIndexedCyclicPoints();
+    scalar mind = 1e10;
+    for (uint i = 0;i<V.size()-1;i++)
+        mind = std::min(SDF::toSegment(x,V[i],V[i+1]),mind);
+    return mind;
+}
+
 cnc::scalar cnc::algo::geometry::Polygon::SignedArea() const
 {
     if (nbVertices() < 3)

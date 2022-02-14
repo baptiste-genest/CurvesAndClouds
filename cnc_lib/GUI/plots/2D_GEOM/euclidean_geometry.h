@@ -11,6 +11,7 @@ namespace cnc {
 namespace euclid {
 
 using placer = std::function<vec()>;
+using attribut = std::function<scalar()>;
 
 class EuclideanPrimitive {
 public:
@@ -107,6 +108,40 @@ private:
     int width;
 
 };
+class Circle : public EuclideanPrimitive {
+public:
+
+    Circle(const vec& p,scalar rad = 2) : radius(rad),color(QColorConstants::Blue){
+        pos_updater = [p] () {return p;};
+        rad_updater = [rad]() {return rad;};
+    }
+    Circle(const placer& p,const attribut& rad) : pos_updater(p),rad_updater(rad),color(QColorConstants::Blue){
+    }
+
+    range get_x_range() const override{
+        return {pos(0)-radius-range_eps,pos(0)+radius+range_eps};
+    }
+    range get_y_range() const override{
+        return {pos(1)-radius-range_eps,pos(1)+radius+range_eps};
+    }
+
+    inline vec get_pos() const {
+        return pos;
+    }
+
+    virtual void draw(frame_draw_object& p,range rx,range ry) override;
+    virtual void update_values() override;
+
+private:
+
+    vec pos = vec(2);
+    placer pos_updater;
+    attribut rad_updater;
+    scalar radius;
+    QColor color = QColorConstants::Red;
+
+};
+
 
 }
 

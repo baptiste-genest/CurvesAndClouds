@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     PlotTab* T = w.add_tab("my first tab");
     //PlotFrame* F= T->add_frame();
-    scalar r = 3;
+    scalar r = 2;
     range R{-r-1,r+1};
     //PlotLayer* L = F->add_grid_layer(R,R,false);
 
@@ -97,14 +97,16 @@ int main(int argc, char *argv[])
     C.add_vertex(vec2(1,1));
     C.add_vertex(vec2(0,1));
     C.add_vertex(vec2(0,0));
-    auto P1 = Polygon(G,{0,1,2,3,4,5});
+    auto P1 = Polygon(G,{0,1,2,3,4,5}).subdivide(10);
     auto B2 = P1.getPointCloud();
     auto p = P1.getShapePredicate();
     //auto M = mesh_generation::Refinement(B2,p,0.18);
-    //auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B,0.05,P));
+    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B2,0.02,P));
 
+    /*
     std::string file = "../../data/rooms.mesh2";
     MeshRef M = algo::import_mesh2(file);
+    */
     M->computeConnectivity();
     //auto M = std::make_shared<Mesh2>(mesh_generation::LloydRelaxation(B[0],150));
     //auto M = std::make_shared<Mesh2>(mesh_generation::LaplacianRelaxation(B,P,300));

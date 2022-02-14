@@ -43,6 +43,7 @@ algo::geometry::SimpleGLMesh import_mesh_from_obj(const std::string& input_file,
 void export_mesh_as_obj(const algo::geometry::SimpleGLMesh* m,std::string out_file);
 
 std::array<vec,3> load_img_as_vec(const std::string& filename,uint& w,uint& h);
+vec load_bw_img_as_vec(const std::string& filename,uint& w,uint& h);
 
 scalar stos(std::string x);
 

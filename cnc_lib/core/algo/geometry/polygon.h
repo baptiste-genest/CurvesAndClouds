@@ -2,6 +2,7 @@
 #define POLYGON_H
 
 #include "geometry.h"
+#include "sdf.h"
 
 namespace cnc {
 
@@ -33,6 +34,7 @@ public:
     Polygon subdivide(int N) const;
     Polygon subdivideImposeLength(scalar l) const;
 
+    scalar distanceTo(const vec& x) const;
     vec getNthVertexPosition(uint n) const;
     scalar Area() const;
     scalar SignedArea() const;

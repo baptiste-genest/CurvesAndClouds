@@ -29,3 +29,22 @@ void cnc::euclid::Segment::update_values()
     pos1 = point1->get_pos();
     pos2 = point2->get_pos();
 }
+
+void cnc::euclid::Circle::draw(cnc::frame_draw_object &fdo, cnc::range rx, cnc::range ry)
+{
+    auto tmp = fdo.painter.brush();
+    update_values();
+    algo_GUI::mapping M = algo_GUI::gen_mapping_value_to_frame(rx,ry, fdo.fi);
+    auto c(M(QPointF(pos(0),pos(1))));
+    auto p = M(QPointF(pos(0)+radius,pos(1)));
+    auto r = p.x()-c.x();
+    fdo.painter.setBrush(Qt::NoBrush);
+    fdo.painter.drawEllipse(c,r,r);
+    fdo.painter.setBrush(tmp);
+}
+
+void cnc::euclid::Circle::update_values()
+{
+    pos = pos_updater();
+    radius = rad_updater();
+}

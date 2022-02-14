@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         digits2 = digits;
 
         QApplication a(argc, argv);
-        Plot_window w;w.resize(500,500);
+        PlotWindow w;w.resize(500,500);
 
         auto T = w.add_tab("handwritten digits");
         {

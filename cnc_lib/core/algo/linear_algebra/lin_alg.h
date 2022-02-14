@@ -12,8 +12,6 @@
 
 #include "../../../cnc_types.h"
 #include "../../matrix.h"
-#include "../../matrix_algo.h"
-#include "../../matrix_errors.h"
 
 namespace cnc {
 
@@ -29,12 +27,18 @@ using mat = chaskal::Matrix<scalar>;
 using cmat = chaskal::Matrix<complex_scalar>;
 
 namespace linear_utils {
-
 inline vec vec2(scalar x= 0,scalar y=0){
     return vec({x,y});
 }
+inline vec vec2(const vec& x){
+    return vec2(x(0),x(1));
+}
 inline vec vec3(scalar x,scalar y,scalar z){
     return vec({x,y,z});
+}
+
+inline cvec cvec2(scalar x= 0,scalar y=0){
+    return cvec({cscalar(x),cscalar(y)});
 }
 
 }

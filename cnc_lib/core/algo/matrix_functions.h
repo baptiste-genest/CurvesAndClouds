@@ -9,11 +9,17 @@
 
 #include "linear_algebra/lin_alg.h"
 #include "algo.h"
+#include "core/algo/calculus/calculus.h"
 #include "core/sparse_matrix.h"
 #include <QVector3D>
 
 namespace cnc {
 namespace algo {
+
+struct eigenpair {
+    vec vector;
+    scalar value;
+};
 
 cmat complexify(const mat& M);
 
@@ -36,6 +42,7 @@ mat sin(const mat& M);
 cmat exp(const cmat& M);
 
 scalar det22(const vec& a,const vec& b);
+scalar det22(const mat& A);
 
 scalar det33(const mat& A);
 scalar det33(const vec& a,const vec& b,const vec& c);
@@ -46,6 +53,7 @@ vec cross(const vec& u,const vec& v);
 
 mat mat22(const vec& x,const vec& y);
 vec solve22(const mat& A,const vec& b);
+mat invert22(const mat& A);
 
 vec Re(const cvec& V);
 
@@ -60,6 +68,13 @@ std::array<scalar,3> symetric_3x3_eigenvalue_solver(const mat& A);
 QVector3D symetric_3x3_eigenvector(const mat& A,scalar eigenvalue);
 
 vec ones(uint N);
+
+scalar trace(const mat& A);
+
+std::vector<scalar> get_2x2_eigenvalues(const mat& A);
+std::vector<eigenpair> get_2x2_eigenpaires(const mat& A);
+
+
 
 }
 }

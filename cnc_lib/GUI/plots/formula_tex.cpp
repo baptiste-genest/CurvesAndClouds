@@ -49,7 +49,8 @@ void formula::change_pixmap_color(QPixmap & P, const QColor &C)
 void formula::download_tex_result()
 {
     QNetworkAccessManager *man = new QNetworkAccessManager(this);
-    const QUrl url = QUrl(QString::fromStdString(tex_url + latex));
+    auto url_text =QString::fromStdString(tex_url + latex);
+    const QUrl url = QUrl(url_text);
     QNetworkRequest request(url);
     man->get(request);
 
