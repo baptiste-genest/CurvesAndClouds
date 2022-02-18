@@ -1,6 +1,6 @@
 #include "diagramplotter.h"
 
-cnc::DiagramPlotter::DiagramPlotter(const algo::geometry::Diagram& Dp) : D(&Dp)
+cnc::DiagramPlotter::DiagramPlotter(std::shared_ptr<algo::geometry::Diagram> Dp) : D(Dp)
 {
     RV = {-D->RV,D->RV};
 

@@ -9,12 +9,12 @@ namespace cnc {
 class DiagramPlotter : public Plottable
 {
 public:
-    DiagramPlotter(const algo::geometry::Diagram& D);
+    DiagramPlotter(std::shared_ptr<algo::geometry::Diagram> D);
     inline plot_type get_type() const override{ return plot_type::d2_curve;}
 
 private:
     range RV;
-    const algo::geometry::Diagram* D;
+    std::shared_ptr<algo::geometry::Diagram> D;
     void init_stat_display(PlotFrame*,PlotLayer*,QVBoxLayout*,const StatList&) const override{}
     virtual void call_draw_axis(frame_draw_object&) const override{}
 

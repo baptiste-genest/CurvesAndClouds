@@ -25,6 +25,10 @@ using CellConnectivityGraph = std::map<edge,edge,edgeComp>;
 
 namespace geometry {
 
+class Diagram;
+
+using DiagramRef = std::shared_ptr<Diagram>;
+
 class Diagram{
 public:
     Diagram();
@@ -43,12 +47,13 @@ private:
     friend class cnc::DiagramPlotter;
     void buildDelaunayDual(const Mesh2& G,const cloud& C,scalar R);
     scalar RV;
-    friend Diagram Voronoi(const cloud& C,scalar R);
-    friend Diagram Laguerre(const cloud& C,const vec& psi,scalar R);
+    friend DiagramRef Voronoi(const cloud& C,scalar R);
+    friend DiagramRef Laguerre(const cloud& C,const vec& psi,scalar R);
 };
 
-Diagram Voronoi(const cloud& C,scalar R);
-Diagram Laguerre(const cloud& C,const vec& psi,scalar R);
+
+DiagramRef Voronoi(const cloud& C,scalar R);
+DiagramRef Laguerre(const cloud& C,const vec& psi,scalar R);
 
 }
 }

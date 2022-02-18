@@ -19,7 +19,7 @@ cnc::FEMDisplayer::FEMDisplayer(const algo::FEM::ScalarFiniteElementSolver &F) :
         scalar z = F.solutionValueAtVertex(i);
         centroids_color[i] = QColor::fromRgb(R(z),0,B(z));
         QVector<QPointF> points;
-        for (const auto& x : D.getCell(v).getIndexedPoints())
+        for (const auto& x : D->getCell(v).getIndexedPoints())
             points.push_back(conv(x));
         cells.push_back(points);
         i++;

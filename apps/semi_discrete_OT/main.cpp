@@ -6,7 +6,7 @@ using namespace cnc::algo::geometry;
 using namespace cnc::algo::topology;
 
 int N = 40;
-scalar R = 3;
+scalar R = 6;
 ConvexPolygon back = convexPrimitive::Square(2*R);
 using ConvexUnion = std::vector<ConvexPolygon>;
 //ConvexPolygon back = convexPrimitive::Rectangle(2*R,2*R,vec({R,0.}));
@@ -92,15 +92,15 @@ vec ConjugateGradient(const smat& A,const vec& b,const vec& x0,scalar eps){
 
 vec PerformSemiDiscreteOptimalTransport(const cloud& X,const vec& goal,const ConvexUnion& source){
     vec psi(N);
-    Diagram L = Laguerre(X,psi,R);
+    auto L = Laguerre(X,psi,R);
     scalar step = 0.01;
     vec A(N),grad(N);
     SMB D = inverse_distance_smatrix(X);
     int iter = 0;
     do{
-        A = computeCellsArea(L,source);
+        A = computeCellsArea(*L,source);
         grad = goal-A;
-        smat H = Hessian(L,D,source);
+        smat H = Hessian(*L,D,source);
         //H.print();
         //P = preconditionners::Jacobi(H);
         //vec p = ConjugateGradient(P*H,-P*grad,psi,1e-20);
@@ -124,71 +124,60 @@ int main(int argc, char *argv[])
     PlotFrame* F= T->add_frame();
 
     //auto X = stat::random_var::PoissonSamplingInSphere(1,0.05,2,100);
-    auto X = algo::stat::random_var::sample_uniform_in_square(2,R,N);
+    scalar x = R/2;
+    auto X = algo::stat::random_var::sample_uniform_in_square(2,x,N);
     //N = X.size();
 
     //ConvexPolygon source = convexPrimitive::Square(2*R,vec({R,0.}));
     //ConvexPolygon source = convexPrimitive::Circle(R,20);
-    ConvexPolygon origin = convexPrimitive::Square(2*R);
+    ConvexPolygon origin = convexPrimitive::Square(2*x);
     ConvexUnion source;
     //source.push_back(convexPrimitive::Circle(R,20));
-    //source.push_back(convexPrimitive::Square(2*R));
+    source.push_back(convexPrimitive::Square(2*x,linear_utils::vec2(0.4*x)));
+    /*
     source.push_back(convexPrimitive::Rectangle(R,2*R,vec({-R*0.5,0.})));
     source.push_back(convexPrimitive::Rectangle(R,2*R,vec({R*0.5,0.})));
+    */
     //ConvexPolygon source = back;
 
 
-    PlotLayer* L = F->add_grid_layer({-R-1,R+1},{-R-1,R+1},false);
     auto V = Voronoi(X,R);
-    //L->addPlot<DiagramPlotter>(V);
 
+    /*
     scalar tA = 0;
     for (const auto& s : source)
         tA += s.Area();
     vec goal = ones(N)*tA/(N);
     std::cout << goal << std::endl;
-
-    //goal= computeCellsArea(V,{origin});
-    /*
-    scalar split_mass = 4*R*R/N;
-    for (int i = 0;i<N;i++)
-        goal(i) = split_mass;
-        */
-
-    /*
-    for (int i = 0;i<N;i++){
-        const auto& C = V.getCell(i);
-        for (const auto& e : C.getIndexedCyclicEdges()){
-            PlotLayer* L = F->add_grid_layer({-R-1,R+1},{-R-1,R+1},false);
-            L->new_point_cloud(X,2,true);
-            auto S = V.polygonEdge(e);
-            auto I = ConvexPolygonIntersection(source,S);
-            L->addPlot<DiagramPlotter>(V);
-            if (I.nbVertices() >= 2){
-                L->new_2D_curve(I.getIndexedCyclicPoints())->set_color(QColorConstants::Black);
-            }
-        }
-    }
     */
-    L->new_2D_curve(origin.getIndexedCyclicPoints());
-    for (const auto& s : source)
-        L->new_2D_curve(s.getIndexedCyclicPoints());
-    //L->new_2D_curve(source.getIndexedCyclicPoints());
+    vec goal = computeCellsArea(*V,{origin});
+
+    /*
+        */
 
     auto grad = [X,goal,source] (const vec& psi){
         auto L = Laguerre(X,psi,R);
-        return goal-computeCellsArea(L,source);
+        return goal-computeCellsArea(*L,source);
     };
-    auto plan = algo::calculus::optimization::gradient_descent_adaptive_step(grad,vec(N),1e-5,0.04,3000);
-    //auto plan = algo::calculus::optimization::gradient_descent_fixed_step(grad,vec(N),0.05,0.1,3000);
-    //auto plan = PerformSemiDiscreteOptimalTransport(X,goal,source);
 
-    auto transportPlan = Laguerre(X,vec(N),R);
-    L->addPlot<DiagramPlotter>(transportPlan);
+    vec plan(N);
+
+    for (uint k = 0;k<30;k++){
+        PlotLayer* L = F->add_grid_layer({-R-1,R+1},{-R-1,R+1},false);
+        L->new_2D_curve(origin.getIndexedCyclicPoints());
+        for (const auto& s : source)
+            L->new_2D_curve(s.getIndexedCyclicPoints());
+        plan = algo::calculus::optimization::gradient_descent_adaptive_step(grad,plan,1e-5,0.01,30);
+        auto transportPlan = Laguerre(X,plan,R);
+        L->addPlot<DiagramPlotter>(transportPlan);
+    }
+
+    /*
     updateRoutine up = [plan,&transportPlan,X](scalar t){
         transportPlan = Laguerre(X,plan*t,R);
     };
     w.add_mutable_scalar_by_cursor({0,1},"interpolation",50,up);
+    */
 
     w.show();
     return App.exec();

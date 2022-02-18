@@ -67,9 +67,10 @@ void cnc::algo::geometry::Diagram::buildDelaunayDual(const Mesh2& L,const cloud&
     }
 }
 
-cnc::algo::geometry::Diagram cnc::algo::geometry::Voronoi(const cloud &C,scalar R)
+cnc::algo::geometry::DiagramRef cnc::algo::geometry::Voronoi(const cloud &C,scalar R)
 {
-    Diagram V;
+    DiagramRef Vr = std::make_shared<Diagram>();
+    auto& V = *Vr;
     V.RV = R;
     auto L = mesh_generation::BowyerWatson(C);
     L.computeConnectivity();
@@ -102,10 +103,10 @@ cnc::algo::geometry::Diagram cnc::algo::geometry::Voronoi(const cloud &C,scalar 
             for (uint j = 0;j<2;j++)
                 V.cells[e[i]].insert(E[j]);
     }
-    return V;
+    return Vr;
 }
 
-cnc::algo::geometry::Diagram cnc::algo::geometry::Laguerre(const cloud &X, const vec &psi,scalar R)
+cnc::algo::geometry::DiagramRef cnc::algo::geometry::Laguerre(const cloud &X, const vec &psi,scalar R)
 {
     cloud G = X;
     for (uint i = 0;i<G.size();i++){
@@ -119,9 +120,9 @@ cnc::algo::geometry::Diagram cnc::algo::geometry::Laguerre(const cloud &X, const
     };
     H.filterFaces(lower_hull);
     H.computeConnectivity();
-    Diagram L;
-    L.buildDelaunayDual(H,X,R);
-    L.RV = R;
+    DiagramRef L = std::make_shared<Diagram>();
+    L->buildDelaunayDual(H,X,R);
+    L->RV = R;
     return L;
 }
 
@@ -135,7 +136,7 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::LloydRelaxation
     auto L = algo::geometry::Voronoi(X,r);
     for (uint i = 0;i<20;i++){
         for (uint i = 0;i<in;i++)
-            X[i] = ConvexPolygonIntersection(L.getCell(i),B).Centroid();
+            X[i] = ConvexPolygonIntersection(L->getCell(i),B).Centroid();
         if (i < 19)
             L = algo::geometry::Voronoi(X,r);
     }
