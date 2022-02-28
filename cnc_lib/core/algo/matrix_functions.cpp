@@ -360,3 +360,13 @@ cnc::mat cnc::algo::diag(const std::vector<cnc::algo::eigenpair> &ep)
         D(i,i) = ep[i].value;
     return D;
 }
+
+cnc::mat cnc::algo::diag(const std::vector<scalar> &ep)
+{
+    auto n = ep.size();
+    mat D(n);
+    for (uint i = 0;i<n;i++)
+        D(i,i) = ep[i];
+    return D;
+
+}

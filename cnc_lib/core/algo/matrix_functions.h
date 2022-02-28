@@ -72,6 +72,7 @@ std::vector<scalar> get_2x2_eigenvalues(const mat& A);
 std::vector<eigenpair> get_2x2_eigenpaires(const mat& A);
 
 mat diag(const std::vector<eigenpair>& ep);
+mat diag(const std::vector<scalar>& ep);
 
 }
 }

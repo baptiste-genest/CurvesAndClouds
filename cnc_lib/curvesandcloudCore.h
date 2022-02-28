@@ -50,6 +50,7 @@
 #include "core/algo/symbolic/variable.h"
 #include "core/algo/symbolic/constant.h"
 #include "core/algo/symbolic/functions.h"
+#include "core/algo/symbolic/symbolic_lin_alg.h"
 
 
 #endif // CURVESANDCLOUDCORE_H
