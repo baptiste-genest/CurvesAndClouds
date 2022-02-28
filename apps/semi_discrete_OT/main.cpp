@@ -160,14 +160,14 @@ int main(int argc, char *argv[])
         return goal-computeCellsArea(*L,source);
     };
 
-    vec plan(N);
-
-    for (uint k = 0;k<30;k++){
+    uint M = 250;
+    auto plan_seq = algo::calculus::optimization::tracked_gradient_descent_adaptive_step(grad,vec(N),1e-5,0.01,M);
+    for (uint i = 0;i<M;i+= M/10){
+        const auto& plan = plan_seq[i];
         PlotLayer* L = F->add_grid_layer({-R-1,R+1},{-R-1,R+1},false);
         L->new_2D_curve(origin.getIndexedCyclicPoints());
         for (const auto& s : source)
             L->new_2D_curve(s.getIndexedCyclicPoints());
-        plan = algo::calculus::optimization::gradient_descent_adaptive_step(grad,plan,1e-5,0.01,30);
         auto transportPlan = Laguerre(X,plan,R);
         L->addPlot<DiagramPlotter>(transportPlan);
     }

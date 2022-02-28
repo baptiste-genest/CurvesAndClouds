@@ -53,6 +53,8 @@ vec gradient_descent_fixed_step(const scalar_function& f,const vec& x0,scalar h,
 vec gradient_descent_fixed_step(const vector_function& grad,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
 vec gradient_descent_adaptive_step(const vector_function& grad,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
 
+std::vector<vec> tracked_gradient_descent_adaptive_step(const vector_function& grad,const vec& x0,scalar h,scalar eps = 1e-5,uint max_iter = 1000);
+
 template<class T>
 T argmin(const std::function<scalar(const T&)>& f,const std::vector<T>& X){
     std::vector<scalar> values(X.size());

@@ -95,3 +95,26 @@ vec algo::calculus::optimization::gradient_descent_adaptive_step(const algo::cal
     }
     return x;
 }
+
+std::vector<vec> algo::calculus::optimization::tracked_gradient_descent_adaptive_step(const algo::calculus::vector_function &grad, const vec &x0, scalar h, scalar eps, uint max_iter)
+{
+    vec xprev = x0,x,G = grad(x0),Gprev;
+    scalar theta = 10e8,next_h,grad_norm;
+    x = x0 - G*h;
+    std::vector<vec> X = {x};
+    for (uint iter = 0;iter < max_iter;iter++){
+        Gprev = G;
+        G = grad(x);
+        next_h = std::min(std::sqrt(1+theta)*h,x.distance(xprev)/(2*Gprev.distance(G)));
+        xprev = x;
+        x = x - G*next_h;
+        X.push_back(x);
+        theta = next_h/h;
+        h = next_h;
+        grad_norm = G.norm_inf();
+        std::cout << "grad norm at " << iter << ": " << grad_norm << std::endl;
+        if (grad_norm < eps)
+            break;
+    }
+    return X;
+}

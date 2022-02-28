@@ -41,6 +41,16 @@ inline cvec cvec2(scalar x= 0,scalar y=0){
     return cvec({cscalar(x),cscalar(y)});
 }
 
+vec ones(uint n);
+
+inline cmat Id(uint n){
+    return chaskal::Id<cscalar>(n);
+}
+
+namespace eigen {
+    std::vector<vec> eigenvector22(const mat& A);
+}
+
 }
 
 /*

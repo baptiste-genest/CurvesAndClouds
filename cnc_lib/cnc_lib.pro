@@ -65,6 +65,7 @@ SOURCES += \
     GUI/plots/vector_field.cpp \
     GUI/plotwindow.cpp \
     GUI/ColorWheel.cpp \
+    core/algo/algebra/permutation.cpp \
     core/algo/algo.cpp \
     core/algo/bit_operations.cpp \
     core/algo/calculus/calculus.cpp \
@@ -109,6 +110,13 @@ SOURCES += \
     core/algo/matrix_functions.cpp \
     core/algo/statistics/random_var.cpp \
     core/algo/statistics/statistics.cpp \
+    core/algo/symbolic/constant.cpp \
+    core/algo/symbolic/expression.cpp \
+    core/algo/symbolic/functions.cpp \
+    core/algo/symbolic/operators.cpp \
+    core/algo/symbolic/symbolic_lin_alg.cpp \
+    core/algo/symbolic/term.cpp \
+    core/algo/symbolic/variable.cpp \
     core/algo/time_handling.cpp \
     core/dual_numbers.cpp \
     core/quaternion.cpp \
@@ -184,6 +192,7 @@ HEADERS += \
     GUI/ColorWheel.h \
     cnc_error.h \
     cnc_types.h \
+    core/algo/algebra/permutation.h \
     core/algo/algo.h \
     core/algo/bit_operations.h \
     core/algo/calculus/calculus.h \
@@ -230,6 +239,13 @@ HEADERS += \
     core/algo/matrix_functions.h \
     core/algo/statistics/random_var.h \
     core/algo/statistics/statistics.h \
+    core/algo/symbolic/constant.h \
+    core/algo/symbolic/expression.h \
+    core/algo/symbolic/functions.h \
+    core/algo/symbolic/operators.h \
+    core/algo/symbolic/symbolic_lin_alg.h \
+    core/algo/symbolic/term.h \
+    core/algo/symbolic/variable.h \
     core/dual_numbers.h \
     core/matrix_algo.h \
     core/quaternion.h \

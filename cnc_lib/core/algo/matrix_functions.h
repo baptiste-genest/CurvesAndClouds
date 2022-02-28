@@ -16,10 +16,7 @@
 namespace cnc {
 namespace algo {
 
-struct eigenpair {
-    vec vector;
-    scalar value;
-};
+using eigenpair = chaskal::eigen_pair<scalar>;
 
 cmat complexify(const mat& M);
 
@@ -74,7 +71,7 @@ scalar trace(const mat& A);
 std::vector<scalar> get_2x2_eigenvalues(const mat& A);
 std::vector<eigenpair> get_2x2_eigenpaires(const mat& A);
 
-
+mat diag(const std::vector<eigenpair>& ep);
 
 }
 }

@@ -45,5 +45,11 @@
 #include "core/algo/geometry/polynomial_curve.h"
 #include "core/dual_numbers.h"
 #include "core/algo/data_structures/interval_tree.h"
+#include "core/algo/symbolic/operators.h"
+#include "core/algo/symbolic/expression.h"
+#include "core/algo/symbolic/variable.h"
+#include "core/algo/symbolic/constant.h"
+#include "core/algo/symbolic/functions.h"
+
 
 #endif // CURVESANDCLOUDCORE_H

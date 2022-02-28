@@ -335,10 +335,12 @@ std::vector<cnc::algo::eigenpair> cnc::algo::get_2x2_eigenpaires(const cnc::mat 
 {
     using namespace linear_utils;
     auto l = get_2x2_eigenvalues(A);
-    return {
-        {vec2(A(1,0),l[0]-A(0,0)).normalize(),l[0]},
-        {vec2(l[1]-A(1,1),A(0,1)).normalize(),l[1]}
-    };
+    std::vector<cnc::algo::eigenpair> EP(2);
+    EP[0].vector = vec2(A(1,0),l[0]-A(0,0)).normalize();
+    EP[0].value = l[0];
+    EP[1].vector = vec2(l[1]-A(1,1),A(0,1)).normalize();
+    EP[1].value = l[1];
+    return EP;
 }
 
 cnc::mat cnc::algo::invert22(const cnc::mat &A)
@@ -348,4 +350,13 @@ cnc::mat cnc::algo::invert22(const cnc::mat &A)
         throw Cnc_error("non inversible matrix");
     scalar iD = 1./D;
     return mat(2,2,{A(1,1),- A(1,0),-A(0,1),A(0,0)})*iD;
+}
+
+cnc::mat cnc::algo::diag(const std::vector<cnc::algo::eigenpair> &ep)
+{
+    auto n = ep.size();
+    mat D(n);
+    for (uint i = 0;i<n;i++)
+        D(i,i) = ep[i].value;
+    return D;
 }

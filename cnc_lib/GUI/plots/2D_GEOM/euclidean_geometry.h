@@ -115,6 +115,10 @@ public:
         pos_updater = [p] () {return p;};
         rad_updater = [rad]() {return rad;};
     }
+    Circle(const cscalar& p,scalar rad = 2) : radius(rad),color(QColorConstants::Blue){
+        pos_updater = [p] () {return linear_utils::vec2(p.real(),p.imag());};
+        rad_updater = [rad]() {return rad;};
+    }
     Circle(const placer& p,const attribut& rad) : pos_updater(p),rad_updater(rad),color(QColorConstants::Blue){
     }
 
@@ -139,7 +143,50 @@ private:
     attribut rad_updater;
     scalar radius;
     QColor color = QColorConstants::Red;
+};
 
+class CircleArc : public EuclideanPrimitive {
+public:
+    CircleArc(const vec& c,scalar radius,scalar start_angle,scalar angle_span){
+        pos_updater = [c] (){
+            return c;
+        };
+        start_angle_updater = [start_angle] (){
+            return start_angle;
+        };
+        angle_span_updater = [angle_span] (){
+            return angle_span;
+        };
+        rad_updater = [radius] (){
+            return radius;
+        };
+
+    }
+
+    range get_x_range() const override{
+        return {pos(0)-radius-range_eps,pos(0)+radius+range_eps};
+    }
+    range get_y_range() const override{
+        return {pos(1)-radius-range_eps,pos(1)+radius+range_eps};
+    }
+
+
+    virtual void update_values() override;
+    virtual void draw(frame_draw_object& p,range rx,range ry) override;
+private:
+    vec pos;
+    placer pos_updater;
+
+    scalar radius;
+    attribut rad_updater;
+
+    scalar start_angle;
+    attribut start_angle_updater;
+
+    scalar angle_span;
+    attribut angle_span_updater;
+
+    QColor color = QColorConstants::Red;
 };
 
 
