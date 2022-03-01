@@ -24,6 +24,7 @@ using VariableId = int;
 using ValuationPair = std::pair<VariableId,cscalar>;
 struct ValuationSystem {
     ValuationSystem(std::initializer_list<ValuationPair> mv);
+    ValuationSystem(const std::vector<ValuationPair>& mv);
     std::map<VariableId,cscalar> mapping;
     cscalar evaluate(const VariableId& id) const;
 };

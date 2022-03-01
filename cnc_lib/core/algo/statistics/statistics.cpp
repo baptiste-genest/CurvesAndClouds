@@ -172,6 +172,15 @@ void cnc::cloud::set_mean(const cnc::vec &new_mean)
         points[k] += offset;
 }
 
+cnc::cloud cnc::cloud::subsample(scalar f) const
+{
+    cloud sub;
+    uint step = size()*f;
+    for (uint k = 0;k<size();k+= step)
+        sub.add_point((*this)[k]);
+    return sub;
+}
+
 
 cnc::mat cnc::algo::stat::compute_kernel_matrix(const cnc::cloud &c, const cnc::algo::stat::kernel &k)
 {

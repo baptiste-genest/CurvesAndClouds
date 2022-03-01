@@ -19,7 +19,7 @@ cnc::cmat cnc::symbolic::smat::evaluate(const ValuationSystem &V) const
     return E;
 }
 
-cnc::symbolic::svec::svec(uint n)
+cnc::symbolic::svec::svec(uint n) : h(n)
 {
     v.resize(n);
 }
@@ -42,7 +42,16 @@ cnc::cvec cnc::symbolic::svec::evaluate(const ValuationSystem &V) const
 {
     cvec X(h);
     for (uint j = 0;j<h;j++)
-        X(h) = v[j].evaluate(V);
+        X(j) = v[j].evaluate(V);
+    return X;
+}
+
+cnc::vec cnc::symbolic::svec::evaluate_real(const ValuationSystem &V) const
+{
+    auto cX = evaluate(V);
+    vec X(h);
+    for (uint i = 0;i<h;i++)
+        X(i) = cX(i).real();
     return X;
 }
 

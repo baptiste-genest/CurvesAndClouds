@@ -26,6 +26,12 @@ cnc::symbolic::ValuationSystem::ValuationSystem(std::initializer_list<ValuationP
         mapping[vp.first] = vp.second;
 }
 
+cnc::symbolic::ValuationSystem::ValuationSystem(const std::vector<ValuationPair> &mv)
+{
+    for (const auto& vp : mv)
+        mapping[vp.first] = vp.second;
+}
+
 cnc::cscalar cnc::symbolic::ValuationSystem::evaluate(const cnc::symbolic::VariableId &id) const
 {
     auto e = mapping.find(id);

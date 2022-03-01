@@ -119,6 +119,8 @@ struct cloud{
         return D;
     }
     friend class algo::geometry::GeometricContext;
+
+    cloud subsample(scalar f) const;
 };
 /**
  * @brief operator + merge operator, creates a new cloud with all the points of A and B

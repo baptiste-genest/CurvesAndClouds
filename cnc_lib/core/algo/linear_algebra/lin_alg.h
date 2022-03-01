@@ -36,6 +36,9 @@ inline vec vec2(const vec& x){
 inline vec vec3(scalar x,scalar y,scalar z){
     return vec({x,y,z});
 }
+inline vec vec3(const vec& x){
+    return vec3(x(0),x(1),x(2));
+}
 
 inline cvec cvec2(scalar x= 0,scalar y=0){
     return cvec({cscalar(x),cscalar(y)});

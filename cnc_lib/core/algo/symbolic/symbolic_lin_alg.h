@@ -26,6 +26,7 @@ public:
     smat jacobian(const std::vector<Variable>& X) const;
     Expression& operator()(uint j);
     cvec evaluate(const ValuationSystem& V) const;
+    vec evaluate_real(const ValuationSystem& V) const;
     std::string print() const;
 
 private:
