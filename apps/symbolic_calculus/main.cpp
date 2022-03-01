@@ -54,6 +54,7 @@ ValuationSystem ValuateVector(const cscalar& z,const cscalar& w){
 
 int main(int argc, char *argv[])
 {
+
     cscalar I(0.,1.);
     Expression knot = pow(a+b*I,3)-27.*pow(c+d*I,2);
     auto g1 = knot.differentiate(a);

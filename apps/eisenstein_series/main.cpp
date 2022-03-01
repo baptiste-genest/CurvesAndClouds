@@ -56,7 +56,7 @@ mat pow(const mat& A,scalar t){
 }
 
 vec stereoproj(const cscalar& z1,const cscalar& z2){
-    auto f = 1./(1.-z2.imag());
+    auto f = 1./(0.87-z2.imag());
     return linear_utils::vec2(z1.real()*f,z1.imag()*f);
 }
 
@@ -118,6 +118,9 @@ cloud generate_trefoil_knot()
     }
     std::cout << grads[0].print() << std::endl;
     std::cout << grads[1].print() << std::endl;
+    std::cout << grads[2].print() << std::endl;
+    cscalar z0 = std::polar(1.,M_PI/3);
+    cscalar w0 = -1.;
     return trefoil;
 }
 
@@ -126,7 +129,7 @@ int main(int argc, char *argv[])
     generate_trefoil_knot();
     return 0;
 
-    mat A= genMat(4);
+    mat A= genMat(3);
     auto ep = algo::get_2x2_eigenpaires(A);
     auto P = chaskal::build_basis(ep);
     auto Pi = algo::invert22(P);
