@@ -98,6 +98,7 @@ ValuationSystem ValuateVector(const cscalar& z,const cscalar& w){
 
 cloud generate_trefoil_knot()
 {
+    cloud trefoil;
     cscalar I(0.,1.);
     const auto& a = Z[0];
     const auto& b = Z[1];
@@ -109,13 +110,15 @@ cloud generate_trefoil_knot()
     for (uint j = 0;j<4;j++)
         G(j) = knot.differentiate(Z[j]);
 
-    svec grads[2] = {svec(4),svec(4)};
+    svec grads[3] = {svec(4),svec(4),svec(4)};
     for (uint j= 0;j<4;j++){
         grads[0](j) = Re(G(j));
         grads[1](j) = Im(G(j));
+        grads[2](j) = Z[j];
     }
     std::cout << grads[0].print() << std::endl;
     std::cout << grads[1].print() << std::endl;
+    return trefoil;
 }
 
 int main(int argc, char *argv[])
