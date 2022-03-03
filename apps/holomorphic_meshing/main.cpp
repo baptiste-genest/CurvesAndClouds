@@ -22,7 +22,7 @@ cscalar vtc(const vec& z){
 }
 
 cscalar integ(const cscalar& a,const cscalar& b,const cscalar& c,const cscalar& d,const cscalar& e){
-    return ((a-b)*(c-d) + (a*(e-d) + b*(c-e))*std::log((e-c)/(e-d)))/(c-d);
+    return ((a-b) + (a*(e-d) + b*(c-e))/(c-d))*std::log((e-c)/(e-d));
 }
 
 vec holomorphic_mapping(const vec& x,const std::vector<cscalar>& boundary,const std::vector<cscalar>& boundary_value){
@@ -30,15 +30,10 @@ vec holomorphic_mapping(const vec& x,const std::vector<cscalar>& boundary,const 
     uint n= boundary.size();
     cscalar fx;
     for (uint i = 0;i<n;i++)
-        if (std::abs(z-boundary[i]) < 1e-5)
+        if (std::abs(z-boundary[i]) < 1e-6)
             return ctv(boundary_value[i]);
     for (uint i = 0;i<n;i++)
         fx += integ(boundary_value[(i+1)%n],boundary_value[i],boundary[(i+1)%n],boundary[i],z);
-        /*
-        fx += 0.5*(
-                    boundary_value[(i+1)%n]/(boundary[(i+1)%n] - z) +
-                    boundary_value[i]/(boundary[i] - z))*(boundary[(i+1)%n]-boundary[i]);
-                    */
     return ctv(fx/(cscalar(0,2*M_PI)));
 }
 
@@ -51,8 +46,8 @@ int main(int argc, char *argv[]) {
     PlotFrame *Frame = Tab->add_frame();
 
     int N = 20;
-    int W = N-1;
-    int H = N-2;
+    int W = N;
+    int H = N;
 
     uint HEAT_ITER = 0;
 
@@ -97,8 +92,7 @@ int main(int argc, char *argv[]) {
         GeometricContextRef Cref = std::make_shared<GeometricContext>(opti);
         auto& C = *Cref;
         auto D = std::make_shared<Mesh2>(Cref,F);
-        //Layer->addPlot<Mesh2DDisplayer>(D);
-        //auto D = std::make_shared<Mesh2>(algo::geometry::mesh_generation::BowyerWatson(opti));
+
         std::cout << "delaunay done" << std::endl;
         D->filterFaces([](const Mesh2& M,const topology::face& F){
             const auto& C = M.getContext();
@@ -117,11 +111,20 @@ int main(int argc, char *argv[]) {
         uint B = boundary.size();
         for (uint i = 0;i<B;i++){
             scalar t = 2*M_PI*scalar(i)/B;
-            fb.push_back(cscalar(cos(t),sin(t)));
+            //fb.push_back(cscalar(cos(t),sin(t)));
+            fb.push_back(std::cos(boundary[i]*boundary[i])*3.);
             //fb.push_back(std::polar(10.,t));
         }
-        for (const auto& v : D->getVertices())
-            C(v) = holomorphic_mapping(C(v),boundary,fb);
+        if (false){
+            for (const auto& v : D->getInteriorVertices())
+                C(v) = linear_utils::vec2();
+            for (const auto& v : D->getBoundaryVertices())
+                C(v) = holomorphic_mapping(C(v),boundary,fb);
+        }
+        else {
+            for (const auto& v : D->getVertices())
+                C(v) = holomorphic_mapping(C(v),boundary,fb);
+        }
         auto V = D->getInteriorVertices();
         std::map<topology::vertex,vec> M;
         for (uint i = 0;i<HEAT_ITER;i++){
