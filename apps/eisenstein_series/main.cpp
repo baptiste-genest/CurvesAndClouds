@@ -63,7 +63,29 @@ vec stereoproj(const cscalar& z1,const cscalar& z2,scalar pole = 0.87){
     auto f = 1./(pole-z2.imag());
     return linear_utils::vec3(z1.real()*f,z1.imag()*f,z2.real()*f);
 }
-vec stereoproj(const vec& X,scalar pole = 0.87){
+
+struct stereopole{
+    mat R;
+    stereopole() {
+        R = mat(4);
+        scalar th[2] = {1.4,-1.6};
+        std::vector<vec> vb = algo::stat::random_var::sample_vector_on_unit_sphere(4,4);
+        vb = chaskal::gram_schmidt(vb);
+        auto P = chaskal::build_basis(vb);
+        auto Pi = P.transpose();
+        for (uint j = 0;j<2;j++){
+            R(2*j,2*j) = cos(th[j]);
+            R(2*j+1,2*j) = -sin(th[j]);
+            R(2*j,2*j+1) = sin(th[j]);
+            R(2*j+1,2*j+1) = cos(th[j]);
+        }
+        R = P*R*Pi;
+    }
+};
+
+vec stereoproj(vec X,scalar pole = 0.87){
+    static stereopole SP;
+    X = SP.R*X;
     auto f = 1./(X(3)-pole);
     return linear_utils::vec3(X)*f;
 }
@@ -182,8 +204,8 @@ int main(int argc, char *argv[])
     return 0;
     */
 
-    //mat A= genMat(6);
-    mat A(2,2,{1,1,2,3});
+    mat A= genMat(6);
+    //mat A(2,2,{1,1,2,3});
     auto ep = algo::get_2x2_eigenpaires(A);
     auto P = chaskal::build_basis(ep);
     auto Pi = algo::invert22(P);
@@ -206,10 +228,10 @@ int main(int argc, char *argv[])
         auto G3 = g3(tau)/std::pow(z,6);
 
         auto k = newton(m2(G2),m2(G3));
-        //std::cout << k << ' ' << 1./std::sqrt(m2(G2)+m2(G3)) << std::endl;
         G2 = std::pow(k,-4)*G2;
         G3 = std::pow(k,-6)*G3;
-        knot.add_point(ctov(G2,G3));
+        auto X = ctov(G2,G3);
+        knot.add_point(X);
     }
 
     QApplication App(argc,argv);
@@ -244,6 +266,22 @@ int main(int argc, char *argv[])
         E->add_object<euclid::Point>([Pr,x](){
             return Pr(x);
         });
+    for (const auto& angle : algo::calculus::get_lin_space(0,2*M_PI,100)){
+        vec x(4);
+        x(0) = cos(angle);
+        x(1) = sin(angle);
+        E->add_object<euclid::Point>([Pr,x](){
+            return Pr(x);
+        })->set_color(QColorConstants::Green);
+    }
+    for (const auto& angle : algo::calculus::get_lin_space(0,2*M_PI,100)){
+        vec x(4);
+        x(2) = cos(angle);
+        x(3) = sin(angle);
+        E->add_object<euclid::Point>([Pr,x](){
+            return Pr(x);
+        })->set_color(QColorConstants::Blue);
+    }
 
     w.show();
     return App.exec();

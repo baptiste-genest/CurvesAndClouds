@@ -35,6 +35,10 @@ struct cloud{
     cloud(cloud&& other) : points(std::move(other.points)) {}
     cloud(std::vector<vec>&& other) : points(std::move(other)) {}
 
+    operator const std::vector<vec>&() const{
+        return points;
+    }
+
     uint size() const{
         return points.size();
     }
