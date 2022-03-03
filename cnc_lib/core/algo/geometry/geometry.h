@@ -104,6 +104,9 @@ vec smallest_positive_ray_square_intersection(const vec& O,const vec& D,scalar R
 
 vec get_intersection(const line& A,const line& B);
 
+scalar arg(const cscalar& z);
+scalar arg(const vec& x);
+
 //QVector3D line_line_intersection(const QVector3D& o1,const QVector3D& d1,const QVector3D& o2,const QVector3D& d2);
 
 }}}

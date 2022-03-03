@@ -32,6 +32,7 @@ struct cloud{
     cloud() {}
     cloud(const cloud& other) : points(other.points) {}
     cloud(const std::vector<vec>& p) : points(p) {}
+    cloud(const std::vector<cscalar>& p);
     cloud(cloud&& other) : points(std::move(other.points)) {}
     cloud(std::vector<vec>&& other) : points(std::move(other)) {}
 

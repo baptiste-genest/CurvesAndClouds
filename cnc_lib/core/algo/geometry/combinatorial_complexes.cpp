@@ -198,3 +198,13 @@ cnc::algo::topology::edge cnc::algo::topology::get_opposite_edge(const cnc::algo
             return e;
     return NULL_EDGE;
 }
+
+void cnc::algo::topology::remove_vertex(faces &F, vertex x)
+{
+    std::vector<face> to_delete;
+    for (const auto& f : F)
+        if (belong(x,f))
+            to_delete.push_back(f);
+    for (const auto& f : to_delete)
+        F.erase(f);
+}

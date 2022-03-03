@@ -63,6 +63,7 @@ vertex get_other(const edge& F,vertex x);
 face assemble_face(const edge& E,const vertex& x);
 face assemble_face(vertex x1,vertex x2,vertex x3);
 void swap(edge& E);
+void remove_vertex(faces& F,vertex x);
 
 edge completeCycle(const SimplicialPolygon& P);
 
