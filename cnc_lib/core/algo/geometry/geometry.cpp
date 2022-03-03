@@ -338,3 +338,19 @@ cnc::algo::geometry::GeometricContextRef cnc::algo::geometry::CreateContext()
 {
     return std::make_shared<GeometricContext>();
 }
+
+cnc::scalar cnc::algo::geometry::arg(const cscalar &z)
+{
+    auto th = std::atan2(z.imag(),z.real());
+    if (th < 0)
+        return 2*M_PI + th;
+    return th;
+}
+
+cnc::scalar cnc::algo::geometry::arg(const vec &x)
+{
+    auto th = std::atan2(x(1),x(0));
+    if (th < 0)
+        return 2*M_PI + th;
+    return th;
+}

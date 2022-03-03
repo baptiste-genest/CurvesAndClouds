@@ -164,6 +164,12 @@ cnc::algo::stat::norm cnc::algo::stat::build_wasserstein_norm(uint p)
     };
 }
 
+cnc::cloud::cloud(const std::vector<cscalar> &p)
+{
+    for (const auto& z : p)
+        points.push_back(linear_utils::vec2(z.real(),z.imag()));
+}
+
 void cnc::cloud::set_mean(const cnc::vec &new_mean)
 {
     vec old_mean = cnc::algo::stat::compute_mean(*this);
