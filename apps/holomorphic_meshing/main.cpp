@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     int W = N;
     int H = N;
 
-    uint HEAT_ITER = 0;
+    uint HEAT_ITER = 50;
 
     scalar f= 1./W;
     scalar l = 2;
@@ -93,7 +93,6 @@ int main(int argc, char *argv[]) {
         auto& C = *Cref;
         auto D = std::make_shared<Mesh2>(Cref,F);
 
-        std::cout << "delaunay done" << std::endl;
         D->filterFaces([](const Mesh2& M,const topology::face& F){
             const auto& C = M.getContext();
             for (const auto& e : F)
@@ -109,10 +108,13 @@ int main(int argc, char *argv[]) {
             return arg(z) < arg(w);
         });
         uint B = boundary.size();
+        auto kernel = [] (scalar x){
+            return (1-0.5*std::exp(-x*x));
+        };
         for (uint i = 0;i<B;i++){
             scalar t = 2*M_PI*scalar(i)/B;
-            //fb.push_back(cscalar(cos(t),sin(t)));
-            fb.push_back(std::cos(boundary[i]*boundary[i])*3.);
+            fb.push_back(cscalar(cos(t),sin(t)*kernel(cos(t))));
+            //fb.push_back(std::cos(boundary[i]*boundary[i])*3.);
             //fb.push_back(std::polar(10.,t));
         }
         if (false){

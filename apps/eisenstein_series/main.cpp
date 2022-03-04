@@ -65,27 +65,28 @@ vec stereoproj(const cscalar& z1,const cscalar& z2,scalar pole = 0.87){
 }
 
 struct stereopole{
-    mat R;
+    mat P,Pi;
     stereopole() {
-        R = mat(4);
-        scalar th[2] = {1.4,-1.6};
         std::vector<vec> vb = algo::stat::random_var::sample_vector_on_unit_sphere(4,4);
         vb = chaskal::gram_schmidt(vb);
-        auto P = chaskal::build_basis(vb);
-        auto Pi = P.transpose();
+        P = chaskal::build_basis(vb);
+        Pi = P.transpose();
+    }
+    mat getMat(std::array<scalar,2> th) const {
+        mat R(4);
         for (uint j = 0;j<2;j++){
             R(2*j,2*j) = cos(th[j]);
             R(2*j+1,2*j) = -sin(th[j]);
             R(2*j,2*j+1) = sin(th[j]);
             R(2*j+1,2*j+1) = cos(th[j]);
         }
-        R = P*R*Pi;
+        return P*R*Pi;
     }
 };
 
-vec stereoproj(vec X,scalar pole = 0.87){
+vec stereoproj(vec X,scalar th1,scalar th2,scalar pole = 0.87){
     static stereopole SP;
-    X = SP.R*X;
+    X = SP.getMat({th1,th2})*X;
     auto f = 1./(X(3)-pole);
     return linear_utils::vec3(X)*f;
 }
@@ -162,7 +163,7 @@ cloud generate_trefoil_knot()
     std::cout << grads[2].print() << std::endl;
     */
     auto X = ctov(std::polar(1.,M_PI/3),I*std::pow(27.,-0.5)).normalize();
-    scalar dt = 1e-3;
+    scalar dt = 5e-4;
     trefoil.add_point(X);
     std::vector<vec> grad_eval(4);
     auto EX = ValuateVector(X);
@@ -249,11 +250,13 @@ int main(int argc, char *argv[])
     knot = knot.subsample(eps);
 
     auto th = w.add_mutable_scalar_by_cursor({0,2*M_PI},"theta");
+    auto th2 = w.add_mutable_scalar_by_cursor({0,2*M_PI},"theta2");
+    auto th3 = w.add_mutable_scalar_by_cursor({0,2*M_PI},"theta3");
     auto zoom = w.add_mutable_scalar_by_cursor({0,4},"zoom");
     auto pole = w.add_mutable_scalar_by_cursor({-4,4},"stereo pole");
 
-    auto Pr = [th,pole,zoom] (const vec& y){
-        vec x = Rot(th)*stereoproj(y,pole)*zoom;
+    auto Pr = [th,th2,th3,pole,zoom] (const vec& y){
+        vec x = Rot(th)*stereoproj(y,th2,th3,pole)*zoom;
         return vec({x(0),x(1)});
     };
 
