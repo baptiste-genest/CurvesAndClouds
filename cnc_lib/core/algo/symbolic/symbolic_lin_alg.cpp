@@ -60,16 +60,14 @@ cnc::vec cnc::symbolic::svec::operator()(const cnc::vec &x) const
     auto VI = getVariablesInvolved();
     if (VI.size() != x.size())
         throw Cnc_error("not all variables involved are valued");
-    std::vector<ValuationPair> vp;
+    std::vector<std::pair<VariableId,scalar>> vp(VI.size());
     uint i = 0;
     for (const auto& v : VI){
-        ValuationPair P;
-        P.first = v;
-        P.second.real(x(i));
-        vp.push_back(P);
+        vp[i].first = v;
+        vp[i].second = x(i);
         i++;
     }
-    return evaluate_real(ValuationSystem(vp));
+    return vec(2);//evaluate_real(ValuationSystem(vp));
 }
 
 cnc::symbolic::varSet cnc::symbolic::svec::getVariablesInvolved() const
