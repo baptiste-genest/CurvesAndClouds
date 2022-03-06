@@ -27,8 +27,8 @@ public:
     Expression& operator()(uint j);
     cvec evaluate(const ValuationSystem& V) const;
     vec evaluate_real(const ValuationSystem& V) const;
-    vec evaluate(const vec& x) const;
-    cvec evaluate(const cvec& x) const;
+    vec operator()(const vec& x) const;
+    //cvec evaluate(const cvec& x) const;
     varSet getVariablesInvolved() const;
     std::string print() const;
 

@@ -12,6 +12,10 @@ int main(int argc, char *argv[]) {
     map(0) = r*cos(th);
     map(1) = r*sin(th);
 
+    vec x = linear_utils::vec2(1.,M_PI*0.5);
+    std::cout << map(x) << std::endl;
+
+    return 0;
     QApplication App(argc, argv);
     PlotWindow Window;
     Window.resize(500, 500);
