@@ -1,4 +1,5 @@
 #include "simpleglmesh.h"
+using namespace cnc::sparse;
 
 cnc::algo::geometry::SimpleGLMesh::SimpleGLMesh(const std::vector<QVector3D> &p, const std::vector<QVector3D> &n, const std::vector<uint> &f)
     : faces(f)
@@ -265,7 +266,7 @@ cnc::mat cnc::algo::geometry::SimpleGLMesh::compute_uniform_laplacian_matrix() c
     return LB;
 }
 
-cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_matrix(bool weighted,bool pos) const
+cnc::sparse::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_matrix(bool weighted,bool pos) const
 {
     smat LB(nb_vertices);
     scalar A;
@@ -292,7 +293,7 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_sparse_laplace_beltrami_mat
     return LB;
 }
 
-cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_identity_plus_dt_sparse_laplace_beltrami_matrix(cnc::scalar dt,bool weighted,bool pos) const
+smat cnc::algo::geometry::SimpleGLMesh::compute_identity_plus_dt_sparse_laplace_beltrami_matrix(cnc::scalar dt,bool weighted,bool pos) const
 {
     smat LB(nb_vertices);
     scalar A;
@@ -321,7 +322,7 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_identity_plus_dt_sparse_lap
     return LB;
 }
 
-cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_weight_plus_dt_cot_matrix(cnc::scalar dt) const
+smat cnc::algo::geometry::SimpleGLMesh::compute_weight_plus_dt_cot_matrix(cnc::scalar dt) const
 {
     smat LB(nb_vertices);
     for (uint j = 0;j<nb_vertices;j++){
@@ -349,7 +350,7 @@ cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_weight_plus_dt_cot_matrix(c
 
 }
 
-cnc::smat cnc::algo::geometry::SimpleGLMesh::compute_mass_matrix() const
+smat cnc::algo::geometry::SimpleGLMesh::compute_mass_matrix() const
 {
     smat W(nb_vertices);
     for (uint j = 0;j<nb_vertices;j++){

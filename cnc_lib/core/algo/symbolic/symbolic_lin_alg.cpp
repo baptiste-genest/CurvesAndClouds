@@ -55,6 +55,22 @@ cnc::vec cnc::symbolic::svec::evaluate_real(const ValuationSystem &V) const
     return X;
 }
 
+cnc::vec cnc::symbolic::svec::evaluate(const cnc::vec &x) const
+{
+    auto VI = getVariablesInvolved();
+    if (VI.size() != x.size())
+        throw Cnc_error("not all variables involved are valued");
+}
+
+cnc::symbolic::varSet cnc::symbolic::svec::getVariablesInvolved() const
+{
+    varSet VI;
+    for (const auto& E : v)
+        for (const auto& var : E.getVariables())
+            VI.insert(var);
+    return VI;
+}
+
 std::string cnc::symbolic::svec::print() const
 {
     std::string s;

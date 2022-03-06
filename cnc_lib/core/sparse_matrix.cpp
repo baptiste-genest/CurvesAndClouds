@@ -1,11 +1,13 @@
 #include "sparse_matrix.h"
+using namespace cnc::sparse;
+using namespace cnc;
 
-cnc::SparseMatrix::SparseMatrix(int dimension, bool is_symetric) :
+SparseMatrix::SparseMatrix(int dimension, bool is_symetric) :
     SparseMatrix(dimension,dimension,is_symetric)
 {
 }
 
-cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
+SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
     w(_w),
     h(_h),
     symetric(is_symetric)
@@ -15,12 +17,12 @@ cnc::SparseMatrix::SparseMatrix(int _w, int _h, bool is_symetric) :
     nnz = 0;
 }
 
-void cnc::SparseMatrix::new_row()
+void SparseMatrix::new_row()
 {
     rowptr.push_back(nnz);
 }
 
-void cnc::SparseMatrix::add_in_row(int i, scalar x)
+void SparseMatrix::add_in_row(int i, scalar x)
 {
     if (i < 0)
         throw Cnc_error("Can't append at negative index");
@@ -29,12 +31,12 @@ void cnc::SparseMatrix::add_in_row(int i, scalar x)
     v.push_back(x);
 }
 
-void cnc::SparseMatrix::end_construct()
+void SparseMatrix::end_construct()
 {
     new_row();
 }
 
-cnc::vec cnc::SparseMatrix::conjugate_gradient(const cnc::vec &x0, const cnc::vec &b, scalar eps,bool log_error) const
+vec SparseMatrix::conjugate_gradient(const vec &x0, const vec &b, scalar eps,bool log_error) const
 {
     vec p = b,r = b,x = x0,Ap,pr;
     scalar alpha,beta;
@@ -56,11 +58,11 @@ cnc::vec cnc::SparseMatrix::conjugate_gradient(const cnc::vec &x0, const cnc::ve
     return x;
 }
 
-cnc::vec cnc::SparseMatrix::conjugate_gradient(const vec &b, scalar eps,bool log_error) const{
+vec SparseMatrix::conjugate_gradient(const vec &b, scalar eps,bool log_error) const{
     return conjugate_gradient(vec(b.rowNum()),b,eps,log_error);
 }
 
-cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
+vec SparseMatrix::mult(const vec &x) const
 {
     if (x.rowNum() != w)
         throw Cnc_error("mat width must be equal to vec height");
@@ -80,7 +82,7 @@ cnc::vec cnc::SparseMatrix::mult(const cnc::vec &x) const
     return y;
 }
 
-void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
+void SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, uint frow, uint lrow) const
 {
     //std::cout << "Address " << this << " " <<(int) frow << " " <<(int) lrow << std::endl;
     for (uint j = frow;j<lrow;j++){
@@ -89,7 +91,7 @@ void cnc::SparseMatrix::parralel_sparse_matrix_vector_mult(const vec &x,vec& b, 
     }
 }
 
-cnc::scalar cnc::SparseMatrix::row_sum(uint j) const
+scalar SparseMatrix::row_sum(uint j) const
 {
     scalar s = 0;
     for (uint k = rowptr[j];k<rowptr[j+1];k++)
@@ -97,7 +99,7 @@ cnc::scalar cnc::SparseMatrix::row_sum(uint j) const
     return s;
 }
 
-void cnc::SparseMatrix::print() const
+void SparseMatrix::print() const
 {
     for (uint j = 0;j<h;j++){
         if (rowptr[j] == rowptr[j+1]){
@@ -121,8 +123,9 @@ void cnc::SparseMatrix::print() const
 }
 
 
-std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &M, const std::vector<uint> &id)
+std::pair<smat, smat> algo::set_known_variables(const smat &M, const std::vector<uint> &id)
 {
+    using namespace algo;
     if (!std::is_sorted(id.begin(),id.end()))
         throw Cnc_error("Coords of known variables must be sorted");
     uint m = id.size();
@@ -131,10 +134,10 @@ std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &
     smat M1(n),M2(m,n,false);
     using namespace algo;
     auto inM1 = [id] (uint i,uint j) {
-        return !belong<uint>(id,i) && !belong<uint>(id,j);
+        return !cnc::algo::belong<uint>(id,i) && !cnc::algo::belong<uint>(id,j);
     };
     auto inM2 = [id] (uint i,uint j) {
-        return belong<uint>(id,i) && !belong<uint>(id,j);
+        return cnc::algo::belong<uint>(id,i) && !cnc::algo::belong<uint>(id,j);
     };
     std::vector<bool> ids(M.get_height(),false);
     for (uint i : id)
@@ -193,7 +196,7 @@ std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &
                 }
             }
         }
-        if (!belong(id,j)){
+        if (!cnc::algo::belong(id,j)){
             M1.new_row();
             M2.new_row();
         }
@@ -203,7 +206,7 @@ std::pair<cnc::smat, cnc::smat> cnc::algo::set_known_variables(const cnc::smat &
     return {M1,M2};
 }
 
-cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::smat &M, const std::vector<uint> &id, const std::vector<cnc::scalar> &v,scalar eps)
+vec algo::solve_for_kernel_with_known_variables(const smat &M, const std::vector<uint> &id, const std::vector<scalar> &v,scalar eps)
 {
     if (id.size() != v.size())
         throw Cnc_error("must have as much values as known variables");
@@ -213,7 +216,7 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::smat &M, co
     auto x = P.first.conjugate_gradient(Y,eps,true);
     uint i = 0,j=0;
     for (uint k = 0;k<M.get_height();k++){
-        if (algo::belong(id,k)){
+        if (cnc::algo::belong(id,k)){
             X(k) = v[i];
             i++;
         }
@@ -225,7 +228,7 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const cnc::smat &M, co
     return X;
 }
 
-std::ostream &cnc::operator<<(std::ostream &o, const cnc::smat &M)
+std::ostream &cnc::sparse::operator<<(std::ostream &o, const smat &M)
 {
     for (uint j = 0;j<M.h;j++){
         if (M.rowptr[j] == M.rowptr[j+1]){
@@ -249,7 +252,7 @@ std::ostream &cnc::operator<<(std::ostream &o, const cnc::smat &M)
     return o;
 }
 
-cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const std::pair<cnc::SparseMatrix, cnc::SparseMatrix> &P,uint N, const std::vector<uint> &id, const std::vector<cnc::scalar> &v, cnc::scalar eps)
+vec algo::solve_for_kernel_with_known_variables(const std::pair<SparseMatrix, SparseMatrix> &P,uint N, const std::vector<uint> &id, const std::vector<scalar> &v, scalar eps)
 {
     if (id.size() != v.size())
         throw Cnc_error("must have as much values as known variables");
@@ -258,7 +261,7 @@ cnc::vec cnc::algo::solve_for_kernel_with_known_variables(const std::pair<cnc::S
     auto x = P.first.conjugate_gradient(Y,eps,false);
     uint i = 0,j=0;
     for (uint k = 0;k<N;k++){
-        if (algo::belong(id,k)){
+        if (cnc::algo::belong(id,k)){
             X(k) = v[i];
             i++;
         }

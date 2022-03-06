@@ -38,7 +38,7 @@ cnc::cscalar cnc::symbolic::Function::evaluate(const cnc::symbolic::ValuationSys
     case cnc::symbolic::functions::exp:
         return std::exp(x);
     case cnc::symbolic::functions::sigmoid:
-        return 1./(1.+std::exp(-x));
+        return scalar(1)/(scalar(1)+std::exp(-x));
     }
 }
 
@@ -58,32 +58,32 @@ std::string cnc::symbolic::Function::print() const
 
 cnc::symbolic::Expression cnc::symbolic::Function::expand() const
 {
-    return Expression(std::make_shared<Function>(Function(func_name,arg.expand())));
+    return Expression(std::make_shared<Function>(Function(func_name,arg.expand())),arg.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::Function::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
 {
-    return Expression(std::make_shared<Function>(Function(func_name,arg.compose(x,e))));
+    return Expression(std::make_shared<Function>(Function(func_name,arg.compose(x,e))),Union(e.getVariables(),arg.getVariables()));
 }
 
 cnc::symbolic::Expression cnc::symbolic::exp(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::exp,e)));
+    return Expression(std::make_shared<Function>(Function(functions::exp,e)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::cos(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::cos,e)));
+    return Expression(std::make_shared<Function>(Function(functions::cos,e)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::sin(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::cos,e)));
+    return Expression(std::make_shared<Function>(Function(functions::cos,e)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::sigmoid(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::sigmoid,e)));
+    return Expression(std::make_shared<Function>(Function(functions::sigmoid,e)),e.getVariables());
 }
 
 cnc::symbolic::Power::Power(cnc::symbolic::Expression e, int p) : arg(e),n(p)
@@ -107,7 +107,7 @@ std::string cnc::symbolic::Power::print() const
 
 cnc::symbolic::Expression cnc::symbolic::Power::expand() const
 {
-    return getExpression(*this);
+    return getExpression(*this,arg.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::Power::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
@@ -121,15 +121,15 @@ cnc::symbolic::Expression cnc::symbolic::pow(cnc::symbolic::Expression e, int n)
         return e;
     if (n == 0)
         return Constant(1.);
-    return Expression(std::make_shared<Power>(Power(e,n)));
+    return Expression(std::make_shared<Power>(Power(e,n)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::Re(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::re,e)));
+    return Expression(std::make_shared<Function>(Function(functions::re,e)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::Im(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::im,e)));
+    return Expression(std::make_shared<Function>(Function(functions::im,e)),e.getVariables());
 }

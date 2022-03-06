@@ -85,7 +85,7 @@ cnc::algo::eigen_mode cnc::algo::IterativeSolvers::PowerMethod(const cnc::mat &A
     return {(A*x).norm(),x};
 }
 
-cnc::vec cnc::algo::IterativeSolvers::PreconditionnedConjugateGradient(const cnc::smat &A, const cnc::vec &b, const cnc::MatrixMultiplicationChain &C, const cnc::vec &x0, cnc::scalar eps, bool debug)
+cnc::vec cnc::algo::IterativeSolvers::PreconditionnedConjugateGradient(const cnc::sparse::smat &A, const cnc::vec &b, const cnc::sparse::MatrixMultiplicationChain &C, const cnc::vec &x0, cnc::scalar eps, bool debug)
 {
     vec r = b - A*x0,p=ChainSolve(C,r),x = x0,Ap,pr,z = p,pz;
     scalar alpha,beta;

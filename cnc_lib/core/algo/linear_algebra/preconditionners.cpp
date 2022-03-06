@@ -10,7 +10,7 @@ cnc::mat cnc::algo::preconditionners::Jacobi(const cnc::mat &A)
     return J;
 }
 
-cnc::MatrixMultiplicationChain cnc::algo::SparsePreconditionners::incompleteCholesky(cnc::SMB A)
+cnc::sparse::MatrixMultiplicationChain cnc::algo::SparsePreconditionners::incompleteCholesky(cnc::sparse::SMB A)
 {
     uint n = A.height();
     A.S = false;

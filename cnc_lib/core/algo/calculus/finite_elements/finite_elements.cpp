@@ -180,7 +180,7 @@ cnc::vec cnc::algo::FEM::ScalarFiniteElementSolver::fullSolutionVector() const
     return S;
 }
 
-cnc::SMB cnc::algo::FEM::ScalarFiniteElementSolver::computeMassMatrix() const
+cnc::sparse::SMB cnc::algo::FEM::ScalarFiniteElementSolver::computeMassMatrix() const
 {
     const geometry::Mesh2& M = *MR;
     const auto& C = *M.getContext();

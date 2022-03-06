@@ -17,10 +17,16 @@ public:
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
+    VariableId getId() const;
 
     ValuationPair operator==(scalar x) const;
+    inline bool operator==(const Variable& other) const{
+        return id == other.id;
+    }
 
     operator Expression() const;
+    static Variable getVariableFromId(VariableId id);
+
 private:
     static int count;
     VariableId id;

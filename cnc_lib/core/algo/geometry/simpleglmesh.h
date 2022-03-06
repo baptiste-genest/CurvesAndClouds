@@ -20,6 +20,8 @@ namespace cnc {
 
 namespace algo {
 
+using namespace sparse;
+
 
 namespace geometry {
 class SimpleGLMesh;

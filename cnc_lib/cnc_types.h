@@ -26,7 +26,7 @@ typedef float scalar;
 #elif PRECISION == DOUBLE
 typedef double scalar;
 #elif PRECISION == LONG_DOUBLE
-typedef double scalar;
+typedef long double scalar;
 #else
 typedef float scalar;
 #endif

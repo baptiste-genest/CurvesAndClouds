@@ -15,17 +15,21 @@
 
 namespace cnc {
 
+namespace sparse {
 class SparseMatrix;
 class SparseMatrixBuilder;
 using SMB = SparseMatrixBuilder;
 
 using smat = SparseMatrix;
+}
+
 namespace algo{
-    std::pair<SparseMatrix,SparseMatrix> set_known_variables(const SparseMatrix& M,const std::vector<uint>& id);
+using namespace sparse;
+    std::pair<cnc::sparse::SparseMatrix,SparseMatrix> set_known_variables(const SparseMatrix& M,const std::vector<uint>& id);
     vec solve_for_kernel_with_known_variables(const SparseMatrix& M,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
     vec solve_for_kernel_with_known_variables(const std::pair<SparseMatrix,SparseMatrix>& M,uint N,const std::vector<uint>& id,const std::vector<scalar>& v,scalar eps = 1e-8);
 }
-
+namespace sparse {
 
 class SparseMatrix
 {
@@ -66,7 +70,7 @@ public:
 
     void print() const;
 
-    friend std::pair<SparseMatrix,SparseMatrix> algo::set_known_variables(const SparseMatrix& M,const std::vector<uint>& id);
+    friend std::pair<SparseMatrix,SparseMatrix> cnc::algo::set_known_variables(const SparseMatrix& M,const std::vector<uint>& id);
     friend std::ostream& operator<<(std::ostream& o,const smat& M);
 
     inline void multiply_by_scalar(scalar lambda){
@@ -90,6 +94,7 @@ private:
 
 };
 
+}
 
 
 //std::pair<smat,smat> set_known_variables(const smat& M,const std::vector<uint>& id);

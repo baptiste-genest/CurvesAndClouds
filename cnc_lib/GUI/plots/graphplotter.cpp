@@ -28,7 +28,7 @@ void cnc::GraphPlotter::compute_nodes_pos()
     using pos = std::complex<float>;
     using namespace algo::stat::random_var;
     for (uint k = 0;k<V;k++)
-        nodes_pos[k] = std::polar(R,2*k*M_PI/(V));
+        nodes_pos[k] = std::polar(R,(scalar)2*k*M_PI/(V));
     using state = std::vector<pos>;
     state vel(V);
     float dt = 0.01f;

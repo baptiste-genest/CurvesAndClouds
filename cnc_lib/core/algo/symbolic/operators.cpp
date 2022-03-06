@@ -51,10 +51,12 @@ std::string cnc::symbolic::BinaryOperator::print() const
 
 cnc::symbolic::Expression cnc::symbolic::BinaryOperator::expand() const
 {
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(a.expand(),b.expand(),type)));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(a.expand(),b.expand(),type)),Union(a.getVariables(),b.getVariables()));
 }
 
 cnc::symbolic::Expression cnc::symbolic::BinaryOperator::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
 {
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(a.compose(x,e),b.compose(x,e),type)));
+    auto A = a.compose(x,e);
+    auto B = b.compose(x,e);
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(A,B,type)),Union(A.getVariables(),B.getVariables()));
 }

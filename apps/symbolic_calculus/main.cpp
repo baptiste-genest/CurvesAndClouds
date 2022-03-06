@@ -54,16 +54,8 @@ ValuationSystem ValuateVector(const cscalar& z,const cscalar& w){
 
 int main(int argc, char *argv[])
 {
-
-    cscalar I(0.,1.);
-    Expression knot = pow(a+b*I,3)-27.*pow(c+d*I,2);
-    auto g1 = knot.differentiate(a);
-    auto g2 = knot.differentiate(b);
-    auto g3 = knot.differentiate(c);
-    auto g4 = knot.differentiate(d);
-    vec grads[2];
-    std::cout << g1.print() << std::endl;
-    std::cout << g2.print() << std::endl;
+    Variable x,y;
+    auto E1 = x*y + cos(x);
 
     return 0;
 }

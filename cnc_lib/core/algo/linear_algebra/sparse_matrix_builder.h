@@ -7,8 +7,9 @@
 namespace cnc {
 namespace algo {
 class SparsePreconditionners;
-
 }
+namespace sparse {
+
 using SMB = SparseMatrixBuilder;
 
 namespace smatbuilder {
@@ -22,7 +23,7 @@ public:
     void operator=(scalar x);
     operator scalar() const;
 private:
-    friend class cnc::SparseMatrixBuilder;
+    friend class cnc::sparse::SparseMatrixBuilder;
     SMBaccessor(SMB& ref,index i) : R(ref),ix(i){}
     SMB& R;
     index ix;
@@ -79,6 +80,7 @@ enum class MatrixType {
 
 using MatrixFactor = std::pair<SMB,MatrixType>;
 using MatrixMultiplicationChain = std::vector<MatrixFactor>;
+}
 
 namespace algo {
 

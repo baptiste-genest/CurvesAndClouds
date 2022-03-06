@@ -1,18 +1,20 @@
 #include "sparse_matrix_builder.h"
+using namespace cnc::sparse;
+using namespace cnc;
 
-bool cnc::smatbuilder::indexComp::operator()(const cnc::smatbuilder::index &a, const cnc::smatbuilder::index &b) const
+bool smatbuilder::indexComp::operator()(const smatbuilder::index &a, const smatbuilder::index &b) const
 {
     if (a.second == b.second)
         return a.first < b.first;
     return a.second < b.second;
 }
 
-cnc::SparseMatrixBuilder::SparseMatrixBuilder(uint width, uint height, bool symetric) : w(width),h(height),S(symetric)
+SparseMatrixBuilder::SparseMatrixBuilder(uint width, uint height, bool symetric) : w(width),h(height),S(symetric)
 {
 
 }
 
-cnc::scalar cnc::SparseMatrixBuilder::get(uint i, uint j) const
+scalar SparseMatrixBuilder::get(uint i, uint j) const
 {
     auto it = values.find({i,j});
     if (it == values.end())
@@ -20,41 +22,41 @@ cnc::scalar cnc::SparseMatrixBuilder::get(uint i, uint j) const
     return (*it).second;
 }
 
-void cnc::SparseMatrixBuilder::operator*=(cnc::scalar x)
+void SparseMatrixBuilder::operator*=(scalar x)
 {
     for (auto& v : values)
         v.second*=x;
 }
 
-void cnc::SparseMatrixBuilder::operator+=(const cnc::SMB & other)
+void SparseMatrixBuilder::operator+=(const SMB & other)
 {
     for (const auto& v: other.values)
         values[v.first] = values[v.first]+v.second;
 }
 
-cnc::smatbuilder::SMBaccessor cnc::SparseMatrixBuilder::operator()(uint i, uint j)
+smatbuilder::SMBaccessor SparseMatrixBuilder::operator()(uint i, uint j)
 {
     return smatbuilder::SMBaccessor(*this,{i,j});
 }
 
-void cnc::SparseMatrixBuilder::set(uint i, uint j, cnc::scalar x)
+void SparseMatrixBuilder::set(uint i, uint j, scalar x)
 {
     values[{i,j}] = x;
     if (S && i != j)
         values[{j,i}] = x;
 }
 
-bool cnc::SparseMatrixBuilder::isNull(uint i,uint j) const
+bool SparseMatrixBuilder::isNull(uint i,uint j) const
 {
     return (values.find({i,j}) == values.end());
 }
 
-void cnc::SparseMatrixBuilder::deleteValue(uint i, uint j)
+void SparseMatrixBuilder::deleteValue(uint i, uint j)
 {
     values.erase({i,j});
 }
 
-void cnc::SparseMatrixBuilder::print() const
+void SparseMatrixBuilder::print() const
 {
     for (uint j = 0;j<height();j++){
         for (uint i = 0;i<width();i++){
@@ -67,7 +69,7 @@ void cnc::SparseMatrixBuilder::print() const
     }
 }
 
-cnc::SparseMatrixBuilder cnc::SparseMatrixBuilder::transpose() const
+SparseMatrixBuilder SparseMatrixBuilder::transpose() const
 {
     if (S)
         return *this;
@@ -77,7 +79,7 @@ cnc::SparseMatrixBuilder cnc::SparseMatrixBuilder::transpose() const
     return t;
 }
 
-cnc::mat cnc::SparseMatrixBuilder::DenseMatrix() const
+mat SparseMatrixBuilder::DenseMatrix() const
 {
     mat D(h,w);
     for (uint j = 0;j<h;j++)
@@ -86,7 +88,7 @@ cnc::mat cnc::SparseMatrixBuilder::DenseMatrix() const
     return D;
 }
 
-cnc::SparseMatrix::SparseMatrix(const cnc::SparseMatrixBuilder & SMB) : SparseMatrix(SMB.w,SMB.h,SMB.S)
+SparseMatrix::SparseMatrix(const SparseMatrixBuilder & SMB) : SparseMatrix(SMB.w,SMB.h,SMB.S)
 {
     uint j = 0;
     for (const auto& iv : SMB.values){
@@ -101,20 +103,20 @@ cnc::SparseMatrix::SparseMatrix(const cnc::SparseMatrixBuilder & SMB) : SparseMa
         new_row();
 }
 
-void cnc::smatbuilder::SMBaccessor::operator=(cnc::scalar x)
+void smatbuilder::SMBaccessor::operator=(scalar x)
 {
     R.values[ix] = x;
     if (R.S)
         R.values[{ix.second,ix.first}] = x;
 }
 
-cnc::smatbuilder::SMBaccessor::operator scalar() const
+smatbuilder::SMBaccessor::operator scalar() const
 {
     return R.get(ix.first,ix.second);
 }
 
 
-cnc::SMB cnc::algo::Cholesky(const cnc::SMB &A)
+SMB algo::Cholesky(const SMB &A)
 {
     uint n = A.width();
     SMB L(n);
@@ -132,7 +134,7 @@ cnc::SMB cnc::algo::Cholesky(const cnc::SMB &A)
     return L;
 }
 
-cnc::vec cnc::algo::UpperSolve(const cnc::SMB &A, const cnc::vec &b)
+vec algo::UpperSolve(const SMB &A, const vec &b)
 {
     vec x(b.size());
     uint n = A.width();
@@ -145,7 +147,7 @@ cnc::vec cnc::algo::UpperSolve(const cnc::SMB &A, const cnc::vec &b)
     return x;
 }
 
-cnc::vec cnc::algo::LowerSolve(const cnc::SMB &A, const cnc::vec &b)
+vec algo::LowerSolve(const SMB &A, const vec &b)
 {
     vec x(b.size());
     int n = A.width();
@@ -158,7 +160,7 @@ cnc::vec cnc::algo::LowerSolve(const cnc::SMB &A, const cnc::vec &b)
     return x;
 }
 
-cnc::vec cnc::algo::ChainSolve(const cnc::MatrixMultiplicationChain &MMC,cnc::vec x)
+vec algo::ChainSolve(const MatrixMultiplicationChain &MMC,vec x)
 {
     for (const auto& factor : MMC){
         switch (factor.second) {

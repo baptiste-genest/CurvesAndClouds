@@ -15,7 +15,7 @@ void FunctionPlot::init_stat_display(PlotFrame*,PlotLayer* ,QVBoxLayout* V,const
         QLabel* L = new QLabel;
         QString text = "integral value ";
         auto M = get_lin_space(x_range.first,x_range.second,100);
-        text += QString::number(integrate(integration_scheme::simpson(value),M));
+        text += QString::number((float)integrate(integration_scheme::simpson(value),M));
         L->setText(text);
         V->addWidget(L);
     }

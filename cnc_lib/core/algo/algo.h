@@ -131,6 +131,14 @@ T fast_pow(const T& A,uint n){
     return SA*SA;
 }
 
+template <class T>
+std::set<T> Union(const std::set<T>& A,const std::set<T>& B){
+    std::set<T> U = A;
+    for (const auto& x : B)
+        U.insert(x);
+    return U;
+}
+
 }
 
 }

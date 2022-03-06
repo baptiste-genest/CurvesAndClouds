@@ -35,14 +35,19 @@ std::string cnc::symbolic::Variable::print() const
 
 cnc::symbolic::Expression cnc::symbolic::Variable::expand() const
 {
-    return getExpression(*this);
+    return getExpression(*this,{id});
 }
 
 cnc::symbolic::Expression cnc::symbolic::Variable::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
 {
     if (x.id == id)
         return e;
-    return getExpression(*this);
+    return getExpression(*this,{id});
+}
+
+cnc::symbolic::VariableId cnc::symbolic::Variable::getId() const
+{
+    return id;
 }
 
 cnc::symbolic::ValuationPair cnc::symbolic::Variable::operator==(cnc::scalar x) const
@@ -50,12 +55,16 @@ cnc::symbolic::ValuationPair cnc::symbolic::Variable::operator==(cnc::scalar x) 
     return {id,x};
 }
 
-cnc::symbolic::Variable::operator Expression() const
+cnc::symbolic::Variable cnc::symbolic::Variable::getVariableFromId(cnc::symbolic::VariableId id)
 {
-    return Expression(std::make_shared<Variable>(*this));
+    if (id >= count)
+        throw Cnc_error("Variable doesn't exists");
+    Variable V;
+    V.id = id;
+    return V;
 }
 
-cnc::symbolic::Expression cnc::symbolic::Expression::differentiate(const cnc::symbolic::Variable& x) const
+cnc::symbolic::Variable::operator Expression() const
 {
-    return ref->differentiate(x);
+    return Expression(std::make_shared<Variable>(*this),{id});
 }

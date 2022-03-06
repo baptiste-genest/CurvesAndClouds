@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 #include <typeinfo>
+#include <set>
+#include "core/algo/algo.h"
 
 namespace cnc {
 
@@ -21,6 +23,8 @@ using SymbolRef = std::shared_ptr<Symbol>;
 
 using VariableId = int;
 
+using varSet = std::set<VariableId>;
+
 using ValuationPair = std::pair<VariableId,cscalar>;
 struct ValuationSystem {
     ValuationSystem(std::initializer_list<ValuationPair> mv);
@@ -31,7 +35,6 @@ struct ValuationSystem {
 
 class Symbol{
     public:
-
     virtual bool isSum() const {return false;}
     virtual bool isProduct() const {return false;}
     virtual bool isQuotient() const {return false;}
@@ -56,12 +59,16 @@ private:
     SymbolRef ref;
     scalar_property p = other;
     friend class Constant;
+    varSet variables_involved;
+
 public:
     cscalar fixValue();
     Expression();
-    Expression(SymbolRef r) : ref(r){}
+    Expression(SymbolRef r,const varSet& VI) : ref(r),variables_involved(VI){}
     Expression(cscalar x);
     Expression(scalar x);
+    const varSet& getVariables() const;
+
     cscalar operator()(const ValuationSystem& V) const;
 
     scalar_property getScalarProperty() const;
@@ -74,11 +81,13 @@ public:
 };
 
 template<typename T>
-Expression getExpression(const T& x){
-    return Expression(std::make_shared<T>(x));
+Expression getExpression(const T& x,const varSet& V){
+    return Expression(std::make_shared<T>(x),V);
 }
+varSet Union(const varSet& A,const varSet& B);
 
 }
+
 
 }
 

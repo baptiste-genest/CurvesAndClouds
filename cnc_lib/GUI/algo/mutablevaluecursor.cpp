@@ -18,7 +18,7 @@ cnc::MutableValueCursor::MutableValueCursor(PlotWindow* W, cnc::range v, uint nb
     timeHandling::PointInTime* pit = &last_update;
     QObject::connect(slider,&QSlider::valueChanged,[W,id,C,label,pit,update] (int) {
         W->update();
-        W->sliders_text[id]->setText(label + QString(":		") + QString::number(C->value()));
+        W->sliders_text[id]->setText(label + QString(":		") + QString::number((double)C->value()));
         W->sliders_panel->update();
         *pit = std::chrono::high_resolution_clock::now();
         update(C->value());

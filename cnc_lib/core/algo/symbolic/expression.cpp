@@ -40,3 +40,11 @@ cnc::cscalar cnc::symbolic::ValuationSystem::evaluate(const cnc::symbolic::Varia
     return e->second;
 
 }
+
+cnc::symbolic::varSet cnc::symbolic::Union(const cnc::symbolic::varSet &A, const cnc::symbolic::varSet &B)
+{
+    auto S = A;
+    for (const auto& x : B)
+        S.insert(x);
+    return S;
+}
