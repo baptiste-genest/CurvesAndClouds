@@ -181,7 +181,7 @@ void cnc::cloud::set_mean(const cnc::vec &new_mean)
 cnc::cloud cnc::cloud::subsample(scalar f) const
 {
     cloud sub;
-    uint step = size()*f;
+    uint step = 1./f;
     for (uint k = 0;k<size();k+= step)
         sub.add_point((*this)[k]);
     return sub;
