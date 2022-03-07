@@ -15,8 +15,8 @@ class Constant : public Term
 private:
     cscalar value;
     scalar_property p;
-    Constant(scalar_property p);
     friend class Expression;
+    Constant(scalar_property p);
 public:
     cscalar getValue() const;
     Constant(cscalar v);

@@ -78,7 +78,7 @@ cnc::symbolic::Expression cnc::symbolic::cos(cnc::symbolic::Expression e)
 
 cnc::symbolic::Expression cnc::symbolic::sin(cnc::symbolic::Expression e)
 {
-    return Expression(std::make_shared<Function>(Function(functions::cos,e)),e.getVariables());
+    return Expression(std::make_shared<Function>(Function(functions::sin,e)),e.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::sigmoid(cnc::symbolic::Expression e)

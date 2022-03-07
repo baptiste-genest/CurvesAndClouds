@@ -25,12 +25,12 @@ using VariableId = int;
 
 using varSet = std::set<VariableId>;
 
-using ValuationPair = std::pair<VariableId,cscalar>;
+using ValuationPair = std::pair<VariableId,scalar>;
 struct ValuationSystem {
     ValuationSystem(std::initializer_list<ValuationPair> mv);
     ValuationSystem(const std::vector<ValuationPair>& mv);
-    std::map<VariableId,cscalar> mapping;
-    cscalar evaluate(const VariableId& id) const;
+    std::map<VariableId,scalar> mapping;
+    scalar evaluate(const VariableId& id) const;
 };
 
 class Symbol{
@@ -67,6 +67,9 @@ public:
     Expression(SymbolRef r,const varSet& VI) : ref(r),variables_involved(VI){}
     Expression(cscalar x);
     Expression(scalar x);
+
+    Expression operator()(VariableId id) const;
+
     const varSet& getVariables() const;
 
     cscalar operator()(const ValuationSystem& V) const;

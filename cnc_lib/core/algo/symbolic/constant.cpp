@@ -11,6 +11,12 @@ cnc::symbolic::Constant::Constant(scalar_property prop) : p(prop)
     }
 }
 
+cnc::symbolic::Expression::Expression()
+{
+    ref = Constant::Zero().ref;
+    p = zero;
+}
+
 cnc::cscalar cnc::symbolic::Constant::getValue() const
 {
     return value;
@@ -176,6 +182,11 @@ const cnc::symbolic::varSet &cnc::symbolic::Expression::getVariables() const
 cnc::cscalar cnc::symbolic::Expression::operator()(const cnc::symbolic::ValuationSystem &V) const
 {
     return evaluate(V);
+}
+
+cnc::symbolic::Expression cnc::symbolic::Expression::operator()(cnc::symbolic::VariableId id) const
+{
+    return differentiate(Variable::getVariableFromId(id));
 }
 
 cnc::symbolic::Expression cnc::symbolic::Expression::differentiate(const cnc::symbolic::Variable& x) const

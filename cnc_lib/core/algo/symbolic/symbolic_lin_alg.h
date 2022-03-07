@@ -9,32 +9,58 @@ namespace cnc {
 
 namespace symbolic {
 
-class smat{
+class SymbolicArray {
+public:
+    SymbolicArray(uint n) : size(n){
+        v.resize(n);
+    }
+    inline Expression& operator()(uint i){
+        return v[i];
+    }
+    inline const Expression& operator()(uint i) const{
+        return v[i];
+    }
+    varSet getVariablesInvolved() const;
+protected:
+    std::vector<Expression> v;
+    uint size;
+};
+
+class smat : public SymbolicArray{
 public:
     smat(uint w,uint h);
-    Expression& operator()(uint i,uint j);
-    cmat evaluate(const ValuationSystem& V) const;
-private:
-    std::vector<Expression> v;
+    Expression& operator()(uint i,uint j){
+        return v[j*width+i];
+    }
+    const Expression& operator()(uint i,uint j) const{
+        return v[j*width+i];
+    }
+    mat evaluate(const ValuationSystem& V) const;
+    mat operator()(const vec& x) const;
+    std::string print() const;
+    smat transpose() const;
+    smat operator*(const smat& other);
+    uint getWidth() const {
+        return width;
+    }
+    uint getHeight() const {
+        return height;
+    }
+protected:
     uint width,height;
 };
 
-class svec{
+class svec : public SymbolicArray{
 public:
-    svec(){}
     svec(uint n);
+    inline Expression& operator()(uint i){
+        return v[i];
+    }
     smat jacobian(const std::vector<Variable>& X) const;
-    Expression& operator()(uint j);
-    cvec evaluate(const ValuationSystem& V) const;
-    vec evaluate_real(const ValuationSystem& V) const;
+    smat jacobian() const;
     vec operator()(const vec& x) const;
-    //cvec evaluate(const cvec& x) const;
-    varSet getVariablesInvolved() const;
+    vec evaluate(const ValuationSystem& V) const;
     std::string print() const;
-
-private:
-    uint h;
-    std::vector<Expression> v;
 };
 
 

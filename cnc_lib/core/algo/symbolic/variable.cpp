@@ -1,11 +1,6 @@
 #include "variable.h"
 
 
-cnc::symbolic::Expression::Expression()
-{
-    ref = std::make_shared<Variable>();
-}
-
 
 cnc::symbolic::scalar_property cnc::symbolic::Expression::getScalarProperty() const
 {

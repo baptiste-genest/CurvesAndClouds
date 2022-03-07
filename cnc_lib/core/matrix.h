@@ -1415,7 +1415,7 @@ std::vector<eigen_pair<T>> Matrix<T>::lanczos(int max_nb,double eps) const{
 template<class T>
 class Vector : public Matrix<T> {
 public:
-    Vector(uint n = 1);
+    explicit Vector(uint n = 1);
     Vector(const std::vector<T>& data);
     Vector(uint n,const std::function<T(T)>& generator,T a = T(0),T b = T(1));
     //Vector(const Vector& other);

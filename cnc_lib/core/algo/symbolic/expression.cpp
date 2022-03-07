@@ -32,13 +32,12 @@ cnc::symbolic::ValuationSystem::ValuationSystem(const std::vector<ValuationPair>
         mapping[vp.first] = vp.second;
 }
 
-cnc::cscalar cnc::symbolic::ValuationSystem::evaluate(const cnc::symbolic::VariableId &id) const
+cnc::scalar cnc::symbolic::ValuationSystem::evaluate(const cnc::symbolic::VariableId &id) const
 {
     auto e = mapping.find(id);
     if (e == mapping.end())
         throw Cnc_error("Can't evaluate unset variable");
     return e->second;
-
 }
 
 cnc::symbolic::varSet cnc::symbolic::Union(const cnc::symbolic::varSet &A, const cnc::symbolic::varSet &B)
