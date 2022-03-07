@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
         smat g(2,2);
         g(0,0) = 1;
         g(1,1) = sin(th)*sin(th);
-        vec x0 = vec2(M_PI*0.5,M_PI*0.1);
+        vec x0 = vec2(M_PI*0.1,M_PI*0.5);
         vec cart_v0 = vec3(1,1,0);
         auto J = map.jacobian();
         auto J0 = J(x0);
