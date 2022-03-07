@@ -72,7 +72,9 @@ std::vector<vec> solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& m
 int main(int argc, char *argv[]) {
     using namespace cnc::linear_utils;
     cloud traj;
-    bool D2 = false;
+    bool D2 = true;
+    scalar rad;
+    scalar m = 10;
     if (D2){
         N = 2;
         Variable r,th;
@@ -80,18 +82,20 @@ int main(int argc, char *argv[]) {
         map(0) = r*cos(th);
         map(1) = r*sin(th);
         smat g(2,2);
-        g(0,0) = 1.;
+        auto schwartz = 1.-2*m/(r);
+        g(0,0) = pow(schwartz,-1);
+        //g(0,0) = 1.;
         g(1,1) = r*r;
         std::cout << g.print() << std::endl;
 
-        vec x = linear_utils::vec2(2.,M_PI*0.25);
+        vec x = linear_utils::vec2(30.,M_PI*0.3);
 
-        vec x0 = vec2(1.,M_PI*0.25);
-        vec cart_v0 = vec2(0,1);
-        vec polar_v0 = algo::solve22(map.jacobian()(x0),cart_v0);
+        //vec x0 = vec2(10.,M_PI*0.25);
+        vec cart_v0 = vec2(0,-1);
+        vec polar_v0 = algo::solve22(map.jacobian()(x),cart_v0);
         std::cout << polar_v0 << std::endl;
 
-        traj = solveGeodesic(x0,polar_v0,0.001,g,map);
+        traj = solveGeodesic(x,polar_v0,0.001,g,map,30000);
     } else {
         N = 3;
         Variable r,th,phi;
@@ -99,15 +103,13 @@ int main(int argc, char *argv[]) {
         map(0) = r*sin(th)*cos(phi);
         map(1) = r*sin(th)*sin(phi);
         map(2) = r*cos(th);
-        vec x0 = vec3(6.1,0.1,0.1);
-        vec cart_v0 = vec3(1,1,1);
-        scalar m = 3;
+        vec x0 = vec3(20,0.01,M_PI*.25);
+        vec cart_v0 = vec3(0,1,0);
         auto schwartz = 1.-2*m/(r);
         smat g(N,N);
         g(0,0) = pow(schwartz,-1);
         g(1,1) = pow(r,2);
         g(2,2) = pow(r*sin(th),2);
-        std::cout << "RADIUS = " << schwartz.evaluate({r == x0(0)}) << std::endl;
         /*
         smat g(3,3);
         g(0,0) = 1.;
@@ -117,8 +119,10 @@ int main(int argc, char *argv[]) {
         vec spheric_v0 = change_coordinate_system(map,x0,cart_v0);
         traj = solveGeodesic(x0,spheric_v0,0.01,g,map,30000);
     }
+        rad = 2*m;
+        std::cout << "RADIUS = " << rad << std::endl;
 
-    scalar l = 10;
+    scalar l = 50;
     range R{-l,l};
 
     QApplication App(argc, argv);
@@ -130,10 +134,11 @@ int main(int argc, char *argv[]) {
     PlotLayer *L = F->add_grid_layer(R,R,false);
 
     if (D2){
-        L->new_point_cloud(traj);
+        L->new_2D_curve(traj);
     } else {
         auto th = Window.add_mutable_scalar_by_cursor({0,2*M_PI},"th");
         auto E = L->add_euclidean_plane(R,R);
+        E->add_object<euclid::Circle>(linear_utils::vec2(),rad);
         traj = traj.subsample(0.1);
         for (const auto& x : traj.points){
             E->add_object<euclid::Point>([th,x](){
