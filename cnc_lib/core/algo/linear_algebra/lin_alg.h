@@ -44,6 +44,22 @@ inline cvec cvec2(scalar x= 0,scalar y=0){
     return cvec({cscalar(x),cscalar(y)});
 }
 
+inline vec toPolar(scalar x,scalar y){
+    scalar r = sqrt(x*x + y*y);
+    scalar th = std::atan2(y,x);
+    return vec2(r,th);
+}
+
+inline vec toSpherical(scalar x,scalar y,scalar z){
+    scalar r = sqrt(x*x + y*y + z*z);
+    scalar th = std::acos(z/r);
+    scalar phi = std::atan2(y,x);
+    return vec3(r,th,phi);
+}
+inline vec toSpherical(const vec& X){
+    return toSpherical(X(0),X(1),X(2));
+}
+
 vec ones(uint n);
 
 inline cmat Id(uint n){

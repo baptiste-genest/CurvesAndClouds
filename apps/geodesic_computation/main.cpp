@@ -5,8 +5,6 @@ using namespace cnc::symbolic;
 
 using Tensor = std::vector<smat>;
 
-uint N;
-
 vec change_coordinate_system(const svec& map,const vec& x,const vec& v){
     auto J = map.jacobian()(x);
     return J.solve(v);
@@ -22,6 +20,7 @@ smat invert_diag_smat(const smat& S){
 
 Tensor getChristoffelSymbols(const smat& g){
     auto ig = invert_diag_smat(g);
+    uint N = g.getHeight();
     Tensor gamma(N,smat(N,N));
     for (uint i = 0;i<N;i++)
         for (uint k = 0;k<N;k++)
@@ -29,18 +28,23 @@ Tensor getChristoffelSymbols(const smat& g){
                 for (uint m = 0;m<N;m++)
                     gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m))*0.5;
             }
-    std::cout << "CHRISTOFFEL SYMBOLS" << std::endl;
-    for (uint i = 0;i<N;i++)
-        std::cout << gamma[i].print() << std::endl;
     return gamma;
 }
 
-std::vector<vec> solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& map,uint itermax = 1000) {
+bool isNan(const mat& A){
+    for (uint j = 0;j<A.rowNum();j++)
+        for (uint i = 0;i<A.colNum();i++)
+            if (std::isnan(A(i,j)))
+                return true;
+    return false;
+}
+
+cloud solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& map,uint itermax = 1000) {
     auto G = getChristoffelSymbols(g);
+    uint N = g.getHeight();
     vec a(N);
-    std::vector<vec> traj;
+    cloud traj;
     std::vector<ValuationPair> V;
-    a.plain_log = true;x.plain_log = true;v.plain_log = true;
     for (uint i = 0;i<x.size();i++)
         V.push_back({i,x(i)});
     for (uint iter = 0;iter<itermax;iter++){
@@ -49,79 +53,43 @@ std::vector<vec> solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& m
         for (uint k = 0;k<N;k++){
             a(k) = 0;
             auto CS = G[k](x);
-            //std::cout << CS << std::endl;
+            if (isNan(CS))
+                return traj;
             a(k) += -v.scalar_product(CS*v);
-            /*
-            for (uint i = 0;i<N;i++)
-                for (uint j =0 ;j<N;j++)
-                    a(k) += -G[k](i,j)(V).real()*v(i)*v(j);
-                    */
         }
-        /*
-        std::cout << "acc: " << a ;
-        std::cout << "vel: " << v ;
-        std::cout << "pos: " << x << std::endl;
-        */
         v += a*dt;
         x += v*dt;
-        traj.push_back(map(x));
+        traj.add_point(map(x));
     }
     return traj;
 }
 
+void plot2DSchwartzchild(cnc::PlotLayer* L){
+    using namespace linear_utils;
+    svec map(2);
+    smat g(2,2);
+    vec x(2),v(2);
+    Variable r,th;
+    scalar m = 10;
+    map(0) = r*cos(th);
+    map(1) = r*sin(th);
+    auto schwartz = 1.-2*m/(r);
+    g(0,0) = pow(schwartz,-1);
+    g(1,1) = r*r;
+    vec cart_v0 = vec2(1,0);
+    scalar dt = 0.02;
+    uint N = 10000;
+    auto J = map.jacobian();
+    for (int h = -40;h<=40;h+= 2){
+        vec polar_x0 = linear_utils::toPolar(-40,h);
+        vec polar_v0 = algo::solve22(J(polar_x0),cart_v0);
+        auto traj = solveGeodesic(polar_x0,polar_v0,dt,g,map,N).subsample(0.05);
+        L->new_2D_curve(traj);
+    }
+}
+
 int main(int argc, char *argv[]) {
     using namespace cnc::linear_utils;
-    cloud traj;
-    bool D2 = true;
-    scalar rad;
-    scalar m = 10;
-    if (D2){
-        N = 2;
-        Variable r,th;
-        svec map(2);
-        map(0) = r*cos(th);
-        map(1) = r*sin(th);
-        smat g(2,2);
-        auto schwartz = 1.-2*m/(r);
-        g(0,0) = pow(schwartz,-1);
-        //g(0,0) = 1.;
-        g(1,1) = r*r;
-        std::cout << g.print() << std::endl;
-
-        vec x = linear_utils::vec2(30.,M_PI*0.3);
-
-        //vec x0 = vec2(10.,M_PI*0.25);
-        vec cart_v0 = vec2(0,-1);
-        vec polar_v0 = algo::solve22(map.jacobian()(x),cart_v0);
-        std::cout << polar_v0 << std::endl;
-
-        traj = solveGeodesic(x,polar_v0,0.001,g,map,30000);
-    } else {
-        N = 3;
-        Variable r,th,phi;
-        svec map(N);
-        map(0) = r*sin(th)*cos(phi);
-        map(1) = r*sin(th)*sin(phi);
-        map(2) = r*cos(th);
-        vec x0 = vec3(20,0.01,M_PI*.25);
-        vec cart_v0 = vec3(0,1,0);
-        auto schwartz = 1.-2*m/(r);
-        smat g(N,N);
-        g(0,0) = pow(schwartz,-1);
-        g(1,1) = pow(r,2);
-        g(2,2) = pow(r*sin(th),2);
-        /*
-        smat g(3,3);
-        g(0,0) = 1.;
-        g(1,1) = r*r;
-        g(2,2) = r*r*sin(th)*sin(th);
-        */
-        vec spheric_v0 = change_coordinate_system(map,x0,cart_v0);
-        traj = solveGeodesic(x0,spheric_v0,0.01,g,map,30000);
-    }
-        rad = 2*m;
-        std::cout << "RADIUS = " << rad << std::endl;
-
     scalar l = 50;
     range R{-l,l};
 
@@ -132,7 +100,39 @@ int main(int argc, char *argv[]) {
     PlotTab *T = Window.add_tab("my first tab");
     PlotFrame *F = T->add_frame();
     PlotLayer *L = F->add_grid_layer(R,R,false);
+    plot2DSchwartzchild(L);
 
+    /*
+    cloud traj;
+    bool D2 = true;
+    scalar rad;
+    scalar m = 10;
+
+    if (D2){
+        N = 2;
+    } else {
+        N = 3;
+        vec x0 = vec3(20,0.01,M_PI*.25);
+        vec cart_v0 = vec3(0,1,0);
+        auto schwartz = 1.-2*m/(r);
+        smat g(N,N);
+        g(0,0) = pow(schwartz,-1);
+        g(1,1) = pow(r,2);
+        g(2,2) = pow(r*sin(th),2);
+        Variable r,th,phi;
+        svec map(N);
+        map(0) = r*sin(th)*cos(phi);
+        map(1) = r*sin(th)*sin(phi);
+        map(2) = r*cos(th);
+    smat g(3,3);
+    g(0,0) = 1.;
+    g(1,1) = r*r;
+    g(2,2) = r*r*sin(th)*sin(th);
+        vec spheric_v0 = change_coordinate_system(map,x0,cart_v0);
+        traj = solveGeodesic(x0,spheric_v0,0.01,g,map,30000);
+    }
+    rad = 2*m;
+    std::cout << "RADIUS = " << rad << std::endl;
     if (D2){
         L->new_2D_curve(traj);
     } else {
@@ -146,8 +146,8 @@ int main(int argc, char *argv[]) {
             });
         }
     }
+        */
 
-    //L->new_2D_curve(traj);
 
     Window.show();
     return App.exec();
