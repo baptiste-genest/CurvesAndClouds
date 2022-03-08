@@ -39,8 +39,17 @@ bool isNan(const mat& A){
     return false;
 }
 
-cloud solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& map,uint itermax = 1000) {
-    auto G = getChristoffelSymbols(g);
+using stop_func = std::function<bool(const vec& x)>;
+struct Manifold{
+    smat metric_tensor;
+    svec map;
+    Tensor Gamma;
+};
+
+
+cloud solveGeodesic(vec x,vec v,scalar dt,const Manifold& M,const stop_func& stop,uint itermax = 1000) {
+    const auto& g = M.metric_tensor;
+    const auto& G = M.Gamma;
     uint N = g.getHeight();
     vec a(N);
     cloud traj;
@@ -59,7 +68,7 @@ cloud solveGeodesic(vec x,vec v,scalar dt,const smat& g,const svec& map,uint ite
         }
         v += a*dt;
         x += v*dt;
-        traj.add_point(map(x));
+        traj.add_point(M.map(x));
     }
     return traj;
 }
@@ -70,27 +79,34 @@ void plot2DSchwartzchild(cnc::PlotLayer* L){
     smat g(2,2);
     vec x(2),v(2);
     Variable r,th;
-    scalar m = 10;
+    scalar m = 0.5;
     map(0) = r*cos(th);
     map(1) = r*sin(th);
     auto schwartz = 1.-2*m/(r);
+    scalar event_horizon = 2*m;
     g(0,0) = pow(schwartz,-1);
     g(1,1) = r*r;
+    Manifold M = {g,map,{}};
+    M.Gamma = getChristoffelSymbols(g);
+
     vec cart_v0 = vec2(1,0);
     scalar dt = 0.02;
-    uint N = 10000;
+    uint N = 5./dt;
+    std::cout << N << std::endl;
     auto J = map.jacobian();
-    for (int h = -40;h<=40;h+= 2){
-        vec polar_x0 = linear_utils::toPolar(-40,h);
+    for (int h = -40;h<=40;h+= 4){
+        vec polar_x0 = linear_utils::toPolar(-2,h/20.);
         vec polar_v0 = algo::solve22(J(polar_x0),cart_v0);
-        auto traj = solveGeodesic(polar_x0,polar_v0,dt,g,map,N).subsample(0.05);
+        auto traj = solveGeodesic(polar_x0,polar_v0,dt,M,[event_horizon](const vec& x){
+            return x(0) < event_horizon + 1e-5;
+        },N).subsample(0.1);
         L->new_2D_curve(traj);
     }
 }
 
 int main(int argc, char *argv[]) {
     using namespace cnc::linear_utils;
-    scalar l = 50;
+    scalar l = 4;
     range R{-l,l};
 
     QApplication App(argc, argv);

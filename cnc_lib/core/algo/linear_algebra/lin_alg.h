@@ -60,6 +60,19 @@ inline vec toSpherical(const vec& X){
     return toSpherical(X(0),X(1),X(2));
 }
 
+inline vec SphericalToCartesian(scalar r,scalar th,scalar phi){
+    vec X(3);
+    X(0) = r*sin(th)*cos(phi);
+    X(1) = r*sin(th)*sin(phi);
+    X(2) = r*cos(th);
+    return X;
+}
+
+inline vec SphericalToCartesian(const vec& x){
+    return SphericalToCartesian(x(0),x(1),x(2));
+}
+
+
 vec ones(uint n);
 
 inline cmat Id(uint n){
