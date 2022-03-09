@@ -47,3 +47,11 @@ cnc::symbolic::varSet cnc::symbolic::Union(const cnc::symbolic::varSet &A, const
         S.insert(x);
     return S;
 }
+
+bool cnc::symbolic::Expression::operator==(const cnc::symbolic::Expression &other) const
+{
+    auto s = other.ref;
+    if (typeid(s) != typeid (ref))
+        return false;
+    return (*ref) == *s;
+}

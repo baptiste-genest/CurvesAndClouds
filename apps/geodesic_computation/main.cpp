@@ -90,8 +90,8 @@ void plot2DSchwartzchild(cnc::PlotLayer* L){
     M.Gamma = getChristoffelSymbols(g);
 
     vec cart_v0 = vec2(1,0);
-    scalar dt = 0.02;
-    uint N = 5./dt;
+    scalar dt = 0.08;
+    uint N = 100;
     std::cout << N << std::endl;
     auto J = map.jacobian();
     for (int h = -40;h<=40;h+= 4){
@@ -99,7 +99,7 @@ void plot2DSchwartzchild(cnc::PlotLayer* L){
         vec polar_v0 = algo::solve22(J(polar_x0),cart_v0);
         auto traj = solveGeodesic(polar_x0,polar_v0,dt,M,[event_horizon](const vec& x){
             return x(0) < event_horizon + 1e-5;
-        },N).subsample(0.1);
+        },N);
         L->new_2D_curve(traj);
     }
 }

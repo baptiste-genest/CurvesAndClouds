@@ -54,8 +54,15 @@ ValuationSystem ValuateVector(const cscalar& z,const cscalar& w){
 
 int main(int argc, char *argv[])
 {
+    using namespace std;
     Variable x,y;
-    auto E1 = x*y + cos(x);
+    auto E1 = cos(x) + cos(y) + cos(x);
+    auto E2 = cos(x) + cos(x) + cos(y);
+    auto E3 = sin(x);
+    cout << E1.print() << std::endl;
+    cout << E2.print() << std::endl;
+    cout << (E1 == E2) << std::endl;
+    cout << (E1 == E3) << std::endl;
 
     return 0;
 }

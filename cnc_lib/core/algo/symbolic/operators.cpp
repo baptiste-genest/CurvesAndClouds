@@ -60,3 +60,20 @@ cnc::symbolic::Expression cnc::symbolic::BinaryOperator::compose(const cnc::symb
     auto B = b.compose(x,e);
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(A,B,type)),Union(A.getVariables(),B.getVariables()));
 }
+
+bool cnc::symbolic::BinaryOperator::operator==(const cnc::symbolic::Symbol &o) const
+{
+    const auto& other = static_cast<const BinaryOperator&>(o);
+    if (type != other.type)
+        return false;
+    if (a == other.a && b == other.b)
+        return true;
+    if (isCommutative())
+        return b == other.a && a == other.b;
+    return false;
+}
+
+bool cnc::symbolic::BinaryOperator::isCommutative() const
+{
+    return int(type) < 2;
+}

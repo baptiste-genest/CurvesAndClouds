@@ -63,3 +63,10 @@ cnc::symbolic::Variable::operator Expression() const
 {
     return Expression(std::make_shared<Variable>(*this),{id});
 }
+
+bool cnc::symbolic::Variable::operator==(const cnc::symbolic::Symbol& o) const
+{
+    const auto& other = static_cast<const Variable&>(o);
+    return (*this) == other;
+}
+

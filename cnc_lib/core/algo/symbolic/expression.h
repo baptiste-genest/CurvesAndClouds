@@ -9,42 +9,10 @@
 #include <typeinfo>
 #include <set>
 #include "core/algo/algo.h"
+#include "symbol.h"
 
 namespace cnc {
-
 namespace symbolic {
-
-class Expression;
-
-class Symbol;
-class Variable;
-
-using SymbolRef = std::shared_ptr<Symbol>;
-
-using VariableId = int;
-
-using varSet = std::set<VariableId>;
-
-using ValuationPair = std::pair<VariableId,scalar>;
-struct ValuationSystem {
-    ValuationSystem(std::initializer_list<ValuationPair> mv);
-    ValuationSystem(const std::vector<ValuationPair>& mv);
-    std::map<VariableId,scalar> mapping;
-    scalar evaluate(const VariableId& id) const;
-};
-
-class Symbol{
-    public:
-    virtual bool isSum() const {return false;}
-    virtual bool isProduct() const {return false;}
-    virtual bool isQuotient() const {return false;}
-
-    virtual Expression differentiate(const Variable& x) const = 0;
-    virtual cscalar evaluate(const ValuationSystem& V) const = 0;
-    virtual std::string print() const = 0;
-    virtual Expression expand() const = 0;
-    virtual Expression compose(const Variable& x,const Expression& e) const = 0;
-};
 
 enum scalar_property{
     zero,
@@ -67,6 +35,8 @@ public:
     Expression(SymbolRef r,const varSet& VI) : ref(r),variables_involved(VI){}
     Expression(cscalar x);
     Expression(scalar x);
+
+    bool operator==(const Expression& other) const;
 
     Expression operator()(VariableId id) const;
 

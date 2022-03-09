@@ -243,6 +243,7 @@ HEADERS += \
     core/algo/symbolic/expression.h \
     core/algo/symbolic/functions.h \
     core/algo/symbolic/operators.h \
+    core/algo/symbolic/symbol.h \
     core/algo/symbolic/symbolic_lin_alg.h \
     core/algo/symbolic/term.h \
     core/algo/symbolic/variable.h \

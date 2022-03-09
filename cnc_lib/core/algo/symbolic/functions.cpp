@@ -133,3 +133,19 @@ cnc::symbolic::Expression cnc::symbolic::Im(cnc::symbolic::Expression e)
 {
     return Expression(std::make_shared<Function>(Function(functions::im,e)),e.getVariables());
 }
+
+bool cnc::symbolic::Function::operator==(const cnc::symbolic::Symbol &o) const
+{
+    const auto& other = static_cast<const Function&>(o);
+    if (func_name != other.func_name)
+        return false;
+    return arg == other.arg;
+}
+
+bool cnc::symbolic::Power::operator==(const cnc::symbolic::Symbol &o) const
+{
+    const auto& other = static_cast<const Power&>(o);
+    if (n != other.n)
+        return false;
+    return arg == other.arg;
+}

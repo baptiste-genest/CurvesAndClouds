@@ -22,6 +22,8 @@ public:
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
+    bool operator==(const Symbol& other) const override;
+    bool isCommutative() const;
 
 private:
     BinaryOperator(Expression x,Expression y,bin_operators t);

@@ -17,9 +17,12 @@ private:
     scalar_property p;
     friend class Expression;
     Constant(scalar_property p);
+    static constexpr scalar epsilon = 1e-10;
 public:
     cscalar getValue() const;
     Constant(cscalar v);
+
+    bool operator==(const Symbol& other) const override;
     virtual Expression differentiate(const Variable& x) const override;
     virtual cscalar evaluate(const ValuationSystem& V) const override;
     virtual std::string print() const override;
