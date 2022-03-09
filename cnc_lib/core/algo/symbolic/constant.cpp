@@ -27,6 +27,12 @@ cnc::symbolic::Constant::Constant(cnc::cscalar v) : value(v),p(fixed)
 
 }
 
+bool cnc::symbolic::Constant::operator==(const cnc::symbolic::Symbol &o) const
+{
+    const auto& other = static_cast<const Constant&>(o);
+    return std::abs(value - other.value) < epsilon;
+}
+
 cnc::symbolic::Expression cnc::symbolic::Constant::differentiate(const cnc::symbolic::Variable &) const
 {
     return Constant::Zero();
@@ -171,8 +177,8 @@ cnc::symbolic::Expression::Expression(cnc::scalar x)
         ref = std::make_shared<Constant>(Constant(x));
         p = fixed;
     }
-
 }
+
 
 const cnc::symbolic::varSet &cnc::symbolic::Expression::getVariables() const
 {

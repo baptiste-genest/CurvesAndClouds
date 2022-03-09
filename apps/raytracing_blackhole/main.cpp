@@ -78,8 +78,19 @@ struct particule {
     uint index;
 };
 
-std::vector<particule> generate_frame(const vec& pos,const vec& horizontal,const vec& vertical,scalar focal_distance,int hrez,int vrez){
-    vec cam_pos = pos + algo::geometry::cross(horizontal,vertical).normalize()*focal_distance;
+struct frame3D {
+    vec pos,hAxis,vAxis;
+    frame3D transform(const mat& A){
+        frame3D Fp;
+        Fp.pos = A*pos;
+        Fp.hAxis = A*hAxis;
+        Fp.vAxis = A*vAxis;
+        return Fp;
+    }
+};
+
+std::vector<particule> generate_frame(const frame3D& F,scalar focal_distance,int hrez,int vrez){
+    vec cam_pos = F.pos + algo::geometry::cross(F.hAxis,F.vAxis).normalize()*focal_distance;
     std::vector<particule> P(hrez*vrez);
     int hhr = hrez/2;
     int hvr = vrez/2;
@@ -88,7 +99,7 @@ std::vector<particule> generate_frame(const vec& pos,const vec& horizontal,const
     scalar dx = 1./hhr;
     for (int j = -hvr;j<hvr;j++){
         for (int i = -hhr;i<hhr;i++){
-            P[index].p = pos + horizontal*i*dx + vertical*j*dy;
+            P[index].p = F.pos + F.hAxis*i*dx + F.vAxis*j*dy;
             P[index].v = (P[index].p - cam_pos).normalize();
             P[index].index = index;
             index++;
@@ -102,7 +113,7 @@ QColor color_func(const vec& x,scalar radius){
     if (x(0) < radius + eps){
         return QColorConstants::Black;
     }
-    if (x(2) < 0)
+    if (linear_utils::SphericalToCartesian(x)(2) < 0)
         return QColorConstants::Yellow;
     return QColorConstants::Blue;
 }
@@ -125,15 +136,16 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     map(0) = r*sin(th)*cos(phi);
     map(1) = r*sin(th)*sin(phi);
     map(2) = r*cos(th);
-    int rez = 400;
+    int rez = 300;
 
     Manifold M = {g,map,{}};
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
 
+    frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
+    f = f.transform(algo::geometry::degrees::Ry(10.));
+    auto particules = generate_frame(f,10.,rez,rez);
 
-    auto particules = generate_frame(vec3(2,0,0),vec3(0,2,0),vec3(0,0,2),10.,rez,rez);
-
-    const scalar dt = 0.04;
+    const scalar dt = 0.08;
     const uint N = 100;
 
     auto fig = L->new_void_figure(rez,rez);
@@ -147,7 +159,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
             return x(0) < event_horizon + eps;
         },N);
         if (p.index % 100 == 0){
-            std::cout << p.index << " over " << rez*rez << std::endl ;
+            std::cout << p.index << " over " << rez*rez << std::endl;
         }
         //std::cout << end_point(0) << std::endl;
         uint i = p.index % rez;
@@ -155,7 +167,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
         auto color = color_func(end_point,event_horizon);
         if (p.index < 2)
             std::cout << p.p << std::endl;
-        fig->set_pixel(i,j,color);
+        fig->set_pixel(i,rez-1-j,color);
     }
     fig->set_display_mode();
 }
