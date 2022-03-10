@@ -1,12 +1,6 @@
+**DOCUMENTATION NOT UP TO DATE**
 # Curves and Clouds
 Scientific computing library and data visualization
-
-## Relative to LIFAP4
-### Informations
-- PROJET LIFAP4: Curves and clouds 
-- Axel BESSY P1910329
-- Baptiste GENEST P1905020
-- ID FORGE 18075
 
 ### Organisation
 - apps : applications tournant avec Qt + C&C
