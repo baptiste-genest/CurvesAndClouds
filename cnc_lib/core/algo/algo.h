@@ -139,6 +139,15 @@ std::set<T> Union(const std::set<T>& A,const std::set<T>& B){
     return U;
 }
 
+template <class T>
+T mod(T x,T a, T b){
+    if (x < a)
+        return mod(x + (b-a),a,b);
+    if (x > b)
+        return mod(x- (b-a),a,b);
+    return x;
+}
+
 }
 
 }

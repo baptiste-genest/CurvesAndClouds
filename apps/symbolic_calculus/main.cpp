@@ -43,16 +43,8 @@ struct network {
     }
 };
 
-Variable a,b,c,d;
-ValuationSystem ValuateVector(const cscalar& z,const cscalar& w){
-    ValuationSystem V = {a == z.real(),
-                         b == z.imag(),
-                         c == w.real(),
-                         d == w.imag()};
-    return V;
-}
 
-int main(int argc, char *argv[])
+int main()
 {
     using namespace std;
     Variable x,y;

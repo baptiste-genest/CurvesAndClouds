@@ -44,5 +44,8 @@ enum axis {
     y_axis
 };
 using updateRoutine = std::function<void(scalar)>;
+
+static constexpr scalar M_TAU = 2*M_PI;
+
 }
 #endif // CNC_TYPES_H
