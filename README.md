@@ -1,4 +1,4 @@
-**DOCUMENTATION NOT UP TO DATE**
+**DOCUMENTATION NOT UP TO DATE, INTERESTING STUFF IS IN cnc_lib/core FOLDER**
 # Curves and Clouds
 Scientific computing library and data visualization
 
