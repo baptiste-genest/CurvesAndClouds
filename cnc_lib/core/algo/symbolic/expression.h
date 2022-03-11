@@ -38,6 +38,10 @@ public:
 
     bool operator==(const Expression& other) const;
 
+    matchResult matchWith(const Expression& o) const {
+        return ref->matchWith(o.ref);
+    }
+
     Expression operator()(VariableId id) const;
 
     const varSet& getVariables() const;

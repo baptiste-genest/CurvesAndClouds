@@ -25,7 +25,8 @@ private:
     Expression arg;
 
 public:
-    bool operator==(const Symbol& other) const override;
+    //bool operator==(const Symbol& other) const override;
+    virtual bool matchWith(const Symbol& other,filterMap& M) const override;
     virtual Expression differentiate(const Variable& x) const override;
     virtual cscalar evaluate(const ValuationSystem& V) const override;
     virtual std::string print() const override;

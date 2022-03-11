@@ -48,10 +48,11 @@ cnc::symbolic::varSet cnc::symbolic::Union(const cnc::symbolic::varSet &A, const
     return S;
 }
 
-bool cnc::symbolic::Expression::operator==(const cnc::symbolic::Expression &other) const
+bool cnc::symbolic::Expression::operator==(const cnc::symbolic::Expression & other) const
 {
     auto s = other.ref;
     if (typeid(s) != typeid (ref))
         return false;
-    return (*ref) == *s;
+    filterMap M;
+    return ref->matchWith(s,M);
 }

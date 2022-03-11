@@ -17,7 +17,8 @@ public:
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
-    bool operator==(const Symbol& other) const override;
+    virtual bool matchWith(SymbolRef other,filterMap& M) const override;
+    //bool operator==(const Symbol& other) const override;
     VariableId getId() const;
 
     ValuationPair operator==(scalar x) const;
@@ -29,7 +30,9 @@ public:
     static Variable getVariableFromId(VariableId id);
 
 private:
+    static Variable getPlaceholder();
     static int count;
+    static int placeholder_count;
     VariableId id;
 };
 

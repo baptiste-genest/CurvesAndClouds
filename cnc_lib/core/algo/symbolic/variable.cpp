@@ -8,6 +8,7 @@ cnc::symbolic::scalar_property cnc::symbolic::Expression::getScalarProperty() co
 }
 
 int cnc::symbolic::Variable::count = 0;
+int cnc::symbolic::Variable::placeholder_count = 0;
 cnc::symbolic::Variable::Variable(const cnc::symbolic::Variable &x)
 {
     id = x.id;
@@ -59,14 +60,28 @@ cnc::symbolic::Variable cnc::symbolic::Variable::getVariableFromId(cnc::symbolic
     return V;
 }
 
+cnc::symbolic::Variable cnc::symbolic::Variable::getPlaceholder()
+{
+    Variable V;
+    V.id = -placeholder_count;
+    placeholder_count++;
+    return V;
+}
+
 cnc::symbolic::Variable::operator Expression() const
 {
     return Expression(std::make_shared<Variable>(*this),{id});
 }
 
-bool cnc::symbolic::Variable::operator==(const cnc::symbolic::Symbol& o) const
+bool cnc::symbolic::Variable::matchWith(SymbolRef o, filterMap &M) const
 {
-    const auto& other = static_cast<const Variable&>(o);
+    const auto& other = static_cast<const Variable&>(*o);
+    if (id < 0){
+        auto e = M.find(id);
+        if (e == M.end()){
+            M[id] = o;
+        }
+    }
     return (*this) == other;
 }
 

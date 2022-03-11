@@ -61,15 +61,20 @@ cnc::symbolic::Expression cnc::symbolic::BinaryOperator::compose(const cnc::symb
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(A,B,type)),Union(A.getVariables(),B.getVariables()));
 }
 
-bool cnc::symbolic::BinaryOperator::operator==(const cnc::symbolic::Symbol &o) const
+cnc::symbolic::matchResult cnc::symbolic::BinaryOperator::matchWith(cnc::symbolic::SymbolRef o) const
 {
-    const auto& other = static_cast<const BinaryOperator&>(o);
+    const auto& other = static_cast<const BinaryOperator&>(*o);
     if (type != other.type)
-        return false;
-    if (a == other.a && b == other.b)
+        return {false,{}};
+    {
+    auto M1 = a.matchWith(other.a);
+    auto M2 = b.matchWith(other.b);
+    if (M1.first && M2.first){
         return true;
+    }
+    }
     if (isCommutative())
-        return b == other.a && a == other.b;
+        return a.matchWith(other.b,M) && b.matchWith(other.a,M);
     return false;
 }
 

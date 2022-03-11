@@ -184,7 +184,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));
     auto particules = generate_frame(f,10.,rez,rez);
 
-    const scalar dt = 0.01;
+    const scalar dt = 0.04;
     const uint N = 200;
 
     auto fig = L->new_void_figure(rez,rez);

@@ -27,10 +27,10 @@ cnc::symbolic::Constant::Constant(cnc::cscalar v) : value(v),p(fixed)
 
 }
 
-bool cnc::symbolic::Constant::operator==(const cnc::symbolic::Symbol &o) const
+cnc::symbolic::matchResult cnc::symbolic::Constant::matchWith(SymbolRef o) const
 {
-    const auto& other = static_cast<const Constant&>(o);
-    return std::abs(value - other.value) < epsilon;
+    const auto& other = static_cast<const Constant&>(*o);
+    return {std::abs(value - other.value) < epsilon,{}};
 }
 
 cnc::symbolic::Expression cnc::symbolic::Constant::differentiate(const cnc::symbolic::Variable &) const

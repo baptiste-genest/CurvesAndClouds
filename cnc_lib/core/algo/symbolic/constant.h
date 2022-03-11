@@ -22,7 +22,8 @@ public:
     cscalar getValue() const;
     Constant(cscalar v);
 
-    bool operator==(const Symbol& other) const override;
+    virtual matchResult matchWith(SymbolRef other) const override;
+    //bool operator==(const Symbol& other) const override;
     virtual Expression differentiate(const Variable& x) const override;
     virtual cscalar evaluate(const ValuationSystem& V) const override;
     virtual std::string print() const override;
