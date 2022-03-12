@@ -14,7 +14,8 @@ enum name {
     sin,
     sigmoid,
     re,
-    im
+    im,
+    log
 };
 }
 
@@ -26,12 +27,13 @@ private:
 
 public:
     //bool operator==(const Symbol& other) const override;
-    virtual bool matchWith(const Symbol& other,filterMap& M) const override;
+    virtual matchResult matchWith(const Expression& other) const override;
     virtual Expression differentiate(const Variable& x) const override;
     virtual cscalar evaluate(const ValuationSystem& V) const override;
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
+    virtual Expression simplify() const override;
 
     friend Expression exp(Expression e);
     friend Expression cos(Expression e);
@@ -39,6 +41,7 @@ public:
     friend Expression sigmoid(Expression e);
     friend Expression Re(Expression e);
     friend Expression Im(Expression e);
+    friend Expression log(Expression e);
 };
 
 Expression exp(Expression e);
@@ -47,23 +50,7 @@ Expression sin(Expression e);
 Expression sigmoid(Expression e);
 Expression Re(Expression e);
 Expression Im(Expression e);
-
-class Power : public Symbol {
-    Power(Expression e,int);
-    Expression arg;
-    int n;
-public:
-    bool operator==(const Symbol& other) const override;
-    virtual Expression differentiate(const Variable& x) const override;
-    virtual cscalar evaluate(const ValuationSystem& V) const override;
-    virtual std::string print() const override;
-    virtual Expression expand() const override;
-    virtual Expression compose(const Variable& x,const Expression& e) const override;
-
-    friend Expression pow(Expression e,int);
-};
-
-Expression pow(Expression e,int n);
+Expression log(Expression e);
 
 }
 }

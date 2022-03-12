@@ -114,6 +114,7 @@ SOURCES += \
     core/algo/symbolic/expression.cpp \
     core/algo/symbolic/functions.cpp \
     core/algo/symbolic/operators.cpp \
+    core/algo/symbolic/simplify.cpp \
     core/algo/symbolic/symbolic_lin_alg.cpp \
     core/algo/symbolic/term.cpp \
     core/algo/symbolic/variable.cpp \
@@ -243,6 +244,7 @@ HEADERS += \
     core/algo/symbolic/expression.h \
     core/algo/symbolic/functions.h \
     core/algo/symbolic/operators.h \
+    core/algo/symbolic/simplify.h \
     core/algo/symbolic/symbol.h \
     core/algo/symbolic/symbolic_lin_alg.h \
     core/algo/symbolic/term.h \

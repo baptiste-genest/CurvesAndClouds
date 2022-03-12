@@ -26,7 +26,8 @@ Tensor getChristoffelSymbols(const smat& g){
         for (uint k = 0;k<N;k++)
             for (uint l = 0;l<N;l++){
                 for (uint m = 0;m<N;m++)
-                    gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m))*0.5;
+                    gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m));
+                gamma[i](l,k) = gamma[i](l,k)*0.5;
             }
     return gamma;
 }

@@ -1,7 +1,8 @@
 #include "constant.h"
 
-cnc::symbolic::Constant::Constant(scalar_property prop) : p(prop)
+cnc::symbolic::Constant::Constant(scalar_property prop)
 {
+    p = prop;
     switch (prop){
     case cnc::symbolic::zero:
         value = 0.;
@@ -14,7 +15,6 @@ cnc::symbolic::Constant::Constant(scalar_property prop) : p(prop)
 cnc::symbolic::Expression::Expression()
 {
     ref = Constant::Zero().ref;
-    p = zero;
 }
 
 cnc::cscalar cnc::symbolic::Constant::getValue() const
@@ -22,14 +22,34 @@ cnc::cscalar cnc::symbolic::Constant::getValue() const
     return value;
 }
 
-cnc::symbolic::Constant::Constant(cnc::cscalar v) : value(v),p(fixed)
+cnc::symbolic::Constant::Constant(cnc::cscalar v) : value(v)
 {
-
+    p = fixed;
+    if (std::abs(v-scalar(1.)) < 1e-10){
+        p = one;
+    }
+    else if (std::abs(v) < 1e-20){
+        p = zero;
+    }
 }
 
-cnc::symbolic::matchResult cnc::symbolic::Constant::matchWith(SymbolRef o) const
+cnc::symbolic::Constant::Constant(scalar v) : Constant(cscalar(v))
 {
-    const auto& other = static_cast<const Constant&>(*o);
+}
+
+cnc::symbolic::Constant::Constant(int v)
+{
+    value = v;
+    p = fixed;
+    if (v == 1)
+        p = one;
+    else if (v == 0)
+        p = zero;
+}
+
+cnc::symbolic::matchResult cnc::symbolic::Constant::matchWith(const Expression& o) const
+{
+    const auto& other = static_cast<const Constant&>(*o.getRef());
     return {std::abs(value - other.value) < epsilon,{}};
 }
 
@@ -50,6 +70,11 @@ cnc::cscalar cnc::symbolic::Constant::evaluate(const cnc::symbolic::ValuationSys
     }
 }
 
+cnc::symbolic::Expression cnc::symbolic::Constant::simplify() const
+{
+    return getExpression(*this,{});
+}
+
 std::string cnc::symbolic::Constant::print() const
 {
     switch (p){
@@ -67,7 +92,6 @@ std::string cnc::symbolic::Constant::print() const
 cnc::symbolic::Expression cnc::symbolic::Constant::expand() const
 {
     auto E = Expression(std::make_shared<Constant>(*this),{});
-    E.p = p;
     return E;
 }
 
@@ -79,7 +103,6 @@ cnc::symbolic::Expression cnc::symbolic::Constant::compose(const cnc::symbolic::
 cnc::symbolic::Constant::operator Expression() const
 {
     auto E = Expression(std::make_shared<Constant>(*this),{});
-    E.p = p;
     return E;
 }
 
@@ -130,6 +153,10 @@ cnc::symbolic::Expression cnc::symbolic::operator-(cnc::symbolic::Expression x, 
         return y*Constant(-1.);
     if (y.getScalarProperty() == zero)
         return x;
+    if (x.getScalarProperty() == one && y.getScalarProperty() == one)
+        return Constant::Zero();
+    if (x.getScalarProperty() != other && y.getScalarProperty() != other)
+        return Constant(x.fixValue()-y.fixValue());
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,sub)),Union(x.getVariables(),y.getVariables()));
 }
 
@@ -137,10 +164,14 @@ cnc::symbolic::Expression cnc::symbolic::operator/(cnc::symbolic::Expression x, 
 {
     if (y.getScalarProperty() == one)
         return x;
+    if (x.getScalarProperty() == one)
+        return pow(y,-1);
     if (x.getScalarProperty() == zero)
         return Constant::Zero();
     if (y.getScalarProperty() == zero)
         throw Cnc_error("Division by zero.");
+    if (x.getScalarProperty() != other && y.getScalarProperty() != other)
+        return Constant(x.fixValue()/y.fixValue());
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,quotient)),Union(x.getVariables(),y.getVariables()));
 }
 
@@ -148,37 +179,43 @@ cnc::symbolic::Expression cnc::symbolic::operator-(cnc::symbolic::Expression E){
     return E*Constant(-1.);
 }
 
+cnc::symbolic::Expression cnc::symbolic::pow(Expression e, Expression n)
+{
+    if (n.getScalarProperty() == one)
+        return e;
+    if (n.getScalarProperty() == zero || e.getScalarProperty() == one)
+        return Constant::One();
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(e,n,exponentiation)),Union(e.getVariables(),n.getVariables()));
+}
+
 cnc::cscalar cnc::symbolic::Expression::fixValue()
 {
     if (getScalarProperty() == other)
         throw Cnc_error("Can't fix variable value");
-    return std::static_pointer_cast<Constant>(ref)->getValue();
+    return ref->evaluate({});
 }
 
 cnc::symbolic::Expression::Expression(cnc::cscalar x)
 {
     if (std::abs(x-scalar(1.)) < 1e-10){
         ref = std::make_shared<Constant>(Constant(one));
-        p = one;
+    }
+    else if (std::abs(x) < 1e-10){
+        ref = std::make_shared<Constant>(Constant(zero));
     }
     else {
         ref = std::make_shared<Constant>(Constant(x));
-        p = fixed;
     }
 }
 
-cnc::symbolic::Expression::Expression(cnc::scalar x)
+cnc::symbolic::Expression::Expression(scalar x) : Expression(cscalar(x))
 {
-    if (std::abs(x-1.) < 1e-10){
-        ref = std::make_shared<Constant>(Constant(one));
-        p = one;
-    }
-    else {
-        ref = std::make_shared<Constant>(Constant(x));
-        p = fixed;
-    }
 }
 
+cnc::symbolic::Expression::Expression(int n)
+{
+    ref = std::make_shared<Constant>(n);
+}
 
 const cnc::symbolic::varSet &cnc::symbolic::Expression::getVariables() const
 {

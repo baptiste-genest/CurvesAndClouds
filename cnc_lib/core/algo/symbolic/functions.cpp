@@ -8,6 +8,8 @@ cnc::symbolic::Function::Function(cnc::symbolic::functions::name f, cnc::symboli
 cnc::symbolic::Expression cnc::symbolic::Function::differentiate(const cnc::symbolic::Variable &x) const
 {
     switch (func_name) {
+    case cnc::symbolic::functions::log:
+        return arg.differentiate(x)/arg;
     case cnc::symbolic::functions::re:
         return arg.differentiate(x);
     case cnc::symbolic::functions::im:
@@ -27,6 +29,8 @@ cnc::cscalar cnc::symbolic::Function::evaluate(const cnc::symbolic::ValuationSys
 {
     cscalar x = arg.evaluate(V);
     switch (func_name) {
+    case cnc::symbolic::functions::log:
+        return std::log(x);
     case cnc::symbolic::functions::re:
         return x.real();
     case cnc::symbolic::functions::im:
@@ -45,13 +49,14 @@ cnc::cscalar cnc::symbolic::Function::evaluate(const cnc::symbolic::ValuationSys
 std::string cnc::symbolic::Function::print() const
 {
     std::string argstr = arg.print();
-    static const std::string names[6] = {
+    static const std::string names[7] = {
         "exp",
         "cos",
         "sin",
         "sigmoid",
         "Re",
-        "Im"
+        "Im",
+        "log"
     };
     return names[int(func_name)] + "(" + argstr + ")";
 }
@@ -64,6 +69,12 @@ cnc::symbolic::Expression cnc::symbolic::Function::expand() const
 cnc::symbolic::Expression cnc::symbolic::Function::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
 {
     return Expression(std::make_shared<Function>(Function(func_name,arg.compose(x,e))),Union(e.getVariables(),arg.getVariables()));
+}
+
+cnc::symbolic::Expression cnc::symbolic::Function::simplify() const
+{
+    auto args = arg.simplify();
+    return getExpression(Function(func_name,args),args.getVariables());
 }
 
 cnc::symbolic::Expression cnc::symbolic::exp(cnc::symbolic::Expression e)
@@ -86,44 +97,6 @@ cnc::symbolic::Expression cnc::symbolic::sigmoid(cnc::symbolic::Expression e)
     return Expression(std::make_shared<Function>(Function(functions::sigmoid,e)),e.getVariables());
 }
 
-cnc::symbolic::Power::Power(cnc::symbolic::Expression e, int p) : arg(e),n(p)
-{
-}
-
-cnc::symbolic::Expression cnc::symbolic::Power::differentiate(const cnc::symbolic::Variable &x) const
-{
-    return Constant(n)*arg.differentiate(x)*pow(arg,n-1);
-}
-
-cnc::cscalar cnc::symbolic::Power::evaluate(const cnc::symbolic::ValuationSystem &V) const
-{
-    return std::pow(arg.evaluate(V),n);
-}
-
-std::string cnc::symbolic::Power::print() const
-{
-    return "pow(" + arg.print() + "," + std::to_string(n)+")";
-}
-
-cnc::symbolic::Expression cnc::symbolic::Power::expand() const
-{
-    return getExpression(*this,arg.getVariables());
-}
-
-cnc::symbolic::Expression cnc::symbolic::Power::compose(const cnc::symbolic::Variable &x, const cnc::symbolic::Expression &e) const
-{
-    return pow(arg.compose(x,e),n);
-}
-
-cnc::symbolic::Expression cnc::symbolic::pow(cnc::symbolic::Expression e, int n)
-{
-    if (n == 1)
-        return e;
-    if (n == 0)
-        return Constant(1.);
-    return Expression(std::make_shared<Power>(Power(e,n)),e.getVariables());
-}
-
 cnc::symbolic::Expression cnc::symbolic::Re(cnc::symbolic::Expression e)
 {
     return Expression(std::make_shared<Function>(Function(functions::re,e)),e.getVariables());
@@ -134,18 +107,40 @@ cnc::symbolic::Expression cnc::symbolic::Im(cnc::symbolic::Expression e)
     return Expression(std::make_shared<Function>(Function(functions::im,e)),e.getVariables());
 }
 
-bool cnc::symbolic::Function::matchWith(const Symbol &o, filterMap &M) const
+cnc::symbolic::matchResult cnc::symbolic::Function::matchWith(const Expression &o) const
 {
-    const auto& other = static_cast<const Function&>(o);
+    const auto& other = static_cast<const Function&>(*o.getRef());
     if (func_name != other.func_name)
-        return false;
-    return arg == other.arg;
+        return {false,{}};
+    return arg.matchWith(other.arg);
 }
 
-bool cnc::symbolic::Power::operator==(const cnc::symbolic::Symbol &o) const
+
+cnc::symbolic::Expression cnc::symbolic::log(Expression e)
 {
-    const auto& other = static_cast<const Power&>(o);
-    if (n != other.n)
-        return false;
-    return arg == other.arg;
+    return Expression(std::make_shared<Function>(Function(functions::log,e)),e.getVariables());
+}
+
+cnc::symbolic::Expression cnc::symbolic::BinaryOperator::differentiate(const cnc::symbolic::Variable &x) const
+{
+    auto da = a.differentiate(x);
+    auto db = b.differentiate(x);
+    switch (type) {
+    case cnc::symbolic::exponentiation:
+        if (b.getScalarProperty() == fixed){
+            auto n = b.evaluate({});
+            return n*pow(a,n-1)*da;
+        }
+        else {
+            return pow(a,b-1)*(b*da + a*log(a)*db);
+        }
+    case cnc::symbolic::sum:
+        return da + db;
+    case cnc::symbolic::product:
+        return da*b + a*db;
+    case cnc::symbolic::sub:
+        return da - db;
+    case cnc::symbolic::quotient:
+        return (da*b - a*db)/(b*b);
+    }
 }

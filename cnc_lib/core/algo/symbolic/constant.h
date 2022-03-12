@@ -14,18 +14,19 @@ class Constant : public Term
 {
 private:
     cscalar value;
-    scalar_property p;
     friend class Expression;
     Constant(scalar_property p);
     static constexpr scalar epsilon = 1e-10;
 public:
     cscalar getValue() const;
     Constant(cscalar v);
+    Constant(scalar v);
+    Constant(int v);
 
-    virtual matchResult matchWith(SymbolRef other) const override;
-    //bool operator==(const Symbol& other) const override;
+    virtual matchResult matchWith(const Expression& o) const override;
     virtual Expression differentiate(const Variable& x) const override;
     virtual cscalar evaluate(const ValuationSystem& V) const override;
+    virtual Expression simplify() const override;
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;

@@ -43,18 +43,52 @@ struct network {
     }
 };
 
+using Tensor = std::vector<smat>;
+smat invert_diag_smat(const smat& S){
+    uint n = S.getHeight();
+    smat iM(n,n);
+    for (uint i = 0;i<n;i++)
+        iM(i,i) = pow(S(i,i),-1).simplify();
+    return iM;
+}
+
+
+Tensor getChristoffelSymbols(const smat& g){
+    auto ig = invert_diag_smat(g);
+    uint N = g.getHeight();
+    Tensor gamma(N,smat(N,N));
+    for (uint i = 0;i<N;i++)
+        for (uint k = 0;k<N;k++)
+            for (uint l = 0;l<N;l++){
+                for (uint m = 0;m<N;m++)
+                    gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m));
+                gamma[i](l,k) = (gamma[i](l,k)*0.5).simplify();
+            }
+    return gamma;
+}
+
 
 int main()
 {
     using namespace std;
-    Variable x,y;
-    auto E1 = cos(x) + cos(y) + cos(x);
-    auto E2 = cos(x) + cos(x) + cos(y);
-    auto E3 = sin(x);
-    cout << E1.print() << std::endl;
-    cout << E2.print() << std::endl;
-    cout << (E1 == E2) << std::endl;
-    cout << (E1 == E3) << std::endl;
-
+    smat g(3,3);
+    Variable r,th,phi;
+    scalar m = 0.5;
+    auto schwartz = (r-2*m)/(r);
+    g(0,0) = 1.;
+    g(1,1) = pow(r,2);
+    g(2,2) = pow(sin(th)*r,2);
+    auto G = getChristoffelSymbols(g);
+    for (const auto& Gk : G){
+        std::cout << Gk.print() << std::endl;
+    }
+    /*
+    uint N = 2;
+    for (uint i = 0;i<N;i++)
+        for (uint k = 0;k<N;k++)
+            for (uint l = 0;l<N;l++){
+                std::cout << G[i](k,l).simplify() << std::endl;
+            }
+            */
     return 0;
 }

@@ -48,11 +48,34 @@ cnc::symbolic::varSet cnc::symbolic::Union(const cnc::symbolic::varSet &A, const
     return S;
 }
 
+cnc::symbolic::matchResult cnc::symbolic::Expression::mergeMatch(const matchResult &A, const matchResult &B)
+{
+    if (!A.first || !B.first)
+        return {false,{}};
+    if (A.second.empty())
+        return {true,B.second};
+    if (B.second.empty())
+        return {true,A.second};
+    auto M = B.second;
+    for (const auto& m : A.second){
+        auto bm = B.second.find(m.first);
+        if (bm != B.second.end()){
+            if (!matchWith(m.second,bm->second).first)
+                return {false,{}};
+        }
+        M.insert(m);
+    }
+    return {true,M};
+}
+
 bool cnc::symbolic::Expression::operator==(const cnc::symbolic::Expression & other) const
 {
-    auto s = other.ref;
-    if (typeid(s) != typeid (ref))
+    if (typeid(*other.ref) != typeid (*ref))
         return false;
-    filterMap M;
-    return ref->matchWith(s,M);
+    return ref->matchWith(other).first;
+}
+
+std::ostream &cnc::symbolic::operator<<(std::ostream &os, const Expression &E){
+    os << E.print();
+    return os;
 }

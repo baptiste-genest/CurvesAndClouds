@@ -26,7 +26,8 @@ Tensor getChristoffelSymbols(const smat& g){
         for (uint k = 0;k<N;k++)
             for (uint l = 0;l<N;l++){
                 for (uint m = 0;m<N;m++)
-                    gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m))*0.5;
+                    gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m));
+                gamma[i](l,k) = (gamma[i](l,k)*0.5).simplify();
             }
         std::cout << gamma[i].print() << std::endl;
     }
@@ -161,7 +162,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     uint dim = 3;
     Variable r,th,phi;
     scalar m = 0.5;
-    auto schwartz = 1.-2*m/(r);
+    auto schwartz = (r-2*m)/(r);
     scalar event_horizon = 2*m;
 
     smat g(dim,dim);
@@ -174,7 +175,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     map(0) = r*sin(th)*cos(phi);
     map(1) = r*sin(th)*sin(phi);
     map(2) = r*cos(th);
-    int rez = 200;
+    int rez = 400;
     auto J = map.jacobian();
 
     Manifold M = {g,map,J,{}};

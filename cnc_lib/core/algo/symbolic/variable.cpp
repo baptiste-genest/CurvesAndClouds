@@ -1,14 +1,7 @@
 #include "variable.h"
 
-
-
-cnc::symbolic::scalar_property cnc::symbolic::Expression::getScalarProperty() const
-{
-    return p;
-}
-
 int cnc::symbolic::Variable::count = 0;
-int cnc::symbolic::Variable::placeholder_count = 0;
+int cnc::symbolic::Variable::placeholder_count = 1;
 cnc::symbolic::Variable::Variable(const cnc::symbolic::Variable &x)
 {
     id = x.id;
@@ -73,15 +66,50 @@ cnc::symbolic::Variable::operator Expression() const
     return Expression(std::make_shared<Variable>(*this),{id});
 }
 
-bool cnc::symbolic::Variable::matchWith(SymbolRef o, filterMap &M) const
+/*
+cnc::symbolic::matchResult cnc::symbolic::Symbol::matchWith(SymbolRef a, SymbolRef b)
 {
-    const auto& other = static_cast<const Variable&>(*o);
-    if (id < 0){
-        auto e = M.find(id);
-        if (e == M.end()){
-            M[id] = o;
-        }
+    if (auto v = dynamic_cast<Variable*>(a.get()))
+    {
+        if (v->getId() < 0) // I'm a placeholder variable
+            return a->matchWith(b);
     }
-    return (*this) == other;
+    if (typeid(*a) != typeid (*b))
+        return {false,{}};
+    return a->matchWith(b);
+
+}
+*/
+cnc::symbolic::matchResult cnc::symbolic::Expression::matchWith(const Expression &a, const Expression &b)
+{
+    if (auto v = dynamic_cast<Variable*>(a.ref.get()))
+    {
+        if (v->getId() < 0) // I'm a placeholder variable
+            return a.ref->matchWith(b);
+    }
+    if (typeid(*a.ref) != typeid (*b.ref))
+        return {false,{}};
+    return a.ref->matchWith(b);
+}
+
+
+cnc::symbolic::matchResult cnc::symbolic::Expression::matchWith(const Expression &o) const {
+    return matchWith(*this,o);
+}
+
+cnc::symbolic::matchResult cnc::symbolic::Variable::matchWith(const Expression& o) const
+{
+    if (id < 0){
+        filterMap M;
+        M[id] = o;
+        return {true,M};
+    }
+    auto other = static_cast<Variable*>(o.getRef().get());
+    return {other->id == id,{}};
+}
+
+cnc::symbolic::Expression cnc::symbolic::Variable::simplify() const
+{
+    return *this;
 }
 

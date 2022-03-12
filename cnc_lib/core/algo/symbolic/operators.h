@@ -12,7 +12,8 @@ enum bin_operators {
     sum,
     product,
     sub,
-    quotient
+    quotient,
+    exponentiation
 };
 
 class BinaryOperator : public Symbol {
@@ -22,7 +23,8 @@ public:
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
-    virtual matchResult matchWith(SymbolRef other) const override;
+    virtual matchResult matchWith(const Expression& other) const override;
+    virtual Expression simplify() const override;
     bool isCommutative() const;
 
 private:
@@ -34,12 +36,14 @@ private:
     friend Expression operator-(Expression x,Expression y);
     friend Expression operator*(Expression x,Expression y);
     friend Expression operator/(Expression x,Expression y);
+    friend Expression pow(Expression e,Expression n);
 };
 
 Expression operator+(Expression x,Expression y);
 Expression operator*(Expression x,Expression y);
 Expression operator-(Expression x,Expression y);
 Expression operator/(Expression x,Expression y);
+Expression pow(Expression e,Expression n);
 
 
 

@@ -5,28 +5,15 @@ cnc::symbolic::BinaryOperator::BinaryOperator(cnc::symbolic::Expression x, cnc::
 
 }
 
-cnc::symbolic::Expression cnc::symbolic::BinaryOperator::differentiate(const cnc::symbolic::Variable &x) const
-{
-    auto da = a.differentiate(x);
-    auto db = b.differentiate(x);
-    switch (type) {
-    case cnc::symbolic::sum:
-        return da + db;
-    case cnc::symbolic::product:
-        return da*b + a*db;
-    case cnc::symbolic::sub:
-        return da - db;
-    case cnc::symbolic::quotient:
-        return (da*b - a*db)/(b*b);
-    }
-}
-
 cnc::cscalar cnc::symbolic::BinaryOperator::evaluate(const cnc::symbolic::ValuationSystem &V) const
 {
     cscalar va = a.evaluate(V);
     cscalar vb = b.evaluate(V);
     cscalar r;
     switch (type){
+    case cnc::symbolic::exponentiation:
+        r = std::pow(va,vb);
+        break;
     case cnc::symbolic::sum:
         r = va+vb;
         break;
@@ -46,6 +33,8 @@ cnc::cscalar cnc::symbolic::BinaryOperator::evaluate(const cnc::symbolic::Valuat
 std::string cnc::symbolic::BinaryOperator::print() const
 {
     static const char ope[4] = {'+','*','-','/'};
+    if (type == exponentiation)
+        return "(pow(" + a.print() + "," + b.print() +"))";
     return "(" +  a.print() + ")"  + ope[int(type)] + "(" + b.print() + ")";
 }
 
@@ -61,21 +50,33 @@ cnc::symbolic::Expression cnc::symbolic::BinaryOperator::compose(const cnc::symb
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(A,B,type)),Union(A.getVariables(),B.getVariables()));
 }
 
-cnc::symbolic::matchResult cnc::symbolic::BinaryOperator::matchWith(cnc::symbolic::SymbolRef o) const
+cnc::symbolic::matchResult cnc::symbolic::BinaryOperator::matchWith(const Expression& o) const
 {
-    const auto& other = static_cast<const BinaryOperator&>(*o);
+    const auto& other = static_cast<const BinaryOperator&>(*o.getRef());
     if (type != other.type)
         return {false,{}};
     {
-    auto M1 = a.matchWith(other.a);
-    auto M2 = b.matchWith(other.b);
-    if (M1.first && M2.first){
-        return true;
+        auto M1 = a.matchWith(other.a);
+        auto M2 = b.matchWith(other.b);
+        auto merge = Expression::mergeMatch(M1,M2);
+        if (merge.first)
+            return merge;
     }
+    if (isCommutative()){
+        auto M1 = a.matchWith(other.b);
+        auto M2 = b.matchWith(other.a);
+        auto merge = Expression::mergeMatch(M1,M2);
+        if (merge.first)
+            return merge;
     }
-    if (isCommutative())
-        return a.matchWith(other.b,M) && b.matchWith(other.a,M);
-    return false;
+    return {false,{}};
+}
+
+cnc::symbolic::Expression cnc::symbolic::BinaryOperator::simplify() const
+{
+    auto as = a.simplify();
+    auto bs = b.simplify();
+    return getExpression(BinaryOperator(as,bs,type),Union(as.getVariables(),bs.getVariables()));
 }
 
 bool cnc::symbolic::BinaryOperator::isCommutative() const
