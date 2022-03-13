@@ -6,6 +6,7 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
     static Variable a = Variable::getPlaceholder(); static VariableId aid = a.getId();
     static Variable b = Variable::getPlaceholder(); static VariableId bid = b.getId();
     static Variable c = Variable::getPlaceholder(); static VariableId cid = c.getId();
+    static Variable d = Variable::getPlaceholder(); static VariableId did = d.getId();
 
     Expression E = ref->simplify();
     bool changed = false;
@@ -44,6 +45,14 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         auto M1 = square.matchWith(E);
         if (M1.first){
             E = pow(M1.second[aid],2);
+            changed = true;
+        }
+    }
+    {
+        static idiom square = a*(a*b);
+        auto M1 = square.matchWith(E);
+        if (M1.first){
+            E = pow(M1.second[aid],2)*M1.second[bid];
             changed = true;
         }
     }
@@ -117,10 +126,26 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         }
     }
     {
+        static idiom powsplit = pow(a*b,c);
+        auto M1 = powsplit.matchWith(E);
+        if (M1.first){
+            E = pow(M1.second[aid],M1.second[cid])*pow(M1.second[bid],M1.second[cid]);
+            changed = true;
+        }
+    }
+    {
         static idiom powproduct = pow(a,b)*pow(a,c);
         auto M1 = powproduct.matchWith(E);
         if (M1.first){
             E = pow(M1.second[aid],M1.second[bid] + M1.second[cid]);
+            changed = true;
+        }
+    }
+    {
+        static idiom powproduct = (pow(a,b)*d)*pow(a,c);
+        auto M1 = powproduct.matchWith(E);
+        if (M1.first){
+            E = pow(M1.second[aid],M1.second[bid] + M1.second[cid])*M1.second[did];
             changed = true;
         }
     }

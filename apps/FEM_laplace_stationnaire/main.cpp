@@ -91,17 +91,29 @@ int main(int argc, char *argv[])
     using namespace linear_utils;
     auto G = CreateContext();
     auto& C = *G;
-    C.add_vertex(vec2(-1,0));
     C.add_vertex(vec2(-1,-1));
-    C.add_vertex(vec2(1,-1));
-    C.add_vertex(vec2(1,1));
+    C.add_vertex(vec2(-1,1));
     C.add_vertex(vec2(0,1));
     C.add_vertex(vec2(0,0));
-    auto P1 = Polygon(G,{0,1,2,3,4,5}).subdivide(10);
+    C.add_vertex(vec2(1,0));
+    C.add_vertex(vec2(1,1));
+    C.add_vertex(vec2(2,1));
+    C.add_vertex(vec2(2,-1));
+    //C.add_vertex(vec2(1,1));
+    auto P1 = Polygon(G,algo::get_index_lin_space(0,7)).subdivide(10);
     auto B2 = P1.getPointCloud();
     auto p = P1.getShapePredicate();
     //auto M = mesh_generation::Refinement(B2,p,0.18);
-    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B2,0.02,P));
+    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(B2,0.05,P));
+    /*
+    auto C1 = algo::geometry::convexPrimitive::Circle(1.8,40);
+    auto pr1 = C1.getShapePredicate();
+    auto C2 = algo::geometry::convexPrimitive::Circle(1.,40);
+    auto pr2 = C2.getShapePredicate();
+    auto PR = algo::geometry::Inter(pr1,Not(pr2));
+    auto M = std::make_shared<Mesh2>(mesh_generation::FromBoundaryMesh(C1.getPointCloud(),0.01,PR));
+    auto M = std::make_shared<Mesh2>(mesh_generation::LaplacianRelaxation({C1,C2},PR,40));
+    */
 
     /*
     std::string file = "../../data/rooms.mesh2";

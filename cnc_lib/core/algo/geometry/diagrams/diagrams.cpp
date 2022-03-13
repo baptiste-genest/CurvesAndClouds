@@ -155,6 +155,7 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::LaplacianRelaxa
     X += algo::stat::random_var::sample_uniform_in_square(2,r,N).filter(P);
     int n = X.size();
     auto L = BowyerWatson(X);
+
     L.computeConnectivity();
     auto& C = *L.getContext();
     cloud M = stat::init_empty_cloud(n-nb_boundary,2);

@@ -175,7 +175,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     map(0) = r*sin(th)*cos(phi);
     map(1) = r*sin(th)*sin(phi);
     map(2) = r*cos(th);
-    int rez = 400;
+    int rez = 200;
     auto J = map.jacobian();
 
     Manifold M = {g,map,J,{}};
