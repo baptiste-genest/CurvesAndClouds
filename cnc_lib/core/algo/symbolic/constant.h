@@ -30,6 +30,7 @@ public:
     virtual std::string print() const override;
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
+    //virtual void treePrint(uint padding = 0) const override;
 
     operator Expression() const;
 

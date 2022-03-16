@@ -10,6 +10,10 @@ std::string cnc::symbolic::Expression::print() const
     return ref->print();
 }
 
+void cnc::symbolic::Expression::treePrint() const
+{
+}
+
 cnc::symbolic::Expression cnc::symbolic::Expression::expand() const
 {
     return ref->expand();

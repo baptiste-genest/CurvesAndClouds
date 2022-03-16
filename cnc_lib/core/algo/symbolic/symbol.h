@@ -48,6 +48,9 @@ class Symbol{
         return p;
     }
 
+    virtual void treePrint(uint padding = 0) const {
+        std::cout << print() << std::endl;
+    }
     virtual matchResult matchWith(const Expression& other) const = 0;
     virtual Expression simplify() const = 0;
     virtual Expression differentiate(const Variable& x) const = 0;

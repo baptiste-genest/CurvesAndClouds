@@ -24,8 +24,12 @@ cnc::cscalar cnc::symbolic::BinaryOperator::evaluate(const cnc::symbolic::Valuat
         r = va-vb;
         break;
     case cnc::symbolic::quotient:
+    {
+        if (std::abs(va) < 1e-10 && std::abs(vb) < 1e-10)
+            return 1.;
         r = va/vb;
         break;
+    }
     }
     return r;
 }

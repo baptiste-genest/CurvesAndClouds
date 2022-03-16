@@ -185,6 +185,8 @@ cnc::symbolic::Expression cnc::symbolic::pow(Expression e, Expression n)
         return e;
     if (n.getScalarProperty() == zero || e.getScalarProperty() == one)
         return Constant::One();
+    if (n.getScalarProperty() != other && e.getScalarProperty() != other)
+        return std::pow(e.fixValue(),n.fixValue());
     return Expression(std::make_shared<BinaryOperator>(BinaryOperator(e,n,exponentiation)),Union(e.getVariables(),n.getVariables()));
 }
 

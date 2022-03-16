@@ -20,6 +20,7 @@ public:
     virtual matchResult matchWith(const Expression& o) const override;
     //bool operator==(const Symbol& other) const override;
     virtual Expression simplify() const override;
+    //virtual void treePrint(uint padding = 0) const override;
     VariableId getId() const;
 
     ValuationPair operator==(scalar x) const;

@@ -11,6 +11,7 @@ namespace symbolic {
 
 class SymbolicArray {
 public:
+    SymbolicArray() {}
     SymbolicArray(uint n) : size(n){
         v.resize(n);
     }
@@ -28,6 +29,7 @@ protected:
 
 class smat : public SymbolicArray{
 public:
+    smat() {}
     smat(uint w,uint h);
     Expression& operator()(uint i,uint j){
         return v[j*width+i];
@@ -52,6 +54,7 @@ protected:
 
 class svec : public SymbolicArray{
 public:
+    svec() {}
     svec(uint n);
     inline Expression& operator()(uint i){
         return v[i];

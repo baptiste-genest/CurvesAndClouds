@@ -34,6 +34,7 @@ public:
     virtual Expression expand() const override;
     virtual Expression compose(const Variable& x,const Expression& e) const override;
     virtual Expression simplify() const override;
+    //virtual void treePrint(uint padding = 0) const override;
 
     friend Expression exp(Expression e);
     friend Expression cos(Expression e);
