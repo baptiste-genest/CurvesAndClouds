@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include "core/algo/algo.h"
 #include "cnc_types.h"
 
 namespace cnc {
@@ -49,7 +50,7 @@ class Symbol{
     }
 
     virtual void treePrint(uint padding = 0) const {
-        std::cout << print() << std::endl;
+        std::cout << algo::repeat("  ",padding) + print() << std::endl;
     }
     virtual matchResult matchWith(const Expression& other) const = 0;
     virtual Expression simplify() const = 0;

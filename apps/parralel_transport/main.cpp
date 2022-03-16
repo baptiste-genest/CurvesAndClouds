@@ -14,7 +14,7 @@ smat invert_diag_smat(const smat& S){
     uint n = S.getHeight();
     smat iM(n,n);
     for (uint i = 0;i<n;i++)
-        iM(i,i) = pow(S(i,i),-1);
+        iM(i,i) = pow(S(i,i),-1).simplify();
     return iM;
 }
 
@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
     S2.Gamma = getChristoffelSymbols(S2.metric_tensor);
     for (uint j = 0;j<2;j++)
         std::cout << S2.Gamma[j].print() << std::endl;
+    return 0;
     using namespace linear_utils;
     auto G = solveGeodesic(vec2(0.1,0.2),vec2(1,0.1),0.01,S2,500);
 

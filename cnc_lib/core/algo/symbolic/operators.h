@@ -25,7 +25,7 @@ public:
     virtual Expression compose(const Variable& x,const Expression& e) const override;
     virtual matchResult matchWith(const Expression& other) const override;
     virtual Expression simplify() const override;
-    //virtual void treePrint(uint padding = 0) const override;
+    virtual void treePrint(uint padding = 0) const override;
     bool isCommutative() const;
 
 private:
@@ -38,6 +38,7 @@ private:
     friend Expression operator*(Expression x,Expression y);
     friend Expression operator/(Expression x,Expression y);
     friend Expression pow(Expression e,Expression n);
+
 };
 
 Expression operator+(Expression x,Expression y);

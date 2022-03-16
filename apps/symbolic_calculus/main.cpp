@@ -1,5 +1,7 @@
 #include <curvesandcloud.h>
 
+using namespace std;
+
 using namespace cnc;
 using namespace cnc::symbolic;
 
@@ -70,25 +72,12 @@ Tensor getChristoffelSymbols(const smat& g){
 
 int main()
 {
-    using namespace std;
-    smat g(3,3);
-    Variable r,th,phi;
-    scalar m = 0.5;
-    auto schwartz = (r-2*m)/(r);
-    g(0,0) = 1.;
-    g(1,1) = pow(r,2);
-    g(2,2) = pow(sin(th)*r,2);
-    auto G = getChristoffelSymbols(g);
-    for (const auto& Gk : G){
-        std::cout << Gk.print() << std::endl;
-    }
-    /*
-    uint N = 2;
-    for (uint i = 0;i<N;i++)
-        for (uint k = 0;k<N;k++)
-            for (uint l = 0;l<N;l++){
-                std::cout << G[i](k,l).simplify() << std::endl;
-            }
-            */
+    using idiom = Expression;
+    Variable a = Variable::getPlaceholder(),b = Variable::getPlaceholder();//,c = Variable::getPlaceholder();
+    Variable x,y;
+    Expression E = x*cos(y);
+    E.treePrint(0);
+
+
     return 0;
 }

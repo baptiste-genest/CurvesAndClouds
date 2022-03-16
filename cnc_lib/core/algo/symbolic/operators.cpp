@@ -36,7 +36,7 @@ cnc::cscalar cnc::symbolic::BinaryOperator::evaluate(const cnc::symbolic::Valuat
 
 std::string cnc::symbolic::BinaryOperator::print() const
 {
-    static const char ope[4] = {'+','*','-','/'};
+    static constexpr char ope[4] = {'+','*','-','/'};
     if (type == exponentiation)
         return "(pow(" + a.print() + "," + b.print() +"))";
     return "(" +  a.print() + ")"  + ope[int(type)] + "(" + b.print() + ")";
@@ -81,6 +81,18 @@ cnc::symbolic::Expression cnc::symbolic::BinaryOperator::simplify() const
     auto as = a.simplify();
     auto bs = b.simplify();
     return getExpression(BinaryOperator(as,bs,type),Union(as.getVariables(),bs.getVariables()));
+}
+
+void cnc::symbolic::BinaryOperator::treePrint(uint padding) const
+{
+    static constexpr char ope[4] = {'+','*','-','/'};
+    if (type == exponentiation)
+        std::cout << print() << std::endl;
+    else {
+        a.treePrint(padding+1);
+        std::cout << algo::repeat("  ",padding) + ope[int(type)] << std::endl;
+        b.treePrint(padding+1);
+    }
 }
 
 bool cnc::symbolic::BinaryOperator::isCommutative() const

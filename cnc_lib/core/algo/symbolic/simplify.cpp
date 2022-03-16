@@ -30,6 +30,14 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         }
     }
     {
+        static idiom factor = ((a*b)*c)*(d*e);
+        auto M1 = factor.matchWith(E);
+        if (M1.first){
+            E = M1.second[did]*(M1.second[eid]*(M1.second[aid]*(M1.second[bid]*M1.second[cid])));
+            changed = true;
+        }
+    }
+    {
         static idiom factor = a*(a*b);
         auto M1 = factor.matchWith(E);
         if (M1.first){

@@ -56,6 +56,7 @@ cnc::symbolic::Variable cnc::symbolic::Variable::getVariableFromId(cnc::symbolic
 cnc::symbolic::Variable cnc::symbolic::Variable::getPlaceholder()
 {
     Variable V;
+    count--;
     V.id = -placeholder_count;
     placeholder_count++;
     return V;

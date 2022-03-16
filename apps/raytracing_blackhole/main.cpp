@@ -14,7 +14,7 @@ smat invert_diag_smat(const smat& S){
     uint n = S.getHeight();
     smat iM(n,n);
     for (uint i = 0;i<n;i++)
-        iM(i,i) = pow(S(i,i),-1);
+        iM(i,i) = pow(S(i,i),-1).simplify();
     return iM;
 }
 
@@ -180,6 +180,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
 
     Manifold M = {g,map,J,{}};
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
+    M.Gamma[0](0,0).treePrint();
 
     frame3D f = {vec3(2.0001,0,0),vec3(0,4,0),vec3(0,0,4)};
     f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));

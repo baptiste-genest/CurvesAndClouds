@@ -148,6 +148,13 @@ T mod(T x,T a, T b){
     return x;
 }
 
+inline std::string repeat(const std::string& s,uint n){
+    std::string R;
+    for (uint i = 0;i<n;i++)
+        R += s;
+    return R;
+}
+
 }
 
 }

@@ -49,7 +49,7 @@ public:
     virtual Expression differentiate(const Variable& x) const;
     virtual cscalar evaluate(const ValuationSystem& V) const;
     virtual std::string print() const;
-    void treePrint() const;
+    void treePrint(uint p = 0) const;
     virtual Expression expand() const;
     virtual Expression compose(const Variable& x,const Expression& e) const;
     static matchResult matchWith(const Expression& a,const Expression& b);
