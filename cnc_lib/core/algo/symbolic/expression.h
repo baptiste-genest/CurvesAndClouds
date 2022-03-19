@@ -46,6 +46,10 @@ public:
         return ref->getScalarProperty();
     }
 
+    inline bool isConstant() const {
+        return getScalarProperty() != other;
+    }
+
     virtual Expression differentiate(const Variable& x) const;
     virtual cscalar evaluate(const ValuationSystem& V) const;
     virtual std::string print() const;

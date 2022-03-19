@@ -149,6 +149,7 @@ QColor color_func(const vec& x,scalar radius){
     if (th < 0)
         th += M_PI;
     //std::cout << H << ' ' << L << std::endl;
+    return QColor::fromRgbF(std::pow(std::sin(th),4),0,0).toRgb();
     return QColor::fromHslF(psi/M_TAU,1.,th/M_PI).toRgb();
             /*
     if (linear_utils::SphericalToCartesian(x)(2) < 0)
@@ -180,10 +181,9 @@ void Schwartzchild3D(cnc::PlotLayer* L){
 
     Manifold M = {g,map,J,{}};
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
-    M.Gamma[0](0,0).treePrint();
 
-    frame3D f = {vec3(2.0001,0,0),vec3(0,4,0),vec3(0,0,4)};
-    f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));
+    frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
+    //f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));
     auto particules = generate_frame(f,10.,rez,rez);
 
     const scalar dt = 0.04;

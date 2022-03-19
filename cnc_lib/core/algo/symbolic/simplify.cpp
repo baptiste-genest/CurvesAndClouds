@@ -14,6 +14,22 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
     auto V = E.getVariables();
 
     {
+        static idiom dev = (a + c)*b;
+        auto M1 = dev.matchWith(E);
+        if (M1.first){
+            E = M1.second[aid]*M1.second[bid]+M1.second[cid]*M1.second[bid];
+            changed = true;
+        }
+    }
+    {
+        static idiom dev = b*(a + c);
+        auto M1 = dev.matchWith(E);
+        if (M1.first){
+            E = M1.second[aid]*M1.second[bid]+M1.second[cid]*M1.second[bid];
+            changed = true;
+        }
+    }
+    {
         static idiom factor = (a*b)*(c*d);
         auto M1 = factor.matchWith(E);
         if (M1.first){
@@ -189,14 +205,6 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         }
     }
     {
-        static idiom sub = -1*(a - b);
-        auto M1 = sub.matchWith(E);
-        if (M1.first){
-            E = M1.second[bid]-M1.second[aid];
-            changed = true;
-        }
-    }
-    {
         static idiom sub = -1*(a - b)*c;
         auto M1 = sub.matchWith(E);
         if (M1.first){
@@ -205,10 +213,34 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         }
     }
     {
+        static idiom sub = -1*((a - b)*c);
+        auto M1 = sub.matchWith(E);
+        if (M1.first){
+            E = (M1.second[bid]-M1.second[aid])*M1.second[cid];
+            changed = true;
+        }
+    }
+    {
+        static idiom sub = a - ((-1)*b);
+        auto M1 = sub.matchWith(E);
+        if (M1.first){
+            E = M1.second[bid]+M1.second[aid];
+            changed = true;
+        }
+    }
+    {
         static idiom cancel = a - a;
         auto M1 = cancel.matchWith(E);
         if (M1.first){
             E = Constant::Zero();
+            changed = true;
+        }
+    }
+    {
+        static idiom cancel = a - (a-b);
+        auto M1 = cancel.matchWith(E);
+        if (M1.first){
+            E = M1.second[bid];
             changed = true;
         }
     }
@@ -301,6 +333,14 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         }
     }
     {
+        static idiom powproduct = pow(a,b)*(c*a);
+        auto M1 = powproduct.matchWith(E);
+        if (M1.first){
+            E = pow(M1.second[aid],M1.second[bid] + 1)*M1.second[cid];
+            changed = true;
+        }
+    }
+    {
         static idiom powsplit = pow(a*b,c);
         auto M1 = powsplit.matchWith(E);
         if (M1.first){
@@ -354,6 +394,20 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         if (M1.first){
             E = (M1.second[bid]+1)*M1.second[aid];
             changed = true;
+        }
+    }
+    {
+        static idiom subpow = b-pow(a,c);
+        auto M1 = subpow.matchWith(E);
+        if (M1.first){
+            if (M1.second[cid].isConstant()){
+                cscalar n = M1.second[cid].evaluate({});
+                if (std::abs(n.imag())< 1e-10 && n.real() < 0){
+                    auto div = pow(M1.second[aid],-n);
+                    E = (div*M1.second[bid] - 1)/div;
+                    changed = true;
+                }
+            }
         }
     }
     {

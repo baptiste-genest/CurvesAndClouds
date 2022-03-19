@@ -38,7 +38,7 @@ std::string cnc::symbolic::BinaryOperator::print() const
 {
     static constexpr char ope[4] = {'+','*','-','/'};
     if (type == exponentiation)
-        return "(pow(" + a.print() + "," + b.print() +"))";
+        return "pow(" + a.print() + "," + b.print() +")";
     return "(" +  a.print() + ")"  + ope[int(type)] + "(" + b.print() + ")";
 }
 
@@ -80,7 +80,18 @@ cnc::symbolic::Expression cnc::symbolic::BinaryOperator::simplify() const
 {
     auto as = a.simplify();
     auto bs = b.simplify();
-    return getExpression(BinaryOperator(as,bs,type),Union(as.getVariables(),bs.getVariables()));
+    switch (type) {
+    case cnc::symbolic::sum:
+        return as + bs;
+    case cnc::symbolic::product:
+        return as * bs;
+    case cnc::symbolic::sub:
+        return as - bs;
+    case cnc::symbolic::quotient:
+        return as / bs;
+    case cnc::symbolic::exponentiation:
+        return pow(as,bs);
+    }
 }
 
 void cnc::symbolic::BinaryOperator::treePrint(uint padding) const

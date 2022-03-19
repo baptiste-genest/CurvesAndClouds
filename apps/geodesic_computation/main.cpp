@@ -14,7 +14,7 @@ smat invert_diag_smat(const smat& S){
     uint n = S.getHeight();
     smat iM(n,n);
     for (uint i = 0;i<n;i++)
-        iM(i,i) = pow(S(i,i),-1);
+        iM(i,i) = pow(S(i,i),-1).simplify();
     return iM;
 }
 
@@ -22,13 +22,15 @@ Tensor getChristoffelSymbols(const smat& g){
     auto ig = invert_diag_smat(g);
     uint N = g.getHeight();
     Tensor gamma(N,smat(N,N));
-    for (uint i = 0;i<N;i++)
+    for (uint i = 0;i<N;i++){
         for (uint k = 0;k<N;k++)
             for (uint l = 0;l<N;l++){
                 for (uint m = 0;m<N;m++)
                     gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m));
-                gamma[i](l,k) = gamma[i](l,k)*0.5;
+                gamma[i](l,k) = (gamma[i](l,k)*0.5).simplify();
             }
+        std::cout << gamma[i].print() << std::endl;
+    }
     return gamma;
 }
 
@@ -63,7 +65,7 @@ cloud solveGeodesic(vec x,vec v,scalar dt,const Manifold& M,const stop_func& sto
         for (uint k = 0;k<N;k++){
             a(k) = 0;
             auto CS = G[k](x);
-            if (isNan(CS))
+            if (isNan(CS) || stop(x))
                 return traj;
             a(k) += -v.scalar_product(CS*v);
         }
@@ -83,7 +85,7 @@ void plot2DSchwartzchild(cnc::PlotLayer* L){
     scalar m = 0.5;
     map(0) = r*cos(th);
     map(1) = r*sin(th);
-    auto schwartz = 1.-2*m/(r);
+    auto schwartz = (r-2*m)/r;
     scalar event_horizon = 2*m;
     g(0,0) = pow(schwartz,-1);
     g(1,1) = r*r;
