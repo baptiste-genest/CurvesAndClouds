@@ -13,6 +13,7 @@
 #include "core/algo/statistics/statistics.h"
 #include <QImage>
 #include <QString>
+#include <QFile>
 
 namespace cnc {
 
@@ -57,6 +58,15 @@ public:
 
     inline  plot_type get_type() const override {
         return figure;
+    }
+
+    inline void save_as_png(std::string s) const {
+        if (edit_mode)
+            throw Cnc_error("Can't export image while in edit mode");
+        QFile file(QString::fromStdString(s));
+        file.open(QIODevice::WriteOnly);
+        pix_img.save(&file, "PNG");
+        std::cout << "figure saved at " + s << std::endl;
     }
 
 private:
