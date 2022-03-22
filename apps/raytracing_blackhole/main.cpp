@@ -176,7 +176,7 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
     map(0) = r*sin(th)*cos(phi);
     map(1) = r*sin(th)*sin(phi);
     map(2) = r*cos(th);
-    int rez = 400;
+    int rez = 500;
     std::cout << rez*rez << std::endl;
     auto J = map.jacobian();
 
@@ -184,7 +184,6 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
 
     frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
-    //f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));
     auto particules = generate_frame(f,10.,rez,rez);
 
     const scalar dt = 0.04;
@@ -253,7 +252,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
 
     frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
-    //f = f.transform(algo::geometry::degrees::Ry(10.)*algo::geometry::degrees::Rz(45.));
+    f = f.transform(algo::geometry::degrees::Ry(30.));
     auto particules = generate_frame(f,10.,rez,rez);
 
     const scalar dt = 0.04;
