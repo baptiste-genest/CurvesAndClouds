@@ -102,26 +102,14 @@ std::vector<particule> generate_frame(const frame3D& F,scalar focal_distance,int
 }
 
 
-particule solveGeodesic(particule p,scalar dt,const Manifold& M,const stop_func& stop,uint itermax = 1000) {
+particule solveGeodesic(particule p,scalar dt,const Manifold& M,const stop_func& stop) {
     const auto& g = M.metric_tensor;
     const auto& G = M.Gamma;
     auto& x = p.p;
     auto& v = p.v;
     uint N = g.getHeight();
     vec a(N);
-    static auto Q = algo::geometry::degrees::Ry(90);
-    static auto iQ = algo::geometry::degrees::Ry(-90);
     while (x(0) < 5.1){
-        /*
-        if (track)
-            std::cout << x << std::endl;
-            */
-        bool rot = std::abs(std::sin(x(1))) < 1e-2;
-        if (rot) {
-            mat J = M.Jacobian(x);
-            x = linear_utils::toSpherical(Q*linear_utils::SphericalToCartesian(x));
-            v = change_coordinate_system(M.Jacobian,x,Q*J*v);
-        }
         for (uint k = 0;k<N;k++){
             a(k) = 0;
             auto CS = G[k](x);
@@ -135,11 +123,6 @@ particule solveGeodesic(particule p,scalar dt,const Manifold& M,const stop_func&
             throw Cnc_error("error radius coord negative");
         v += a*dt;
         x += v*dt;
-        if (rot){
-            mat J = M.Jacobian(x);
-            x = linear_utils::toSpherical(iQ*linear_utils::SphericalToCartesian(x));
-            v = change_coordinate_system(M.Jacobian,x,iQ*J*v);
-        }
     }
     return p;
 }
@@ -149,12 +132,34 @@ void parralelGeodesic(std::vector<particule>& p,const Manifold& M,uint start,uin
     for (uint i = start;i<end;i++){
         p[i].p = linear_utils::toSpherical(p[i].p);
         p[i].v = M.Jacobian(p[i].p).solve(p[i].v);
-        p[i] = solveGeodesic(p[i],dt,M,stop,itmax);
+        p[i] = solveGeodesic(p[i],dt,M,stop);
         NB_DONE++;
         if (NB_DONE % 1000 == 0)
             std::cout << NB_DONE << " done" << std::endl;
     }
 }
+void parralelPlanarGeodesic(std::vector<particule>& p,const Manifold& M,uint start,uint end,const stop_func& stop,scalar dt){
+    using namespace linear_utils;
+    static uint NB_DONE = 0;
+    particule proj;
+    for (uint i = start;i<end;i++){
+        proj.index = p[i].index;
+        auto x0 = p[i].p.normalize();
+        auto x1 = (p[i].p + p[i].v*dt*0.01).normalize();
+        x1 = (x1 - x0*x0.scalar_product(x1)).normalize();
+        proj.p = vec2(p[i].p.norm(),0);
+        proj.v = vec2(x0.scalar_product(p[i].v),x1.scalar_product(p[i].v));
+        proj.v = M.Jacobian(proj.p).solve(proj.v);
+        auto end = solveGeodesic(proj,dt,M,stop).p;
+        p[i].p = toSpherical(x0*end(0)*cos(end(1)) + x1*end(0)*sin(end(1)));
+
+        NB_DONE++;
+        if (NB_DONE % 1000 == 0)
+            std::cout << NB_DONE << " done" << std::endl;
+    }
+}
+
+QImage back;
 
 scalar eps = 1e-5;
 QColor color_func(const vec& x,scalar radius){
@@ -167,34 +172,31 @@ QColor color_func(const vec& x,scalar radius){
         psi += M_TAU;
     if (th < 0)
         th += M_PI;
-    //std::cout << H << ' ' << L << std::endl;
-    //return QColor::fromRgbF(std::pow(std::sin(th),4),0,0).toRgb();
-    return QColor::fromHslF(psi/M_TAU,1.,th/M_PI).toRgb();
-            /*
+    int sx = back.width()*(psi/M_TAU);
+    int sy = back.height()*(th/M_PI);
+    return back.pixelColor(sx,sy);
+    return QColor::fromRgbF(std::pow(std::sin(th),30),0,0).toRgb();
+    //return QColor::fromHslF(psi/M_TAU,1.,th/M_PI).toRgb();
     if (linear_utils::SphericalToCartesian(x)(2) < 0)
         return QColorConstants::Yellow;
     return QColorConstants::Blue;
-            */
 }
 
 void schwartzchildPlane3D(cnc::PlotLayer* L){
     using namespace linear_utils;
-    uint dim = 3;
-    Variable r,th,phi;
+    uint dim = 2;
+    Variable r,th;
     scalar m = 0.5;
     auto schwartz = (r-2*m)/(r);
     scalar event_horizon = 2*m;
 
     smat g(dim,dim);
     g(0,0) = pow(schwartz,-1);
-    //g(0,0) = 1.;
     g(1,1) = pow(r,2);
-    g(2,2) = pow(r*sin(th),2);
 
     svec map(dim);
-    map(0) = r*sin(th)*cos(phi);
-    map(1) = r*sin(th)*sin(phi);
-    map(2) = r*cos(th);
+    map(0) = r*cos(th);
+    map(1) = r*sin(th);
     int rez = 500;
     std::cout << rez*rez << std::endl;
     auto J = map.jacobian();
@@ -203,10 +205,10 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
 
     frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
+    //f = f.transform(algo::geometry::degrees::Ry(20.));
     auto particules = generate_frame(f,10.,rez,rez);
 
-    const scalar dt = 0.04;
-    const uint N = 200;
+    const scalar dt = 0.1;
 
     auto fig = L->new_void_figure(rez,rez);
     fig->set_edit_mode();
@@ -221,14 +223,13 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
     std::vector<std::thread> threads;
 
     for (uint k = 0;k<NB_THREADS;k++)
-        threads.push_back(std::thread(parralelGeodesic,
+        threads.push_back(std::thread(parralelPlanarGeodesic,
                                       std::ref(particules),
                                       std::cref(M),
                                       k*NB_PIX_PER_THREADS,
                                       (k+1)*NB_PIX_PER_THREADS,
                                       stop,
-                                      dt,
-                                      N));
+                                      dt));
 
     for (auto& t : threads)
         t.join();
@@ -242,6 +243,7 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
         fig->set_pixel(i,rez-1-j,color);
     }
     fig->set_display_mode();
+    fig->save_as_png("../../output/blackhole.png");
 }
 
 
@@ -317,17 +319,18 @@ void Schwartzchild3D(cnc::PlotLayer* L){
 
 
 int main(int argc, char *argv[]) {
-  QApplication App(argc, argv);
-  PlotWindow Window;
-  Window.resize(500, 500);
+    QApplication App(argc, argv);
+    PlotWindow Window;
+    back = QImage("../../data/background.png");
+    Window.resize(500, 500);
 
-  PlotTab *Tab = Window.add_tab("my first tab");
-  PlotFrame *Frame = Tab->add_frame();
-  PlotLayer *Layer = Frame->add_layer();
+    PlotTab *Tab = Window.add_tab("my first tab");
+    PlotFrame *Frame = Tab->add_frame();
+    PlotLayer *Layer = Frame->add_layer();
 
-  Schwartzchild3D(Layer);
+    schwartzchildPlane3D(Layer);
 
-  Window.show();
-  return App.exec();
+    Window.show();
+    return App.exec();
 }
 
