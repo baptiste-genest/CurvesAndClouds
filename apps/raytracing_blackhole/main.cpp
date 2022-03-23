@@ -9,6 +9,13 @@ vec change_coordinate_system(const svec& map,const vec& x,const vec& v){
     auto J = map.jacobian()(x);
     return J.solve(v);
 }
+vec change_coordinate_system(const smat& jacobian,const vec& x,const vec& v){
+    auto J = jacobian(x);
+    return J.solve(v);
+}
+vec change_coordinate_system(const mat& J,const vec& v){
+    return J.solve(v);
+}
 
 smat invert_diag_smat(const smat& S){
     uint n = S.getHeight();
@@ -102,17 +109,24 @@ particule solveGeodesic(particule p,scalar dt,const Manifold& M,const stop_func&
     auto& v = p.v;
     uint N = g.getHeight();
     vec a(N);
-    std::vector<ValuationPair> V;
-    for (uint i = 0;i<x.size();i++)
-        V.push_back({i,x(i)});
-    //for (uint iter = 0;iter<itermax;iter++){
+    static auto Q = algo::geometry::degrees::Ry(90);
+    static auto iQ = algo::geometry::degrees::Ry(-90);
     while (x(0) < 5.1){
-        for (uint i = 0;i<N;i++)
-            V[i].second = x(i);
+        /*
+        if (track)
+            std::cout << x << std::endl;
+            */
+        bool rot = std::abs(std::sin(x(1))) < 1e-2;
+        if (rot) {
+            mat J = M.Jacobian(x);
+            x = linear_utils::toSpherical(Q*linear_utils::SphericalToCartesian(x));
+            v = change_coordinate_system(M.Jacobian,x,Q*J*v);
+        }
         for (uint k = 0;k<N;k++){
             a(k) = 0;
             auto CS = G[k](x);
-            removeNan(CS);
+            if (isNan(CS))
+                std::cout << "non" << std::endl;
             if (stop(x))
                 return p;
             a(k) += -v.scalar_product(CS*v);
@@ -121,6 +135,11 @@ particule solveGeodesic(particule p,scalar dt,const Manifold& M,const stop_func&
             throw Cnc_error("error radius coord negative");
         v += a*dt;
         x += v*dt;
+        if (rot){
+            mat J = M.Jacobian(x);
+            x = linear_utils::toSpherical(iQ*linear_utils::SphericalToCartesian(x));
+            v = change_coordinate_system(M.Jacobian,x,iQ*J*v);
+        }
     }
     return p;
 }
@@ -142,14 +161,14 @@ QColor color_func(const vec& x,scalar radius){
     if (x(0) < radius + eps){
         return QColorConstants::Black;
     }
-    scalar psi = std::fmod(x(2),2*M_PI);
     scalar th = std::fmod(x(1),M_PI);
+    scalar psi = std::fmod(x(2),M_TAU);
     if (psi < 0)
         psi += M_TAU;
     if (th < 0)
         th += M_PI;
     //std::cout << H << ' ' << L << std::endl;
-    return QColor::fromRgbF(std::pow(std::sin(th),4),0,0).toRgb();
+    //return QColor::fromRgbF(std::pow(std::sin(th),4),0,0).toRgb();
     return QColor::fromHslF(psi/M_TAU,1.,th/M_PI).toRgb();
             /*
     if (linear_utils::SphericalToCartesian(x)(2) < 0)
@@ -244,7 +263,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     map(0) = r*sin(th)*cos(phi);
     map(1) = r*sin(th)*sin(phi);
     map(2) = r*cos(th);
-    int rez = 300;
+    int rez = 100;
     std::cout << rez*rez << std::endl;
     auto J = map.jacobian();
 
@@ -252,7 +271,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
     M.Gamma = getChristoffelSymbols(M.metric_tensor);
 
     frame3D f = {vec3(2,0,0),vec3(0,4,0),vec3(0,0,4)};
-    f = f.transform(algo::geometry::degrees::Ry(30.));
+    //f = f.transform(algo::geometry::degrees::Ry(90.));
     auto particules = generate_frame(f,10.,rez,rez);
 
     const scalar dt = 0.04;
