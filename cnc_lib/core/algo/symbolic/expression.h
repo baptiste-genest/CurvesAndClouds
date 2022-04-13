@@ -29,6 +29,13 @@ public:
     Expression(scalar x);
     Expression(int n);
 
+    bool isIdiomatic() const {
+        for (const auto& v : variables_involved)
+            if (v < 0)
+                return true;
+        return false;
+    }
+
     bool operator==(const Expression& other) const;
 
     matchResult matchWith(const Expression& o) const;

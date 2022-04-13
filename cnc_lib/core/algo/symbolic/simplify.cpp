@@ -2,6 +2,8 @@
 
 cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
 {
+    if (isIdiomatic())
+        return *this;
     using idiom = Expression;
     static Variable a = Variable::getPlaceholder(); static VariableId aid = a.getId();
     static Variable b = Variable::getPlaceholder(); static VariableId bid = b.getId();
@@ -9,7 +11,8 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
     static Variable d = Variable::getPlaceholder(); static VariableId did = d.getId();
     static Variable e = Variable::getPlaceholder(); static VariableId eid = e.getId();
 
-    Expression E = ref->simplify();
+    //Expression E = ref->simplify();
+    Expression E = *this;
     bool changed = false;
     auto V = E.getVariables();
 
@@ -241,6 +244,14 @@ cnc::symbolic::Expression cnc::symbolic::Expression::simplify() const
         auto M1 = cancel.matchWith(E);
         if (M1.first){
             E = M1.second[bid];
+            changed = true;
+        }
+    }
+    {
+        static idiom cancel = (a - b) - a;
+        auto M1 = cancel.matchWith(E);
+        if (M1.first){
+            E = -M1.second[bid];
             changed = true;
         }
     }

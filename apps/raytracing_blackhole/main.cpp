@@ -21,7 +21,7 @@ smat invert_diag_smat(const smat& S){
     uint n = S.getHeight();
     smat iM(n,n);
     for (uint i = 0;i<n;i++)
-        iM(i,i) = pow(S(i,i),-1).simplify();
+        iM(i,i) = pow(S(i,i),-1);
     return iM;
 }
 
@@ -34,7 +34,7 @@ Tensor getChristoffelSymbols(const smat& g){
             for (uint l = 0;l<N;l++){
                 for (uint m = 0;m<N;m++)
                     gamma[i](l,k) = gamma[i](l,k) + ig(m,i)*(g(k,m)(l) + g(l,m)(k) - g(l,k)(m));
-                gamma[i](l,k) = (gamma[i](l,k)*0.5).simplify();
+                gamma[i](l,k) = (gamma[i](l,k)*0.5);
             }
         std::cout << gamma[i].print() << std::endl;
     }
@@ -197,7 +197,7 @@ void schwartzchildPlane3D(cnc::PlotLayer* L){
     svec map(dim);
     map(0) = r*cos(th);
     map(1) = r*sin(th);
-    int rez = 500;
+    int rez = 400;
     std::cout << rez*rez << std::endl;
     auto J = map.jacobian();
 
@@ -321,7 +321,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
 int main(int argc, char *argv[]) {
     QApplication App(argc, argv);
     PlotWindow Window;
-    back = QImage("../../data/background.png");
+    back = QImage("../../data/background2.png");
     Window.resize(500, 500);
 
     PlotTab *Tab = Window.add_tab("my first tab");

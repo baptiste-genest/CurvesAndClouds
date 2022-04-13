@@ -131,7 +131,7 @@ cnc::symbolic::Expression cnc::symbolic::operator+(cnc::symbolic::Expression x, 
         return x;
     if (x.getScalarProperty() != other && y.getScalarProperty() != other)
         return Constant(x.fixValue() + y.fixValue());
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,sum)),Union(x.getVariables(),y.getVariables()));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,sum)),Union(x.getVariables(),y.getVariables())).simplify();
 }
 
 cnc::symbolic::Expression cnc::symbolic::operator*(cnc::symbolic::Expression x, cnc::symbolic::Expression y)
@@ -144,7 +144,7 @@ cnc::symbolic::Expression cnc::symbolic::operator*(cnc::symbolic::Expression x, 
         return Constant::Zero();
     if (x.getScalarProperty() != other && y.getScalarProperty() != other)
         return Constant(x.fixValue()*y.fixValue());
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,product)),Union(x.getVariables(),y.getVariables()));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,product)),Union(x.getVariables(),y.getVariables())).simplify();
 }
 
 cnc::symbolic::Expression cnc::symbolic::operator-(cnc::symbolic::Expression x, cnc::symbolic::Expression y)
@@ -157,7 +157,7 @@ cnc::symbolic::Expression cnc::symbolic::operator-(cnc::symbolic::Expression x, 
         return Constant::Zero();
     if (x.getScalarProperty() != other && y.getScalarProperty() != other)
         return Constant(x.fixValue()-y.fixValue());
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,sub)),Union(x.getVariables(),y.getVariables()));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,sub)),Union(x.getVariables(),y.getVariables())).simplify();
 }
 
 cnc::symbolic::Expression cnc::symbolic::operator/(cnc::symbolic::Expression x, cnc::symbolic::Expression y)
@@ -172,7 +172,7 @@ cnc::symbolic::Expression cnc::symbolic::operator/(cnc::symbolic::Expression x, 
         throw Cnc_error("Division by zero.");
     if (x.getScalarProperty() != other && y.getScalarProperty() != other)
         return Constant(x.fixValue()/y.fixValue());
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,quotient)),Union(x.getVariables(),y.getVariables()));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(x,y,quotient)),Union(x.getVariables(),y.getVariables())).simplify();
 }
 
 cnc::symbolic::Expression cnc::symbolic::operator-(cnc::symbolic::Expression E){
@@ -187,7 +187,7 @@ cnc::symbolic::Expression cnc::symbolic::pow(Expression e, Expression n)
         return Constant::One();
     if (n.getScalarProperty() != other && e.getScalarProperty() != other)
         return std::pow(e.fixValue(),n.fixValue());
-    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(e,n,exponentiation)),Union(e.getVariables(),n.getVariables()));
+    return Expression(std::make_shared<BinaryOperator>(BinaryOperator(e,n,exponentiation)),Union(e.getVariables(),n.getVariables())).simplify();
 }
 
 cnc::cscalar cnc::symbolic::Expression::fixValue()
@@ -238,5 +238,5 @@ cnc::symbolic::Expression cnc::symbolic::Expression::differentiate(const cnc::sy
 {
     if (variables_involved.find(x.getId()) == variables_involved.end())
         return Constant::Zero();
-    return ref->differentiate(x);
+    return ref->differentiate(x).simplify();
 }

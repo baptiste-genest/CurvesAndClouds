@@ -73,10 +73,11 @@ Tensor getChristoffelSymbols(const smat& g){
 int main()
 {
     using idiom = Expression;
-    Variable a = Variable::getPlaceholder(),b = Variable::getPlaceholder();//,c = Variable::getPlaceholder();
     Variable x,y;
-    Expression E = x*cos(y);
-    E.treePrint(0);
+    Expression E = x/x;
+    Expression E2 = pow(x/y,-1);
+    std::cout << E.print() << std::endl;
+    std::cout << E2.print() << std::endl;
 
 
     return 0;
