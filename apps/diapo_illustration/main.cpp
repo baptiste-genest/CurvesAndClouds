@@ -61,8 +61,6 @@ int main(int argc, char *argv[]) {
         L1->new_function_plot(f,X);
         L1->new_function_plot(df,X);
         */
-
-
         auto h = 0.2;
         PlotLayer *L2 = Tab->add_frame()->add_grid_layer(X,{-1.5,1.5},false);
             auto Xe = algo::calculus::get_lin_space(X,h);

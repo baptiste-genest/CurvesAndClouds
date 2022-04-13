@@ -44,13 +44,13 @@ scalar_function_2D build_nth_lagrange_modulus(uint n){
 int main(int argc, char *argv[])
 {
     QApplication a(argc,argv);
-    Plot_window w; w.resize(500,500);
+    PlotWindow w; w.resize(500,500);
 
     {
         using namespace ODE;
-        Plot_tab* T = w.add_tab("ODE solving");
-        Plot_frame* F= T->add_frame();
-        Plot_layer* L = F->add_layer();
+        PlotTab* T = w.add_tab("ODE solving");
+        PlotFrame* F= T->add_frame();
+        PlotLayer* L = F->add_layer();
 
         scalar dt = 0.3;
         scalar t0 = 0.f;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     {
         using namespace PDE;
         using namespace PDE::D1;
-        Plot_tab* T = w.add_tab("PDE solving schemes");
+        PlotTab* T = w.add_tab("PDE solving schemes");
         scalar dt = 0.0001;
         scalar dx = 0.02;
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
         U0(0) = 1.f;
 
         PDE_scheme EE = build_euler_explicit(A,B,dt,dirichlet);
-        Plot_frame* FEE = T->add_frame();
+        PlotFrame* FEE = T->add_frame();
         FEE->set_nb_layer_per_second(30);
         PDE_steps EE_steps = solve_PDE(EE,U0,NB_STEPS);
         for (const vec& u : EE_steps){
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
         dt = 0.01;
 
         PDE_scheme EI = build_euler_implicit(A,B,dt,dirichlet);
-        Plot_frame* FEI = T->add_frame();
+        PlotFrame* FEI = T->add_frame();
         FEI->set_nb_layer_per_second(30);
         PDE_steps EI_steps = solve_PDE(EI,U0,NB_STEPS);
         for (const vec& u : EI_steps){
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
         dt = 0.01;
 
         PDE_scheme CN = build_crank_nicholson(A,B,dt,dirichlet);
-        Plot_frame* FCN = T->add_frame();
+        PlotFrame* FCN = T->add_frame();
         FCN->set_nb_layer_per_second(30);
         PDE_steps CN_steps = solve_PDE(CN,U0,NB_STEPS);
         for (const vec& u : CN_steps){
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
         dt = 0.01;
 
         PDE_scheme CNA = build_crank_nicholson(S,B,dt,bct);
-        Plot_frame* FCNA = T->add_frame();
+        PlotFrame* FCNA = T->add_frame();
         FCNA->set_nb_layer_per_second(30);
         PDE_steps CNA_steps = solve_PDE(CNA,U0,NB_STEPS);
         for (const vec& u : CNA_steps){
