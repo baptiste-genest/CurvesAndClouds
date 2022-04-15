@@ -41,6 +41,12 @@ std::vector<vec> vec_to_curve(const vec& u){
     return V;
 }
 
+void display_dt(PlotTab* T,uint n){
+    cnc::tex_stream ts;
+    ts << tex("dt = 10^{-" + std::to_string(n) + "}") << tex::endl;
+    T->add_frame()->add_layer()->add_text_frame_from_tex_stream(ts);
+}
+
 int main(int argc, char *argv[]) {
     QApplication App(argc, argv);
     PlotWindow Window;
@@ -49,6 +55,7 @@ int main(int argc, char *argv[]) {
     uint N = 100;
 
     vec T0 = algo::stat::random_var::random_vec(-1,1,N);
+    vec tmp = T0;
 
 
     uint nb = 350;
@@ -57,33 +64,49 @@ int main(int argc, char *argv[]) {
     scalar dx = 2./N;
     //scalar dt = 1e-5;
 
+    {
     std::vector<scalar> dts = {1e-5,1e-4,1e-3};
-    std::vector<std::string> labels = {"dt = 10-5","dt = 10-4","dt = 10-3"};
+    std::vector<int> labels = {5,4,3};
 
-    if (true){
         for (uint k = 0;k<dts.size();k++){
+            T0 = tmp;
             auto dt = dts[k];
             PlotTab *Tab = Window.add_tab("EE");
             PlotFrame *Frame = Tab->add_frame(2,2);
             Frame->set_nb_layer_per_second(100);
             auto L = buildEELaplace(N,dx,dt);
-            auto L2 = buildEILaplace(N,dx,dt);
-            Tab->add_frame(1,1)->add_layer()->add_text_frame(labels[k]);
+            display_dt(Tab,labels[k]);
             for (uint i = 0;i<nb;i++){
                 auto lay = Frame->add_layer();
                 lay->new_2D_curve(vec_to_curve(T0));
                 T0 = L*T0;
             }
         }
+    }{
+    std::vector<scalar> dts = {1e-3};
+    std::vector<int> labels = {3};
+
+        for (uint k = 0;k<dts.size();k++){
+            T0 = tmp;
+            auto dt = dts[k];
+            PlotTab *Tab = Window.add_tab("EI");
+            PlotFrame *Frame = Tab->add_frame(2,2);
+            Frame->set_nb_layer_per_second(100);
+            display_dt(Tab,labels[k]);
+            auto L2 = buildEILaplace(N,dx,dt);
+            for (uint i = 0;i<nb;i++){
+                auto lay = Frame->add_layer();
+                lay->new_2D_curve(vec_to_curve(T0));
+                T0 = L2.conjugate_gradient(vec(N),T0,1e-12);
+            }
+        }
     }
-    else {
         /*
         for (uint i = 0;i<nb;i++){
             Frame->add_layer()->new_2D_curve(vec_to_curve(T0));
             T0 = L2.conjugate_gradient(vec(N),T0,1e-12);
         }
         */
-    }
 
     Window.show();
     return App.exec();
