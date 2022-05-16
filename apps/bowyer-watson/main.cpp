@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 
 
     //auto Y = convexPrimitive::Circle(1,20).getIndexedPoints();
-    auto Y = algo::stat::random_var::sample_uniform_in_square(2,R,60);
-    auto D = std::make_shared<Mesh2>(mesh_generation::BowyerWatsonWIP(Y));
+    auto Y = algo::stat::random_var::sample_uniform_in_square(2,R,4);
+    auto D = std::make_shared<Mesh2>(mesh_generation::BowyerWatson(Y));
     L->addPlot<Mesh2DDisplayer>(D);
     L->new_point_cloud(Y);
 

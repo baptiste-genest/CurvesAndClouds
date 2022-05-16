@@ -169,12 +169,14 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::BowyerWatson(co
     auto v2 = C.add_vertex(STv[1]);
     auto v3 = C.add_vertex(STv[2]);
     auto ST = topology::assemble_face(v1,v2,v3);
-    faces T = {ST};
-    for (vertex v : V){
-        insertVertexInDelaunay(C,T,v);
-    }
     Mesh2 D(CR);
+    D.insertFace(ST);
+    D.computeConnectivity();
+    for (vertex v : V){
+        insertVertexInDelaunay(D,v);
+    }
     auto stv = get_vertices(ST);
+    faces T = D.F;
     for (const auto& f : T){
         bool insuper = false;
         for (const auto& v : stv)
@@ -189,12 +191,48 @@ cnc::algo::geometry::Mesh2 cnc::algo::geometry::mesh_generation::BowyerWatson(co
     return D;
 }
 
-void cnc::algo::geometry::mesh_generation::insertVertexInDelaunay(const cnc::algo::geometry::GeometricContext &C, cnc::algo::topology::faces &T, cnc::algo::topology::vertex v)
+void cnc::algo::geometry::mesh_generation::insertVertexInDelaunay(Mesh2& M, cnc::algo::topology::vertex v)
 {
     std::map<topology::edge,int,edgeComp> edgeCount;
     edges englobing;
     faces to_delete;
+    /*
     for (const auto& f : T){
+    auto CC = C.circumCenterRadius(f);
+    const auto& center = CC.first;
+    const auto& radius = CC.second;
+    if (C(v).distance(center) < radius + 1e-4){
+    for (const auto& e : f){
+    englobing.insert(e);
+    edgeCount[e]++;
+    }
+    to_delete.insert(f);
+    }
+    }
+    */
+    const auto& C = *M.getContext();
+    face f = *M.F.begin();
+    while (!C.insideFace(f,C(v))){
+        auto m = C.midPoint(f);
+        auto rayd = C(v)-m;
+        bool I = false;
+        for (const auto& e : f){
+            geometry::raySegmentIntersection(m,rayd,C(e[0]),C(e[1]),I);
+            if (I){
+                f = M.getOppositeFace(f,e);
+                break;
+            }
+        }
+        if (!I)
+            throw Cnc_error("couldn't find next triangle");
+    }
+    std::stack<face> violating_triangles;
+    faces inspected;
+    violating_triangles.push(f);
+    inspected.insert(f);
+    while (!violating_triangles.empty()){
+        f = violating_triangles.top();
+        violating_triangles.pop();
         auto CC = C.circumCenterRadius(f);
         const auto& center = CC.first;
         const auto& radius = CC.second;
@@ -202,19 +240,31 @@ void cnc::algo::geometry::mesh_generation::insertVertexInDelaunay(const cnc::alg
             for (const auto& e : f){
                 englobing.insert(e);
                 edgeCount[e]++;
+                if (!M.EtoF[e].empty()){
+                    try {
+                        face n = M.getOppositeFace(f,e);
+                        if (inspected.find(n) == inspected.end()){
+                            violating_triangles.push(n);
+                            inspected.insert(n);
+                        }
+                    } catch (...) {
+                    }
+                }
             }
             to_delete.insert(f);
         }
     }
     for (const auto& f : to_delete)
-        T.erase(f);
+        M.F.erase(f);
     for (const auto& e : englobing){
         if (edgeCount[e] == 1){
             auto nT = assemble_face(e,v);
-            T.insert(nT);
+            M.F.insert(nT);
         }
     }
+    M.computeConnectivity();
 }
+
 /*
 void cnc::algo::geometry::mesh_generation::RBST::insert(const cnc::algo::topology::face &f, cnc::range r)
 {
@@ -239,7 +289,7 @@ void cnc::algo::geometry::mesh_generation::RBST::get(RBSTnode *n, cnc::algo::top
     f.erase(n->f);
     else
     if (T.find(n->f) != T.end())
-        f.insert(n->f);
+    f.insert(n->f);
     get(n->R,f,x,T);
     }
     else {
@@ -247,7 +297,7 @@ void cnc::algo::geometry::mesh_generation::RBST::get(RBSTnode *n, cnc::algo::top
     f.erase(n->f);
     else{
     if (T.find(n->f) != T.end())
-        f.insert(n->f);
+    f.insert(n->f);
     }
     get(n->L,f,x,T);
     }

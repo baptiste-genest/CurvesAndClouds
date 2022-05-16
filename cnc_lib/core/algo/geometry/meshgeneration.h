@@ -28,7 +28,7 @@ private:
     static void relaxation(Mesh2& M);
     static std::array<cnc::vec,3> super_triangle(const cloud& X);
     static bool inCircle(const vec& x,const vec& center,scalar r);
-    static void insertVertexInDelaunay(const GeometricContext& C,faces& T,vertex x);
+    static void insertVertexInDelaunay(Mesh2& M,vertex x);
 
     using circumMap = std::map<topology::face,circum_data,topology::faceComp>;
 
