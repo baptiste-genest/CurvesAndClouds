@@ -1,4 +1,6 @@
 #include "compute_shader.h"
+#ifdef CNC_OPENGL
+
 
 cnc::ComputeShader::ComputeShader()
 {
@@ -53,3 +55,5 @@ std::string cnc::ComputeShader::getSource()
 "	imageStore(img_output,coords,pixel);}\n";
 }
 
+
+#endif

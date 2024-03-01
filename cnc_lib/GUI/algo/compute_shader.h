@@ -1,6 +1,8 @@
 #ifndef COMPUTE_SHADER_H
 #define COMPUTE_SHADER_H
 
+#ifdef CNC_OPENGL
+
 #include <QOpenGLFunctions>
 #include "../plots/3D/GLWrapper.h"
 #include <QOpenGLFunctions_4_3_Core>
@@ -24,5 +26,6 @@ private:
 };
 
 }
+#endif
 
 #endif // COMPUTE_SHADER_H

@@ -1,5 +1,6 @@
 #include "tube_primitive.h"
 
+#ifdef CNC_OPENGL
 
 cnc::graphics::Tube::Tube(const std::vector<cnc::graphics::vec3> &nodes,const std::vector<float>& radiuses, uint circular_resolution, uint height_resolution)
     :	m_nodes(nodes),
@@ -45,3 +46,5 @@ cnc::graphics::Tube::Tube(const std::vector<cnc::graphics::vec3> &nodes,const st
 cnc::graphics::Tube::Tube(const std::vector<cnc::graphics::vec3> &nodes, cnc::scalar radius, uint circular_resolution, uint height_resolution)
     : Tube(nodes,std::vector<float>(nodes.size(),radius),circular_resolution,height_resolution)
 {}
+
+#endif // TUBE_PRIMITIVE_H

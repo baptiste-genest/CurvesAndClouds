@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <array>
+#include <map>
 #include "../linear_algebra/lin_alg.h"
 #include "../matrix_functions.h"
 #include "../statistics/statistics.h"

@@ -321,7 +321,7 @@ void Schwartzchild3D(cnc::PlotLayer* L){
 int main(int argc, char *argv[]) {
     QApplication App(argc, argv);
     PlotWindow Window;
-    back = QImage("../../data/background2.png");
+    back = QImage("../../data/background.png");
     Window.resize(500, 500);
 
     PlotTab *Tab = Window.add_tab("my first tab");

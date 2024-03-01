@@ -10,6 +10,7 @@
 #include "cnc_types.h"
 #include "marching_table.h"
 #include "core/algo/bit_operations.h"
+#include <map>
 
 #include <QVector3D>
 
